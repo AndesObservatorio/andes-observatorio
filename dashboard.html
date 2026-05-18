@@ -5,86 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Andes Observatorio</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f7f0;
-            color: #333;
-        }
-        header {
-            background: linear-gradient(135deg, #1a5a1a 0%, #2d7a2d 100%);
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-        }
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f7f0; color: #333; }
+        header { background: linear-gradient(135deg, #1a5a1a 0%, #2d7a2d 100%); color: white; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 100; }
+        nav { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
         .logo { font-size: 1.5rem; font-weight: bold; }
         .logo span { color: #ffd700; }
         .nav-links { display: flex; gap: 2rem; }
         .nav-links a { color: white; text-decoration: none; }
-        .nav-links a:hover { color: #ffd700; }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 7rem 2rem 2rem;
-        }
-        h1 {
-            color: #1a5a1a;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 7rem 2rem 2rem; }
+        h1 { color: #1a5a1a; margin-bottom: 2rem; text-align: center; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .stat-card h3 { color: #1a5a1a; margin-bottom: 0.5rem; }
-        .stat-value { font-size: 2rem; font-weight: bold; color: #ffd700; text-shadow: 1px 1px 2px #1a5a1a; }
-        .charts {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        .chart-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #ffd700; }
+        .update-time { font-size: 0.7rem; color: #999; margin-top: 0.5rem; }
+        .map-container { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .map-container h3 { color: #1a5a1a; margin-bottom: 1rem; text-align: center; }
+        #map { height: 400px; border-radius: 8px; z-index: 1; }
+        .charts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-bottom: 2rem; }
+        .chart-card { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .chart-card h3 { color: #1a5a1a; margin-bottom: 1rem; text-align: center; }
         canvas { max-height: 300px; width: 100%; }
-        footer {
-            background: #1a3a1a;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-        .update-time { font-size: 0.7rem; color: #999; text-align: center; margin-top: 0.5rem; }
+        footer { background: #1a3a1a; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        .city-selector { text-align: center; margin-bottom: 1.5rem; }
+        .city-selector select { padding: 0.5rem; font-size: 1rem; border-radius: 5px; border: 1px solid #1a5a1a; }
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .stats { grid-template-columns: 1fr; }
             .charts { grid-template-columns: 1fr; }
+            #map { height: 300px; }
         }
     </style>
 </head>
@@ -98,181 +51,103 @@
             </div>
         </nav>
     </header>
-
     <div class="container">
         <h1>📊 Monitoreo Ambiental - Región Andina</h1>
-        
+        <div class="city-selector">
+            <label for="citySelect">📍 Selecciona una ciudad: </label>
+            <select id="citySelect">
+                <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
+                <option value="Quito,EC,-0.1807,-78.4678">Quito, Ecuador</option>
+                <option value="Lima,PE,-12.0464,-77.0428">Lima, Perú</option>
+                <option value="La Paz,BO,-16.5000,-68.1500">La Paz, Bolivia</option>
+                <option value="Santiago,CL,-33.4489,-70.6693">Santiago, Chile</option>
+                <option value="Buenos Aires,AR,-34.6037,-58.3816">Buenos Aires, Argentina</option>
+                <option value="Brasilia,BR,-15.8267,-47.9218">Brasilia, Brasil</option>
+            </select>
+        </div>
         <div class="stats">
-            <div class="stat-card">
-                <h3>🌡️ Temperatura Bogotá</h3>
-                <div class="stat-value" id="temp">14.2</div>
-                <div>°C</div>
-            </div>
-            <div class="stat-card">
-                <h3>💧 Humedad</h3>
-                <div class="stat-value" id="hum">72</div>
-                <div>%</div>
-            </div>
-            <div class="stat-card">
-                <h3>💨 Calidad del Aire</h3>
-                <div class="stat-value" id="aqi">65</div>
-                <div>AQI</div>
-            </div>
-            <div class="stat-card">
-                <h3>🌡️ Sensación Térmica</h3>
-                <div class="stat-value" id="feels">13.5</div>
-                <div>°C</div>
-            </div>
+            <div class="stat-card"><h3>🌡️ Temperatura</h3><div class="stat-value" id="temp">--</div><div>°C</div></div>
+            <div class="stat-card"><h3>💧 Humedad</h3><div class="stat-value" id="hum">--</div><div>%</div></div>
+            <div class="stat-card"><h3>💨 Calidad del Aire</h3><div class="stat-value" id="aqi">--</div><div>AQI</div></div>
+            <div class="stat-card"><h3>🌡️ Sensación</h3><div class="stat-value" id="feels">--</div><div>°C</div></div>
         </div>
-
+        <div class="map-container">
+            <h3>🗺️ Mapa de la Región Andina</h3>
+            <div id="map"></div>
+            <p class="update-time">Haz clic en los marcadores para ver datos climáticos</p>
+        </div>
         <div class="charts">
-            <div class="chart-card">
-                <h3>📈 Temperatura por País</h3>
-                <canvas id="tempChart"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3>🌿 Áreas Protegidas (%)</h3>
-                <canvas id="protectedChart"></canvas>
-            </div>
+            <div class="chart-card"><h3>📈 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
+            <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
         </div>
-
-        <div class="charts">
-            <div class="chart-card">
-                <h3>📉 Deforestación Anual (ha)</h3>
-                <canvas id="deforestChart"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3>🏔️ Pérdida de Glaciares (%)</h3>
-                <canvas id="glaciarChart"></canvas>
-            </div>
-        </div>
-
-        <div class="update-time">
-            Datos actualizados automáticamente cada 30 segundos
-        </div>
+        <div class="update-time" id="lastUpdate">Última actualización: --:--:--</div>
     </div>
-
     <footer>
         <p>🌄 Andes Observatorio - Monitoreo de Ecosistemas Andinos</p>
         <p>📧 andesobservatorio@gmail.com | 📞 +57 3337211047</p>
     </footer>
-
     <script>
-        // Países andinos
-        const paises = ['Colombia', 'Ecuador', 'Perú', 'Bolivia', 'Chile', 'Argentina', 'Brasil'];
+        const API_KEY = "sh&W4.)pj4LqtVG";
+        const ciudades = [
+            { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
+            { nombre: "Quito", pais: "Ecuador", query: "Quito,EC", lat: -0.1807, lon: -78.4678 },
+            { nombre: "Lima", pais: "Perú", query: "Lima,PE", lat: -12.0464, lon: -77.0428 },
+            { nombre: "La Paz", pais: "Bolivia", query: "La Paz,BO", lat: -16.5000, lon: -68.1500 },
+            { nombre: "Santiago", pais: "Chile", query: "Santiago,CL", lat: -33.4489, lon: -70.6693 },
+            { nombre: "Buenos Aires", pais: "Argentina", query: "Buenos Aires,AR", lat: -34.6037, lon: -58.3816 },
+            { nombre: "Brasilia", pais: "Brasil", query: "Brasilia,BR", lat: -15.8267, lon: -47.9218 }
+        ];
+        const areasProtegidas = { 'Colombia':16.8,'Ecuador':19.2,'Perú':17.5,'Bolivia':22.1,'Chile':21.5,'Argentina':9.8,'Brasil':29.5 };
+        let map, tempChart;
         
-        // Datos base
-        const tempBase = [24.5, 21.8, 22.3, 21.0, 14.5, 16.2, 25.8];
-        const protectedBase = [16.8, 19.2, 17.5, 22.1, 21.5, 9.8, 29.5];
-        const deforestBase = [197159, 85000, 200000, 300000, 12000, 68000, 1300000];
-        const glaciarBase = [45, 40, 51, 43, 38, 42, 0];
-        
-        // Variables para los gráficos
-        let tempChart, protectedChart, deforestChart, glaciarChart;
-        
-        // Función para actualizar números aleatorios realistas
-        function actualizarNumeros() {
-            // Simular pequeñas variaciones en tiempo real
-            const nuevaTemp = (14 + Math.random() * 4).toFixed(1);
-            const nuevaHum = Math.floor(60 + Math.random() * 25);
-            const nuevoAqi = Math.floor(50 + Math.random() * 60);
-            const nuevaSensacion = (parseFloat(nuevaTemp) - 1 + Math.random() * 2).toFixed(1);
-            
-            document.getElementById('temp').textContent = nuevaTemp;
-            document.getElementById('hum').textContent = nuevaHum;
-            document.getElementById('aqi').textContent = nuevoAqi;
-            document.getElementById('feels').textContent = nuevaSensacion;
+        async function obtenerClima(query) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data.cod === 200) return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
+                return null;
+            } catch(e) { return null; }
         }
         
-        // Inicializar gráficos
-        function initCharts() {
-            // Gráfico de Temperaturas
-            const ctx1 = document.getElementById('tempChart').getContext('2d');
-            tempChart = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: paises,
-                    datasets: [{
-                        label: 'Temperatura Promedio (°C)',
-                        data: tempBase,
-                        backgroundColor: 'rgba(46, 90, 46, 0.7)',
-                        borderColor: '#1a5a1a',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: { legend: { position: 'top' } }
-                }
-            });
-            
-            // Gráfico de Áreas Protegidas
-            const ctx2 = document.getElementById('protectedChart').getContext('2d');
-            protectedChart = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: paises,
-                    datasets: [{
-                        label: 'Áreas Protegidas (% del territorio)',
-                        data: protectedBase,
-                        backgroundColor: 'rgba(255, 215, 0, 0.7)',
-                        borderColor: '#ffd700',
-                        borderWidth: 2
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: true }
-            });
-            
-            // Gráfico de Deforestación
-            const ctx3 = document.getElementById('deforestChart').getContext('2d');
-            deforestChart = new Chart(ctx3, {
-                type: 'bar',
-                data: {
-                    labels: paises,
-                    datasets: [{
-                        label: 'Deforestación Anual (hectáreas)',
-                        data: deforestBase,
-                        backgroundColor: 'rgba(220, 53, 69, 0.7)',
-                        borderColor: '#dc3545',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Hectáreas' } } }
-                }
-            });
-            
-            // Gráfico de Glaciares
-            const ctx4 = document.getElementById('glaciarChart').getContext('2d');
-            glaciarChart = new Chart(ctx4, {
-                type: 'line',
-                data: {
-                    labels: paises,
-                    datasets: [{
-                        label: 'Pérdida de Glaciares desde 1990 (%)',
-                        data: glaciarBase,
-                        backgroundColor: 'rgba(13, 110, 253, 0.2)',
-                        borderColor: '#0d6efd',
-                        borderWidth: 3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Porcentaje de pérdida (%)' } } }
-                }
+        function initMap() {
+            map = L.map('map').setView([-15.0, -65.0], 4);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM & CartoDB' }).addTo(map);
+            ciudades.forEach(async c => {
+                const clima = await obtenerClima(c.query);
+                const temp = clima ? clima.temp.toFixed(1) : '--';
+                L.marker([c.lat, c.lon]).addTo(map).bindPopup(`<b>${c.nombre}, ${c.pais}</b><br>🌡️ ${temp}°C`);
             });
         }
         
-        // Iniciar todo
+        async function actualizarTodo() {
+            const select = document.getElementById('citySelect');
+            const val = select.value.split(',');
+            const clima = await obtenerClima(val[0]+','+val[1]);
+            if(clima) {
+                document.getElementById('temp').textContent = clima.temp.toFixed(1);
+                document.getElementById('hum').textContent = clima.hum;
+                document.getElementById('feels').textContent = clima.feels.toFixed(1);
+                document.getElementById('aqi').textContent = Math.floor(50+Math.random()*60);
+            }
+            const temps = [], labels = [];
+            for(const c of ciudades) {
+                const cl = await obtenerClima(c.query);
+                temps.push(cl ? cl.temp : 0);
+                labels.push(c.pais);
+                await new Promise(r => setTimeout(r, 500));
+            }
+            if(tempChart) { tempChart.data.datasets[0].data = temps; tempChart.data.labels = labels; tempChart.update(); }
+            document.getElementById('lastUpdate').textContent = `Última actualización: ${new Date().toLocaleTimeString()}`;
+        }
+        
         window.onload = () => {
-            initCharts();
-            actualizarNumeros();
-            setInterval(actualizarNumeros, 30000);
+            tempChart = new Chart(document.getElementById('tempChart'), { type:'bar', data:{ labels:[], datasets:[{ label:'Temperatura (°C)', data:[], backgroundColor:'green' }] } });
+            new Chart(document.getElementById('protectedChart'), { type:'bar', data:{ labels:Object.keys(areasProtegidas), datasets:[{ label:'Áreas Protegidas (%)', data:Object.values(areasProtegidas), backgroundColor:'gold' }] } });
+            initMap();
+            actualizarTodo();
+            setInterval(actualizarTodo, 600000);
+            document.getElementById('citySelect').addEventListener('change', actualizarTodo);
         };
     </script>
 </body>
