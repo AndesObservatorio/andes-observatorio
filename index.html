@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andes Observatorio | Monitoreo de Ecosistemas Andinos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(135deg, #1a5a1a 0%, #2d7a2d 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .logo span {
+            color: #ffd700;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+        .hero {
+            background: linear-gradient(135deg, #1a5a1a 0%, #2d7a2d 100%);
+            color: white;
+            padding: 8rem 2rem 5rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .btn {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a5a1a;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 2rem;
+            transition: transform 0.3s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section h2 {
+            text-align: center;
+            color: #1a5a1a;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: #f5f5f5;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .card h3 {
+            color: #1a5a1a;
+            margin-bottom: 1rem;
+        }
+        .partners {
+            background: #f0f7f0;
+            padding: 3rem;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .partner {
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .partner:hover {
+            transform: translateY(-3px);
+        }
+        footer {
+            background: #1a3a1a;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🏔️ Andes <span>Observatorio</span></div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="#">Alianzas</a>
+                <a href="#">Contacto</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Monitoreo de Ecosistemas Andinos</h1>
+        <p>Ciencia, datos y colaboración para la protección de nuestras montañas</p>
+        <a href="dashboard.html" class="btn">Explorar Dashboard</a>
+    </section>
+
+    <section class="section">
+        <h2>¿Quiénes Somos?</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto;">Andes Observatorio es una iniciativa regional que integra ciencia, tecnología y comunidades para monitorear y proteger los ecosistemas andinos de Colombia, Ecuador, Perú, Bolivia, Chile, Argentina, Brasil, Centro América y el Caribe.</p>
+    </section>
+
+    <section class="section">
+        <h2>Datos Ambientales Destacados</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>🌡️ Temperatura</h3>
+                <p style="font-size: 2rem; margin: 1rem 0;">+1.5°C</p>
+                <p>Incremento promedio en la región andina</p>
+            </div>
+            <div class="card">
+                <h3>🏔️ Glaciares</h3>
+                <p style="font-size: 2rem; margin: 1rem 0;">-30%</p>
+                <p>Pérdida de masa glaciar en 30 años</p>
+            </div>
+            <div class="card">
+                <h3>🌿 Deforestación</h3>
+                <p style="font-size: 2rem; margin: 1rem 0;">200K ha/año</p>
+                <p>Pérdida de bosques andinos</p>
+            </div>
+            <div class="card">
+                <h3>💧 Calidad del Agua</h3>
+                <p style="font-size: 2rem; margin: 1rem 0;">65%</p>
+                <p>Cuencas en estado crítico</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Líneas de Trabajo</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>📊 Monitoreo Científico</h3>
+                <p>Estaciones de monitoreo en tiempo real y sensores remotos para seguimiento de variables ambientales.</p>
+            </div>
+            <div class="card">
+                <h3>🤝 Alianzas Estratégicas</h3>
+                <p>Colaboración con GIZ, CAF, TNC, USAID y universidades regionales.</p>
+            </div>
+            <div class="card">
+                <h3>📢 Incidencia Política</h3>
+                <p>Generación de evidencia para políticas públicas de conservación andina.</p>
+            </div>
+            <div class="card">
+                <h3>👥 Participación Comunitaria</h3>
+                <p>Inclusión de comunidades locales en la gestión de ecosistemas.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Nuestros Socios Estratégicos</h2>
+        <div class="partners">
+            <div class="partner">🇩🇪 GIZ</div>
+            <div class="partner">🏛️ CAF</div>
+            <div class="partner">🌿 TNC</div>
+            <div class="partner">🇺🇸 USAID</div>
+            <div class="partner">🏛️ Moore Foundation</div>
+            <div class="partner">🎓 Universidad Nacional Loja</div>
+            <div class="partner">🌄 CONDESAN</div>
+            <div class="partner">🦅 ECOAN Perú</div>
+            <div class="partner">💧 Fundación Humedales</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>🌄 Andes Observatorio - Monitoreo de Ecosistemas Andinos</p>
+        <p>📧 andesobservatorio@gmail.com | 📞 +57 3337211047</p>
+        <p><small>© 2026 Andes Observatorio - Todos los derechos reservados</small></p>
+    </footer>
+</body>
+</html>

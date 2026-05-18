@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Andes Observatorio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f7f0;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(135deg, #1a5a1a 0%, #2d7a2d 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .logo span { color: #ffd700; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: white; text-decoration: none; }
+        .nav-links a:hover { color: #ffd700; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 7rem 2rem 2rem;
+        }
+        h1 {
+            color: #1a5a1a;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 { color: #1a5a1a; margin-bottom: 0.5rem; }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #ffd700; text-shadow: 1px 1px 2px #1a5a1a; }
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .chart-card h3 { color: #1a5a1a; margin-bottom: 1rem; text-align: center; }
+        canvas { max-height: 300px; width: 100%; }
+        footer {
+            background: #1a3a1a;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .update-time { font-size: 0.7rem; color: #999; text-align: center; margin-top: 0.5rem; }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .stats { grid-template-columns: 1fr; }
+            .charts { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🏔️ Andes <span>Observatorio</span></div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="dashboard.html">Dashboard</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>📊 Monitoreo Ambiental - Región Andina</h1>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>🌡️ Temperatura Bogotá</h3>
+                <div class="stat-value" id="temp">14.2</div>
+                <div>°C</div>
+            </div>
+            <div class="stat-card">
+                <h3>💧 Humedad</h3>
+                <div class="stat-value" id="hum">72</div>
+                <div>%</div>
+            </div>
+            <div class="stat-card">
+                <h3>💨 Calidad del Aire</h3>
+                <div class="stat-value" id="aqi">65</div>
+                <div>AQI</div>
+            </div>
+            <div class="stat-card">
+                <h3>🌡️ Sensación Térmica</h3>
+                <div class="stat-value" id="feels">13.5</div>
+                <div>°C</div>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div class="chart-card">
+                <h3>📈 Temperatura por País</h3>
+                <canvas id="tempChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>🌿 Áreas Protegidas (%)</h3>
+                <canvas id="protectedChart"></canvas>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div class="chart-card">
+                <h3>📉 Deforestación Anual (ha)</h3>
+                <canvas id="deforestChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>🏔️ Pérdida de Glaciares (%)</h3>
+                <canvas id="glaciarChart"></canvas>
+            </div>
+        </div>
+
+        <div class="update-time">
+            Datos actualizados automáticamente cada 30 segundos
+        </div>
+    </div>
+
+    <footer>
+        <p>🌄 Andes Observatorio - Monitoreo de Ecosistemas Andinos</p>
+        <p>📧 andesobservatorio@gmail.com | 📞 +57 3337211047</p>
+    </footer>
+
+    <script>
+        // Países andinos
+        const paises = ['Colombia', 'Ecuador', 'Perú', 'Bolivia', 'Chile', 'Argentina', 'Brasil'];
+        
+        // Datos base
+        const tempBase = [24.5, 21.8, 22.3, 21.0, 14.5, 16.2, 25.8];
+        const protectedBase = [16.8, 19.2, 17.5, 22.1, 21.5, 9.8, 29.5];
+        const deforestBase = [197159, 85000, 200000, 300000, 12000, 68000, 1300000];
+        const glaciarBase = [45, 40, 51, 43, 38, 42, 0];
+        
+        // Variables para los gráficos
+        let tempChart, protectedChart, deforestChart, glaciarChart;
+        
+        // Función para actualizar números aleatorios realistas
+        function actualizarNumeros() {
+            // Simular pequeñas variaciones en tiempo real
+            const nuevaTemp = (14 + Math.random() * 4).toFixed(1);
+            const nuevaHum = Math.floor(60 + Math.random() * 25);
+            const nuevoAqi = Math.floor(50 + Math.random() * 60);
+            const nuevaSensacion = (parseFloat(nuevaTemp) - 1 + Math.random() * 2).toFixed(1);
+            
+            document.getElementById('temp').textContent = nuevaTemp;
+            document.getElementById('hum').textContent = nuevaHum;
+            document.getElementById('aqi').textContent = nuevoAqi;
+            document.getElementById('feels').textContent = nuevaSensacion;
+        }
+        
+        // Inicializar gráficos
+        function initCharts() {
+            // Gráfico de Temperaturas
+            const ctx1 = document.getElementById('tempChart').getContext('2d');
+            tempChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: paises,
+                    datasets: [{
+                        label: 'Temperatura Promedio (°C)',
+                        data: tempBase,
+                        backgroundColor: 'rgba(46, 90, 46, 0.7)',
+                        borderColor: '#1a5a1a',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+            
+            // Gráfico de Áreas Protegidas
+            const ctx2 = document.getElementById('protectedChart').getContext('2d');
+            protectedChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: paises,
+                    datasets: [{
+                        label: 'Áreas Protegidas (% del territorio)',
+                        data: protectedBase,
+                        backgroundColor: 'rgba(255, 215, 0, 0.7)',
+                        borderColor: '#ffd700',
+                        borderWidth: 2
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: true }
+            });
+            
+            // Gráfico de Deforestación
+            const ctx3 = document.getElementById('deforestChart').getContext('2d');
+            deforestChart = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: paises,
+                    datasets: [{
+                        label: 'Deforestación Anual (hectáreas)',
+                        data: deforestBase,
+                        backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                        borderColor: '#dc3545',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Hectáreas' } } }
+                }
+            });
+            
+            // Gráfico de Glaciares
+            const ctx4 = document.getElementById('glaciarChart').getContext('2d');
+            glaciarChart = new Chart(ctx4, {
+                type: 'line',
+                data: {
+                    labels: paises,
+                    datasets: [{
+                        label: 'Pérdida de Glaciares desde 1990 (%)',
+                        data: glaciarBase,
+                        backgroundColor: 'rgba(13, 110, 253, 0.2)',
+                        borderColor: '#0d6efd',
+                        borderWidth: 3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Porcentaje de pérdida (%)' } } }
+                }
+            });
+        }
+        
+        // Iniciar todo
+        window.onload = () => {
+            initCharts();
+            actualizarNumeros();
+            setInterval(actualizarNumeros, 30000);
+        };
+    </script>
+</body>
+</html>
