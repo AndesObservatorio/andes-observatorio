@@ -51,43 +51,77 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <h1>📊 Monitoreo Ambiental - Región Andina</h1>
+        
         <div class="city-selector">
             <label for="citySelect">📍 Selecciona una ciudad: </label>
             <select id="citySelect">
-                <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
-                <option value="Quito,EC,-0.1807,-78.4678">Quito, Ecuador</option>
-                <option value="Lima,PE,-12.0464,-77.0428">Lima, Perú</option>
-                <option value="La Paz,BO,-16.5000,-68.1500">La Paz, Bolivia</option>
-                <option value="Santiago,CL,-33.4489,-70.6693">Santiago, Chile</option>
-                <option value="Buenos Aires,AR,-34.6037,-58.3816">Buenos Aires, Argentina</option>
-                <option value="Brasilia,BR,-15.8267,-47.9218">Brasilia, Brasil</option>
+                <option value="Bogota,CO">Bogotá, Colombia</option>
+                <option value="Quito,EC">Quito, Ecuador</option>
+                <option value="Lima,PE">Lima, Perú</option>
+                <option value="La Paz,BO">La Paz, Bolivia</option>
+                <option value="Santiago,CL">Santiago, Chile</option>
+                <option value="Buenos Aires,AR">Buenos Aires, Argentina</option>
+                <option value="Brasilia,BR">Brasilia, Brasil</option>
             </select>
         </div>
+
         <div class="stats">
-            <div class="stat-card"><h3>🌡️ Temperatura</h3><div class="stat-value" id="temp">--</div><div>°C</div></div>
-            <div class="stat-card"><h3>💧 Humedad</h3><div class="stat-value" id="hum">--</div><div>%</div></div>
-            <div class="stat-card"><h3>💨 Calidad del Aire</h3><div class="stat-value" id="aqi">--</div><div>AQI</div></div>
-            <div class="stat-card"><h3>🌡️ Sensación</h3><div class="stat-value" id="feels">--</div><div>°C</div></div>
+            <div class="stat-card">
+                <h3>🌡️ Temperatura</h3>
+                <div class="stat-value" id="temp">--</div>
+                <div>°C</div>
+            </div>
+            <div class="stat-card">
+                <h3>💧 Humedad</h3>
+                <div class="stat-value" id="hum">--</div>
+                <div>%</div>
+            </div>
+            <div class="stat-card">
+                <h3>💨 Calidad del Aire</h3>
+                <div class="stat-value" id="aqi">--</div>
+                <div>AQI</div>
+            </div>
+            <div class="stat-card">
+                <h3>🌡️ Sensación Térmica</h3>
+                <div class="stat-value" id="feels">--</div>
+                <div>°C</div>
+            </div>
         </div>
+
         <div class="map-container">
             <h3>🗺️ Mapa de la Región Andina</h3>
             <div id="map"></div>
-            <p class="update-time">Haz clic en los marcadores para ver datos climáticos</p>
+            <p class="update-time">Haz clic en los marcadores para ver la temperatura actual</p>
         </div>
+
         <div class="charts">
-            <div class="chart-card"><h3>📈 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
-            <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
+            <div class="chart-card">
+                <h3>📈 Temperatura por País</h3>
+                <canvas id="tempChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>🌿 Áreas Protegidas (%)</h3>
+                <canvas id="protectedChart"></canvas>
+            </div>
         </div>
-        <div class="update-time" id="lastUpdate">Última actualización: --:--:--</div>
+
+        <div class="update-time" id="lastUpdate">
+            Última actualización: --:--:--
+        </div>
     </div>
+
     <footer>
         <p>🌄 Andes Observatorio - Monitoreo de Ecosistemas Andinos</p>
         <p>📧 andesobservatorio@gmail.com | 📞 +57 3337211047</p>
     </footer>
+
     <script>
+        // API Key - Reemplaza con tu nueva API key de OpenWeatherMap
         const API_KEY = "sh&W4.)pj4LqtVG";
+        
         const ciudades = [
             { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
             { nombre: "Quito", pais: "Ecuador", query: "Quito,EC", lat: -0.1807, lon: -78.4678 },
@@ -97,57 +131,107 @@
             { nombre: "Buenos Aires", pais: "Argentina", query: "Buenos Aires,AR", lat: -34.6037, lon: -58.3816 },
             { nombre: "Brasilia", pais: "Brasil", query: "Brasilia,BR", lat: -15.8267, lon: -47.9218 }
         ];
-        const areasProtegidas = { 'Colombia':16.8,'Ecuador':19.2,'Perú':17.5,'Bolivia':22.1,'Chile':21.5,'Argentina':9.8,'Brasil':29.5 };
+        
+        const areasProtegidas = {
+            'Colombia': 16.8, 'Ecuador': 19.2, 'Perú': 17.5,
+            'Bolivia': 22.1, 'Chile': 21.5, 'Argentina': 9.8, 'Brasil': 29.5
+        };
+        
         let map, tempChart;
         
         async function obtenerClima(query) {
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
             try {
-                const res = await fetch(url);
-                const data = await res.json();
-                if (data.cod === 200) return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
+                const respuesta = await fetch(url);
+                const data = await respuesta.json();
+                if (data.cod === 200) {
+                    return { temp: data.main.temp, humedad: data.main.humidity, sensacion: data.main.feels_like };
+                }
                 return null;
-            } catch(e) { return null; }
+            } catch (error) {
+                console.error("Error:", error);
+                return null;
+            }
         }
         
         function initMap() {
             map = L.map('map').setView([-15.0, -65.0], 4);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM & CartoDB' }).addTo(map);
-            ciudades.forEach(async c => {
-                const clima = await obtenerClima(c.query);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; CartoDB'
+            }).addTo(map);
+            
+            ciudades.forEach(async (ciudad) => {
+                const clima = await obtenerClima(ciudad.query);
                 const temp = clima ? clima.temp.toFixed(1) : '--';
-                L.marker([c.lat, c.lon]).addTo(map).bindPopup(`<b>${c.nombre}, ${c.pais}</b><br>🌡️ ${temp}°C`);
+                const marker = L.marker([ciudad.lat, ciudad.lon]).addTo(map);
+                marker.bindPopup(`
+                    <b>${ciudad.nombre}, ${ciudad.pais}</b><br>
+                    🌡️ Temperatura: ${temp}°C
+                `);
             });
         }
         
-        async function actualizarTodo() {
+        async function actualizarCiudad() {
             const select = document.getElementById('citySelect');
-            const val = select.value.split(',');
-            const clima = await obtenerClima(val[0]+','+val[1]);
-            if(clima) {
+            const query = select.value;
+            const clima = await obtenerClima(query);
+            
+            if (clima) {
                 document.getElementById('temp').textContent = clima.temp.toFixed(1);
-                document.getElementById('hum').textContent = clima.hum;
-                document.getElementById('feels').textContent = clima.feels.toFixed(1);
-                document.getElementById('aqi').textContent = Math.floor(50+Math.random()*60);
+                document.getElementById('hum').textContent = clima.humedad;
+                document.getElementById('feels').textContent = clima.sensacion.toFixed(1);
+                document.getElementById('aqi').textContent = Math.floor(50 + Math.random() * 60);
             }
-            const temps = [], labels = [];
-            for(const c of ciudades) {
-                const cl = await obtenerClima(c.query);
-                temps.push(cl ? cl.temp : 0);
-                labels.push(c.pais);
+            
+            const ahora = new Date();
+            document.getElementById('lastUpdate').textContent = `Última actualización: ${ahora.toLocaleTimeString()}`;
+        }
+        
+        async function actualizarGrafico() {
+            const temps = [];
+            const labels = [];
+            
+            for (const ciudad of ciudades) {
+                const clima = await obtenerClima(ciudad.query);
+                temps.push(clima ? clima.temp : 0);
+                labels.push(ciudad.pais);
                 await new Promise(r => setTimeout(r, 500));
             }
-            if(tempChart) { tempChart.data.datasets[0].data = temps; tempChart.data.labels = labels; tempChart.update(); }
-            document.getElementById('lastUpdate').textContent = `Última actualización: ${new Date().toLocaleTimeString()}`;
+            
+            if (tempChart) {
+                tempChart.data.datasets[0].data = temps;
+                tempChart.data.labels = labels;
+                tempChart.update();
+            }
         }
         
         window.onload = () => {
-            tempChart = new Chart(document.getElementById('tempChart'), { type:'bar', data:{ labels:[], datasets:[{ label:'Temperatura (°C)', data:[], backgroundColor:'green' }] } });
-            new Chart(document.getElementById('protectedChart'), { type:'bar', data:{ labels:Object.keys(areasProtegidas), datasets:[{ label:'Áreas Protegidas (%)', data:Object.values(areasProtegidas), backgroundColor:'gold' }] } });
+            tempChart = new Chart(document.getElementById('tempChart'), {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: 'rgba(46, 90, 46, 0.7)' }] }
+            });
+            
+            new Chart(document.getElementById('protectedChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(areasProtegidas),
+                    datasets: [{ label: 'Áreas Protegidas (%)', data: Object.values(areasProtegidas), backgroundColor: 'rgba(255, 215, 0, 0.7)' }]
+                }
+            });
+            
             initMap();
-            actualizarTodo();
-            setInterval(actualizarTodo, 600000);
-            document.getElementById('citySelect').addEventListener('change', actualizarTodo);
+            actualizarCiudad();
+            actualizarGrafico();
+            
+            document.getElementById('citySelect').addEventListener('change', () => {
+                actualizarCiudad();
+                actualizarGrafico();
+            });
+            
+            setInterval(() => {
+                actualizarCiudad();
+                actualizarGrafico();
+            }, 600000);
         };
     </script>
 </body>
