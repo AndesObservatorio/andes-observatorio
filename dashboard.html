@@ -1,13 +1,140 @@
-k                tempChart.update();
-            }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Andes Observatorio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f7f0; padding: 20px; }
+        h1 { color: #1a5a1a; text-align: center; }
+        .stats { display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
+        .card { background: white; padding: 20px; border-radius: 10px; flex: 1; text-align: center; }
+        .value { font-size: 32px; color: gold; font-weight: bold; }
+        #map { height: 400px; margin: 20px 0; }
+        .charts { display: flex; gap: 20px; flex-wrap: wrap; }
+        .chart-card { background: white; padding: 20px; border-radius: 10px; flex: 1; }
+        canvas { max-height: 300px; width: 100%; }
+        footer { background: #1a3a1a; color: white; text-align: center; padding: 20px; margin-top: 20px; }
+        select { padding: 10px; margin: 10px; }
+        .selector { text-align: center; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>🏔️ Andes Observatorio - Dashboard Ambiental</h1>
+    
+    <div class="selector">
+        <label>📍 Ciudad: </label>
+        <select id="citySelect">
+            <option value="Bogota,CO">Bogotá, Colombia</option>
+            <option value="Quito,EC">Quito, Ecuador</option>
+            <option value="Lima,PE">Lima, Perú</option>
+            <option value="La Paz,BO">La Paz, Bolivia</option>
+            <option value="Santiago,CL">Santiago, Chile</option>
+            <option value="Buenos Aires,AR">Buenos Aires, Argentina</option>
+            <option value="Brasilia,BR">Brasilia, Brasil</option>
+            <option value="Caracas,VE">Caracas, Venezuela</option>
+            <option value="Panama City,PA">Panamá, Panamá</option>
+        </select>
+    </div>
+
+    <div class="stats">
+        <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--</div><div>°C</div></div>
+        <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--</div><div>%</div></div>
+        <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--</div><div>°C</div></div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="charts">
+        <div class="chart-card"><h3>Temperatura por País</h3><canvas id="tempChart"></canvas></div>
+        <div class="chart-card"><h3>Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
+    </div>
+
+    <footer>
+        <p>andesobservatorio@gmail.com | +57 3337211047</p>
+    </footer>
+
+    <script>
+        const API_KEY = "257ead5e0a9128276d4c947480000ebb";
+        
+        const datosRespaldo = {
+            'Bogota,CO': { temp: 16.5, hum: 72, feels: 15.2 },
+            'Quito,EC': { temp: 17.2, hum: 65, feels: 16.0 },
+            'Lima,PE': { temp: 19.8, hum: 78, feels: 19.0 },
+            'La Paz,BO': { temp: 15.3, hum: 60, feels: 14.5 },
+            'Santiago,CL': { temp: 14.2, hum: 55, feels: 13.5 },
+            'Buenos Aires,AR': { temp: 18.5, hum: 70, feels: 17.8 },
+            'Brasilia,BR': { temp: 24.3, hum: 65, feels: 23.5 },
+            'Caracas,VE': { temp: 27.0, hum: 68, feels: 28.0 },
+            'Panama City,PA': { temp: 28.0, hum: 75, feels: 29.0 }
+        };
+        
+        const ciudades = [
+            { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
+            { nombre: "Quito", pais: "Ecuador", query: "Quito,EC", lat: -0.1807, lon: -78.4678 },
+            { nombre: "Lima", pais: "Perú", query: "Lima,PE", lat: -12.0464, lon: -77.0428 },
+            { nombre: "La Paz", pais: "Bolivia", query: "La Paz,BO", lat: -16.5000, lon: -68.1500 },
+            { nombre: "Santiago", pais: "Chile", query: "Santiago,CL", lat: -33.4489, lon: -70.6693 },
+            { nombre: "Buenos Aires", pais: "Argentina", query: "Buenos Aires,AR", lat: -34.6037, lon: -58.3816 },
+            { nombre: "Brasilia", pais: "Brasil", query: "Brasilia,BR", lat: -15.8267, lon: -47.9218 },
+            { nombre: "Caracas", pais: "Venezuela", query: "Caracas,VE", lat: 10.4806, lon: -66.9036 },
+            { nombre: "Panamá", pais: "Panamá", query: "Panama City,PA", lat: 8.9824, lon: -79.5199 }
+        ];
+        
+        const areas = {
+            'Colombia': 16.8, 'Ecuador': 19.2, 'Perú': 17.5,
+            'Bolivia': 22.1, 'Chile': 21.5, 'Argentina': 9.8,
+            'Brasil': 29.5, 'Venezuela': 35.2, 'Panamá': 25.6
+        };
+        
+        let map, tempChart;
+        
+        async function getClima(query) {
+            try {
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
+                const res = await fetch(url);
+                const data = await res.json();
+                if(data.cod === 200) {
+                    return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
+                }
+            } catch(e) {}
+            return datosRespaldo[query];
         }
         
         function initMap() {
             map = L.map('map').setView([-15, -65], 4);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-            ciudades.forEach(c => {
-                L.marker([c.lat, c.lon]).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            ciudades.forEach(async c => {
+                const clima = await getClima(c.query);
+                const temp = clima ? clima.temp.toFixed(1) : '--';
+                L.marker([c.lat, c.lon]).addTo(map).bindPopup(`${c.nombre}: ${temp}°C`);
             });
+        }
+        
+        async function actualizar() {
+            const select = document.getElementById('citySelect');
+            const clima = await getClima(select.value);
+            if(clima) {
+                document.getElementById('temp').innerText = clima.temp.toFixed(1);
+                document.getElementById('hum').innerText = clima.hum;
+                document.getElementById('feels').innerText = clima.feels.toFixed(1);
+            }
+            
+            const temps = [];
+            const labels = [];
+            for(const c of ciudades) {
+                const cl = await getClima(c.query);
+                temps.push(cl ? cl.temp : 0);
+                labels.push(c.pais);
+            }
+            if(tempChart) {
+                tempChart.data.datasets[0].data = temps;
+                tempChart.data.labels = labels;
+                tempChart.update();
+            }
         }
         
         window.onload = () => {
@@ -15,12 +142,17 @@ k                tempChart.update();
                 type: 'bar',
                 data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: 'green' }] }
             });
+            new Chart(document.getElementById('protectedChart'), {
+                type: 'bar',
+                data: { labels: Object.keys(areas), datasets: [{ label: '% Protegido', data: Object.values(areas), backgroundColor: 'gold' }] }
+            });
             initMap();
-            actualizarTodo();
-            document.getElementById('citySelect').onchange = actualizarTodo;
-            setInterval(actualizarTodo, 600000);
+            actualizar();
+            document.getElementById('citySelect').onchange = actualizar;
+            setInterval(actualizar, 600000);
         };
     </script>
 </body>
 </html>
+
 
