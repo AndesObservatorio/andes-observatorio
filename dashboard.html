@@ -11,7 +11,24 @@
         body { font-family: Arial, sans-serif; background: #f0f7f0; padding: 20px; }
         h1 { color: #1a5a1a; text-align: center; }
         .stats { display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
-        .card { background: white; padding: 20px; border-radius: 10px; flex: 1; text-align: center; }
+        <div class="stats">
+    <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--</div><div>°C</div></div>
+    <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--</div><div>%</div></div>
+    <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--</div><div>°C</div></div>
+    <div class="card"><h3>💨 Viento</h3><div class="value" id="wind">--</div><div>km/h</div></div>
+    <div class="card"><h3>📊 Presión</h3><div class="value" id="pressure">--</div>
+<div>hPa</div>
+
+<div class="stats">
+    <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--</div><div>°C</div></div>
+    <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--</div><div>%</div></div>
+    <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--</div><div>°C</div></div>
+    <div class="card"><h3>💨 Viento</h3><div class="value" id="wind">--</div><div>km/h</div></div>
+    <div class="card"><h3>📊 Presión</h3><div class="value" id="pressure">--</div><div>hPa</div></div>
+</div>
+</div>
+</div>
+.card { background: white; padding: 20px; border-radius: 10px; flex: 1; text-align: center; }
         .value { font-size: 32px; color: gold; font-weight: bold; }
         #map { height: 400px; margin: 20px 0; }
         .charts { display: flex; gap: 20px; flex-wrap: wrap; }
@@ -71,7 +88,17 @@
             'Caracas,VE': { temp: 27.0, hum: 68, feels: 28.0 },
             'Panama City,PA': { temp: 28.0, hum: 75, feels: 29.0 }
         };
-        
+        const datosRespaldo = {
+    'Bogota,CO': { temp: 16.5, hum: 72, feels: 15.2, wind: 12, pressure: 1015 },
+    'Quito,EC': { temp: 17.2, hum: 65, feels: 16.0, wind: 10, pressure: 1012 },
+    'Lima,PE': { temp: 19.8, hum: 78, feels: 19.0, wind: 15, pressure: 1010 },
+    'La Paz,BO': { temp: 15.3, hum: 60, feels: 14.5, wind: 8, pressure: 1018 },
+    'Santiago,CL': { temp: 14.2, hum: 55, feels: 13.5, wind: 14, pressure: 1016 },
+    'Buenos Aires,AR': { temp: 18.5, hum: 70, feels: 17.8, wind: 16, pressure: 1014 },
+    'Brasilia,BR': { temp: 24.3, hum: 65, feels: 23.5, wind: 11, pressure: 1013 },
+    'Caracas,VE': { temp: 27.0, hum: 68, feels: 28.0, wind: 9, pressure: 1011 },
+    'Panama City,PA': { temp: 28.0, hum: 75, feels: 29.0, wind: 13, pressure: 1010 }
+};
         const ciudades = [
             { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
             { nombre: "Quito", pais: "Ecuador", query: "Quito,EC", lat: -0.1807, lon: -78.4678 },
@@ -92,7 +119,40 @@
         
         let map, tempChart;
         
-        async function getClima(query) {
+        async function getClima(query) async function getClima(query) {
+    try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if(data.cod === 200) {
+            return { 
+                temp: data.main.temp, 
+                hum: data.main.humidity, 
+                feels: data.main.feels_like,
+                wind: data.wind.speed,
+                pressure: data.main.pressure
+            }; 
+async function getClima(query) {
+    try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if(data.cod === 200) {
+            return { 
+                temp: data.main.temp, 
+                hum: data.main.humidity, 
+                feels: data.main.feels_like,
+                wind: data.wind.speed,
+                pressure: data.main.pressure
+            };
+        }
+    } catch(e) {}
+    return datosRespaldo[query];
+}
+        }
+    } catch(e) {}
+    return datosRespaldo[query];
+} {
             try {
                 const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
                 const res = await fetch(url);
@@ -102,7 +162,10 @@
                 }
             } catch(e) {}
             return datosRespaldo[query];
-        }
+const datosRespaldo = {
+    'Bogota,CO': { temp: 16.5, hum: 72, feels: 15.2, wind: 12, pressure: 1015 },
+    // ... agrega para las demás ciudades
+};        }
         
         function initMap() {
             map = L.map('map').setView([-15, -65], 4);
@@ -115,6 +178,13 @@
         }
         
         async function actualizar() {
+if(clima) {
+    document.getElementById('temp').innerText = clima.temp.toFixed(1);
+    document.getElementById('hum').innerText = clima.hum;
+    document.getElementById('feels').innerText = clima.feels.toFixed(1);
+    document.getElementById('wind').innerText = clima.wind ? clima.wind.toFixed(1) : '--';
+    document.getElementById('pressure').innerText = clima.pressure || '--';
+}
             const select = document.getElementById('citySelect');
             const clima = await getClima(select.value);
             if(clima) {
@@ -122,6 +192,14 @@
                 document.getElementById('hum').innerText = clima.hum;
                 document.getElementById('feels').innerText = clima.feels.toFixed(1);
             }
+if(clima) {
+    document.getElementById('temp').innerText = clima.temp.toFixed(1);
+    document.getElementById('hum').innerText = clima.hum;
+    document.getElementById('feels').innerText = clima.feels.toFixed(1);
+    document.getElementById('wind').innerText = clima.wind ? clima.wind.toFixed(1) : '--';
+    document.getElementById('pressure').innerText = clima.pressure || '--';
+}
+
             
             const temps = [];
             const labels = [];
