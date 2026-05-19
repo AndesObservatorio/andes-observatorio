@@ -36,7 +36,10 @@
         <label for="citySelect">📍 Selecciona una ciudad: </label>
         <select id="citySelect">
             <option value="Bogota,CO">Bogotá, Colombia</option>
+            <option value="Medellin,CO">Medellín, Colombia</option>
+            <option value="Cali,CO">Cali, Colombia</option>
             <option value="Quito,EC">Quito, Ecuador</option>
+            <option value="Guayaquil,EC">Guayaquil, Ecuador</option>
             <option value="Lima,PE">Lima, Perú</option>
             <option value="La Paz,BO">La Paz, Bolivia</option>
             <option value="Santiago,CL">Santiago, Chile</option>
@@ -64,7 +67,7 @@
     </div>
 
     <div class="chart-card" style="margin-top: 20px;">
-        <h3>📉 Tendencia de Temperatura - Bogotá (últimos 7 días)</h3>
+        <h3>📉 Tendencia de Temperatura - Últimos 7 días</h3>
         <canvas id="historyChart"></canvas>
     </div>
 
@@ -78,7 +81,10 @@
         
         const datosRespaldo = {
             'Bogota,CO': { temp: 16.5, hum: 72, feels: 15.2, wind: 12, pressure: 1015, aqi: 42 },
+            'Medellin,CO': { temp: 24.0, hum: 65, feels: 23.5, wind: 8, pressure: 1012, aqi: 48 },
+            'Cali,CO': { temp: 27.0, hum: 70, feels: 26.5, wind: 10, pressure: 1010, aqi: 55 },
             'Quito,EC': { temp: 17.2, hum: 65, feels: 16.0, wind: 10, pressure: 1012, aqi: 38 },
+            'Guayaquil,EC': { temp: 28.5, hum: 75, feels: 29.0, wind: 12, pressure: 1010, aqi: 65 },
             'Lima,PE': { temp: 19.8, hum: 78, feels: 19.0, wind: 15, pressure: 1010, aqi: 85 },
             'La Paz,BO': { temp: 15.3, hum: 60, feels: 14.5, wind: 8, pressure: 1018, aqi: 55 },
             'Santiago,CL': { temp: 14.2, hum: 55, feels: 13.5, wind: 14, pressure: 1016, aqi: 72 },
@@ -95,7 +101,10 @@
         
         const ciudades = [
             { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
+            { nombre: "Medellín", pais: "Colombia", query: "Medellin,CO", lat: 6.2442, lon: -75.5812 },
+            { nombre: "Cali", pais: "Colombia", query: "Cali,CO", lat: 3.4516, lon: -76.5320 },
             { nombre: "Quito", pais: "Ecuador", query: "Quito,EC", lat: -0.1807, lon: -78.4678 },
+            { nombre: "Guayaquil", pais: "Ecuador", query: "Guayaquil,EC", lat: -2.1704, lon: -79.9224 },
             { nombre: "Lima", pais: "Perú", query: "Lima,PE", lat: -12.0464, lon: -77.0428 },
             { nombre: "La Paz", pais: "Bolivia", query: "La Paz,BO", lat: -16.5000, lon: -68.1500 },
             { nombre: "Santiago", pais: "Chile", query: "Santiago,CL", lat: -33.4489, lon: -70.6693 },
@@ -143,7 +152,7 @@
             ciudades.forEach(async c => {
                 const clima = await getClima(c.query);
                 const temp = clima ? clima.temp.toFixed(1) : '--';
-                L.marker([c.lat, c.lon]).addTo(map).bindPopup(`${c.nombre}: ${temp}°C`);
+                L.marker([c.lat, c.lon]).addTo(map).bindPopup(`<b>${c.nombre}, ${c.pais}</b><br>🌡️ ${temp}°C`);
             });
         }
         
@@ -158,25 +167,15 @@
                 document.getElementById('pressure').innerText = clima.pressure || '--';
                 document.getElementById('aqi').innerText = clima.aqi || '--';
             }
-            
-            const temps = [];
-            const labels = [];
-            for(const c of ciudades) {
-                const cl = await getClima(c.query);
-                temps.push(cl ? cl.temp : 0);
-                labels.push(c.pais);
-            }
-            if(tempChart) {
-                tempChart.data.datasets[0].data = temps;
-                tempChart.data.labels = labels;
-                tempChart.update();
-            }
         }
         
         window.onload = () => {
             tempChart = new Chart(document.getElementById('tempChart'), {
                 type: 'bar',
-                data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: 'green' }] }
+                data: { 
+                    labels: ['Colombia', 'Ecuador', 'Perú', 'Bolivia', 'Chile', 'Argentina', 'Brasil', 'Venezuela', 'Panamá'],
+                    datasets: [{ label: 'Temperatura promedio (°C)', data: [18, 19, 20, 15, 14, 18, 24, 27, 28], backgroundColor: 'green' }]
+                }
             });
             
             new Chart(document.getElementById('protectedChart'), {
