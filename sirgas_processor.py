@@ -7,7 +7,6 @@ class SirgasProcessor:
     Clase para descargar y procesar datos de velocidades de estaciones SIRGAS-CON.
     """
     
-    # URL base para soluciones multianuales (ejemplo basado en SIR22P01)
     VELOCITY_URL = "https://www.sirgas.org/fileadmin/docs/SIR22P01_velocities.txt"
 
     @staticmethod
@@ -23,10 +22,7 @@ class SirgasProcessor:
 
     @staticmethod
     def parse_velocity_file(content: str) -> List[Dict]:
-        """
-        Parsea el archivo de texto de velocidades de SIRGAS.
-        Formato típico: ID Estación, Lon, Lat, Ve (mm/y), Vn (mm/y), Vu (mm/y)
-        """
+        """Parsea el archivo de texto de velocidades de SIRGAS."""
         stations = []
         lines = content.splitlines()
         
@@ -41,9 +37,9 @@ class SirgasProcessor:
                         "id": parts[0],
                         "lon": float(parts[1]),
                         "lat": float(parts[2]),
-                        "ve": float(parts[3]),  # Velocidad Este mm/y
-                        "vn": float(parts[4]),  # Velocidad Norte mm/y
-                        "vu": float(parts[5])   # Velocidad Vertical mm/y
+                        "ve": float(parts[3]),
+                        "vn": float(parts[4]),
+                        "vu": float(parts[5])
                     })
                 except ValueError:
                     continue
@@ -54,7 +50,6 @@ class SirgasProcessor:
         """Flujo completo para obtener los datos procesados."""
         content = self.download_velocities()
         if not content:
-            # Datos de respaldo (mock) en caso de que el servidor esté caído
             return [
                 {"id": "BOGT", "lon": -74.08, "lat": 4.64, "ve": 12.5, "vn": 15.2, "vu": -1.2},
                 {"id": "QUIT", "lon": -78.50, "lat": -0.18, "ve": 8.4, "vn": 10.1, "vu": 0.5},
