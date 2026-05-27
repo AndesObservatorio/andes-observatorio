@@ -71,6 +71,7 @@
             <option value="Santiago,CL">Santiago, Chile</option>
             <option value="Buenos Aires,AR">Buenos Aires, Argentina</option>
             <option value="Asuncion,PY">Asunción, Paraguay</option>
+            <option value="Montevideo,UY">Montevideo, Uruguay</option>
             <option value="Brasilia,BR">Brasilia, Brasil</option>
             <option value="Caracas,VE">Caracas, Venezuela</option>
             <option value="Panama City,PA">Panamá, Panamá</option>
@@ -121,7 +122,7 @@
         <p><strong>¿Qué es?</strong> Una plataforma tecnológica independiente que integra datos climáticos en tiempo real (OpenWeatherMap) con información geodésica de alta precisión (SIRGAS-CON) para el monitoreo integral de los ecosistemas andinos y sudamericanos.</p>
         
         <p><strong>🎯 Objetivos</strong><br>
-        • Monitorear variables ambientales en 10 países sudamericanos<br>
+        • Monitorear variables ambientales en 11 países sudamericanos<br>
         • Visualizar la dinámica tectónica de la región (movimiento de placas)<br>
         • Proveer datos abiertos para la toma de decisiones en conservación<br>
         • Servir como herramienta educativa y de investigación</p>
@@ -169,6 +170,7 @@
             { nombre: "Santiago", pais: "Chile", query: "Santiago,CL", lat: -33.4489, lon: -70.6693 },
             { nombre: "Buenos Aires", pais: "Argentina", query: "Buenos Aires,AR", lat: -34.6037, lon: -58.3816 },
             { nombre: "Asunción", pais: "Paraguay", query: "Asuncion,PY", lat: -25.2637, lon: -57.5759 },
+            { nombre: "Montevideo", pais: "Uruguay", query: "Montevideo,UY", lat: -34.9011, lon: -56.1645 },
             { nombre: "Brasilia", pais: "Brasil", query: "Brasilia,BR", lat: -15.8267, lon: -47.9218 },
             { nombre: "Caracas", pais: "Venezuela", query: "Caracas,VE", lat: 10.4806, lon: -66.9036 },
             { nombre: "Panamá", pais: "Panamá", query: "Panama City,PA", lat: 8.9824, lon: -79.5199 }
@@ -177,7 +179,8 @@
         const areas = {
             'Colombia': 16.8, 'Ecuador': 19.2, 'Perú': 17.5,
             'Bolivia': 22.1, 'Chile': 21.5, 'Argentina': 9.8,
-            'Paraguay': 12.5, 'Brasil': 29.5, 'Venezuela': 35.2, 'Panamá': 25.6
+            'Paraguay': 12.5, 'Uruguay': 4.5, 'Brasil': 29.5,
+            'Venezuela': 35.2, 'Panamá': 25.6
         };
         
         let map, tempChart, trendChart;
@@ -204,9 +207,6 @@
             const temps = [];
             const dias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
             for (let i = 6; i >= 0; i--) {
-                const fecha = new Date();
-                fecha.setDate(fecha.getDate() - i);
-                const fechaStr = fecha.toISOString().split('T')[0];
                 try {
                     const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
                     const res = await fetch(url);
@@ -317,7 +317,7 @@
         }
         
         function initMap() {
-            map = L.map('map').setView([-20, -65], 4);
+            map = L.map('map').setView([-23, -65], 4);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
             crearCapasCiudades();
             cargarDatosSIRGAS();
@@ -427,8 +427,8 @@ Dashboard: https://andes-observatorio.netlify.app
             
             tempChart = new Chart(document.getElementById('tempChart'), {
                 type: 'bar',
-                data: { labels: ['Colombia','Ecuador','Perú','Bolivia','Chile','Argentina','Paraguay','Brasil','Venezuela','Panamá'],
-                        datasets: [{ label: 'Temperatura promedio (°C)', data: [18,19,20,15,14,18,24,24,27,28], backgroundColor: 'rgba(46,90,46,0.7)' }] }
+                data: { labels: ['Colombia','Ecuador','Perú','Bolivia','Chile','Argentina','Paraguay','Uruguay','Brasil','Venezuela','Panamá'],
+                        datasets: [{ label: 'Temperatura promedio (°C)', data: [18,19,20,15,14,18,24,17,24,27,28], backgroundColor: 'rgba(46,90,46,0.7)' }] }
             });
             
             new Chart(document.getElementById('protectedChart'), {
