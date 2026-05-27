@@ -2,28 +2,37 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Andes Observatorio</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f0f7f0; padding: 20px; }
-        h1 { color: #1a5a1a; text-align: center; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f7f0; padding: 20px; }
+        h1 { color: #1a5a1a; text-align: center; margin-bottom: 20px; font-size: 1.8rem; }
         .selector { text-align: center; margin: 20px 0; }
-        select { padding: 10px; font-size: 16px; border-radius: 5px; }
+        select { padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #1a5a1a; }
         .stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin: 20px 0; }
-        .card { background: white; padding: 15px; border-radius: 10px; text-align: center; }
-        .value { font-size: 28px; font-weight: bold; color: #ffd700; }
+        .card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card h3 { color: #1a5a1a; margin-bottom: 10px; }
+        .value { font-size: 28px; font-weight: bold; color: #ffd700; text-shadow: 1px 1px 2px #1a5a1a; }
         #map { height: 500px; margin: 20px 0; border-radius: 10px; }
         .charts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 20px 0; }
         .chart-card { background: white; padding: 20px; border-radius: 10px; }
+        .chart-card h3 { text-align: center; color: #1a5a1a; margin-bottom: 15px; }
         canvas { max-height: 300px; width: 100%; }
         .news-section { background: white; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        .news-section h3 { color: #1a5a1a; margin-bottom: 15px; }
         .news-item { padding: 10px; border-bottom: 1px solid #ddd; }
         .news-title { font-weight: bold; color: #1a5a1a; }
         .news-date { font-size: 12px; color: #666; }
         footer { background: #1a3a1a; color: white; text-align: center; padding: 20px; margin-top: 20px; border-radius: 10px; }
+        .info-section { background: white; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        .info-section h3 { color: #1a5a1a; margin-bottom: 15px; }
+        .legend-box { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        .legend-color { display: inline-block; width: 20px; height: 4px; background: #e63946; margin-right: 8px; vertical-align: middle; }
+        .legend-marker { display: inline-block; width: 12px; height: 12px; background: #e63946; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
         @media (max-width: 768px) {
             .stats { grid-template-columns: repeat(2, 1fr); }
             .charts { grid-template-columns: 1fr; }
@@ -35,7 +44,7 @@
     <h1>🏔️ Andes Observatorio - Dashboard Ambiental</h1>
     
     <div class="selector">
-        <label>📍 Selecciona una ciudad: </label>
+        <label for="citySelect">📍 Selecciona una ciudad: </label>
         <select id="citySelect">
             <option value="Bogota,CO">Bogotá, Colombia</option>
             <option value="Medellin,CO">Medellín, Colombia</option>
@@ -63,6 +72,16 @@
 
     <div id="map"></div>
 
+    <div class="info-section">
+        <h3>📌 ¿Qué significa lo que ves en el mapa?</h3>
+        <div class="legend-box">
+            <span class="legend-marker"></span> <strong>Marcador rojo:</strong> Estación Geodésica SIRGAS-CON<br>
+            <span class="legend-color"></span> <strong>Línea roja:</strong> Vector de velocidad tectónica (mm/año)<br>
+            <strong>🔵 Marcador azul:</strong> Ciudad con datos climáticos en tiempo real<br><br>
+            <small>📐 Los vectores muestran la dirección y magnitud del movimiento de la placa tectónica. Datos actualizados desde SIRGAS-CON.</small>
+        </div>
+    </div>
+
     <div class="charts">
         <div class="chart-card"><h3>📈 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
         <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
@@ -76,6 +95,7 @@
     <footer>
         <p>🌄 Andes Observatorio - Monitoreo de Ecosistemas Andinos</p>
         <p>📧 andesobservatorio@gmail.com | 📞 +57 3337211047</p>
+        <p><small>Datos geodésicos: SIRGAS-CON | Datos climáticos: OpenWeatherMap | Actualización automática cada 10 minutos</small></p>
     </footer>
 
     <script>
@@ -122,31 +142,57 @@
         }
         
         async function cargarVectoresGeodesicos() {
-            console.log("🔄 Cargando vectores SIRGAS...");
+            console.log("🔄 Cargando estaciones SIRGAS...");
             try {
-                const response = await fetch(API_SIRGAS);
-                const estaciones = await response.json();
+                const respuesta = await fetch(API_SIRGAS);
+                const estaciones = await respuesta.json();
                 console.log(`📡 Recibidas ${estaciones.length} estaciones`);
                 
                 estaciones.forEach(est => {
-                    const start = [est.lat, est.lon];
-                    const end = [est.lat + (est.vn / 50000), est.lon + (est.ve / 50000)];
+                    const inicio = [est.lat, est.lon];
+                    const fin = [est.lat + (est.vn / 20000), est.lon + (est.ve / 20000)];
                     
-                    L.polyline([start, end], { color: '#ff4444', weight: 4, opacity: 0.9 }).addTo(map);
-                    L.marker(start).addTo(map).bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año`);
+                    L.polyline([inicio, fin], { 
+                        color: '#e63946', 
+                        weight: 4, 
+                        opacity: 0.9,
+                        dashArray: '8, 6'
+                    }).addTo(map);
+                    
+                    L.marker(inicio).addTo(map).bindPopup(`
+                        <div style="font-family: Arial, sans-serif; min-width: 200px;">
+                            <b style="color: #1a5a1a; font-size: 1.1rem;">📍 Estación Geodésica: ${est.id}</b>
+                            <hr style="margin: 5px 0;">
+                            <table style="width: 100%; font-size: 0.9rem;">
+                                <tr><td style="padding: 2px 0;"><b>🧭 Velocidad Este (ve):</b></td><td style="text-align: right;">${est.ve} mm/año</td></tr>
+                                <tr><td style="padding: 2px 0;"><b>🧭 Velocidad Norte (vn):</b></td><td style="text-align: right;">${est.vn} mm/año</td></tr>
+                                <tr><td style="padding: 2px 0;"><b>⬆️ Velocidad Vertical (vu):</b></td><td style="text-align: right;">${est.vu} mm/año</td></tr>
+                            </table>
+                            <hr style="margin: 5px 0;">
+                            <div style="font-size: 0.8rem; color: #555;">
+                                📐 Magnitud horizontal: ${Math.sqrt(est.ve*est.ve + est.vn*est.vn).toFixed(1)} mm/año<br>
+                                🧭 Dirección: ${Math.atan2(est.ve, est.vn) * 180 / Math.PI.toFixed(1)}°<br>
+                                <i>Fuente: SIRGAS-CON</i>
+                            </div>
+                        </div>
+                    `);
                 });
-                console.log(`✅ Agregadas ${estaciones.length} estaciones SIRGAS`);
+                console.log(`✅ Agregadas ${estaciones.length} estaciones al mapa`);
             } catch(e) {
-                console.log("❌ Error SIRGAS:", e);
+                console.error("❌ Error cargando SIRGAS:", e);
             }
         }
         
         function initMap() {
             map = L.map('map').setView([-15, -65], 4);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            
             ciudades.forEach(c => {
                 L.marker([c.lat, c.lon]).addTo(map).bindPopup(c.nombre);
             });
+            
             cargarVectoresGeodesicos();
         }
         
@@ -164,16 +210,16 @@
         }
         
         const noticias = [
-            { titulo: "Glaciares andinos perdieron más del 30% de su superficie", fecha: "2024-05-15" },
+            { titulo: "Glaciares andinos perdieron más del 30% de su superficie en 50 años", fecha: "2024-05-15" },
             { titulo: "Nuevo acuerdo regional para la protección de la Amazonía", fecha: "2024-05-14" },
             { titulo: "Comunidades indígenas implementan sistemas de alerta temprana", fecha: "2024-05-13" }
         ];
         
         function cargarNoticias() {
-            const container = document.getElementById('news-container');
-            container.innerHTML = '';
+            const contenedor = document.getElementById('news-container');
+            contenedor.innerHTML = '';
             noticias.forEach(n => {
-                container.innerHTML += `<div class="news-item"><div class="news-title">📌 ${n.titulo}</div><div class="news-date">📅 ${n.fecha}</div></div>`;
+                contenedor.innerHTML += `<div class="news-item"><div class="news-title">📌 ${n.titulo}</div><div class="news-date">📅 ${n.fecha}</div></div>`;
             });
         }
         
@@ -185,12 +231,12 @@
             tempChart = new Chart(document.getElementById('tempChart'), {
                 type: 'bar',
                 data: { labels: ['Colombia','Ecuador','Perú','Bolivia','Chile','Argentina','Brasil','Venezuela','Panamá'],
-                        datasets: [{ label: 'Temperatura (°C)', data: [18,19,20,15,14,18,24,27,28], backgroundColor: 'green' }] }
+                        datasets: [{ label: 'Temperatura promedio (°C)', data: [18,19,20,15,14,18,24,27,28], backgroundColor: 'rgba(46,90,46,0.7)' }] }
             });
             
             new Chart(document.getElementById('protectedChart'), {
                 type: 'bar',
-                data: { labels: Object.keys(areas), datasets: [{ label: '% Protegido', data: Object.values(areas), backgroundColor: 'gold' }] }
+                data: { labels: Object.keys(areas), datasets: [{ label: 'Áreas Protegidas (%)', data: Object.values(areas), backgroundColor: 'rgba(255,215,0,0.7)' }] }
             });
             
             document.getElementById('citySelect').onchange = actualizar;
@@ -199,4 +245,3 @@
     </script>
 </body>
 </html>
-
