@@ -181,6 +181,29 @@
             return null;
         }
         
+        // Función para actualizar el popup de una ciudad con datos EN VIVO
+        async function actualizarPopupCiudad(marker, ciudad) {
+            const clima = await getClima(ciudad.query);
+            if (clima) {
+                marker.bindPopup(`
+                    <div style="min-width: 180px;">
+                        <b style="color: #1a5a1a;">🏙️ ${ciudad.nombre}, ${ciudad.pais}</b><br>
+                        <hr style="margin: 5px 0;">
+                        <table style="width: 100%; font-size: 0.85rem;">
+                            <tr><td style="padding: 2px 0;"><b>🌡️ Temperatura:</b></td><td style="text-align: right;">${clima.temp.toFixed(1)}°C</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>💧 Humedad:</b></td><td style="text-align: right;">${clima.hum}%</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>🌡️ Sensación:</b></td><td style="text-align: right;">${clima.feels.toFixed(1)}°C</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>💨 Viento:</b></td><td style="text-align: right;">${clima.wind ? clima.wind.toFixed(1) : '--'} km/h</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>📊 Presión:</b></td><td style="text-align: right;">${clima.pressure || '--'} hPa</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>💨 Calidad Aire:</b></td><td style="text-align: right;">${clima.aqi || '--'} AQI</td></tr>
+                        </table>
+                        <hr style="margin: 5px 0;">
+                        <small>📅 Datos actualizados ahora<br>🔍 Más detalles en el panel superior</small>
+                    </div>
+                `).openPopup();
+            }
+        }
+        
         async function cargarVectoresGeodesicos() {
             console.log("🔄 Cargando estaciones SIRGAS...");
             try {
@@ -199,7 +222,6 @@
                         dashArray: '8, 6'
                     }).addTo(map);
                     
-                    // Marcadores ROJOS para estaciones SIRGAS
                     L.circleMarker(inicio, {
                         radius: 8,
                         fillColor: '#e63946',
@@ -237,33 +259,24 @@
                 attribution: '© OpenStreetMap'
             }).addTo(map);
             
-            // Marcadores VERDES para ciudades (con datos climáticos en tiempo real)
-            ciudades.forEach(async (c) => {
-                const clima = await getClima(c.query);
-                const temp = clima ? clima.temp.toFixed(1) : '--';
-                const hum = clima ? clima.hum : '--';
-                const feels = clima ? clima.feels.toFixed(1) : '--';
-                
-                L.circleMarker([c.lat, c.lon], {
+            // Crear marcadores VERDES para ciudades (con popup que se actualiza al hacer clic)
+            ciudades.forEach(ciudad => {
+                const marker = L.circleMarker([ciudad.lat, ciudad.lon], {
                     radius: 8,
                     fillColor: '#1a5a1a',
                     color: '#1a5a1a',
                     weight: 2,
                     opacity: 0.8,
                     fillOpacity: 0.6
-                }).addTo(map).bindPopup(`
-                    <div style="min-width: 180px;">
-                        <b style="color: #1a5a1a;">🏙️ ${c.nombre}, ${c.pais}</b><br>
-                        <hr style="margin: 5px 0;">
-                        <table style="width: 100%; font-size: 0.85rem;">
-                            <tr><td>🌡️ Temperatura:</td><td style="text-align: right;"><b>${temp}°C</b></td></tr>
-                            <tr><td>💧 Humedad:</td><td style="text-align: right;"><b>${hum}%</b></td></tr>
-                            <tr><td>🌡️ Sensación:</td><td style="text-align: right;"><b>${feels}°C</b></td></tr>
-                        </table>
-                        <hr style="margin: 5px 0;">
-                        <small>📅 Datos en tiempo real<br>🔍 Más detalles en el panel superior</small>
-                    </div>
-                `);
+                }).addTo(map);
+                
+                // Al hacer clic, actualizar el popup con datos EN VIVO
+                marker.on('click', async () => {
+                    await actualizarPopupCiudad(marker, ciudad);
+                });
+                
+                // Popup inicial mientras carga
+                marker.bindPopup(`<div style="text-align:center;">🔄 Cargando datos de ${ciudad.nombre}...</div>`);
             });
             
             cargarVectoresGeodesicos();
