@@ -19,7 +19,8 @@
         .value { font-size: 28px; font-weight: bold; color: #ffd700; text-shadow: 1px 1px 2px #1a5a1a; }
         .map-header { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; flex-wrap: wrap; gap: 10px; }
         .update-badge { background: #1a5a1a; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; }
-        .layer-control { background: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+        .layer-control { background: white; padding: 8px 15px; border-radius: 8px; font-size: 14px; display: inline-flex; align-items: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .layer-control label { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
         #map { height: 500px; margin: 10px 0 20px 0; border-radius: 10px; }
         .info-section { background: white; padding: 20px; border-radius: 10px; margin: 20px 0; }
         .info-section h3 { color: #1a5a1a; margin-bottom: 15px; }
@@ -40,7 +41,7 @@
         .news-item { padding: 10px; border-bottom: 1px solid #ddd; }
         .news-title { font-weight: bold; color: #1a5a1a; }
         .news-date { font-size: 12px; color: #666; }
-        .download-btn { background: #1a5a1a; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; margin: 10px 0; }
+        .download-btn { background: #1a5a1a; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 13px; }
         .download-btn:hover { background: #2d7a2d; }
         footer { background: #1a3a1a; color: white; text-align: center; padding: 20px; margin-top: 20px; border-radius: 10px; }
         @media (max-width: 768px) {
@@ -50,6 +51,7 @@
             .charts { grid-template-columns: 1fr; }
             #map { height: 350px; }
             .map-header { flex-direction: column; align-items: flex-start; }
+            .layer-control { width: 100%; }
         }
     </style>
 </head>
@@ -85,8 +87,11 @@
 
     <div class="map-header">
         <div class="update-badge" id="sirgas-update">🔄 Cargando datos SIRGAS...</div>
-        <div style="display: flex; gap: 10px;">
-            <button class="download-btn" id="downloadPDF">📄 Descargar Reporte</button>
+        <div class="layer-control" id="layer-control">
+            <label><input type="checkbox" id="toggle-vectores" checked> 📍 Vectores SIRGAS</label>
+            <label><input type="checkbox" id="toggle-estaciones" checked> 🔴 Estaciones SIRGAS</label>
+            <label><input type="checkbox" id="toggle-ciudades" checked> 🟢 Ciudades</label>
+            <button class="download-btn" id="downloadPDF">📄 Reporte</button>
         </div>
     </div>
 
@@ -99,7 +104,8 @@
             <span class="legend-marker-blue"></span> <strong>Círculo VERDE:</strong> Ciudad con datos climáticos en tiempo real<br>
             <span class="legend-color"></span> <strong>Línea roja:</strong> Vector de velocidad tectónica - dirección y magnitud del movimiento<br><br>
             <small>📐 Los vectores muestran el desplazamiento horizontal de la placa Sudamericana. Datos actualizados desde SIRGAS-CON.<br>
-            🔍 Haz clic en cualquier círculo para ver información detallada.</small>
+            🔍 Haz clic en cualquier círculo para ver información detallada.<br>
+            🎛️ Puedes activar/desactivar capas usando los controles sobre el mapa.</small>
         </div>
     </div>
 
@@ -171,8 +177,9 @@
             'Brasil': 29.5, 'Venezuela': 35.2, 'Panamá': 25.6
         };
         
-        let map, tempChart, estacionesSIRGAS = [];
-        let vectoresLayer, markersLayer;
+        let map, tempChart;
+        let vectoresLayer, estacionesLayer, ciudadesLayer;
+        let estacionesSIRGAS = [];
         
         async function getClima(query) {
             try {
@@ -198,12 +205,12 @@
                         <b style="color: #1a5a1a;">🏙️ ${ciudad.nombre}, ${ciudad.pais}</b><br>
                         <hr style="margin: 5px 0;">
                         <table style="width: 100%; font-size: 0.85rem;">
-                            <tr><td><b>🌡️ Temperatura:</b></td><td style="text-align: right;">${clima.temp.toFixed(1)}°C</td></tr>
-                            <tr><td><b>💧 Humedad:</b></td><td style="text-align: right;">${clima.hum}%</td></tr>
-                            <tr><td><b>🌡️ Sensación:</b></td><td style="text-align: right;">${clima.feels.toFixed(1)}°C</td></tr>
-                            <tr><td><b>💨 Viento:</b></td><td style="text-align: right;">${clima.wind ? clima.wind.toFixed(1) : '--'} km/h</td></tr>
-                            <tr><td><b>📊 Presión:</b></td><td style="text-align: right;">${clima.pressure || '--'} hPa</td></tr>
-                            <tr><td><b>💨 Calidad Aire:</b></td><td style="text-align: right;">${clima.aqi || '--'} AQI</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>🌡️ Temperatura:</b></td><td style="text-align: right;">${clima.temp.toFixed(1)}°C</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>💧 Humedad:</b></td><td style="text-align: right;">${clima.hum}%</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>🌡️ Sensación:</b></td><td style="text-align: right;">${clima.feels.toFixed(1)}°C</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>💨 Viento:</b></td><td style="text-align: right;">${clima.wind ? clima.wind.toFixed(1) : '--'} km/h</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>📊 Presión:</b></td><td style="text-align: right;">${clima.pressure || '--'} hPa</td></tr>
+                            <tr><td style="padding: 2px 0;"><b>💨 Calidad Aire:</b></td><td style="text-align: right;">${clima.aqi || '--'} AQI</td></tr>
                         </table>
                         <hr><small>📅 Datos actualizados ahora</small>
                     </div>
@@ -211,7 +218,7 @@
             }
         }
         
-        async function cargarVectoresGeodesicos() {
+        async function cargarDatosSIRGAS() {
             document.getElementById('sirgas-update').innerHTML = '🔄 Actualizando datos SIRGAS...';
             try {
                 const respuesta = await fetch(API_SIRGAS);
@@ -220,10 +227,10 @@
                 document.getElementById('sirgas-update').innerHTML = `📡 SIRGAS: ${estacionesSIRGAS.length} estaciones | Actualizado: ${ahora.toLocaleTimeString()}`;
                 
                 if (vectoresLayer) map.removeLayer(vectoresLayer);
-                if (markersLayer) map.removeLayer(markersLayer);
+                if (estacionesLayer) map.removeLayer(estacionesLayer);
                 
                 vectoresLayer = L.layerGroup();
-                markersLayer = L.layerGroup();
+                estacionesLayer = L.layerGroup();
                 
                 estacionesSIRGAS.forEach(est => {
                     const inicio = [est.lat, est.lon];
@@ -236,18 +243,19 @@
                             <div style="min-width: 200px;">
                                 <b style="color:#1a5a1a;">📍 Estación: ${est.id}</b><hr>
                                 <table style="width:100%">
-                                    <tr><td><b>🧭 Velocidad Este:</b></td><td>${est.ve} mm/año</td></tr>
-                                    <tr><td><b>🧭 Velocidad Norte:</b></td><td>${est.vn} mm/año</td></tr>
-                                    <tr><td><b>⬆️ Velocidad Vertical:</b></td><td>${est.vu} mm/año</td></tr>
-                                    <tr><td><b>📐 Magnitud:</b></td><td>${Math.sqrt(est.ve*est.ve + est.vn*est.vn).toFixed(1)} mm/año</td></tr>
+                                    <tr><td><b>🧭 Velocidad Este:</b></td><td style="text-align:right;">${est.ve} mm/año</td></tr>
+                                    <tr><td><b>🧭 Velocidad Norte:</b></td><td style="text-align:right;">${est.vn} mm/año</td></tr>
+                                    <tr><td><b>⬆️ Velocidad Vertical:</b></td><td style="text-align:right;">${est.vu} mm/año</td></tr>
+                                    <tr><td><b>📐 Magnitud:</b></td><td style="text-align:right;">${Math.sqrt(est.ve*est.ve + est.vn*est.vn).toFixed(1)} mm/año</td></tr>
                                 </table>
                                 <hr><i>Fuente: SIRGAS-CON</i>
                             </div>
-                        `).addTo(markersLayer);
+                        `).addTo(estacionesLayer);
                 });
                 
-                vectoresLayer.addTo(map);
-                markersLayer.addTo(map);
+                if (document.getElementById('toggle-vectores').checked) vectoresLayer.addTo(map);
+                if (document.getElementById('toggle-estaciones').checked) estacionesLayer.addTo(map);
+                
                 console.log(`✅ ${estacionesSIRGAS.length} estaciones SIRGAS cargadas`);
             } catch(e) {
                 console.error("❌ Error SIRGAS:", e);
@@ -255,19 +263,36 @@
             }
         }
         
-        function initMap() {
-            map = L.map('map').setView([-15, -65], 4);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
-            
+        function crearCapasCiudades() {
+            ciudadesLayer = L.layerGroup();
             ciudades.forEach(ciudad => {
                 const marker = L.circleMarker([ciudad.lat, ciudad.lon], {
                     radius: 8, fillColor: '#1a5a1a', color: '#1a5a1a', weight: 2, opacity: 0.8, fillOpacity: 0.6
-                }).addTo(map);
+                }).addTo(ciudadesLayer);
                 marker.on('click', async () => { await actualizarPopupCiudad(marker, ciudad); });
                 marker.bindPopup(`<div style="text-align:center;">🔄 Cargando datos de ${ciudad.nombre}...</div>`);
             });
+            if (document.getElementById('toggle-ciudades').checked) ciudadesLayer.addTo(map);
+        }
+        
+        function initMap() {
+            map = L.map('map').setView([-15, -65], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+            crearCapasCiudades();
+            cargarDatosSIRGAS();
             
-            cargarVectoresGeodesicos();
+            document.getElementById('toggle-vectores').addEventListener('change', (e) => {
+                if (e.target.checked) vectoresLayer?.addTo(map);
+                else vectoresLayer?.removeFrom(map);
+            });
+            document.getElementById('toggle-estaciones').addEventListener('change', (e) => {
+                if (e.target.checked) estacionesLayer?.addTo(map);
+                else estacionesLayer?.removeFrom(map);
+            });
+            document.getElementById('toggle-ciudades').addEventListener('change', (e) => {
+                if (e.target.checked) ciudadesLayer?.addTo(map);
+                else ciudadesLayer?.removeFrom(map);
+            });
         }
         
         async function actualizar() {
@@ -363,7 +388,7 @@ Dashboard: https://andes-observatorio.netlify.app
             
             document.getElementById('citySelect').onchange = actualizar;
             setInterval(actualizar, 600000);
-            setInterval(cargarVectoresGeodesicos, 600000);
+            setInterval(cargarDatosSIRGAS, 600000);
         };
     </script>
 </body>
