@@ -260,6 +260,9 @@
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia;
     let estacionesSIRGAS = [];
 
+    // ============================================================
+    // CLIMA
+    // ============================================================
     async function getClima(query) {
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
         try {
@@ -349,51 +352,35 @@
         else { feelsEl.className = 'estado-alerta ok'; feelsEl.innerText = '✅ Normal'; }
     }
 
+    // ============================================================
+    // GRÁFICOS
+    // ============================================================
+    async function actualizarGrafico() {
         const labels = [];
-    const datos = [];
-    const colores = [];
-    
-    for (const c of ciudades) {
-        const clima = await getClima(c.query);
-        labels.push(c.pais);
-        const temp = clima ? clima.temp : 0;
-        datos.push(temp);
-        
-        // Asignar color según temperatura (de amarillo a rojo)
-        let color;
-        if (temp < 15) {
-            color = '#fff5cc';  // Amarillo muy claro
-        } else if (temp < 18) {
-            color = '#ffebb3';  // Amarillo claro
-        } else if (temp < 22) {
-            color = '#ffd699';  // Amarillo/naranja
-        } else if (temp < 26) {
-            color = '#ffb366';  // Naranja claro
-        } else if (temp < 30) {
-            color = '#ff8c42';  // Naranja
-        } else if (temp < 35) {
-            color = '#ff6b35';  // Naranja/rojo
-        } else {
-            color = '#e63946';  // Rojo
+        const datos = [];
+        const colores = [];
+        const paleta = ['#fff5cc','#ffebb3','#ffd699','#ffb366','#ff8c42','#ff6b35','#e63946'];
+        for (const c of ciudades) {
+            const clima = await getClima(c.query);
+            labels.push(c.pais);
+            const temp = clima ? clima.temp : 0;
+            datos.push(temp);
+            let idx = Math.min(Math.floor(temp / 5), paleta.length - 1);
+            colores.push(paleta[idx] || paleta[0]);
         }
-        colores.push(color);
+        if (tempChart) {
+            tempChart.data.labels = labels;
+            tempChart.data.datasets[0].data = datos;
+            tempChart.data.datasets[0].backgroundColor = colores;
+            tempChart.update();
+        }
     }
-    
-    if (tempChart) {
-        tempChart.data.labels = labels;
-        tempChart.data.datasets[0].data = datos;
-        tempChart.data.datasets[0].backgroundColor = colores;
-        tempChart.update();
-    }
-}
-
-
 
     function initCharts() {
         const ctx = document.getElementById('tempChart').getContext('2d');
         tempChart = new Chart(ctx, {
             type: 'bar',
-            data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: '#ffd699', borderColor: '#e6b800', borderWidth: 1, borderRadius: 4 }] },
+            data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: [] }] },
             options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 35, title: { display: true, text: 'Temperatura (°C)' } } } }
         });
 
@@ -421,6 +408,9 @@
         actualizarGrafico();
     }
 
+    // ============================================================
+    // SIRGAS HISTÓRICO
+    // ============================================================
     function generarDatosHistoricos(estacion, variable) {
         const params = {
             'BOGT': { base: 0, tendencia: 2.5, ruido: 1.2 },
@@ -457,6 +447,9 @@
         }
     }
 
+    // ============================================================
+    // SIRGAS
+    // ============================================================
     async function cargarSIRGAS() {
         const badge = document.getElementById('sirgasBadge');
         badge.innerText = '🔄 Actualizando SIRGAS…';
@@ -497,6 +490,9 @@
         capaInfluencia.addTo(map);
     }
 
+    // ============================================================
+    // MAPA
+    // ============================================================
     function initMap() {
         if (map) map.remove();
         map = L.map('map').setView([-15, -65], 4);
@@ -529,6 +525,9 @@
         cargarSIRGAS();
     }
 
+    // ============================================================
+    // REPORTE
+    // ============================================================
     function descargarReporte() {
         const ahora = new Date();
         const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
@@ -554,6 +553,9 @@
         link.click();
     }
 
+    // ============================================================
+    // EVENTOS
+    // ============================================================
     document.getElementById('citySelect').addEventListener('change', actualizarCiudad);
     document.getElementById('btnReporte').addEventListener('click', descargarReporte);
     document.querySelectorAll('.btn-alerta').forEach(btn => {
@@ -562,6 +564,9 @@
     document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
 
+    // ============================================================
+    // INICIO
+    // ============================================================
     window.onload = function() {
         initMap();
         initCharts();
