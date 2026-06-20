@@ -997,7 +997,30 @@ const normativas = {
             }, 5000);
         }
 
-        function configurarUmbrales() {
+        function     const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
+    const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
+    const umbralFeels = parseFloat(document.getElementById('umbralFeels').value) || 30;
+
+    // Obtener valores actuales de la interfaz
+    const tempActual = parseFloat(document.getElementById('temp').innerText) || 0;
+    const humActual = parseFloat(document.getElementById('hum').innerText) || 0;
+    const feelsActual = parseFloat(document.getElementById('feels').innerText) || 0;
+
+    // Actualizar los spans de "Actual"
+    const tempSpan = document.getElementById('tempActual');
+    const humSpan = document.getElementById('humActual');
+    const feelsSpan = document.getElementById('feelsActual');
+
+    if (tempSpan) tempSpan.innerText = tempActual.toFixed(1);
+    if (humSpan) humSpan.innerText = humActual;
+    if (feelsSpan) feelsSpan.innerText = feelsActual.toFixed(1);
+
+    // Evaluar alertas
+    actualizarEstadoAlerta('tempActual', 'estadoTemp', tempActual, umbralTemp, 'Temperatura');
+    actualizarEstadoAlerta('humActual', 'estadoHum', humActual, umbralHum, 'Humedad');
+    actualizarEstadoAlerta('feelsActual', 'estadoFeels', feelsActual, umbralFeels, 'Sensación');
+}
+configurarUmbrales() {
             const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
             const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
             const umbralFeels = parseFloat(document.getElementById('umbralFeels').value) || 30;
@@ -1047,6 +1070,7 @@ const normativas = {
                 document.getElementById('hum').innerText = clima.hum;
                 document.getElementById('feels').innerText = clima.feels.toFixed(1);
             }
+configurarUmbrales();
 
             const lista = document.getElementById('normativasLista');
             const placeholder = document.getElementById('normativasPlaceholder');
@@ -1397,7 +1421,8 @@ const normativas = {
         //  INICIO
         // ============================================================
         window.onload = function() {
-            const defaultVal = document.getElementById('citySelect').value;
+        setTimeout(configurarUmbrales, 1000);
+    const defaultVal = document.getElementById('citySelect').value;
             const partes = defaultVal.split(',');
             const lat = parseFloat(partes[2]);
             const lon = parseFloat(partes[3]);
