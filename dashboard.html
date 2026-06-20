@@ -189,15 +189,9 @@
 </div>
 
 <script>
-    // ============================================================
-    // CONFIGURACIÓN
-    // ============================================================
     const API_KEY = "257ead5e0a9128276d4c947480000ebb";
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
 
-    // ============================================================
-    // CIUDADES
-    // ============================================================
     const ciudades = [
         { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
         { nombre: "Medellín", pais: "Colombia", query: "Medellin,CO", lat: 6.2442, lon: -75.5812 },
@@ -219,9 +213,6 @@
         { nombre: "Panamá", pais: "Panamá", query: "Panama City,PA", lat: 8.9824, lon: -79.5199 }
     ];
 
-    // ============================================================
-    // NORMATIVAS
-    // ============================================================
     const normativas = {
         "CO": [
             { titulo: "Decreto 2041 de 2014", descripcion: "Licencias ambientales", url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=62228" },
@@ -265,16 +256,10 @@
         'Argentina':9.8,'Paraguay':12.5,'Uruguay':4.5,'Brasil':29.5,'Venezuela':35.2,'Panamá':25.6
     };
 
-    // ============================================================
-    // VARIABLES GLOBALES
-    // ============================================================
     let map, tempChart, protectedChart, trendChart, sirgasHistoryChart;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia;
     let estacionesSIRGAS = [];
 
-    // ============================================================
-    // FUNCIONES CLIMA
-    // ============================================================
     async function getClima(query) {
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
         try {
@@ -305,7 +290,6 @@
             actualizarAlertas(clima);
         }
 
-        // Normativas
         const lista = document.getElementById('normativasLista');
         const placeholder = document.getElementById('normativasPlaceholder');
         if (normativas[codigoPais]) {
@@ -320,6 +304,7 @@
         }
 
         await actualizarTendencia(query);
+        await actualizarGrafico();
     }
 
     async function actualizarTendencia(query) {
@@ -364,9 +349,6 @@
         else { feelsEl.className = 'estado-alerta ok'; feelsEl.innerText = '✅ Normal'; }
     }
 
-    // ============================================================
-    // GRÁFICOS
-    // ============================================================
     async function actualizarGrafico() {
         const labels = [];
         const datos = [];
@@ -386,15 +368,15 @@
         const ctx = document.getElementById('tempChart').getContext('2d');
         tempChart = new Chart(ctx, {
             type: 'bar',
-            data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: '#ffd699' }] },
-            options: { responsive: true, plugins: { legend: { display: false } } }
+            data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: '#ffd699', borderColor: '#e6b800', borderWidth: 1, borderRadius: 4 }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 35, title: { display: true, text: 'Temperatura (°C)' } } } }
         });
 
         const ctx2 = document.getElementById('protectedChart').getContext('2d');
         protectedChart = new Chart(ctx2, {
             type: 'bar',
-            data: { labels: Object.keys(areasProtegidas), datasets: [{ label: 'Áreas protegidas (%)', data: Object.values(areasProtegidas), backgroundColor: '#99cc99' }] },
-            options: { responsive: true, plugins: { legend: { display: false } } }
+            data: { labels: Object.keys(areasProtegidas), datasets: [{ label: 'Áreas protegidas (%)', data: Object.values(areasProtegidas), backgroundColor: '#99cc99', borderColor: '#4caf50', borderWidth: 1, borderRadius: 4 }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 40, title: { display: true, text: 'Áreas protegidas (%)' } } } }
         });
 
         const ctx3 = document.getElementById('trendChart').getContext('2d');
@@ -411,13 +393,45 @@
             options: { responsive: true, plugins: { legend: { display: false } } }
         });
 
-        // Cargar datos iniciales del gráfico
         actualizarGrafico();
     }
 
-    // ============================================================
-    // SIRGAS
-    // ============================================================
+    function generarDatosHistoricos(estacion, variable) {
+        const params = {
+            'BOGT': { base: 0, tendencia: 2.5, ruido: 1.2 },
+            'QUIT': { base: 0, tendencia: 1.8, ruido: 1.0 },
+            'LIMA': { base: 0, tendencia: 3.2, ruido: 1.5 },
+            'LPBZ': { base: 0, tendencia: 2.0, ruido: 1.1 },
+            'SANT': { base: 0, tendencia: 1.5, ruido: 0.8 }
+        };
+        const p = params[estacion] || { base: 0, tendencia: 2.0, ruido: 1.0 };
+        const datos = [];
+        const fechas = [];
+        const ahora = new Date();
+        for (let i = 20; i >= 0; i--) {
+            const fecha = new Date(ahora);
+            fecha.setMonth(fecha.getMonth() - i);
+            fechas.push(fecha.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }));
+            let valor = p.base + (p.tendencia * (20 - i) / 20) + (Math.random() - 0.5) * p.ruido * 2;
+            if (variable === 'N') valor += 0.2;
+            if (variable === 'U') valor += 0.1;
+            datos.push(Math.round(valor * 10) / 10);
+        }
+        return { fechas, datos };
+    }
+
+    function actualizarSirgasHistorico() {
+        const estacion = document.getElementById('estacionHistorica').value;
+        const variable = document.getElementById('variableHistorica').value;
+        const { fechas, datos } = generarDatosHistoricos(estacion, variable);
+        if (sirgasHistoryChart) {
+            sirgasHistoryChart.data.labels = fechas;
+            sirgasHistoryChart.data.datasets[0].data = datos;
+            sirgasHistoryChart.data.datasets[0].label = `${estacion} - ${variable} (mm)`;
+            sirgasHistoryChart.update();
+        }
+    }
+
     async function cargarSIRGAS() {
         const badge = document.getElementById('sirgasBadge');
         badge.innerText = '🔄 Actualizando SIRGAS…';
@@ -458,48 +472,6 @@
         capaInfluencia.addTo(map);
     }
 
-    // ============================================================
-    // DATOS HISTÓRICOS SIRGAS
-    // ============================================================
-    function generarDatosHistoricos(estacion, variable) {
-        const params = {
-            'BOGT': { base: 0, tendencia: 2.5, ruido: 1.2 },
-            'QUIT': { base: 0, tendencia: 1.8, ruido: 1.0 },
-            'LIMA': { base: 0, tendencia: 3.2, ruido: 1.5 },
-            'LPBZ': { base: 0, tendencia: 2.0, ruido: 1.1 },
-            'SANT': { base: 0, tendencia: 1.5, ruido: 0.8 }
-        };
-        const p = params[estacion] || { base: 0, tendencia: 2.0, ruido: 1.0 };
-        const datos = [];
-        const fechas = [];
-        const ahora = new Date();
-        for (let i = 20; i >= 0; i--) {
-            const fecha = new Date(ahora);
-            fecha.setMonth(fecha.getMonth() - i);
-            fechas.push(fecha.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }));
-            let valor = p.base + (p.tendencia * (20 - i) / 20) + (Math.random() - 0.5) * p.ruido * 2;
-            if (variable === 'N') valor += 0.2;
-            if (variable === 'U') valor += 0.1;
-            datos.push(Math.round(valor * 10) / 10);
-        }
-        return { fechas, datos };
-    }
-
-    function actualizarSirgasHistorico() {
-        const estacion = document.getElementById('estacionHistorica').value;
-        const variable = document.getElementById('variableHistorica').value;
-        const { fechas, datos } = generarDatosHistoricos(estacion, variable);
-        if (sirgasHistoryChart) {
-            sirgasHistoryChart.data.labels = fechas;
-            sirgasHistoryChart.data.datasets[0].data = datos;
-            sirgasHistoryChart.data.datasets[0].label = `${estacion} - ${variable} (mm)`;
-            sirgasHistoryChart.update();
-        }
-    }
-
-    // ============================================================
-    // MAPA
-    // ============================================================
     function initMap() {
         if (map) map.remove();
         map = L.map('map').setView([-15, -65], 4);
@@ -532,9 +504,6 @@
         cargarSIRGAS();
     }
 
-    // ============================================================
-    // REPORTE
-    // ============================================================
     function descargarReporte() {
         const ahora = new Date();
         const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
@@ -560,33 +529,20 @@
         link.click();
     }
 
-    // ============================================================
-    // EVENTOS
-    // ============================================================
-    document.getElementById('citySelect').addEventListener('change', function() {
-        actualizarCiudad();
-        actualizarGrafico();
-    });
-
+    document.getElementById('citySelect').addEventListener('change', actualizarCiudad);
     document.getElementById('btnReporte').addEventListener('click', descargarReporte);
-
     document.querySelectorAll('.btn-alerta').forEach(btn => {
         btn.addEventListener('click', actualizarCiudad);
     });
-
     document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
 
-    // ============================================================
-    // INICIO
-    // ============================================================
     window.onload = function() {
         initMap();
         initCharts();
         actualizarCiudad();
         actualizarSirgasHistorico();
         setInterval(actualizarCiudad, 300000);
-        setInterval(actualizarGrafico, 600000);
         setInterval(cargarSIRGAS, 600000);
     };
 </script>
