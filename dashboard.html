@@ -349,20 +349,45 @@
         else { feelsEl.className = 'estado-alerta ok'; feelsEl.innerText = '✅ Normal'; }
     }
 
-    async function actualizarGrafico() {
         const labels = [];
-        const datos = [];
-        for (const c of ciudades) {
-            const clima = await getClima(c.query);
-            labels.push(c.pais);
-            datos.push(clima ? clima.temp : 0);
+    const datos = [];
+    const colores = [];
+    
+    for (const c of ciudades) {
+        const clima = await getClima(c.query);
+        labels.push(c.pais);
+        const temp = clima ? clima.temp : 0;
+        datos.push(temp);
+        
+        // Asignar color según temperatura (de amarillo a rojo)
+        let color;
+        if (temp < 15) {
+            color = '#fff5cc';  // Amarillo muy claro
+        } else if (temp < 18) {
+            color = '#ffebb3';  // Amarillo claro
+        } else if (temp < 22) {
+            color = '#ffd699';  // Amarillo/naranja
+        } else if (temp < 26) {
+            color = '#ffb366';  // Naranja claro
+        } else if (temp < 30) {
+            color = '#ff8c42';  // Naranja
+        } else if (temp < 35) {
+            color = '#ff6b35';  // Naranja/rojo
+        } else {
+            color = '#e63946';  // Rojo
         }
-        if (tempChart) {
-            tempChart.data.labels = labels;
-            tempChart.data.datasets[0].data = datos;
-            tempChart.update();
-        }
+        colores.push(color);
     }
+    
+    if (tempChart) {
+        tempChart.data.labels = labels;
+        tempChart.data.datasets[0].data = datos;
+        tempChart.data.datasets[0].backgroundColor = colores;
+        tempChart.update();
+    }
+}
+
+
 
     function initCharts() {
         const ctx = document.getElementById('tempChart').getContext('2d');
