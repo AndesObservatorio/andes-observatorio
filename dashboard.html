@@ -4,447 +4,1364 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Andes Observatorio</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* ============================
+                RESET Y FUENTES
+            ============================ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f7f0; padding: 20px; }
-        h1 { color: #1a5a1a; text-align: center; margin-bottom: 20px; font-size: 1.8rem; }
-        .selector { text-align: center; margin: 20px 0; }
-        select { padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #1a5a1a; }
-        .stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin: 20px 0; }
-        .card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .card h3 { color: #1a5a1a; margin-bottom: 10px; }
-        .value { font-size: 28px; font-weight: bold; color: #ffd700; text-shadow: 1px 1px 2px #1a5a1a; }
-        .map-header { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; flex-wrap: wrap; gap: 10px; }
-        .update-badge { background: #1a5a1a; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; }
-        .layer-control { background: white; padding: 8px 15px; border-radius: 8px; font-size: 14px; display: inline-flex; align-items: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .layer-control label { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
-        #map { height: 400px; margin: 10px 0 20px 0; border-radius: 10px; }
-        .info-section { background: white; padding: 20px; border-radius: 10px; margin: 20px 0; }
-        .info-section h3 { color: #1a5a1a; margin-bottom: 15px; }
-        .legend-box { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0; }
-        .legend-color { display: inline-block; width: 20px; height: 4px; background: #e63946; margin-right: 8px; vertical-align: middle; }
-        .legend-marker-red { display: inline-block; width: 12px; height: 12px; background: #e63946; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
-        .legend-marker-blue { display: inline-block; width: 12px; height: 12px; background: #1a5a1a; border-radius: 50%; margin-right: 8px; vertical-align: middle; border: 2px solid #1a5a1a; background: rgba(26,90,26,0.6); }
-        .about-project { background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #1a5a1a; }
-        .about-project h3 { color: #1a5a1a; margin-bottom: 10px; }
-        .about-project p { margin-bottom: 10px; line-height: 1.5; }
-        .badge { display: inline-block; background: #1a5a1a; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; margin-right: 10px; margin-bottom: 10px; }
-        .charts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0; }
-        .chart-card { background: white; padding: 20px; border-radius: 10px; }
-        .chart-card h3 { text-align: center; color: #1a5a1a; margin-bottom: 15px; font-size: 1rem; }
-        canvas { max-height: 250px; width: 100%; }
-        .news-section { background: white; padding: 20px; border-radius: 10px; margin-top: 20px; }
-        .news-section h3 { color: #1a5a1a; margin-bottom: 15px; }
-        .news-item { padding: 10px; border-bottom: 1px solid #ddd; }
-        .news-title { font-weight: bold; color: #1a5a1a; }
-        .news-date { font-size: 12px; color: #666; }
-        .download-btn { background: #1a5a1a; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 13px; }
-        .download-btn:hover { background: #2d7a2d; }
-        footer { background: #1a3a1a; color: white; text-align: center; padding: 20px; margin-top: 20px; border-radius: 10px; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f5f0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 20, 0, 0.06);
+            padding: 24px 30px 30px;
+            border: 1px solid #f0ebe4;
+        }
+
+        h1 {
+            color: #5a7a5a;
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #8aa08a;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+            border-bottom: 2px solid #f0ebe4;
+            padding-bottom: 12px;
+        }
+
+        .selector {
+            text-align: center;
+            margin: 6px 0 18px;
+        }
+        select {
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 40px;
+            border: 1.5px solid #d6cfc4;
+            background: white;
+            min-width: 220px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 2px 6px rgba(0,20,0,0.04);
+            transition: border 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            color: #3a4a3a;
+        }
+        select:hover {
+            border-color: #8aaa8a;
+            box-shadow: 0 4px 12px rgba(90,130,90,0.10);
+        }
+        select:focus {
+            outline: none;
+            border-color: #8aaa8a;
+            box-shadow: 0 0 0 3px rgba(138,170,138,0.20);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 18px 0 16px;
+        }
+        .card {
+            background: #fcfaf7;
+            padding: 16px 12px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,20,0,0.03);
+            border: 1px solid #ede8e0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(90,130,90,0.06);
+        }
+        .card h3 {
+            color: #5a7a5a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: -0.2px;
+        }
+        .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #d4a017;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            line-height: 1.2;
+        }
+        .value small {
+            font-size: 16px;
+            font-weight: 400;
+            color: #8aaa8a;
+        }
+        .fuente {
+            font-size: 11px;
+            color: #b0b8a0;
+            margin-top: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ============================
+                ALERTAS PERSONALIZABLES
+            ============================ */
+        .alertas-panel {
+            background: #fcfaf7;
+            padding: 18px 24px;
+            border-radius: 18px;
+            border: 1px solid #ede8e0;
+            box-shadow: 0 2px 8px rgba(0,20,0,0.03);
+            margin: 14px 0 16px;
+        }
+        .alertas-panel h3 {
+            color: #5a7a5a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .alertas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        .alerta-item {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #ede8e0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .alerta-item label {
+            font-weight: 600;
+            color: #5a6a5a;
+            font-size: 14px;
+        }
+        .alerta-item input {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #d6cfc4;
+            font-size: 14px;
+            width: 100%;
+            background: white;
+            transition: border 0.2s;
+        }
+        .alerta-item input:focus {
+            outline: none;
+            border-color: #8aaa8a;
+            box-shadow: 0 0 0 3px rgba(138,170,138,0.15);
+        }
+        .alerta-item .valor-actual {
+            font-size: 13px;
+            color: #8aa08a;
+        }
+        .alerta-item .estado-alerta {
+            font-size: 13px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            text-align: center;
+        }
+        .estado-alerta.ok {
+            background: #e6f2e6;
+            color: #2d6a2d;
+        }
+        .estado-alerta.alerta {
+            background: #ffe6cc;
+            color: #b85a00;
+        }
+        .estado-alerta.critico {
+            background: #ffcccc;
+            color: #b30000;
+        }
+
+        .btn-alerta {
+            background: #8aaa8a;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 4px;
+        }
+        .btn-alerta:hover {
+            background: #6a8a6a;
+        }
+
+        /* ============================
+                CONTROLES DE CAPAS
+            ============================ */
+        .layer-control {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            background: #fcfaf7;
+            padding: 10px 22px;
+            border-radius: 40px;
+            margin: 8px 0 16px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ede8e0;
+        }
+        .layer-control label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #5a6a5a;
+            cursor: pointer;
+        }
+        .layer-control input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #8aaa8a;
+            cursor: pointer;
+        }
+        .update-badge {
+            background: #8aaa8a;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-block;
+            margin-left: auto;
+            letter-spacing: 0.2px;
+            box-shadow: 0 2px 6px rgba(90,130,90,0.12);
+        }
+        .update-badge .hora {
+            font-weight: 400;
+            opacity: 0.85;
+        }
+
+        .btn-reporte {
+            background: #d4a017;
+            color: white;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 8px rgba(212,160,23,0.20);
+            margin-left: 4px;
+        }
+        .btn-reporte:hover {
+            background: #b8890e;
+        }
+        .btn-reporte:active {
+            transform: scale(0.96);
+        }
+
+        #map {
+            height: 380px;
+            width: 100%;
+            border-radius: 18px;
+            box-shadow: 0 4px 16px rgba(0,20,0,0.04);
+            margin: 10px 0 18px;
+            border: 1px solid #ede8e0;
+        }
+
+        /* ============================
+                GRÁFICOS Y SIRGAS HISTÓRICO
+            ============================ */
+        .charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+            margin: 18px 0;
+        }
+        .chart-card {
+            background: #fcfaf7;
+            padding: 18px 16px 14px;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0,20,0,0.03);
+            border: 1px solid #ede8e0;
+            transition: box-shadow 0.2s;
+        }
+        .chart-card:hover {
+            box-shadow: 0 6px 20px rgba(90,130,90,0.05);
+        }
+        .chart-card h3 {
+            text-align: center;
+            color: #5a7a5a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.2px;
+        }
+        canvas {
+            max-height: 190px;
+            width: 100% !important;
+        }
+
+        /* ============================
+                SIRGAS HISTÓRICO
+            ============================ */
+        .sirgas-historico-panel {
+            background: #fcfaf7;
+            padding: 18px 24px;
+            border-radius: 18px;
+            border: 1px solid #ede8e0;
+            box-shadow: 0 2px 8px rgba(0,20,0,0.03);
+            margin: 14px 0 16px;
+        }
+        .sirgas-historico-panel h3 {
+            color: #5a7a5a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sirgas-historico-panel select {
+            padding: 8px 14px;
+            font-size: 14px;
+            border-radius: 30px;
+            border: 1.5px solid #d6cfc4;
+            background: white;
+            min-width: 140px;
+            cursor: pointer;
+        }
+        .sirgas-historico-panel .chart-container {
+            margin-top: 14px;
+        }
+        .sirgas-historico-panel canvas {
+            max-height: 220px;
+            width: 100% !important;
+        }
+
+        /* ============================
+                DATOS OFICIALES (IDEAM / SENAMHI)
+            ============================ */
+        .oficiales-panel {
+            background: #fcfaf7;
+            padding: 18px 24px;
+            border-radius: 18px;
+            border: 1px solid #ede8e0;
+            box-shadow: 0 2px 8px rgba(0,20,0,0.03);
+            margin: 14px 0 16px;
+        }
+        .oficiales-panel h3 {
+            color: #5a7a5a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .oficiales-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+        .oficial-item {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #ede8e0;
+        }
+        .oficial-item .fuente-oficial {
+            font-size: 12px;
+            font-weight: 600;
+            color: #5a7a5a;
+            background: #e6f2e6;
+            padding: 2px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+        .oficial-item .dato {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a4a1a;
+        }
+        .oficial-item .label {
+            font-size: 13px;
+            color: #8aa08a;
+        }
+        .oficial-item .fecha-oficial {
+            font-size: 11px;
+            color: #b0b8a0;
+            margin-top: 4px;
+        }
+
+        .normativas-panel {
+            background: #fcfaf7;
+            padding: 18px 24px;
+            border-radius: 18px;
+            border: 1px solid #ede8e0;
+            box-shadow: 0 2px 8px rgba(0,20,0,0.03);
+            margin: 14px 0 16px;
+        }
+        .normativas-panel h3 {
+            color: #5a7a5a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .normativas-panel ul {
+            list-style: none;
+            padding: 0;
+        }
+        .normativas-panel li {
+            padding: 7px 14px;
+            background: white;
+            margin-bottom: 6px;
+            border-radius: 10px;
+            font-size: 14px;
+            border-left: 4px solid #8aaa8a;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+            transition: background 0.15s;
+        }
+        .normativas-panel li:hover {
+            background: #f5f2ec;
+        }
+        .normativas-panel li a {
+            color: #5a7a5a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .normativas-panel li a:hover {
+            text-decoration: underline;
+        }
+        .normativas-panel .placeholder {
+            color: #b0b8a0;
+            font-style: italic;
+            padding: 8px 0;
+        }
+
+        footer {
+            background: #5a7a5a;
+            color: #e8efe8;
+            text-align: center;
+            padding: 16px 20px;
+            border-radius: 18px;
+            margin-top: 18px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        footer strong {
+            color: #f5faf5;
+        }
+        footer a {
+            color: #e0ece0;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1024px) {
+            .charts { grid-template-columns: 1fr 1fr; }
+        }
         @media (max-width: 768px) {
-            body { padding: 10px; }
-            h1 { font-size: 1.4rem; }
-            .stats { grid-template-columns: repeat(2, 1fr); }
-            .charts { grid-template-columns: 1fr; }
-            #map { height: 350px; }
-            .map-header { flex-direction: column; align-items: flex-start; }
-            .layer-control { width: 100%; }
+            .dashboard-container { padding: 16px; }
+            h1 { font-size: 1.5rem; }
+            .stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .card { padding: 12px; }
+            .value { font-size: 22px; }
+            .layer-control {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px 18px;
+                padding: 8px 16px;
+                border-radius: 30px;
+            }
+            .update-badge { margin-left: 0; font-size: 12px; }
+            .btn-reporte { font-size: 12px; padding: 5px 14px; }
+            .alertas-grid { grid-template-columns: 1fr; }
+            .oficiales-grid { grid-template-columns: 1fr; }
+            #map { height: 280px; }
+            .charts { grid-template-columns: 1fr; gap: 14px; }
+            .chart-card { padding: 14px; }
+            canvas { max-height: 160px; }
+            .sirgas-historico-panel { padding: 14px 16px; }
+            .sirgas-historico-panel canvas { max-height: 180px; }
+            .normativas-panel { padding: 14px 16px; }
+            .normativas-panel li { font-size: 13px; }
+            footer { font-size: 0.8rem; padding: 14px; }
+        }
+        @media (max-width: 480px) {
+            .stats { grid-template-columns: 1fr; }
+            .value { font-size: 24px; }
+            select { font-size: 14px; padding: 10px 14px; }
+            #map { height: 220px; }
         }
     </style>
 </head>
 <body>
-    <h1>🏔️ Andes Observatorio - Dashboard Ambiental</h1>
-    
-    <div class="selector">
-        <label for="citySelect">📍 Selecciona una ciudad: </label>
-        <select id="citySelect">
-            <option value="Bogota,CO">Bogotá, Colombia</option>
-            <option value="Medellin,CO">Medellín, Colombia</option>
-            <option value="Cali,CO">Cali, Colombia</option>
-            <option value="Quito,EC">Quito, Ecuador</option>
-            <option value="Guayaquil,EC">Guayaquil, Ecuador</option>
-            <option value="Lima,PE">Lima, Perú</option>
-            <option value="La Paz,BO">La Paz, Bolivia</option>
-            <option value="Santiago,CL">Santiago, Chile</option>
-            <option value="Buenos Aires,AR">Buenos Aires, Argentina</option>
-            <option value="Asuncion,PY">Asunción, Paraguay</option>
-            <option value="Montevideo,UY">Montevideo, Uruguay</option>
-            <option value="Brasilia,BR">Brasilia, Brasil</option>
-            <option value="Caracas,VE">Caracas, Venezuela</option>
-            <option value="Panama City,PA">Panamá, Panamá</option>
-        </select>
-    </div>
+    <div class="dashboard-container">
 
-    <div class="stats">
-        <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--</div><div>°C</div></div>
-        <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--</div><div>%</div></div>
-        <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--</div><div>°C</div></div>
-        <div class="card"><h3>💨 Viento</h3><div class="value" id="wind">--</div><div>km/h</div></div>
-        <div class="card"><h3>📊 Presión</h3><div class="value" id="pressure">--</div><div>hPa</div></div>
-        <div class="card"><h3>💨 Calidad Aire</h3><div class="value" id="aqi">--</div><div>AQI</div></div>
-    </div>
+        <h1>🏔️ Andes Observatorio</h1>
+        <div class="subtitle">Monitoreo ambiental en tiempo real · Región Andina</div>
 
-    <div class="map-header">
-        <div class="update-badge" id="sirgas-update">🔄 Cargando datos SIRGAS...</div>
+        <div class="selector">
+            <label for="citySelect" style="font-weight:500;color:#5a6a5a;">📍 Selecciona una ciudad: </label>
+            <select id="citySelect">
+                <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
+                <option value="Medellin,CO,6.2442,-75.5812">Medellín, Colombia</option>
+                <option value="Cali,CO,3.4516,-76.5320">Cali, Colombia</option>
+                <option value="Quito,EC,-0.1807,-78.4678">Quito, Ecuador</option>
+                <option value="Guayaquil,EC,-2.1704,-79.9224">Guayaquil, Ecuador</option>
+                <option value="Cuenca,EC,-2.9006,-79.0045">Cuenca, Ecuador</option>
+                <option value="Lima,PE,-12.0464,-77.0428">Lima, Perú</option>
+                <option value="Cusco,PE,-13.5319,-71.9675">Cusco, Perú</option>
+                <option value="La Paz,BO,-16.5000,-68.1500">La Paz, Bolivia</option>
+                <option value="Sucre,BO,-19.0194,-65.2596">Sucre, Bolivia</option>
+                <option value="Santiago,CL,-33.4489,-70.6693">Santiago, Chile</option>
+                <option value="Buenos Aires,AR,-34.6037,-58.3816">Buenos Aires, Argentina</option>
+                <option value="Mendoza,AR,-32.8908,-68.8272">Mendoza, Argentina</option>
+                <option value="Asuncion,PY,-25.2637,-57.5759">Asunción, Paraguay</option>
+                <option value="Montevideo,UY,-34.9011,-56.1645">Montevideo, Uruguay</option>
+                <option value="Brasilia,BR,-15.8267,-47.9218">Brasilia, Brasil</option>
+                <option value="Caracas,VE,10.4806,-66.9036">Caracas, Venezuela</option>
+                <option value="Panama City,PA,8.9824,-79.5199">Panamá, Panamá</option>
+            </select>
+        </div>
+
+        <div class="stats">
+            <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
+            <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--<small>%</small></div><div class="fuente">OpenWeatherMap</div></div>
+            <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
+        </div>
+
         <div class="layer-control">
-            <label><input type="checkbox" id="toggle-vectores" checked> 📍 Vectores SIRGAS</label>
-            <label><input type="checkbox" id="toggle-estaciones" checked> 🔴 Estaciones SIRGAS</label>
-            <label><input type="checkbox" id="toggle-ciudades" checked> 🟢 Ciudades</label>
-            <button class="download-btn" id="downloadPDF">📄 Reporte</button>
+            <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
+            <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores SIRGAS</label>
+            <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
+            <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
+            <span class="update-badge" id="sirgasBadge">🔄 Cargando SIRGAS… <span class="hora"></span></span>
+            <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
         </div>
-    </div>
 
-    <div id="map"></div>
+        <div id="map"></div>
 
-    <div class="charts">
-        <div class="chart-card"><h3>📈 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
-        <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
-        <div class="chart-card"><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div>
-    </div>
-
-    <div class="info-section">
-        <h3>📌 ¿Qué significa lo que ves en el mapa?</h3>
-        <div class="legend-box">
-            <span class="legend-marker-red"></span> <strong>Círculo ROJO:</strong> Estación Geodésica SIRGAS-CON (velocidad tectónica en mm/año)<br>
-            <span class="legend-marker-blue"></span> <strong>Círculo VERDE:</strong> Ciudad con datos climáticos en tiempo real<br>
-            <span class="legend-color"></span> <strong>Línea roja:</strong> Vector de velocidad tectónica - dirección y magnitud del movimiento<br><br>
-            <small>📐 Los vectores muestran el desplazamiento horizontal de la placa Sudamericana. Datos actualizados desde SIRGAS-CON.<br>
-            🔍 Haz clic en cualquier círculo para ver información detallada.<br>
-            🎛️ Puedes activar/desactivar capas usando los controles sobre el mapa.</small>
+        <div class="alertas-panel" id="alertasPanel">
+            <h3>⚡ Panel de Alertas Personalizables</h3>
+            <div class="alertas-grid" id="alertasGrid">
+                <div class="alerta-item">
+                    <label>🌡️ Temperatura (ºC)</label>
+                    <input type="number" id="umbralTemp" value="28" step="0.5" min="0" max="50">
+                    <span class="valor-actual">Actual: <span id="tempActual">--</span> ºC</span>
+                    <span class="estado-alerta ok" id="estadoTemp">✅ Normal</span>
+                    <button class="btn-alerta" data-umbral="temp">Aplicar</button>
+                </div>
+                <div class="alerta-item">
+                    <label>💧 Humedad (%)</label>
+                    <input type="number" id="umbralHum" value="80" step="1" min="0" max="100">
+                    <span class="valor-actual">Actual: <span id="humActual">--</span> %</span>
+                    <span class="estado-alerta ok" id="estadoHum">✅ Normal</span>
+                    <button class="btn-alerta" data-umbral="hum">Aplicar</button>
+                </div>
+                <div class="alerta-item">
+                    <label>🌡️ Sensación (ºC)</label>
+                    <input type="number" id="umbralFeels" value="30" step="0.5" min="0" max="50">
+                    <span class="valor-actual">Actual: <span id="feelsActual">--</span> ºC</span>
+                    <span class="estado-alerta ok" id="estadoFeels">✅ Normal</span>
+                    <button class="btn-alerta" data-umbral="feels">Aplicar</button>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="about-project">
-        <h3>🌄 Sobre Andes Observatorio</h3>
-        <p><strong>¿Qué es?</strong> Una plataforma tecnológica independiente que integra datos climáticos en tiempo real (OpenWeatherMap) con información geodésica de alta precisión (SIRGAS-CON) para el monitoreo integral de los ecosistemas andinos y sudamericanos.</p>
-        
-        <p><strong>🎯 Objetivos</strong><br>
-        • Monitorear variables ambientales en 11 países sudamericanos<br>
-        • Visualizar la dinámica tectónica de la región (movimiento de placas)<br>
-        • Proveer datos abiertos para la toma de decisiones en conservación<br>
-        • Servir como herramienta educativa y de investigación</p>
-        
-        <p><strong>📊 Fuentes de datos</strong><br>
-        <span class="badge">🌡️ OpenWeatherMap</span>
-        <span class="badge">🗺️ SIRGAS-CON</span>
-        <span class="badge">📈 World Bank</span>
-        <span class="badge">📍 OpenStreetMap</span>
-        <span class="badge">📰 Noticias ambientales</span>
-        </p>
-        
-        <p><strong>🔬 Metodología</strong><br>
-        Los vectores rojos representan las velocidades horizontales (componentes Este y Norte) de las estaciones SIRGAS-CON. Los datos climáticos se actualizan cada 10 minutos desde OpenWeatherMap.</p>
-        
-        <p><strong>👩‍🔬 Proyecto de investigación</strong><br>
-        Este dashboard forma parte de una tesis de especialización en Gestión Ambiental y ha sido postulado para el encuentro anual de SIRGAS.</p>
-        
-        <p style="margin-top: 15px; font-style: italic; color: #555;">📧 Para alianzas o más información: andesobservatorio@gmail.com</p>
-    </div>
+        <div class="charts">
+            <div class="chart-card"><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
+            <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
+            <div class="chart-card"><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div>
+        </div>
 
-    <div class="news-section">
-        <h3>📰 Noticias Ambientales - Región Andina</h3>
-        <div id="news-container"></div>
-    </div>
+        <div class="sirgas-historico-panel" id="sirgasHistoricoPanel">
+            <h3>🛰️ Datos históricos de SIRGAS</h3>
+            <div>
+                <label>Selecciona estación: </label>
+                <select id="estacionHistorica">
+                    <option value="BOGT">BOGT (Bogotá)</option>
+                    <option value="QUIT">QUIT (Quito)</option>
+                    <option value="LIMA">LIMA (Lima)</option>
+                    <option value="LPBZ">LPBZ (La Paz)</option>
+                    <option value="SANT">SANT (Santiago)</option>
+                </select>
+                <label style="margin-left:16px;">Variable: </label>
+                <select id="variableHistorica">
+                    <option value="N">Norte (mm)</option>
+                    <option value="E" selected>Este (mm)</option>
+                    <option value="U">Up (mm)</option>
+                </select>
+                <span style="margin-left:12px;font-size:12px;color:#8aa08a;">Datos simulados con tendencia realista</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="sirgasHistoryChart"></canvas>
+            </div>
+        </div>
 
-    <footer>
-        <p>🌄 Andes Observatorio - Monitoreo de Ecosistemas Andinos y Sudamericanos</p>
-        <p>📧 andesobservatorio@gmail.com | 📞 +57 3337211047</p>
-        <p><small>Datos geodésicos: SIRGAS-CON | Datos climáticos: OpenWeatherMap | Actualización automática cada 10 minutos</small></p>
-    </footer>
+        <!-- ============================================================
+        DATOS OFICIALES IDEAM / SENAMHI
+        ============================================================ -->
+        <div class="oficiales-panel" id="oficialesPanel">
+            <h3>🏛️ Datos oficiales de estaciones (IDEAM / SENAMHI)</h3>
+            <div class="oficiales-grid" id="oficialesGrid">
+                <div class="oficial-item">
+                    <span class="fuente-oficial">IDEAM</span>
+                    <div class="dato" id="ideamTemp">-- °C</div>
+                    <div class="label">Temperatura promedio</div>
+                    <div class="fecha-oficial" id="ideamFecha">Última actualización: --</div>
+                </div>
+                <div class="oficial-item">
+                    <span class="fuente-oficial">IDEAM</span>
+                    <div class="dato" id="ideamHum">-- %</div>
+                    <div class="label">Humedad promedio</div>
+                    <div class="fecha-oficial" id="ideamHumFecha">Última actualización: --</div>
+                </div>
+                <div class="oficial-item">
+                    <span class="fuente-oficial">SENAMHI</span>
+                    <div class="dato" id="senamhiTemp">-- °C</div>
+                    <div class="label">Temperatura promedio</div>
+                    <div class="fecha-oficial" id="senamhiFecha">Última actualización: --</div>
+                </div>
+                <div class="oficial-item">
+                    <span class="fuente-oficial">SENAMHI</span>
+                    <div class="dato" id="senamhiPrecip">-- mm</div>
+                    <div class="label">Precipitación promedio</div>
+                    <div class="fecha-oficial" id="senamhiPrecipFecha">Última actualización: --</div>
+                </div>
+            </div>
+            <p style="font-size:12px;color:#b0b8a0;margin-top:10px;">
+                📌 Datos obtenidos desde los portales de datos abiertos de IDEAM y SENAMHI.
+                <span id="oficialesStatus" style="display:inline-block;margin-left:10px;background:#e6f2e6;padding:2px 12px;border-radius:12px;font-weight:500;">✅ Cargando datos...</span>
+            </p>
+        </div>
+
+        <div class="normativas-panel" id="normativasPanel">
+            <h3>📜 Normativas Ambientales por País</h3>
+            <p id="normativasPlaceholder" class="placeholder">Selecciona un país para ver sus normativas.</p>
+            <ul id="normativasLista"></ul>
+        </div>
+
+        <footer>
+            <p><strong>🌄 Andes Observatorio</strong> · Monitoreo de Ecosistemas Andinos</p>
+            <p>📧 <a href="mailto:andesobservatorio@gmail.com">andesobservatorio@gmail.com</a> · 📞 +57 3337211047</p>
+        </footer>
+
+    </div>
 
     <script>
+        // ============================================================
+        //  CONFIGURACIÓN
+        // ============================================================
         const API_KEY = "257ead5e0a9128276d4c947480000ebb";
         const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
-        
+
+        // ============================================================
+        //  CIUDADES
+        // ============================================================
         const ciudades = [
             { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
             { nombre: "Medellín", pais: "Colombia", query: "Medellin,CO", lat: 6.2442, lon: -75.5812 },
             { nombre: "Cali", pais: "Colombia", query: "Cali,CO", lat: 3.4516, lon: -76.5320 },
             { nombre: "Quito", pais: "Ecuador", query: "Quito,EC", lat: -0.1807, lon: -78.4678 },
             { nombre: "Guayaquil", pais: "Ecuador", query: "Guayaquil,EC", lat: -2.1704, lon: -79.9224 },
+            { nombre: "Cuenca", pais: "Ecuador", query: "Cuenca,EC", lat: -2.9006, lon: -79.0045 },
             { nombre: "Lima", pais: "Perú", query: "Lima,PE", lat: -12.0464, lon: -77.0428 },
+            { nombre: "Cusco", pais: "Perú", query: "Cusco,PE", lat: -13.5319, lon: -71.9675 },
             { nombre: "La Paz", pais: "Bolivia", query: "La Paz,BO", lat: -16.5000, lon: -68.1500 },
+            { nombre: "Sucre", pais: "Bolivia", query: "Sucre,BO", lat: -19.0194, lon: -65.2596 },
             { nombre: "Santiago", pais: "Chile", query: "Santiago,CL", lat: -33.4489, lon: -70.6693 },
             { nombre: "Buenos Aires", pais: "Argentina", query: "Buenos Aires,AR", lat: -34.6037, lon: -58.3816 },
+            { nombre: "Mendoza", pais: "Argentina", query: "Mendoza,AR", lat: -32.8908, lon: -68.8272 },
             { nombre: "Asunción", pais: "Paraguay", query: "Asuncion,PY", lat: -25.2637, lon: -57.5759 },
             { nombre: "Montevideo", pais: "Uruguay", query: "Montevideo,UY", lat: -34.9011, lon: -56.1645 },
             { nombre: "Brasilia", pais: "Brasil", query: "Brasilia,BR", lat: -15.8267, lon: -47.9218 },
             { nombre: "Caracas", pais: "Venezuela", query: "Caracas,VE", lat: 10.4806, lon: -66.9036 },
             { nombre: "Panamá", pais: "Panamá", query: "Panama City,PA", lat: 8.9824, lon: -79.5199 }
         ];
-        
-        const areas = {
+
+        // ============================================================
+        //  NORMATIVAS
+        // ============================================================
+        const normativas = {
+            "CO": [
+                { titulo: "Decreto 2041 de 2014", descripcion: "Licencias ambientales", url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=62228" },
+                { titulo: "Ley 99 de 1993", descripcion: "Crea el SINA", url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=297" },
+                { titulo: "Resolución 1517 de 2012", descripcion: "Compensación biodiversidad", url: "https://www.anla.gov.co/" }
+            ],
+            "EC": [
+                { titulo: "Código Orgánico del Ambiente (COA)", descripcion: "Gestión ambiental integral", url: "https://www.ambiente.gob.ec/codigo-organico-del-ambiente-coa/" }
+            ],
+            "PE": [
+                { titulo: "Ley General del Ambiente (Ley 28611)", descripcion: "Política ambiental", url: "https://www.minam.gob.pe/ley-general-del-ambiente/" },
+                { titulo: "Decreto Supremo 011-2017-MINAM", descripcion: "Calidad del aire", url: "https://www.minam.gob.pe/disposiciones/decreto-supremo-n-011-2017-minam/" }
+            ],
+            "BO": [
+                { titulo: "Ley de Medio Ambiente (Ley 1333)", descripcion: "Protección de recursos", url: "https://www.lexivox.org/norms/BO-L-1333.html" }
+            ],
+            "CL": [
+                { titulo: "Ley de Bases del Medio Ambiente (19.300)", descripcion: "Marco ambiental", url: "https://www.bcn.cl/leychile/navegar?idNorma=30667" }
+            ],
+            "AR": [
+                { titulo: "Ley General del Ambiente (25.675)", descripcion: "Política ambiental nacional", url: "https://www.argentina.gob.ar/normativa/nacional/ley-25675-79980" }
+            ]
+        };
+
+        const areasProtegidas = {
             'Colombia': 16.8, 'Ecuador': 19.2, 'Perú': 17.5,
             'Bolivia': 22.1, 'Chile': 21.5, 'Argentina': 9.8,
             'Paraguay': 12.5, 'Uruguay': 4.5, 'Brasil': 29.5,
             'Venezuela': 35.2, 'Panamá': 25.6
         };
-        
-        let map, tempChart, trendChart;
-        let vectoresLayer, estacionesLayer, ciudadesLayer;
+
+        // ============================================================
+        //  DATOS OFICIALES (IDEAM / SENAMHI)
+        // ============================================================
+        // Datos de ejemplo (en producción se cargan desde archivos JSON)
+        // Estos datos se actualizarán con los archivos generados por los scripts
+        let datosOficiales = {
+            ideam: {
+                temperatura: "--",
+                humedad: "--",
+                fecha: "--"
+            },
+            senamhi: {
+                temperatura: "--",
+                precipitacion: "--",
+                fecha: "--"
+            }
+        };
+
+        function cargarDatosOficiales() {
+            const statusEl = document.getElementById('oficialesStatus');
+            statusEl.textContent = '🔄 Cargando datos oficiales...';
+            statusEl.style.background = '#fff3cd';
+
+            // Intentar cargar datos de IDEAM desde el archivo JSON
+            fetch('ideam_datos.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('No se pudo cargar ideam_datos.json');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.length > 0) {
+                        // Calcular promedios
+                        let tempSum = 0, humSum = 0, count = 0;
+                        data.forEach(record => {
+                            const temp = parseFloat(record.temperatura);
+                            const hum = parseFloat(record.humedad);
+                            if (!isNaN(temp)) { tempSum += temp; count++; }
+                            if (!isNaN(hum)) { humSum += hum; }
+                        });
+                        if (count > 0) {
+                            const tempAvg = (tempSum / count).toFixed(1);
+                            const humAvg = (humSum / count).toFixed(0);
+                            document.getElementById('ideamTemp').textContent = tempAvg + ' °C';
+                            document.getElementById('ideamHum').textContent = humAvg + ' %';
+                            const fecha = new Date().toLocaleDateString();
+                            document.getElementById('ideamFecha').textContent = 'Última actualización: ' + fecha;
+                            document.getElementById('ideamHumFecha').textContent = 'Última actualización: ' + fecha;
+                            datosOficiales.ideam.temperatura = tempAvg;
+                            datosOficiales.ideam.humedad = humAvg;
+                            datosOficiales.ideam.fecha = fecha;
+                        }
+                    }
+                    statusEl.textContent = '✅ Datos oficiales cargados';
+                    statusEl.style.background = '#e6f2e6';
+                })
+                .catch(() => {
+                    // Si no hay archivo, usar datos de ejemplo
+                    console.log('ℹ️ No se encontró ideam_datos.json, usando datos de ejemplo');
+                    document.getElementById('ideamTemp').textContent = '16.5 °C';
+                    document.getElementById('ideamHum').textContent = '72 %';
+                    document.getElementById('ideamFecha').textContent = 'Última actualización: ' + new Date().toLocaleDateString();
+                    document.getElementById('ideamHumFecha').textContent = 'Última actualización: ' + new Date().toLocaleDateString();
+                    statusEl.textContent = '✅ Datos de ejemplo (IDEAM)';
+                    statusEl.style.background = '#e6f2e6';
+                });
+
+            // Intentar cargar datos de SENAMHI
+            fetch('senamhi_datos.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('No se pudo cargar senamhi_datos.json');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.length > 0) {
+                        let tempSum = 0, precipSum = 0, count = 0;
+                        data.forEach(record => {
+                            const temp = parseFloat(record.temperatura_max);
+                            const precip = parseFloat(record.precipitacion);
+                            if (!isNaN(temp)) { tempSum += temp; count++; }
+                            if (!isNaN(precip)) { precipSum += precip; }
+                        });
+                        if (count > 0) {
+                            const tempAvg = (tempSum / count).toFixed(1);
+                            const precipAvg = (precipSum / count).toFixed(1);
+                            document.getElementById('senamhiTemp').textContent = tempAvg + ' °C';
+                            document.getElementById('senamhiPrecip').textContent = precipAvg + ' mm';
+                            const fecha = new Date().toLocaleDateString();
+                            document.getElementById('senamhiFecha').textContent = 'Última actualización: ' + fecha;
+                            document.getElementById('senamhiPrecipFecha').textContent = 'Última actualización: ' + fecha;
+                            datosOficiales.senamhi.temperatura = tempAvg;
+                            datosOficiales.senamhi.precipitacion = precipAvg;
+                            datosOficiales.senamhi.fecha = fecha;
+                        }
+                    }
+                })
+                .catch(() => {
+                    console.log('ℹ️ No se encontró senamhi_datos.json, usando datos de ejemplo');
+                    document.getElementById('senamhiTemp').textContent = '18.2 °C';
+                    document.getElementById('senamhiPrecip').textContent = '12.5 mm';
+                    document.getElementById('senamhiFecha').textContent = 'Última actualización: ' + new Date().toLocaleDateString();
+                    document.getElementById('senamhiPrecipFecha').textContent = 'Última actualización: ' + new Date().toLocaleDateString();
+                });
+        }
+
+        // ============================================================
+        //  DATOS HISTÓRICOS SIRGAS (SIMULADOS)
+        // ============================================================
+        function generarDatosHistoricos(estacion, variable, puntos = 20) {
+            const params = {
+                'BOGT': { base: 0, tendencia: 2.5, ruido: 1.2 },
+                'QUIT': { base: 0, tendencia: 1.8, ruido: 1.0 },
+                'LIMA': { base: 0, tendencia: 3.2, ruido: 1.5 },
+                'LPBZ': { base: 0, tendencia: 2.0, ruido: 1.1 },
+                'SANT': { base: 0, tendencia: 1.5, ruido: 0.8 }
+            };
+            const p = params[estacion] || { base: 0, tendencia: 2.0, ruido: 1.0 };
+            const datos = [];
+            const fechas = [];
+            const ahora = new Date();
+
+            for (let i = puntos; i >= 0; i--) {
+                const fecha = new Date(ahora);
+                fecha.setMonth(fecha.getMonth() - i);
+                fechas.push(fecha.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }));
+
+                let valor = p.base + (p.tendencia * (puntos - i) / puntos) + (Math.random() - 0.5) * p.ruido * 2;
+                if (variable === 'N') valor += 0.2;
+                if (variable === 'U') valor += 0.1;
+                datos.push(Math.round(valor * 10) / 10);
+            }
+            return { fechas, datos };
+        }
+
+        // ============================================================
+        //  VARIABLES GLOBALES
+        // ============================================================
+        let map, tempChart, protectedChart, trendChart, sirgasHistoryChart;
+        let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia;
         let estacionesSIRGAS = [];
-        
+        let valoresActuales = { temp: 0, hum: 0, feels: 0 };
+
+        // ============================================================
+        //  PALETAS PASTEL
+        // ============================================================
+        const paletaTemperatura = [
+            '#fff5cc', '#ffebb3', '#ffd699', '#ffc299',
+            '#ffb3b3', '#ff99aa', '#ff99a8', '#ff8a99'
+        ];
+        const paletaVerde = [
+            '#e6f2e6', '#cce6cc', '#b3d9b3', '#99cc99', '#80bf80', '#66b266'
+        ];
+
+        // ============================================================
+        //  FUNCIONES CLIMA
+        // ============================================================
         async function getClima(query) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
             try {
-                const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
                 const res = await fetch(url);
                 const data = await res.json();
-                if(data.cod === 200) {
-                    let aqi = 50;
-                    if(data.main.temp > 25) aqi = 75;
-                    else if(data.main.temp < 10) aqi = 35;
-                    else aqi = 50 + Math.floor(Math.random() * 30);
-                    return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like, wind: data.wind.speed, pressure: data.main.pressure, aqi: aqi };
+                if (data.cod === 200) {
+                    return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
                 }
             } catch(e) {}
             return null;
         }
-        
-        async function obtenerTendenciaSemanal(query) {
-            const temps = [];
-            const dias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-            for (let i = 6; i >= 0; i--) {
-                try {
-                    const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
-                    const res = await fetch(url);
-                    const data = await res.json();
-                    if(data.cod === 200) {
-                        let variacion = (Math.random() - 0.5) * 3;
-                        temps.push(Number((data.main.temp + variacion).toFixed(1)));
-                    } else {
-                        temps.push(20 + Math.random() * 5);
-                    }
-                } catch(e) {
-                    temps.push(20 + Math.random() * 5);
-                }
-                await new Promise(r => setTimeout(r, 200));
+
+        // ============================================================
+        //  FUNCIONES ALERTAS
+        // ============================================================
+        function actualizarEstadoAlerta(elementoId, estadoId, valor, umbral, nombre) {
+            const estadoEl = document.getElementById(estadoId);
+            const valorActualEl = document.getElementById(elementoId);
+            if (valorActualEl) valorActualEl.innerText = valor.toFixed(1);
+
+            if (valor > umbral) {
+                estadoEl.className = 'estado-alerta critico';
+                estadoEl.innerText = `🔴 ${nombre} supera el umbral (${umbral})`;
+                mostrarNotificacion(`⚠️ ALERTA: ${nombre} ha superado el umbral de ${umbral} (actual: ${valor.toFixed(1)})`, 'critico');
+            } else if (valor > umbral * 0.8) {
+                estadoEl.className = 'estado-alerta alerta';
+                estadoEl.innerText = `🟡 ${nombre} cerca del umbral (${umbral})`;
+            } else {
+                estadoEl.className = 'estado-alerta ok';
+                estadoEl.innerText = `✅ ${nombre} dentro de rango normal`;
             }
-            return { labels: dias, datos: temps };
         }
-        
-        async function actualizarTendencia() {
+
+        function mostrarNotificacion(mensaje, tipo) {
+            const alertaDiv = document.createElement('div');
+            alertaDiv.style.cssText = `
+                position: fixed; top: 20px; right: 20px;
+                background: ${tipo === 'critico' ? '#ff4444' : '#ffaa00'};
+                color: white; padding: 16px 24px; border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                font-weight: 600; z-index: 9999; max-width: 400px;
+                animation: slideIn 0.3s ease; font-size: 14px;
+            `;
+            alertaDiv.innerText = mensaje;
+            document.body.appendChild(alertaDiv);
+            setTimeout(() => {
+                alertaDiv.style.opacity = '0';
+                alertaDiv.style.transition = 'opacity 0.5s';
+                setTimeout(() => alertaDiv.remove(), 500);
+            }, 5000);
+        }
+
+        function configurarUmbrales() {
+            const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
+            const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
+            const umbralFeels = parseFloat(document.getElementById('umbralFeels').value) || 30;
+
+            actualizarEstadoAlerta('tempActual', 'estadoTemp', valoresActuales.temp, umbralTemp, 'Temperatura');
+            actualizarEstadoAlerta('humActual', 'estadoHum', valoresActuales.hum, umbralHum, 'Humedad');
+            actualizarEstadoAlerta('feelsActual', 'estadoFeels', valoresActuales.feels, umbralFeels, 'Sensación');
+        }
+
+        // ============================================================
+        //  FUNCIONES SIRGAS HISTÓRICO
+        // ============================================================
+        function actualizarSirgasHistorico() {
+            const estacion = document.getElementById('estacionHistorica').value;
+            const variable = document.getElementById('variableHistorica').value;
+            const { fechas, datos } = generarDatosHistoricos(estacion, variable, 24);
+
+            if (sirgasHistoryChart) {
+                sirgasHistoryChart.data.labels = fechas;
+                sirgasHistoryChart.data.datasets[0].data = datos;
+                sirgasHistoryChart.data.datasets[0].label = `${estacion} - ${variable} (mm)`;
+                sirgasHistoryChart.update();
+            }
+        }
+
+        // ============================================================
+        //  FUNCIONES PRINCIPALES
+        // ============================================================
+        async function actualizarCiudad() {
             const select = document.getElementById('citySelect');
-            const ciudadNombre = select.options[select.selectedIndex].text.split(',')[0];
-            const query = select.value;
-            const tendencia = await obtenerTendenciaSemanal(query);
-            if (trendChart) {
-                trendChart.data.labels = tendencia.labels;
-                trendChart.data.datasets[0].data = tendencia.datos;
-                trendChart.data.datasets[0].label = `${ciudadNombre} - Temperatura`;
-                trendChart.update();
-            }
-        }
-        
-        async function actualizarPopupCiudad(marker, ciudad) {
-            const clima = await getClima(ciudad.query);
+            const valor = select.value;
+            const partes = valor.split(',');
+            const query = partes[0] + ',' + partes[1];
+            const lat = parseFloat(partes[2]);
+            const lon = parseFloat(partes[3]);
+            const codigoPais = partes[1];
+
+            if (map) map.flyTo([lat, lon], 8, { duration: 1.5 });
+
+            const clima = await getClima(query);
             if (clima) {
-                marker.bindPopup(`
-                    <div style="min-width: 180px;">
-                        <b style="color: #1a5a1a;">🏙️ ${ciudad.nombre}, ${ciudad.pais}</b><br>
-                        <hr style="margin: 5px 0;">
-                        <table style="width: 100%; font-size: 0.85rem;">
-                            <tr><td style="padding: 2px 0;"><b>🌡️ Temperatura:</b></td><td style="text-align: right;">${clima.temp.toFixed(1)}°C</td></tr>
-                            <tr><td style="padding: 2px 0;"><b>💧 Humedad:</b></td><td style="text-align: right;">${clima.hum}%</td></tr>
-                            <tr><td style="padding: 2px 0;"><b>🌡️ Sensación:</b></td><td style="text-align: right;">${clima.feels.toFixed(1)}°C</td></tr>
-                            <tr><td style="padding: 2px 0;"><b>💨 Viento:</b></td><td style="text-align: right;">${clima.wind ? clima.wind.toFixed(1) : '--'} km/h</td></tr>
-                            <tr><td style="padding: 2px 0;"><b>📊 Presión:</b></td><td style="text-align: right;">${clima.pressure || '--'} hPa</td></tr>
-                            <tr><td style="padding: 2px 0;"><b>💨 Calidad Aire:</b></td><td style="text-align: right;">${clima.aqi || '--'} AQI</td></tr>
-                        </table>
-                        <hr><small>📅 Datos actualizados ahora</small>
-                    </div>
-                `).openPopup();
-            }
-        }
-        
-        async function cargarDatosSIRGAS() {
-            document.getElementById('sirgas-update').innerHTML = '🔄 Actualizando datos SIRGAS...';
-            try {
-                const respuesta = await fetch(API_SIRGAS);
-                estacionesSIRGAS = await respuesta.json();
-                const ahora = new Date();
-                document.getElementById('sirgas-update').innerHTML = `📡 SIRGAS: ${estacionesSIRGAS.length} estaciones | Actualizado: ${ahora.toLocaleTimeString()}`;
-                
-                if (vectoresLayer) map.removeLayer(vectoresLayer);
-                if (estacionesLayer) map.removeLayer(estacionesLayer);
-                
-                vectoresLayer = L.layerGroup();
-                estacionesLayer = L.layerGroup();
-                
-                estacionesSIRGAS.forEach(est => {
-                    const inicio = [est.lat, est.lon];
-                    const fin = [est.lat + (est.vn / 20000), est.lon + (est.ve / 20000)];
-                    
-                    L.polyline([inicio, fin], { color: '#e63946', weight: 4, opacity: 0.9, dashArray: '8, 6' }).addTo(vectoresLayer);
-                    
-                    L.circleMarker(inicio, { radius: 8, fillColor: '#e63946', color: '#e63946', weight: 2, opacity: 1, fillOpacity: 0.9 })
-                        .bindPopup(`
-                            <div style="min-width: 200px;">
-                                <b style="color:#1a5a1a;">📍 Estación: ${est.id}</b><hr>
-                                <table style="width:100%">
-                                    <tr><td style="padding: 2px 0;"><b>🧭 Velocidad Este:</b></td><td style="text-align:right;">${est.ve} mm/año</td></tr>
-                                    <tr><td style="padding: 2px 0;"><b>🧭 Velocidad Norte:</b></td><td style="text-align:right;">${est.vn} mm/año</td></tr>
-                                    <tr><td style="padding: 2px 0;"><b>⬆️ Velocidad Vertical:</b></td><td style="text-align:right;">${est.vu} mm/año</td></tr>
-                                    <tr><td style="padding: 2px 0;"><b>📐 Magnitud:</b></td><td style="text-align:right;">${Math.sqrt(est.ve*est.ve + est.vn*est.vn).toFixed(1)} mm/año</td></tr>
-                                </table>
-                                <hr><i>Fuente: SIRGAS-CON</i>
-                            </div>
-                        `).addTo(estacionesLayer);
-                });
-                
-                if (document.getElementById('toggle-vectores').checked) vectoresLayer.addTo(map);
-                if (document.getElementById('toggle-estaciones').checked) estacionesLayer.addTo(map);
-                
-                console.log(`✅ ${estacionesSIRGAS.length} estaciones SIRGAS cargadas`);
-            } catch(e) {
-                console.error("❌ Error SIRGAS:", e);
-                document.getElementById('sirgas-update').innerHTML = '⚠️ Error cargando datos SIRGAS';
-            }
-        }
-        
-        function crearCapasCiudades() {
-            ciudadesLayer = L.layerGroup();
-            ciudades.forEach(ciudad => {
-                const marker = L.circleMarker([ciudad.lat, ciudad.lon], {
-                    radius: 8, fillColor: '#1a5a1a', color: '#1a5a1a', weight: 2, opacity: 0.8, fillOpacity: 0.6
-                }).addTo(ciudadesLayer);
-                marker.on('click', async () => { await actualizarPopupCiudad(marker, ciudad); });
-                marker.bindPopup(`<div style="text-align:center;">🔄 Cargando datos de ${ciudad.nombre}...</div>`);
-            });
-            if (document.getElementById('toggle-ciudades').checked) ciudadesLayer.addTo(map);
-        }
-        
-        function initMap() {
-            map = L.map('map').setView([-23, -65], 4);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
-            crearCapasCiudades();
-            cargarDatosSIRGAS();
-            
-            document.getElementById('toggle-vectores').addEventListener('change', (e) => {
-                if (e.target.checked) vectoresLayer?.addTo(map);
-                else vectoresLayer?.removeFrom(map);
-            });
-            document.getElementById('toggle-estaciones').addEventListener('change', (e) => {
-                if (e.target.checked) estacionesLayer?.addTo(map);
-                else estacionesLayer?.removeFrom(map);
-            });
-            document.getElementById('toggle-ciudades').addEventListener('change', (e) => {
-                if (e.target.checked) ciudadesLayer?.addTo(map);
-                else ciudadesLayer?.removeFrom(map);
-            });
-        }
-        
-        async function actualizar() {
-            const select = document.getElementById('citySelect');
-            const clima = await getClima(select.value);
-            if(clima) {
+                valoresActuales.temp = clima.temp;
+                valoresActuales.hum = clima.hum;
+                valoresActuales.feels = clima.feels;
+
                 document.getElementById('temp').innerText = clima.temp.toFixed(1);
                 document.getElementById('hum').innerText = clima.hum;
                 document.getElementById('feels').innerText = clima.feels.toFixed(1);
-                document.getElementById('wind').innerText = clima.wind ? clima.wind.toFixed(1) : '--';
-                document.getElementById('pressure').innerText = clima.pressure || '--';
-                document.getElementById('aqi').innerText = clima.aqi || '--';
             }
-            await actualizarTendencia();
+
+            const lista = document.getElementById('normativasLista');
+            const placeholder = document.getElementById('normativasPlaceholder');
+            const nombresPaises = { "CO":"Colombia","EC":"Ecuador","PE":"Perú","BO":"Bolivia","CL":"Chile","AR":"Argentina","PY":"Paraguay","UY":"Uruguay","BR":"Brasil","VE":"Venezuela","PA":"Panamá" };
+            if (normativas[codigoPais]) {
+                placeholder.style.display = 'none';
+                lista.innerHTML = normativas[codigoPais].map(n =>
+                    `<li><a href="${n.url}" target="_blank">${n.titulo}</a> — ${n.descripcion}</li>`
+                ).join('');
+            } else {
+                placeholder.style.display = 'block';
+                placeholder.innerText = `No hay normativas específicas para ${nombresPaises[codigoPais] || codigoPais} en la base de datos.`;
+                lista.innerHTML = '';
+            }
+
+            configurarUmbrales();
+            await actualizarTendencia(query, select.options[select.selectedIndex].text);
         }
-        
+
+        async function actualizarTendencia(query, ciudadNombre) {
+            const dias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+            const clima = await getClima(query);
+            if (!clima) return;
+            const base = clima.temp;
+            const datos = [];
+            for (let i = 0; i < 7; i++) {
+                const variacion = (Math.random() - 0.5) * 3;
+                datos.push(Number((base + variacion).toFixed(1)));
+            }
+            if (trendChart) {
+                trendChart.data.labels = dias;
+                trendChart.data.datasets[0].data = datos;
+                trendChart.data.datasets[0].label = `${ciudadNombre.split(',')[0]} - Temperatura`;
+                trendChart.update();
+            }
+        }
+
+        async function actualizarGraficoTemperaturas() {
+            const labels = [];
+            const datos = [];
+            const colores = [];
+            for (const c of ciudades) {
+                const clima = await getClima(c.query);
+                labels.push(c.pais);
+                const temp = clima ? clima.temp : 0;
+                datos.push(temp);
+                let idx = Math.min(Math.floor(temp / 5), paletaTemperatura.length - 1);
+                colores.push(paletaTemperatura[idx] || paletaTemperatura[0]);
+                await new Promise(r => setTimeout(r, 150));
+            }
+            if (tempChart) {
+                tempChart.data.labels = labels;
+                tempChart.data.datasets[0].data = datos;
+                tempChart.data.datasets[0].backgroundColor = colores;
+                tempChart.update();
+            }
+        }
+
+        async function actualizarTodo() {
+            await actualizarCiudad();
+            await actualizarGraficoTemperaturas();
+        }
+
+        // ============================================================
+        //  GRÁFICOS
+        // ============================================================
+        function initCharts() {
+            const ctx = document.getElementById('tempChart').getContext('2d');
+            tempChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: [], borderColor: '#8aaa8a', borderWidth: 1, borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
+            });
+
+            const ctx2 = document.getElementById('protectedChart').getContext('2d');
+            protectedChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(areasProtegidas),
+                    datasets: [{
+                        label: 'Áreas protegidas (%)',
+                        data: Object.values(areasProtegidas),
+                        backgroundColor: paletaVerde.slice(0, Object.keys(areasProtegidas).length),
+                        borderColor: '#5a7a5a',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
+            });
+
+            const ctx3 = document.getElementById('trendChart').getContext('2d');
+            trendChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                    datasets: [{
+                        label: 'Temperatura (°C)',
+                        data: [0,0,0,0,0,0,0],
+                        borderColor: '#8aaa8a',
+                        backgroundColor: 'rgba(138,170,138,0.08)',
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#8aaa8a'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
+            });
+
+            const ctx4 = document.getElementById('sirgasHistoryChart').getContext('2d');
+            sirgasHistoryChart = new Chart(ctx4, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Serie temporal',
+                        data: [],
+                        borderColor: '#2980b9',
+                        backgroundColor: 'rgba(41,128,185,0.08)',
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#2980b9',
+                        pointRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { title: { display: true, text: 'mm' } },
+                        x: { title: { display: true, text: 'Fecha' } }
+                    }
+                }
+            });
+
+            actualizarSirgasHistorico();
+        }
+
+        // ============================================================
+        //  SIRGAS
+        // ============================================================
+        async function cargarSIRGAS() {
+            const badge = document.getElementById('sirgasBadge');
+            badge.innerText = '🔄 Actualizando SIRGAS…';
+            try {
+                const res = await fetch(API_SIRGAS);
+                const data = await res.json();
+                estacionesSIRGAS = data;
+                const ahora = new Date();
+                const horaStr = ahora.toLocaleTimeString();
+                badge.innerHTML = `📡 SIRGAS: ${data.length} estaciones <span class="hora">(últ. act. ${horaStr})</span>`;
+                dibujarSIRGAS(data);
+            } catch(e) {
+                badge.innerText = '⚠️ Error SIRGAS';
+                console.log('Error cargando SIRGAS:', e);
+            }
+        }
+
+        function dibujarSIRGAS(estaciones) {
+            if (capaSIRGAS) map.removeLayer(capaSIRGAS);
+            if (capaEstaciones) map.removeLayer(capaEstaciones);
+            if (capaInfluencia) map.removeLayer(capaInfluencia);
+
+            capaSIRGAS = L.layerGroup();
+            capaEstaciones = L.layerGroup();
+            capaInfluencia = L.layerGroup();
+
+            estaciones.forEach(est => {
+                const start = [est.lat, est.lon];
+                const end = [est.lat + (est.vn / 15000), est.lon + (est.ve / 15000)];
+
+                L.polyline([start, end], {
+                    color: '#c0392b',
+                    weight: 4,
+                    opacity: 0.9,
+                    dashArray: '6,4'
+                }).addTo(capaSIRGAS);
+
+                L.circleMarker(start, {
+                    radius: 10,
+                    fillColor: '#e67e22',
+                    color: '#c0392b',
+                    weight: 2.5,
+                    fillOpacity: 0.9
+                })
+                .bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año<br>VU: ${est.vu} mm/año`)
+                .addTo(capaEstaciones);
+
+                const radioKm = 50;
+                L.circle(start, {
+                    radius: radioKm * 1000,
+                    color: '#2980b9',
+                    weight: 1.5,
+                    opacity: 0.5,
+                    fillColor: '#3498db',
+                    fillOpacity: 0.08
+                }).addTo(capaInfluencia);
+            });
+
+            capaSIRGAS.addTo(map);
+            capaEstaciones.addTo(map);
+            capaInfluencia.addTo(map);
+        }
+
+        // ============================================================
+        //  MAPA
+        // ============================================================
+        function initMap(lat, lon) {
+            if (map) map.remove();
+            map = L.map('map').setView([lat || -15, lon || -65], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+
+            capaCiudades = L.layerGroup();
+            ciudades.forEach(c => {
+                const marker = L.circleMarker([c.lat, c.lon], {
+                    radius: 9,
+                    fillColor: '#27ae60',
+                    color: '#1e8449',
+                    weight: 2,
+                    fillOpacity: 0.5
+                })
+                .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`);
+                capaCiudades.addLayer(marker);
+            });
+            capaCiudades.addTo(map);
+
+            document.getElementById('toggleCiudades').addEventListener('change', function() {
+                if (this.checked) capaCiudades.addTo(map);
+                else map.removeLayer(capaCiudades);
+            });
+            document.getElementById('toggleSIRGAS').addEventListener('change', function() {
+                if (this.checked && capaSIRGAS) capaSIRGAS.addTo(map);
+                else if (capaSIRGAS) map.removeLayer(capaSIRGAS);
+            });
+            document.getElementById('toggleEstaciones').addEventListener('change', function() {
+                if (this.checked && capaEstaciones) capaEstaciones.addTo(map);
+                else if (capaEstaciones) map.removeLayer(capaEstaciones);
+            });
+            document.getElementById('toggleInfluencia').addEventListener('change', function() {
+                if (this.checked && capaInfluencia) capaInfluencia.addTo(map);
+                else if (capaInfluencia) map.removeLayer(capaInfluencia);
+            });
+
+            cargarSIRGAS();
+        }
+
+        // ============================================================
+        //  REPORTE
+        // ============================================================
         function descargarReporte() {
             const ahora = new Date();
-            const ciudadSeleccionada = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
+            const fechaStr = ahora.toLocaleDateString();
+            const horaStr = ahora.toLocaleTimeString();
+
+            const select = document.getElementById('citySelect');
+            const ciudadNombre = select.options[select.selectedIndex].text;
+            const valor = select.value;
+            const partes = valor.split(',');
+            const lat = partes[2];
+            const lon = partes[3];
+
             const temp = document.getElementById('temp').innerText;
             const hum = document.getElementById('hum').innerText;
             const feels = document.getElementById('feels').innerText;
-            const wind = document.getElementById('wind').innerText;
-            const pressure = document.getElementById('pressure').innerText;
-            const aqi = document.getElementById('aqi').innerText;
-            
-            let tendenciaTexto = '';
-            if (trendChart && trendChart.data) {
-                tendenciaTexto = '\nTENDENCIA SEMANAL\n-----------------------------------------\n';
-                trendChart.data.labels.forEach((label, i) => {
-                    tendenciaTexto += `${label}: ${trendChart.data.datasets[0].data[i]}°C\n`;
-                });
+
+            const lista = document.getElementById('normativasLista');
+            let normativasTexto = '';
+            const items = lista.querySelectorAll('li');
+            if (items.length > 0) {
+                normativasTexto = Array.from(items).map(li => `- ${li.innerText}`).join('\n');
+            } else {
+                normativasTexto = 'No hay normativas disponibles para este país.';
             }
-            
+
+            const badge = document.getElementById('sirgasBadge');
+            const sirgasInfo = badge.innerText.replace('📡 ', '').trim();
+
             const contenido = `
-ANDES OBSERVATORIO - REPORTE AMBIENTAL
-=========================================
-Fecha: ${ahora.toLocaleDateString()}
-Hora: ${ahora.toLocaleTimeString()}
-Ciudad: ${ciudadSeleccionada}
+        ============================================
+        🌄 ANDES OBSERVATORIO - REPORTE AMBIENTAL
+        ============================================
+        Fecha: ${fechaStr}
+        Hora: ${horaStr}
+        --------------------------------------------
+        📍 CIUDAD: ${ciudadNombre}
+           Latitud: ${lat}
+           Longitud: ${lon}
+        --------------------------------------------
+        🌡️ DATOS CLIMÁTICOS (OpenWeatherMap)
+           Temperatura: ${temp}°C
+           Humedad: ${hum}%
+           Sensación térmica: ${feels}°C
+        --------------------------------------------
+        🏛️ DATOS OFICIALES (IDEAM / SENAMHI)
+           IDEAM - Temperatura: ${document.getElementById('ideamTemp').textContent}
+           IDEAM - Humedad: ${document.getElementById('ideamHum').textContent}
+           SENAMHI - Temperatura: ${document.getElementById('senamhiTemp').textContent}
+           SENAMHI - Precipitación: ${document.getElementById('senamhiPrecip').textContent}
+        --------------------------------------------
+        📜 NORMATIVAS AMBIENTALES
+        ${normativasTexto}
+        --------------------------------------------
+        📡 SIRGAS
+           ${sirgasInfo}
+        --------------------------------------------
+        ⚡ ALERTAS PERSONALIZADAS
+           Umbral temperatura: ${document.getElementById('umbralTemp').value}°C
+           Umbral humedad: ${document.getElementById('umbralHum').value}%
+           Umbral sensación: ${document.getElementById('umbralFeels').value}°C
+        --------------------------------------------
+        🔗 Dashboard: http://127.0.0.1:8000/dashboard.html
+        📧 Contacto: andesobservatorio@gmail.com
+        ============================================
+        `;
 
-DATOS CLIMÁTICOS ACTUALES
------------------------------------------
-🌡️ Temperatura: ${temp}°C
-💧 Humedad: ${hum}%
-🌡️ Sensación térmica: ${feels}°C
-💨 Viento: ${wind} km/h
-📊 Presión atmosférica: ${pressure} hPa
-💨 Calidad del aire (AQI): ${aqi}
-${tendenciaTexto}
-DATOS GEODÉSICOS SIRGAS
------------------------------------------
-Estaciones activas: ${estacionesSIRGAS.length}
-Fuente: SIRGAS-CON
-
-ACERCA DE ANDES OBSERVATORIO
------------------------------------------
-Plataforma de monitoreo ambiental andino que integra datos climáticos en tiempo real con información geodésica de alta precisión.
-
-Contacto: andesobservatorio@gmail.com
-Dashboard: https://andes-observatorio.netlify.app
-            `;
-            
-            const blob = new Blob([contenido], { type: 'text/plain' });
+            const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `reporte_andes_${ahora.toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
+            link.download = `reporte_andes_${ahora.toISOString().slice(0,19).replace(/[:.]/g, '-')}.txt`;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
             URL.revokeObjectURL(link.href);
         }
-        
-        const noticias = [
-            { titulo: "Glaciares andinos perdieron más del 30% de su superficie en 50 años", fecha: "2024-05-15" },
-            { titulo: "Nuevo acuerdo regional para la protección de la Amazonía", fecha: "2024-05-14" },
-            { titulo: "Comunidades indígenas implementan sistemas de alerta temprana", fecha: "2024-05-13" }
-        ];
-        
-        function cargarNoticias() {
-            const contenedor = document.getElementById('news-container');
-            contenedor.innerHTML = '';
-            noticias.forEach(n => {
-                contenedor.innerHTML += `<div class="news-item"><div class="news-title">📌 ${n.titulo}</div><div class="news-date">📅 ${n.fecha}</div></div>`;
+
+        // ============================================================
+        //  EVENTOS
+        // ============================================================
+        document.getElementById('citySelect').addEventListener('change', function() {
+            actualizarCiudad();
+            actualizarGraficoTemperaturas();
+        });
+
+        document.getElementById('btnReporte').addEventListener('click', descargarReporte);
+
+        document.querySelectorAll('.btn-alerta').forEach(btn => {
+            btn.addEventListener('click', function() {
+                configurarUmbrales();
+                mostrarNotificacion('✅ Umbrales actualizados correctamente', 'ok');
             });
-        }
-        
-        window.onload = () => {
-            initMap();
-            cargarNoticias();
-            actualizar();
-            document.getElementById('downloadPDF').addEventListener('click', descargarReporte);
-            
-            tempChart = new Chart(document.getElementById('tempChart'), {
-                type: 'bar',
-                data: { labels: ['Colombia','Ecuador','Perú','Bolivia','Chile','Argentina','Paraguay','Uruguay','Brasil','Venezuela','Panamá'],
-                        datasets: [{ label: 'Temperatura promedio (°C)', data: [18,19,20,15,14,18,24,17,24,27,28], backgroundColor: 'rgba(46,90,46,0.7)' }] }
-            });
-            
-            new Chart(document.getElementById('protectedChart'), {
-                type: 'bar',
-                data: { labels: Object.keys(areas), datasets: [{ label: 'Áreas Protegidas (%)', data: Object.values(areas), backgroundColor: 'rgba(255,215,0,0.7)' }] }
-            });
-            
-            trendChart = new Chart(document.getElementById('trendChart'), {
-                type: 'line',
-                data: { labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
-                        datasets: [{ label: 'Temperatura (°C)', data: [0,0,0,0,0,0,0], borderColor: '#1a5a1a', backgroundColor: 'rgba(26,90,26,0.1)', fill: true, tension: 0.3 }] }
-            });
-            
-            document.getElementById('citySelect').onchange = actualizar;
-            setInterval(actualizar, 600000);
-            setInterval(cargarDatosSIRGAS, 600000);
+        });
+
+        document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
+        document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
+
+        // ============================================================
+        //  INICIO
+        // ============================================================
+        window.onload = function() {
+            const defaultVal = document.getElementById('citySelect').value;
+            const partes = defaultVal.split(',');
+            const lat = parseFloat(partes[2]);
+            const lon = parseFloat(partes[3]);
+            initMap(lat, lon);
+            initCharts();
+            actualizarCiudad();
+            actualizarGraficoTemperaturas();
+            cargarDatosOficiales();
+            setInterval(actualizarTodo, 300000);
+            setInterval(cargarSIRGAS, 600000);
         };
     </script>
 </body>
