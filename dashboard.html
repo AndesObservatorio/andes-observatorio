@@ -572,7 +572,35 @@
 
         <div id="map"></div>
 
-        <div class="alertas-panel" id="alertasPanel">
+            <h3>⚡ Panel de Alertas Personalizables</h3>
+    <div class="alertas-grid" id="alertasGrid">
+        <!-- Temperatura -->
+        <div class="alerta-item">
+            <label>🌡️ Temperatura (ºC)</label>
+            <input type="number" id="umbralTemp" value="28" step="0.5" min="0" max="50">
+            <span class="valor-actual">Actual: <span id="tempActual">--</span> ºC</span>
+            <span class="estado-alerta ok" id="estadoTemp">✅ Normal</span>
+            <button class="btn-alerta" data-umbral="temp">Aplicar</button>
+        </div>
+        <!-- Humedad -->
+        <div class="alerta-item">
+            <label>💧 Humedad (%)</label>
+            <input type="number" id="umbralHum" value="80" step="1" min="0" max="100">
+            <span class="valor-actual">Actual: <span id="humActual">--</span> %</span>
+            <span class="estado-alerta ok" id="estadoHum">✅ Normal</span>
+            <button class="btn-alerta" data-umbral="hum">Aplicar</button>
+        </div>
+        <!-- Sensación -->
+        <div class="alerta-item">
+            <label>🌡️ Sensación (ºC)</label>
+            <input type="number" id="umbralFeels" value="30" step="0.5" min="0" max="50">
+            <span class="valor-actual">Actual: <span id="feelsActual">--</span> ºC</span>
+            <span class="estado-alerta ok" id="estadoFeels">✅ Normal</span>
+            <button class="btn-alerta" data-umbral="feels">Aplicar</button>
+        </div>
+    </div>
+</div>
+<div class="alertas-panel" id="alertasPanel">
             <h3>⚡ Panel de Alertas Personalizables</h3>
             <div class="alertas-grid" id="alertasGrid">
                 <div class="alerta-item">
@@ -1020,6 +1048,34 @@ const normativas = {
     actualizarEstadoAlerta('humActual', 'estadoHum', humActual, umbralHum, 'Humedad');
     actualizarEstadoAlerta('feelsActual', 'estadoFeels', feelsActual, umbralFeels, 'Sensación');
 }
+    const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
+    const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
+    const umbralFeels = parseFloat(document.getElementById('umbralFeels').value) || 30;
+
+    // Obtener valores actuales de la interfaz (elementos principales)
+    const tempText = document.getElementById('temp').innerText;
+    const humText = document.getElementById('hum').innerText;
+    const feelsText = document.getElementById('feels').innerText;
+
+    const tempActual = parseFloat(tempText) || 0;
+    const humActual = parseFloat(humText) || 0;
+    const feelsActual = parseFloat(feelsText) || 0;
+
+    // Actualizar los spans de "Actual"
+    const tempSpan = document.getElementById('tempActual');
+    const humSpan = document.getElementById('humActual');
+    const feelsSpan = document.getElementById('feelsActual');
+
+    if (tempSpan) tempSpan.innerText = tempActual.toFixed(1);
+    if (humSpan) humSpan.innerText = humActual;
+    if (feelsSpan) feelsSpan.innerText = feelsActual.toFixed(1);
+
+    // Evaluar alertas
+    actualizarEstadoAlerta('tempActual', 'estadoTemp', tempActual, umbralTemp, 'Temperatura');
+    actualizarEstadoAlerta('humActual', 'estadoHum', humActual, umbralHum, 'Humedad');
+    actualizarEstadoAlerta('feelsActual', 'estadoFeels', feelsActual, umbralFeels, 'Sensación');
+}
+
 configurarUmbrales() {
             const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
             const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
