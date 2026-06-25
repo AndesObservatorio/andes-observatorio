@@ -25,19 +25,42 @@ jobs:
           pip install requests
 
       - name: Ejecutar script de IDEAM
+        id: ideam
         run: |
           python ideam_data_fetcher.py
+          echo "status=$?" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Ejecutar script de SENAMHI
+        id: senamhi
         run: |
           python senamhi_data_fetcher.py
+          echo "status=$?" >> $GITHUB_OUTPUT
         continue-on-error: true
+
+      - name: Verificar archivos generados
+        run: |
+          echo "=== Archivos en el repositorio ==="
+          ls -la
+          echo "=== Archivos JSON ==="
+          ls -la *.json 2>/dev/null || echo "No hay archivos JSON"
+          echo "=== Contenido de ideam_datos.json (primeras líneas) ==="
+          head -20 ideam_datos.json 2>/dev/null || echo "archivo no existe"
+          echo "=== Contenido de senamhi_datos.json (primeras líneas) ==="
+          head -20 senamhi_datos.json 2>/dev/null || echo "archivo no existe"
 
       - name: Subir cambios al repositorio
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add ideam_datos.json senamhi_datos.json
-          git diff --staged --quiet || git commit -m "Actualización automática de datos oficiales $(date +'%Y-%m-%d')"
-          git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
+          
+          # Verificar si hay cambios
+          git add ideam_datos.json senamhi_datos.json 2>/dev/null || true
+          
+          if git diff --staged --quiet; then
+            echo "ℹ️ No hay cambios para commitear"
+          else
+            git commit -m "Actualización automática de datos oficiales $(date +'%Y-%m-%d %H:%M:%S')"
+            git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
+            echo "✅ Cambios subidos exitosamente"
+          fi
