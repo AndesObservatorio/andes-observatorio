@@ -83,6 +83,66 @@ text
 
 ---
 
+## 🛰️ Módulo geodésico SIRGAS
+
+Además del dashboard ambiental, el proyecto expone una API geodésica basada en datos de la red **SIRGAS-CON**:
+
+| Dato | Endpoint | Fuente |
+|------|----------|--------|
+| Velocidades de estaciones | `GET /api/v1/geodesia/velocidades` | `SIR22P01_velocities.txt` (SIRGAS) |
+| Estación puntual | `GET /api/v1/geodesia/estacion/{id}` | ídem |
+| Estaciones con datos troposféricos | `GET /api/v1/geodesia/tropo/estaciones` | Base de datos local |
+| Serie histórica de ZTD por estación | `GET /api/v1/geodesia/tropo/{codigo}/serie?desde=&hasta=` | Base de datos local |
+
+### Parámetros troposféricos (ZTD)
+
+Se ingiere el **Retardo Troposférico Cenital (ZTD)** que SIRGAS publica en formato **SINEX TRO**, con muestreo horario, desde enero de 2014, vía `ftp://ftp.sirgas.org/pub/gps/SIRGAS-ZPD/` (redirige a `www3.dgfi.tum.de`). SIRGAS publica estos productos semanalmente con ~30 días de latencia, por lo que no es un dato "en vivo": se ingiere periódicamente a una base de datos (SQLite en desarrollo, Postgres en producción vía `DATABASE_URL`).
+
+**Estructura real del FTP** (confirmada explorando manualmente el servidor):
+```
+/pub/gps/SIRGAS-ZPD/<año>/<día-del-año, 3 dígitos>/{ESTACION}{ddd}0.{yy}zpd.gz
+```
+Es decir: **un archivo comprimido (.gz) por estación por día** — toda la red SIRGAS-CON tiene ~400+ estaciones.
+
+**Cobertura de estaciones (config/stations.py):**
+Por defecto, el pipeline solo procesa las 12 estaciones que ya muestra el dashboard actual (`scope="andes"`: Colombia, Ecuador, Perú, Bolivia, Chile, Argentina). El código ya está preparado para escalar a cobertura mundial sin tocar el fetcher ni el parser — solo hay que:
+
+```bash
+# Uso normal (default): solo las estaciones del dashboard
+python sirgas_tropo_ingest.py --days-back 60
+
+# Escalar a TODAS las estaciones de SIRGAS-CON (~400+), sin cambiar código:
+python sirgas_tropo_ingest.py --days-back 60 --scope global
+
+# Agregar una nueva región (ej. Centroamérica) más adelante: solo se
+# agrega una entrada en config/stations.py -> REGIONES, y se usa:
+python sirgas_tropo_ingest.py --days-back 60 --scope centroamerica
+
+# Override manual puntual, ignorando el scope:
+python sirgas_tropo_ingest.py --days-back 60 --stations BOGT,QUIT,AACR,LPGS
+```
+
+Pipeline:
+```
+config/stations.py        -> qué estaciones procesar (por región/scope, o "global" = todas)
+sirgas_tropo_fetcher.py   -> descarga los .zpd.gz diarios por FTP, reutilizando una
+                              única conexión (reconecta automáticamente si se cae),
+                              con caché local para no volver a bajar lo ya descargado
+sirgas_tropo_parser.py    -> parsea el formato SINEX TRO real (lee el orden de columnas
+                              del propio archivo vía TROP/DESCRIPTION, no lo asume fijo)
+sirgas_tropo_ingest.py    -> orquesta descarga + parseo + guardado idempotente en DB
+```
+
+Para correr la ingesta manualmente:
+```bash
+pip install -r requirements.txt
+python sirgas_tropo_ingest.py --days-back 60
+```
+
+**Citación obligatoria:** el uso de estos productos requiere citar a Mackern M.V., Mateo M.L., Camisay M.F., Morichetti P.V. (2020). *Tropospheric Products from High-Level GNSS Processing in Latin America*. IAG Symposia Series, Vol 152. doi: 10.1007/1345_2020_121
+
+---
+
 ## 🎯 Próximas mejoras
 
 - [ ] Agregar Venezuela y Panamá al dashboard
@@ -112,3 +172,4 @@ Este proyecto es de código abierto y está disponible para fines educativos y d
 *🌄 Andes Observatorio - Monitoreo de ecosistemas andinos para su protección y conservación*
 
 *Datos actualizados en tiempo real desde OpenWeatherMap*
+

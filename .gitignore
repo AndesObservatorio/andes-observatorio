@@ -1,0 +1,21 @@
+# Datos descargados y bases de datos generadas (no son código fuente)
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos de prueba sueltos descargados manualmente del FTP para validar el formato
+*.tro.txt
+*.TRO.gz
+*.zpd.gz
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Editor / OS
+.vscode/
+.DS_Store
