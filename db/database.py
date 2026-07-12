@@ -20,6 +20,12 @@ DEFAULT_SQLITE_PATH = os.path.join(
     "andes_observa.db",
 )
 
+# SQLite puede crear el archivo de base de datos, pero NO la carpeta que lo
+# contiene. En un checkout nuevo (ej. GitHub Actions), data/ no existe todavía
+# porque está en .gitignore -- si no se crea acá, sqlalchemy falla con
+# 'unable to open database file' al intentar conectar.
+os.makedirs(os.path.dirname(DEFAULT_SQLITE_PATH), exist_ok=True)
+
 DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{DEFAULT_SQLITE_PATH}")
 
 # connect_args solo es necesario para SQLite (permite uso multi-hilo con FastAPI/uvicorn)
@@ -43,4 +49,3 @@ def init_db():
     """Crea todas las tablas si no existen. Importa los modelos antes de llamar esto."""
     from db import models  # noqa: F401 (registra los modelos en Base.metadata)
     Base.metadata.create_all(bind=engine)
-
