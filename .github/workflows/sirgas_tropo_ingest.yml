@@ -1,0 +1,66 @@
+name: Actualizar datos troposféricos SIRGAS (ZTD)
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-sirgas-tropo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+
+      - name: Ejecutar ingesta de datos troposféricos SIRGAS
+        id: ingesta
+        run: |
+          python sirgas_tropo_ingest.py --days-back 10 --latency-days 40
+        continue-on-error: true
+
+      - name: Verificar contenido de la base de datos
+        run: |
+          echo "=== Resumen de la base de datos ==="
+          python -c "
+          from db.database import SessionLocal
+          from db.models import Station, TropoObservation
+          db = SessionLocal()
+          print('Estaciones:', db.query(Station).count())
+          print('Observaciones:', db.query(TropoObservation).count())
+          db.close()
+          "
+          echo "=== Tamaño del archivo de base de datos ==="
+          ls -la data/andes_observa.db 2>/dev/null || echo "El archivo de base de datos no existe todavía"
+
+      - name: Subir cambios al repositorio
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          git add -f data/andes_observa.db 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No hay cambios para commitear"
+          else
+            git commit -m "Actualización automática de datos troposféricos SIRGAS $(date +'%Y-%m-%d %H:%M:%S')"
+            git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
+            echo "Cambios subidos exitosamente"
+          fi
+
+      - name: Fallar el workflow si la ingesta tuvo errores
+        if: steps.ingesta.outcome == 'failure'
+        run: |
+          echo "La ingesta de datos SIRGAS falló, revisa el log del paso anterior"
+          exit 1

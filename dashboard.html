@@ -3,580 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Andes Observatorio</title>
+    <title>🌄 Andes Observatorio</title>
+    
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f5f0; padding: 20px; }
-        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 24px; padding: 24px 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); border: 1px solid #f0ebe4; }
-        h1 { color: #5a7a5a; text-align: center; font-size: 2rem; }
-        .subtitle { text-align: center; color: #8aa08a; margin-bottom: 18px; border-bottom: 2px solid #f0ebe4; padding-bottom: 12px; }
-        .selector { text-align: center; margin: 10px 0 18px; }
-        select { padding: 12px 20px; font-size: 16px; border-radius: 40px; border: 1.5px solid #d6cfc4; background: white; min-width: 220px; width: 90%; max-width: 480px; }
-        .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin: 16px 0; }
-        .card { background: #fcfaf7; padding: 16px; border-radius: 18px; text-align: center; border: 1px solid #ede8e0; }
-        .card h3 { color: #5a7a5a; font-size: 0.95rem; }
-        .value { font-size: 32px; font-weight: 700; color: #d4a017; }
-        .value small { font-size: 18px; color: #8aaa8a; }
-        .fuente { font-size: 11px; color: #b0b8a0; margin-top: 4px; }
-        .layer-control { display: flex; flex-wrap: wrap; gap: 16px 24px; background: #fcfaf7; padding: 10px 20px; border-radius: 40px; margin: 10px 0; align-items: center; border: 1px solid #ede8e0; }
-        .layer-control label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
-        .update-badge { background: #8aaa8a; color: white; padding: 4px 16px; border-radius: 30px; font-size: 13px; margin-left: auto; }
-        .btn-reporte { background: #d4a017; color: white; border: none; padding: 6px 18px; border-radius: 30px; font-size: 13px; cursor: pointer; }
-        #map { height: 400px; width: 100%; border-radius: 18px; margin: 12px 0; border: 1px solid #ede8e0; }
-        .alertas-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
-        .alertas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; }
-        .alerta-item { background: white; padding: 12px 16px; border-radius: 12px; border: 1px solid #ede8e0; }
-        .alerta-item label { font-weight: 600; font-size: 14px; }
-        .alerta-item input { padding: 6px 10px; border-radius: 8px; border: 1px solid #d6cfc4; width: 100%; margin-top: 4px; }
-        .valor-actual { font-size: 13px; color: #8aa08a; display: block; margin: 4px 0; }
-        .estado-alerta { font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 20px; display: inline-block; }
-        .estado-alerta.ok { background: #e6f2e6; color: #2d6a2d; }
-        .estado-alerta.alerta { background: #ffe6cc; color: #b85a00; }
-        .estado-alerta.critico { background: #ffcccc; color: #b30000; }
-        .btn-alerta { background: #8aaa8a; color: white; border: none; padding: 4px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; margin-top: 4px; }
-        .charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin: 18px 0; }
-        .chart-card { background: #fcfaf7; padding: 16px; border-radius: 18px; border: 1px solid #ede8e0; }
-        .chart-card h3 { text-align: center; color: #5a7a5a; font-size: 0.95rem; margin-bottom: 8px; }
-        canvas { max-height: 190px; width: 100% !important; }
-        .sirgas-historico { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
-        .sirgas-historico select { padding: 6px 12px; border-radius: 30px; border: 1.5px solid #d6cfc4; }
-        .oficiales-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
-        .oficiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; }
-        .oficial-item { background: white; padding: 12px 16px; border-radius: 12px; border: 1px solid #ede8e0; }
-        .fuente-oficial { font-size: 12px; font-weight: 600; color: #5a7a5a; background: #e6f2e6; padding: 2px 10px; border-radius: 12px; display: inline-block; }
-        .oficial-item .dato { font-size: 20px; font-weight: 700; color: #1a4a1a; }
-        .oficial-item .label { font-size: 13px; color: #8aa08a; }
-        .normativas-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
-        .normativas-panel ul { list-style: none; padding: 0; }
-        .normativas-panel li { padding: 6px 14px; background: white; margin-bottom: 6px; border-radius: 10px; border-left: 4px solid #8aaa8a; font-size: 14px; }
-        footer { background: #5a7a5a; color: #e8efe8; text-align: center; padding: 16px; border-radius: 18px; margin-top: 18px; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f0fe 0%, #d4e4f7 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #1a3a5c 0%, #2c5f8a 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(26, 58, 92, 0.3);
+        }
+        .header h1 { font-size: 28px; display: flex; align-items: center; gap: 10px; }
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+        }
+        .status-badge {
+            background: #2ecc71;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .card-title {
+            background: linear-gradient(135deg, #1a3a5c 0%, #2c5f8a 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: -5px -5px 15px -5px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #map { height: 400px; border-radius: 8px; }
+        #chart-container { height: 300px; position: relative; }
+        .controls {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .controls label { font-weight: bold; }
+        .controls select, .controls input {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        .controls button {
+            padding: 8px 20px;
+            background: #2c5f8a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .controls button:hover { background: #1a3a5c; }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #95a5a6;
+            font-size: 13px;
+            border-top: 1px solid #d4e4f7;
+            margin-top: 30px;
+        }
         @media (max-width: 768px) {
-            .container { padding: 16px; }
-            .stats { grid-template-columns: 1fr 1fr; }
-            .charts { grid-template-columns: 1fr; }
-            .layer-control { flex-direction: column; align-items: stretch; }
-            .update-badge { margin-left: 0; }
-            #map { height: 280px; }
+            .header { flex-direction: column; gap: 10px; text-align: center; }
+            .header h1 { font-size: 22px; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>🏔️ Andes Observatorio</h1>
-    <div class="subtitle">Monitoreo ambiental en tiempo real · Región Andina</div>
-
-    <div class="selector">
-        <label for="citySelect">📍 Selecciona una ciudad: </label>
-        <select id="citySelect">
-            <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
-            <option value="Medellin,CO,6.2442,-75.5812">Medellín, Colombia</option>
-            <option value="Cali,CO,3.4516,-76.5320">Cali, Colombia</option>
-            <option value="Quito,EC,-0.1807,-78.4678">Quito, Ecuador</option>
-            <option value="Guayaquil,EC,-2.1704,-79.9224">Guayaquil, Ecuador</option>
-            <option value="Cuenca,EC,-2.9006,-79.0045">Cuenca, Ecuador</option>
-            <option value="Lima,PE,-12.0464,-77.0428">Lima, Perú</option>
-            <option value="Cusco,PE,-13.5319,-71.9675">Cusco, Perú</option>
-            <option value="La Paz,BO,-16.5000,-68.1500">La Paz, Bolivia</option>
-            <option value="Sucre,BO,-19.0194,-65.2596">Sucre, Bolivia</option>
-            <option value="Santiago,CL,-33.4489,-70.6693">Santiago, Chile</option>
-            <option value="Buenos Aires,AR,-34.6037,-58.3816">Buenos Aires, Argentina</option>
-            <option value="Mendoza,AR,-32.8908,-68.8272">Mendoza, Argentina</option>
-            <option value="Asuncion,PY,-25.2637,-57.5759">Asunción, Paraguay</option>
-            <option value="Montevideo,UY,-34.9011,-56.1645">Montevideo, Uruguay</option>
-            <option value="Brasilia,BR,-15.8267,-47.9218">Brasilia, Brasil</option>
-            <option value="Caracas,VE,10.4806,-66.9036">Caracas, Venezuela</option>
-            <option value="Panama City,PA,8.9824,-79.5199">Panamá, Panamá</option>
-        </select>
-    </div>
-
-    <div class="stats">
-        <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
-        <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--<small>%</small></div><div class="fuente">OpenWeatherMap</div></div>
-        <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
-    </div>
-
-    <div class="layer-control">
-        <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
-        <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores SIRGAS</label>
-        <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
-        <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
-        <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
-        <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
-    </div>
-
-    <div id="map"></div>
-
-    <div class="alertas-panel">
-        <h3>⚡ Panel de Alertas Personalizables</h3>
-        <div class="alertas-grid">
-            <div class="alerta-item">
-                <label>🌡️ Temperatura (ºC)</label>
-                <input type="number" id="umbralTemp" value="28" step="0.5">
-                <span class="valor-actual">Actual: <span id="tempActual">--</span> ºC</span>
-                <span class="estado-alerta ok" id="estadoTemp">✅ Normal</span>
-                <button class="btn-alerta" data-umbral="temp">Aplicar</button>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🌄 Andes Observatorio</h1>
+            <div class="header-info">
+                <span id="update-time">🔄 Actualizando...</span>
+                <span class="status-badge">● En Vivo</span>
             </div>
-            <div class="alerta-item">
-                <label>💧 Humedad (%)</label>
-                <input type="number" id="umbralHum" value="80" step="1">
-                <span class="valor-actual">Actual: <span id="humActual">--</span> %</span>
-                <span class="estado-alerta ok" id="estadoHum">✅ Normal</span>
-                <button class="btn-alerta" data-umbral="hum">Aplicar</button>
+        </div>
+
+        <!-- Mapa -->
+        <div class="card">
+            <div class="card-title">🗺️ Estaciones SIRGAS</div>
+            <div id="map"></div>
+        </div>
+
+        <!-- Datos Troposféricos SIRGAS -->
+        <div class="card">
+            <div class="card-title">🛰️ Retardo Troposférico Cenital (ZTD) - SIRGAS</div>
+            <div class="controls">
+                <div style="flex:1;min-width:200px;">
+                    <label for="estacion-select">Seleccionar estación:</label>
+                    <select id="estacion-select" style="width:100%;">
+                        <option value="">Cargando estaciones...</option>
+                    </select>
+                </div>
+                <div style="flex:1;min-width:200px;">
+                    <label>Rango de fechas:</label>
+                    <div style="display:flex;gap:10px;margin-top:5px;">
+                        <input type="date" id="fecha-desde" style="flex:1;">
+                        <input type="date" id="fecha-hasta" style="flex:1;">
+                    </div>
+                </div>
+                <div style="display:flex;align-items:flex-end;">
+                    <button id="actualizar-grafico">Actualizar Gráfico</button>
+                </div>
             </div>
-            <div class="alerta-item">
-                <label>🌡️ Sensación (ºC)</label>
-                <input type="number" id="umbralFeels" value="30" step="0.5">
-                <span class="valor-actual">Actual: <span id="feelsActual">--</span> ºC</span>
-                <span class="estado-alerta ok" id="estadoFeels">✅ Normal</span>
-                <button class="btn-alerta" data-umbral="feels">Aplicar</button>
+            <div id="chart-container">
+                <canvas id="ztd-chart"></canvas>
+            </div>
+            <div id="ztd-info" style="margin-top:10px;font-size:12px;color:#95a5a6;text-align:center;">
+                Selecciona una estación y rango de fechas para visualizar la serie de ZTD
             </div>
         </div>
     </div>
 
-    <div class="charts">
-        <div class="chart-card"><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
-        <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
-        <div class="chart-card"><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div>
+    <div class="footer">
+        🌄 Andes Observatorio v2.0 | Datos SIRGAS y OpenWeatherMap | Actualización automática
     </div>
 
-    <div class="sirgas-historico">
-        <h3>🛰️ Datos históricos de SIRGAS</h3>
-        <div>
-            <label>Estación: </label>
-            <select id="estacionHistorica">
-                <option value="BOGT">BOGT (Bogotá)</option>
-                <option value="QUIT">QUIT (Quito)</option>
-                <option value="LIMA">LIMA (Lima)</option>
-                <option value="LPBZ">LPBZ (La Paz)</option>
-                <option value="SANT">SANT (Santiago)</option>
-            </select>
-            <label>Variable: </label>
-            <select id="variableHistorica">
-                <option value="N">Norte (mm)</option>
-                <option value="E" selected>Este (mm)</option>
-                <option value="U">Up (mm)</option>
-            </select>
-        </div>
-        <canvas id="sirgasHistoryChart" style="max-height:220px;margin-top:10px;"></canvas>
-    </div>
+    <script>
+        let map = null;
+        let ztdChart = null;
 
-    <div class="oficiales-panel">
-        <h3>🏛️ Datos oficiales en integración (IDEAM / SENAMHI)</h3>
-        <div class="oficiales-grid">
-            <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamTemp">16.5 °C</div><div class="label">Temperatura promedio</div></div>
-            <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamHum">72 %</div><div class="label">Humedad promedio</div></div>
-            <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiTemp">18.2 °C</div><div class="label">Temperatura promedio</div></div>
-            <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiPrecip">12.5 mm</div><div class="label">Precipitación promedio</div></div>
-        </div>
-        <div style="background:#f0f5f0;padding:12px 16px;border-radius:12px;margin-top:12px;border-left:4px solid #8aaa8a;">
-            <p style="font-size:13px;color:#4a6a4a;margin:0;"><strong>📌 Nota:<p style="color: #27ae60; font-size: 0.9rem; font-weight: 500;">
-    ✅ Datos actualizados automáticamente desde fuentes oficiales
-            </p> 
-        </div>
-    </div>
+        // ===== INICIALIZAR MAPA =====
+        function initMap() {
+            map = L.map('map').setView([-15, -70], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        }
 
-    <div class="normativas-panel">
-        <h3>📜 Normativas Ambientales por País</h3>
-        <p id="normativasPlaceholder" class="placeholder">Selecciona un país para ver sus normativas.</p>
-        <ul id="normativasLista"></ul>
-    </div>
-
-    <footer>
-        <p><strong>🌄 Andes Observatorio</strong> · Monitoreo de Ecosistemas Andinos</p>
-        <p>📧 andesobservatorio@gmail.com · 📞 +57 3337211047</p>
-    </footer>
-</div>
-
-<script>
-    const API_KEY = "257ead5e0a9128276d4c947480000ebb";
-    const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
-
-    const ciudades = [
-        { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
-        { nombre: "Medellín", pais: "Colombia", query: "Medellin,CO", lat: 6.2442, lon: -75.5812 },
-        { nombre: "Cali", pais: "Colombia", query: "Cali,CO", lat: 3.4516, lon: -76.5320 },
-        { nombre: "Quito", pais: "Ecuador", query: "Quito,EC", lat: -0.1807, lon: -78.4678 },
-        { nombre: "Guayaquil", pais: "Ecuador", query: "Guayaquil,EC", lat: -2.1704, lon: -79.9224 },
-        { nombre: "Cuenca", pais: "Ecuador", query: "Cuenca,EC", lat: -2.9006, lon: -79.0045 },
-        { nombre: "Lima", pais: "Perú", query: "Lima,PE", lat: -12.0464, lon: -77.0428 },
-        { nombre: "Cusco", pais: "Perú", query: "Cusco,PE", lat: -13.5319, lon: -71.9675 },
-        { nombre: "La Paz", pais: "Bolivia", query: "La Paz,BO", lat: -16.5000, lon: -68.1500 },
-        { nombre: "Sucre", pais: "Bolivia", query: "Sucre,BO", lat: -19.0194, lon: -65.2596 },
-        { nombre: "Santiago", pais: "Chile", query: "Santiago,CL", lat: -33.4489, lon: -70.6693 },
-        { nombre: "Buenos Aires", pais: "Argentina", query: "Buenos Aires,AR", lat: -34.6037, lon: -58.3816 },
-        { nombre: "Mendoza", pais: "Argentina", query: "Mendoza,AR", lat: -32.8908, lon: -68.8272 },
-        { nombre: "Asunción", pais: "Paraguay", query: "Asuncion,PY", lat: -25.2637, lon: -57.5759 },
-        { nombre: "Montevideo", pais: "Uruguay", query: "Montevideo,UY", lat: -34.9011, lon: -56.1645 },
-        { nombre: "Brasilia", pais: "Brasil", query: "Brasilia,BR", lat: -15.8267, lon: -47.9218 },
-        { nombre: "Caracas", pais: "Venezuela", query: "Caracas,VE", lat: 10.4806, lon: -66.9036 },
-        { nombre: "Panamá", pais: "Panamá", query: "Panama City,PA", lat: 8.9824, lon: -79.5199 }
-    ];
-
-    const normativas = {
-        "CO": [
-            { titulo: "Decreto 2041 de 2014", descripcion: "Licencias ambientales", url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=62228" },
-            { titulo: "Ley 99 de 1993", descripcion: "Crea el SINA", url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=297" }
-        ],
-        "EC": [
-            { titulo: "Código Orgánico del Ambiente (COA)", descripcion: "Gestión ambiental integral", url: "https://www.ambiente.gob.ec/codigo-organico-del-ambiente-coa/" }
-        ],
-        "PE": [
-            { titulo: "Ley General del Ambiente (Ley 28611)", descripcion: "Política ambiental", url: "https://www.minam.gob.pe/ley-general-del-ambiente/" },
-            { titulo: "Decreto Supremo 011-2017-MINAM", descripcion: "Calidad del aire", url: "https://www.minam.gob.pe/disposiciones/decreto-supremo-n-011-2017-minam/" }
-        ],
-        "BO": [
-            { titulo: "Ley de Medio Ambiente (Ley 1333)", descripcion: "Protección de recursos", url: "https://www.lexivox.org/norms/BO-L-1333.html" }
-        ],
-        "CL": [
-            { titulo: "Ley de Bases del Medio Ambiente (19.300)", descripcion: "Marco ambiental", url: "https://www.bcn.cl/leychile/navegar?idNorma=30667" }
-        ],
-        "AR": [
-            { titulo: "Ley General del Ambiente (25.675)", descripcion: "Política ambiental nacional", url: "https://www.argentina.gob.ar/normativa/nacional/ley-25675-79980" }
-        ],
-        "PY": [
-            { titulo: "Ley de Gestión Ambiental (Ley 1561/2000)", descripcion: "Marco de gestión ambiental", url: "https://www.mades.gov.py/" }
-        ],
-        "UY": [
-            { titulo: "Ley de Protección del Medio Ambiente (Ley 17.283)", descripcion: "Protección ambiental general", url: "https://www.impo.com.uy/bases/leyes/17283-2000" }
-        ],
-        "BR": [
-            { titulo: "Política Nacional del Medio Ambiente (Ley 6938/81)", descripcion: "Marco ambiental", url: "https://www.planalto.gov.br/ccivil_03/leis/l6938.htm" }
-        ],
-        "VE": [
-            { titulo: "Ley Orgánica del Ambiente (Ley 2006)", descripcion: "Gestión ambiental", url: "https://www.ambiente.gob.ve/" }
-        ],
-        "PA": [
-            { titulo: "Ley General del Ambiente (Ley 41/1998)", descripcion: "Marco ambiental", url: "https://www.miambiente.gob.pa/" }
-        ]
-    };
-
-    const areasProtegidas = {
-        'Colombia':16.8,'Ecuador':19.2,'Perú':17.5,'Bolivia':22.1,'Chile':21.5,
-        'Argentina':9.8,'Paraguay':12.5,'Uruguay':4.5,'Brasil':29.5,'Venezuela':35.2,'Panamá':25.6
-    };
-
-    let map, tempChart, protectedChart, trendChart, sirgasHistoryChart;
-    let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia;
-    let estacionesSIRGAS = [];
-
-    // ============================================================
-    // CLIMA
-    // ============================================================
-    async function getClima(query) {
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
-        try {
-            const res = await fetch(url);
-            const data = await res.json();
-            if (data.cod === 200) {
-                return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
+        // ===== GRÁFICO ZTD (SIRGAS) =====
+        async function cargarEstacionesTropo() {
+            try {
+                const response = await fetch('http://localhost:8001/api/v1/geodesia/tropo/estaciones');
+                if (!response.ok) throw new Error('Error al cargar estaciones');
+                const data = await response.json();
+                
+                const select = document.getElementById('estacion-select');
+                select.innerHTML = '<option value="">Selecciona una estación...</option>';
+                
+                if (data.estaciones && data.estaciones.length > 0) {
+                    data.estaciones.forEach(est => {
+                        const option = document.createElement('option');
+                        option.value = est.codigo;
+                        option.textContent = `${est.codigo} (${est.total_registros} registros)`;
+                        select.appendChild(option);
+                    });
+                    // Cargar automáticamente la primera estación
+                    if (data.estaciones.length > 0) {
+                        select.value = data.estaciones[0].codigo;
+                        actualizarGraficoZTD();
+                    }
+                } else {
+                    select.innerHTML = '<option value="">No hay estaciones disponibles</option>';
+                }
+            } catch (error) {
+                console.error('Error cargando estaciones:', error);
+                document.getElementById('estacion-select').innerHTML = '<option value="">Error al cargar</option>';
             }
-        } catch(e) {}
-        return null;
-    }
-
-    async function actualizarCiudad() {
-        const select = document.getElementById('citySelect');
-        const partes = select.value.split(',');
-        const query = partes[0] + ',' + partes[1];
-        const lat = parseFloat(partes[2]);
-        const lon = parseFloat(partes[3]);
-        const codigoPais = partes[1];
-
-        if (map) map.flyTo([lat, lon], 8, { duration: 1.5 });
-
-        const clima = await getClima(query);
-        if (clima) {
-            document.getElementById('temp').innerHTML = clima.temp.toFixed(1) + '<small>°C</small>';
-            document.getElementById('hum').innerHTML = clima.hum + '<small>%</small>';
-            document.getElementById('feels').innerHTML = clima.feels.toFixed(1) + '<small>°C</small>';
-            actualizarAlertas(clima);
         }
 
-        const lista = document.getElementById('normativasLista');
-        const placeholder = document.getElementById('normativasPlaceholder');
-        if (normativas[codigoPais]) {
-            placeholder.style.display = 'none';
-            lista.innerHTML = normativas[codigoPais].map(n =>
-                `<li><a href="${n.url}" target="_blank">${n.titulo}</a> — ${n.descripcion}</li>`
-            ).join('');
-        } else {
-            placeholder.style.display = 'block';
-            placeholder.innerText = `No hay normativas para este país.`;
-            lista.innerHTML = '';
+        async function actualizarGraficoZTD() {
+            const codigo = document.getElementById('estacion-select').value;
+            if (!codigo) {
+                alert('Por favor, selecciona una estación');
+                return;
+            }
+            
+            const desde = document.getElementById('fecha-desde').value;
+            const hasta = document.getElementById('fecha-hasta').value;
+            
+            let url = `http://localhost:8001/api/v1/geodesia/tropo/${codigo}/serie?limite=500`;
+            if (desde) url += `&desde=${desde}`;
+            if (hasta) url += `&hasta=${hasta}`;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Error al cargar datos');
+                const data = await response.json();
+                
+                if (!data.datos || data.datos.length === 0) {
+                    document.getElementById('ztd-info').textContent = `⚠️ No hay datos para ${codigo} en el rango seleccionado`;
+                    return;
+                }
+                
+                // Preparar datos para el gráfico
+                const fechas = data.datos.map(d => new Date(d.fecha).toLocaleDateString());
+                const valores = data.datos.map(d => d.valor);
+                const errores = data.datos.map(d => d.error || 0);
+                
+                // Actualizar información
+                document.getElementById('ztd-info').innerHTML = `
+                    📊 Estación: <strong>${data.estacion}</strong> | 
+                    Registros: <strong>${data.total_registros}</strong> | 
+                    Rango: ${fechas[0]} a ${fechas[fechas.length-1]}
+                `;
+                
+                // Crear o actualizar gráfico
+                const ctx = document.getElementById('ztd-chart').getContext('2d');
+                
+                if (ztdChart) {
+                    ztdChart.destroy();
+                }
+                
+                ztdChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: fechas,
+                        datasets: [{
+                            label: 'ZTD (metros)',
+                            data: valores,
+                            borderColor: '#2c5f8a',
+                            backgroundColor: 'rgba(44, 95, 138, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 1,
+                            pointHoverRadius: 5
+                        }, {
+                            label: 'Error ZTD',
+                            data: errores,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            tension: 0.3,
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y.toFixed(4)} m`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                title: { display: true, text: 'ZTD (metros)' },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                title: { display: true, text: 'Fecha' },
+                                ticks: { maxTicksLimit: 20 },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error actualizando gráfico:', error);
+                document.getElementById('ztd-info').textContent = `❌ Error: ${error.message}`;
+            }
         }
 
-        await actualizarTendencia(query);
-        await actualizarGrafico();
-    }
-
-    async function actualizarTendencia(query) {
-        const dias = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-        const clima = await getClima(query);
-        if (!clima) return;
-        const base = clima.temp;
-        const datos = [];
-        for (let i=0; i<7; i++) {
-            datos.push(Number((base + (Math.random()-0.5)*3).toFixed(1)));
-        }
-        if (trendChart) {
-            trendChart.data.labels = dias;
-            trendChart.data.datasets[0].data = datos;
-            trendChart.update();
-        }
-    }
-
-    function actualizarAlertas(clima) {
-        const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
-        const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
-        const umbralFeels = parseFloat(document.getElementById('umbralFeels').value) || 30;
-
-        document.getElementById('tempActual').innerText = clima.temp.toFixed(1);
-        document.getElementById('humActual').innerText = clima.hum;
-        document.getElementById('feelsActual').innerText = clima.feels.toFixed(1);
-
-        const tempEl = document.getElementById('estadoTemp');
-        const humEl = document.getElementById('estadoHum');
-        const feelsEl = document.getElementById('estadoFeels');
-
-        if (clima.temp > umbralTemp) { tempEl.className = 'estado-alerta critico'; tempEl.innerText = '🔴 Supera umbral'; }
-        else if (clima.temp > umbralTemp * 0.8) { tempEl.className = 'estado-alerta alerta'; tempEl.innerText = '🟡 Cerca del umbral'; }
-        else { tempEl.className = 'estado-alerta ok'; tempEl.innerText = '✅ Normal'; }
-
-        if (clima.hum > umbralHum) { humEl.className = 'estado-alerta critico'; humEl.innerText = '🔴 Supera umbral'; }
-        else if (clima.hum > umbralHum * 0.8) { humEl.className = 'estado-alerta alerta'; humEl.innerText = '🟡 Cerca del umbral'; }
-        else { humEl.className = 'estado-alerta ok'; humEl.innerText = '✅ Normal'; }
-
-        if (clima.feels > umbralFeels) { feelsEl.className = 'estado-alerta critico'; feelsEl.innerText = '🔴 Supera umbral'; }
-        else if (clima.feels > umbralFeels * 0.8) { feelsEl.className = 'estado-alerta alerta'; feelsEl.innerText = '🟡 Cerca del umbral'; }
-        else { feelsEl.className = 'estado-alerta ok'; feelsEl.innerText = '✅ Normal'; }
-    }
-
-    // ============================================================
-    // GRÁFICOS
-    // ============================================================
-    async function actualizarGrafico() {
-        const labels = [];
-        const datos = [];
-        const colores = [];
-        const paleta = ['#fff5cc','#ffebb3','#ffd699','#ffb366','#ff8c42','#ff6b35','#e63946'];
-        for (const c of ciudades) {
-            const clima = await getClima(c.query);
-            labels.push(c.pais);
-            const temp = clima ? clima.temp : 0;
-            datos.push(temp);
-            let idx = Math.min(Math.floor(temp / 5), paleta.length - 1);
-            colores.push(paleta[idx] || paleta[0]);
-        }
-        if (tempChart) {
-            tempChart.data.labels = labels;
-            tempChart.data.datasets[0].data = datos;
-            tempChart.data.datasets[0].backgroundColor = colores;
-            tempChart.update();
-        }
-    }
-
-    function initCharts() {
-        const ctx = document.getElementById('tempChart').getContext('2d');
-        tempChart = new Chart(ctx, {
-            type: 'bar',
-            data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: [] }] },
-            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 35, title: { display: true, text: 'Temperatura (°C)' } } } }
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            
+            // Configurar fechas por defecto (últimos 30 días)
+            const hoy = new Date();
+            const hace30Dias = new Date(hoy);
+            hace30Dias.setDate(hace30Dias.getDate() - 30);
+            
+            document.getElementById('fecha-desde').value = hace30Dias.toISOString().split('T')[0];
+            document.getElementById('fecha-hasta').value = hoy.toISOString().split('T')[0];
+            
+            // Cargar estaciones
+            cargarEstacionesTropo();
+            
+            // Eventos
+            document.getElementById('actualizar-grafico').addEventListener('click', actualizarGraficoZTD);
+            document.getElementById('estacion-select').addEventListener('change', () => {
+                if (document.getElementById('estacion-select').value) {
+                    actualizarGraficoZTD();
+                }
+            });
+            
+            // Actualizar hora
+            document.getElementById('update-time').textContent = '🔄 ' + new Date().toLocaleTimeString();
+            setInterval(() => {
+                document.getElementById('update-time').textContent = '🔄 ' + new Date().toLocaleTimeString();
+            }, 60000);
         });
-
-        const ctx2 = document.getElementById('protectedChart').getContext('2d');
-        protectedChart = new Chart(ctx2, {
-            type: 'bar',
-            data: { labels: Object.keys(areasProtegidas), datasets: [{ label: 'Áreas protegidas (%)', data: Object.values(areasProtegidas), backgroundColor: '#99cc99', borderColor: '#4caf50', borderWidth: 1, borderRadius: 4 }] },
-            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 40, title: { display: true, text: 'Áreas protegidas (%)' } } } }
-        });
-
-        const ctx3 = document.getElementById('trendChart').getContext('2d');
-        trendChart = new Chart(ctx3, {
-            type: 'line',
-            data: { labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], datasets: [{ label: 'Temperatura (°C)', data: [0,0,0,0,0,0,0], borderColor: '#8aaa8a', tension: 0.3, fill: true, backgroundColor: 'rgba(138,170,138,0.1)' }] },
-            options: { responsive: true, plugins: { legend: { display: false } } }
-        });
-
-        const ctx4 = document.getElementById('sirgasHistoryChart').getContext('2d');
-        sirgasHistoryChart = new Chart(ctx4, {
-            type: 'line',
-            data: { labels: [], datasets: [{ label: 'Serie temporal', data: [], borderColor: '#2980b9', tension: 0.3, fill: true, backgroundColor: 'rgba(41,128,185,0.08)' }] },
-            options: { responsive: true, plugins: { legend: { display: false } } }
-        });
-
-        actualizarGrafico();
-    }
-
-    // ============================================================
-    // SIRGAS HISTÓRICO
-    // ============================================================
-    function generarDatosHistoricos(estacion, variable) {
-        const params = {
-            'BOGT': { base: 0, tendencia: 2.5, ruido: 1.2 },
-            'QUIT': { base: 0, tendencia: 1.8, ruido: 1.0 },
-            'LIMA': { base: 0, tendencia: 3.2, ruido: 1.5 },
-            'LPBZ': { base: 0, tendencia: 2.0, ruido: 1.1 },
-            'SANT': { base: 0, tendencia: 1.5, ruido: 0.8 }
-        };
-        const p = params[estacion] || { base: 0, tendencia: 2.0, ruido: 1.0 };
-        const datos = [];
-        const fechas = [];
-        const ahora = new Date();
-        for (let i = 20; i >= 0; i--) {
-            const fecha = new Date(ahora);
-            fecha.setMonth(fecha.getMonth() - i);
-            fechas.push(fecha.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }));
-            let valor = p.base + (p.tendencia * (20 - i) / 20) + (Math.random() - 0.5) * p.ruido * 2;
-            if (variable === 'N') valor += 0.2;
-            if (variable === 'U') valor += 0.1;
-            datos.push(Math.round(valor * 10) / 10);
-        }
-        return { fechas, datos };
-    }
-
-    function actualizarSirgasHistorico() {
-        const estacion = document.getElementById('estacionHistorica').value;
-        const variable = document.getElementById('variableHistorica').value;
-        const { fechas, datos } = generarDatosHistoricos(estacion, variable);
-        if (sirgasHistoryChart) {
-            sirgasHistoryChart.data.labels = fechas;
-            sirgasHistoryChart.data.datasets[0].data = datos;
-            sirgasHistoryChart.data.datasets[0].label = `${estacion} - ${variable} (mm)`;
-            sirgasHistoryChart.update();
-        }
-    }
-
-    // ============================================================
-    // SIRGAS
-    // ============================================================
-    async function cargarSIRGAS() {
-        const badge = document.getElementById('sirgasBadge');
-        badge.innerText = '🔄 Actualizando SIRGAS…';
-        try {
-            const res = await fetch(API_SIRGAS);
-            const data = await res.json();
-            estacionesSIRGAS = data;
-            const ahora = new Date();
-            badge.innerText = `📡 SIRGAS: ${data.length} estaciones (últ. act. ${ahora.toLocaleTimeString()})`;
-            dibujarSIRGAS(data);
-        } catch(e) {
-            badge.innerText = '⚠️ Error SIRGAS';
-        }
-    }
-
-    function dibujarSIRGAS(estaciones) {
-        if (capaSIRGAS) map.removeLayer(capaSIRGAS);
-        if (capaEstaciones) map.removeLayer(capaEstaciones);
-        if (capaInfluencia) map.removeLayer(capaInfluencia);
-
-        capaSIRGAS = L.layerGroup();
-        capaEstaciones = L.layerGroup();
-        capaInfluencia = L.layerGroup();
-
-        estaciones.forEach(est => {
-            const start = [est.lat, est.lon];
-            const end = [est.lat + (est.vn / 15000), est.lon + (est.ve / 15000)];
-            L.polyline([start, end], { color: '#c0392b', weight: 4, dashArray: '6,4' }).addTo(capaSIRGAS);
-            L.circleMarker(start, { radius: 10, fillColor: '#e67e22', color: '#c0392b', weight: 2.5, fillOpacity: 0.9 })
-                .bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año`)
-                .addTo(capaEstaciones);
-            L.circle(start, { radius: 50*1000, color: '#2980b9', weight: 1.5, fillColor: '#3498db', fillOpacity: 0.08 })
-                .addTo(capaInfluencia);
-        });
-
-        capaSIRGAS.addTo(map);
-        capaEstaciones.addTo(map);
-        capaInfluencia.addTo(map);
-    }
-
-    // ============================================================
-    // MAPA
-    // ============================================================
-    function initMap() {
-        if (map) map.remove();
-        map = L.map('map').setView([-15, -65], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
-
-        capaCiudades = L.layerGroup();
-        ciudades.forEach(c => {
-            L.circleMarker([c.lat, c.lon], { radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 })
-                .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`)
-                .addTo(capaCiudades);
-        });
-        capaCiudades.addTo(map);
-
-        document.getElementById('toggleCiudades').addEventListener('change', function() {
-            this.checked ? capaCiudades.addTo(map) : map.removeLayer(capaCiudades);
-        });
-        document.getElementById('toggleSIRGAS').addEventListener('change', function() {
-            if (this.checked && capaSIRGAS) capaSIRGAS.addTo(map);
-            else if (capaSIRGAS) map.removeLayer(capaSIRGAS);
-        });
-        document.getElementById('toggleEstaciones').addEventListener('change', function() {
-            if (this.checked && capaEstaciones) capaEstaciones.addTo(map);
-            else if (capaEstaciones) map.removeLayer(capaEstaciones);
-        });
-        document.getElementById('toggleInfluencia').addEventListener('change', function() {
-            if (this.checked && capaInfluencia) capaInfluencia.addTo(map);
-            else if (capaInfluencia) map.removeLayer(capaInfluencia);
-        });
-
-        cargarSIRGAS();
-    }
-
-    // ============================================================
-    // REPORTE
-    // ============================================================
-    function descargarReporte() {
-        const ahora = new Date();
-        const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
-        const temp = document.getElementById('temp').innerText;
-        const hum = document.getElementById('hum').innerText;
-        const feels = document.getElementById('feels').innerText;
-        const contenido = `
-        ============================================
-        🌄 ANDES OBSERVATORIO - REPORTE AMBIENTAL
-        ============================================
-        Fecha: ${ahora.toLocaleDateString()}
-        Hora: ${ahora.toLocaleTimeString()}
-        Ciudad: ${ciudad}
-        Temperatura: ${temp}
-        Humedad: ${hum}
-        Sensación: ${feels}
-        ============================================
-        `;
-        const blob = new Blob([contenido], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `reporte_andes_${ahora.toISOString().slice(0,10)}.txt`;
-        link.click();
-    }
-
-    // ============================================================
-    // EVENTOS
-    // ============================================================
-    document.getElementById('citySelect').addEventListener('change', actualizarCiudad);
-    document.getElementById('btnReporte').addEventListener('click', descargarReporte);
-    document.querySelectorAll('.btn-alerta').forEach(btn => {
-        btn.addEventListener('click', actualizarCiudad);
-    });
-    document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
-    document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
-
-    // ============================================================
-    // INICIO
-    // ============================================================
-    window.onload = function() {
-        initMap();
-        initCharts();
-        actualizarCiudad();
-        actualizarSirgasHistorico();
-        setInterval(actualizarCiudad, 300000);
-        setInterval(cargarSIRGAS, 600000);
-    };
-</script>
+    </script>
 </body>
 </html>

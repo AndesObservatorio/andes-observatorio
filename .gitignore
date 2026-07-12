@@ -1,8 +1,8 @@
-# Datos descargados y bases de datos generadas (no son código fuente)
-data/
-*.db
-*.sqlite
-*.sqlite3
+# Datos crudos descargados del FTP (archivos .gz individuales) -- no se versionan,
+# se vuelven a descargar si hace falta. La base de datos SÍ se comete al repo
+# (ver excepción abajo), siguiendo el mismo patrón que ideam_datos.json/senamhi_datos.json.
+data/*
+!data/andes_observa.db
 
 # Archivos de prueba sueltos descargados manualmente del FTP para validar el formato
 *.tro.txt
