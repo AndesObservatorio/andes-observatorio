@@ -209,8 +209,10 @@
 
 <script>
     const API_KEY = "257ead5e0a9128276d4c947480000ebb";
-    const API_BASE = "https://andes-observatorio.onrender.com";
-    const API_SIRGAS = `${API_BASE}/api/v1/geodesia/velocidades`;
+    const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
+    // La API de ZTD corre localmente por ahora (uvicorn en tu Ubuntu, puerto 8001).
+    // Cuando conectes Render más adelante, cambia esta línea a tu URL de Render.
+    const API_BASE = "http://localhost:8001";
 
     const ciudades = [
         { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
