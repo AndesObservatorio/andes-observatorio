@@ -1,21 +1,28 @@
-# Datos crudos descargados del FTP (archivos .gz individuales) -- no se versionan,
-# se vuelven a descargar si hace falta. La base de datos SÍ se comete al repo
-# (ver excepción abajo), siguiendo el mismo patrón que ideam_datos.json/senamhi_datos.json.
-data/*
-!data/andes_observa.db
-
-# Archivos de prueba sueltos descargados manualmente del FTP para validar el formato
-*.tro.txt
-*.TRO.gz
-*.zpd.gz
-
-# Python
-__pycache__/
+# Archivos temporales
+*.bak
+*.log
 *.pyc
-*.pyo
-.venv/
-venv/
+__pycache__/
 
-# Editor / OS
-.vscode/
-.DS_Store
+# Archivos de base de datos
+*.db
+*.sqlite3
+
+# Archivos de scripts temporales
+fix_*.sh
+fix_*.py
+init_*.py
+insert_*.py
+start_*.sh
+*_test.py
+
+# Logs
+*.log
+ingesta.log
+
+# Entorno virtual
+venv/
+.env
+
+# Datos temporales
+data/tropo_raw/
