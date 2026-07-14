@@ -62,20 +62,20 @@
     <!-- Tabs -->
     <div class="tabs">
         <button class="tab active" data-tab="clima">🌤️ Clima y Ciudades</button>
-        <button class="tab" data-tab="sirgas">🛰️ SIRGAS y Geodesia</button>
-        <button class="tab" data-tab="alertas">⚡ Alertas<!-- Panel de Alertas Mejorado -->
+        <button class="tab" data-tab="sirgas">🛰 SIRGAS y Geodesia</button>
+        <button class="tab" data-tab="alertas">⚠ Alertas<!-- Panel de Alertas Mejorado -->
 <div class="alertas-panel card">
-  <h3 style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">⚡ Panel de Alertas Personalizables</h3>
+  <h3 style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">⚠ Panel de Alertas Personalizables</h3>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
     <!-- Alerta 1: Temperatura -->
     <div style="background:var(--bg-card);border-radius:10px;padding:16px;border:1px solid var(--border);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <label style="font-weight:600;font-size:0.85rem;">🌡️ Temperatura</label>
+        <label style="font-weight:600;font-size:0.85rem;">°C Temperatura</label>
         <span class="badge" style="background:rgba(59,130,246,0.15);color:#60a5fa;">Umbral: <span id="umbralTempDisplay">28</span>°C</span>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:0.75rem;color:var(--text-muted);">Actual: <strong id="tempActual">--</strong>°C</span>
-        <span id="estadoTemp" style="font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.15);color:#34d399;">✅ Normal</span>
+        <span id="estadoTemp" style="font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.15);color:#34d399;">✓ Normal</span>
       </div>
       <input type="range" id="umbralTemp" min="10" max="40" value="28" step="0.5" style="width:100%;margin-top:8px;" oninput="document.getElementById('umbralTempDisplay').textContent=this.value">
     </div>
@@ -83,12 +83,12 @@
     <!-- Alerta 2: Humedad -->
     <div style="background:var(--bg-card);border-radius:10px;padding:16px;border:1px solid var(--border);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <label style="font-weight:600;font-size:0.85rem;">💧 Humedad</label>
+        <label style="font-weight:600;font-size:0.85rem;">% Humedad</label>
         <span class="badge" style="background:rgba(59,130,246,0.15);color:#60a5fa;">Umbral: <span id="umbralHumDisplay">80</span>%</span>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:0.75rem;color:var(--text-muted);">Actual: <strong id="humActual">--</strong>%</span>
-        <span id="estadoHum" style="font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.15);color:#34d399;">✅ Normal</span>
+        <span id="estadoHum" style="font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.15);color:#34d399;">✓ Normal</span>
       </div>
       <input type="range" id="umbralHum" min="20" max="100" value="80" step="1" style="width:100%;margin-top:8px;" oninput="document.getElementById('umbralHumDisplay').textContent=this.value">
     </div>
@@ -96,24 +96,24 @@
     <!-- Alerta 3: Sensación -->
     <div style="background:var(--bg-card);border-radius:10px;padding:16px;border:1px solid var(--border);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <label style="font-weight:600;font-size:0.85rem;">🌡️ Sensación</label>
+        <label style="font-weight:600;font-size:0.85rem;">°C Sensación</label>
         <span class="badge" style="background:rgba(59,130,246,0.15);color:#60a5fa;">Umbral: <span id="umbralFeelsDisplay">30</span>°C</span>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:0.75rem;color:var(--text-muted);">Actual: <strong id="feelsActual">--</strong>°C</span>
-        <span id="estadoFeels" style="font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.15);color:#34d399;">✅ Normal</span>
+        <span id="estadoFeels" style="font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.15);color:#34d399;">✓ Normal</span>
       </div>
       <input type="range" id="umbralFeels" min="10" max="45" value="30" step="0.5" style="width:100%;margin-top:8px;" oninput="document.getElementById('umbralFeelsDisplay').textContent=this.value">
     </div>
   </div>
 </divs</button>
-        <button class="tab" data-tab="dashboard">📊 Dashboards</button>
+        <button class="tab" data-tab="dashboard">📈 Dashboards</button>
     </div>
 
     <!-- Tab: Clima y Ciudades -->
     <div id="tab-clima" class="tab-content active">
         <div class="controls">
-            <label>📍 Ciudad:</label>
+            <label>• Ciudad:</label>
             <select id="citySelect">
                 <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
                 <option value="Quito,EC,-0.1807,-78.4678">Quito, Ecuador</option>
@@ -124,14 +124,14 @@
             </select>
         </div>
         <div class="stats" id="climaStats">
-            <div class="stat-box"><span class="number" id="tempDisplay">--</span><div class="label">🌡️ Temperatura</div></div>
-            <div class="stat-box"><span class="number" id="humDisplay">--</span><div class="label">💧 Humedad</div></div>
-            <div class="stat-box"><span class="number" id="feelsDisplay">--</span><div class="label">🌡️ Sensación</div></div>
+            <div class="stat-box"><span class="number" id="tempDisplay">--</span><div class="label">°C Temperatura</div></div>
+            <div class="stat-box"><span class="number" id="humDisplay">--</span><div class="label">% Humedad</div></div>
+            <div class="stat-box"><span class="number" id="feelsDisplay">--</span><div class="label">°C Sensación</div></div>
         </div>
         <div id="map"></div>
         <div class="grid-3" style="margin-top:15px;">
-            <div class="card"><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
-            <div class="card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
+            <div class="card"><h3>📈 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
+            <div class="card"><h3>🌱 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
             <div class="card"><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div>
         </div>
     </div>
@@ -139,7 +139,7 @@
     <!-- Tab: SIRGAS y Geodesia -->
     <div id="tab-sirgas" class="tab-content">
         <div class="controls">
-            <label>📍 Estación ZTD:</label>
+            <label>• Estación ZTD:</label>
             <select id="stationZTD"><option value="">Cargando...</option></select>
             <label>Desde:</label>
             <input type="date" id="dateFrom">
@@ -155,19 +155,19 @@
         </div>
         <div class="grid-2">
             <div class="card"><h3>📈 Retardo Troposférico Cenital (ZTD)</h3><canvas id="ztdChart"></canvas></div>
-            <div class="card"><h3>💧 Vapor de Agua Integrado (IWV)</h3><canvas id="iwvChart"></canvas></div>
+            <div class="card"><h3>% Vapor de Agua Integrado (IWV)</h3><canvas id="iwvChart"></canvas></div>
         </div>
         <div style="margin-top:15px;font-size:12px;color:#8aa08a;background:#f4f8f4;padding:12px 16px;border-radius:12px;border-left:4px solid #2c5f8a;">
-            <strong>📌 Citación obligatoria:</strong> Mackern M.V., Mateo M.L., Camisay M.F., Morichetti P.V. (2020). Tropospheric Products from High-Level GNSS Processing in Latin America. IAG Symposia Series, Vol 152. doi: 10.1007/1345_2020_121
+            <strong>ℹ Citación obligatoria:</strong> Mackern M.V., Mateo M.L., Camisay M.F., Morichetti P.V. (2020). Tropospheric Products from High-Level GNSS Processing in Latin America. IAG Symposia Series, Vol 152. doi: 10.1007/1345_2020_121
         </div>
     </div>
 
     <!-- Tab: Alertas -->
     <div id="tab-alertas" class="tab-content">
         <div class="grid-3">
-            <div class="card"><h3>🌡️ Temperatura</h3><input type="number" id="umbralTemp" value="28"><span id="estadoTemp">✅ Normal</span></div>
-            <div class="card"><h3>💧 Humedad</h3><input type="number" id="umbralHum" value="80"><span id="estadoHum">✅ Normal</span></div>
-            <div class="card"><h3>🌡️ Sensación</h3><input type="number" id="umbralFeels" value="30"><span id="estadoFeels">✅ Normal</span></div>
+            <div class="card"><h3>°C Temperatura</h3><input type="number" id="umbralTemp" value="28"><span id="estadoTemp">✓ Normal</span></div>
+            <div class="card"><h3>% Humedad</h3><input type="number" id="umbralHum" value="80"><span id="estadoHum">✓ Normal</span></div>
+            <div class="card"><h3>°C Sensación</h3><input type="number" id="umbralFeels" value="30"><span id="estadoFeels">✓ Normal</span></div>
         </div>
         <button class="btn-reporte" id="btnReporte">📄 Descargar Reporte Ambiental</button>
     </div>
@@ -176,12 +176,12 @@
     <div id="tab-dashboard" class="tab-content">
         <div class="grid-2">
             <div class="card">
-                <h3>📊 Panel de Control</h3>
+                <h3>📈 Panel de Control</h3>
                 <p>Monitoreo integrado de datos climáticos y geodésicos.</p>
                 <ul style="margin-top:10px;list-style:none;">
-                    <li>✅ 12+ estaciones SIRGAS monitoreadas</li>
-                    <li>✅ Datos climáticos en tiempo real</li>
-                    <li>✅ Alertas personalizables</li>
+                    <li>✓ 12+ estaciones SIRGAS monitoreadas</li>
+                    <li>✓ Datos climáticos en tiempo real</li>
+                    <li>✓ Alertas personalizables</li>
                    // Función mejorada para cargar estaciones ZTD
 async function cargarEstacionesZTD() {
     const select = document.getElementById('stationZTD');
@@ -211,13 +211,13 @@ async function cargarEstacionesZTD() {
         console.error('Error:', error);
     }
 }
- <li>✅ Gráficos interactivos</li>
+ <li>✓ Gráficos interactivos</li>
                 </ul>
             </div>
             <div class="card">
-                <h3>🛰️ Estado del Sistema</h3>
-                <p><strong>API:</strong> <span id="apiStatus">✅ Conectada</span></p>
-                <p><strong>Base de datos:</strong> <span id="dbStatus">✅ Activa</span></p>
+                <h3>🛰 Estado del Sistema</h3>
+                <p><strong>API:</strong> <span id="apiStatus">✓ Conectada</span></p>
+                <p><strong>Base de datos:</strong> <span id="dbStatus">✓ Activa</span></p>
                 <p><strong>Última ingesta:</strong> <span id="lastIngest">--</span></p>
             </div>
         </div>
