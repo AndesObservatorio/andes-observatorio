@@ -14,7 +14,7 @@ import argparse
 import hashlib
 import logging
 import os
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timedelta
 
 from db.database import SessionLocal, init_db
 from db.models import Station, TropoObservation, IngestedFile
@@ -65,7 +65,7 @@ def ingest_file(db, local_path: str) -> int:
         logger.error(f"Error parseando {filename}: {e}")
         db.merge(IngestedFile(
             filename=filename, file_hash=file_hash, rows_inserted=0,
-            status="error", detail=str(e)[:500], processed_at=datetime.now(timezone.utc),
+            status="error", detail=str(e)[:500], processed_at=datetime.utcnow(),
         ))
         db.commit()
         return 0
@@ -102,7 +102,7 @@ def ingest_file(db, local_path: str) -> int:
     db.merge(IngestedFile(
         filename=filename, file_hash=file_hash, rows_inserted=inserted,
         status="ok" if parsed["observations"] else "empty",
-        detail=None, processed_at=datetime.now(timezone.utc),
+        detail=None, processed_at=datetime.utcnow(),
     ))
     db.commit()
     logger.info(f"{filename}: {inserted} observaciones insertadas")
@@ -169,3 +169,4 @@ if __name__ == "__main__":
             logger.info(f"Scope '{args.scope}': {len(stations)} estaciones -> {stations}")
 
     run(days_back=args.days_back, latency_days=args.latency_days, station_filter=stations)
+

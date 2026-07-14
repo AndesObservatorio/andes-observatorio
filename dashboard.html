@@ -103,11 +103,26 @@
         <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores SIRGAS</label>
         <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
         <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
+        <label><input type="checkbox" id="toggleZTD" checked> 💧 ZTD en mapa</label>
         <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
+        <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
         <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
     </div>
 
     <div id="map"></div>
+    <div id="ztdLeyenda" style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;padding:6px 12px 0;" title="Los colores comparan las estaciones ENTRE SÍ en este momento (el valor más bajo del grupo es azul, el más alto es rojo). No es un umbral fijo de peligro, ya que el ZTD normal varía según la altitud de cada estación.">
+        <span>ZTD (mm), relativo entre estaciones:</span>
+        <span style="background:linear-gradient(to right,#2c7bb6,#ffffbf,#d7191c);width:120px;height:10px;border-radius:4px;display:inline-block;"></span>
+        <span id="ztdLeyendaMin">--</span>
+        <span style="flex:1"></span>
+        <span id="ztdLeyendaMax">--</span>
+        <span style="color:#aaa;">ⓘ</span>
+    </div>
+    <p style="font-size:11px;color:#8aa08a;padding:2px 12px 0;margin:0;">
+        Nota: el ZTD "normal" es distinto en cada estación según su altitud (estaciones más altas tienen naturalmente
+        menos atmósfera encima, y por tanto menor ZTD). Compara la evolución de una misma estación en el tiempo,
+        no el color absoluto entre estaciones de altitudes muy distintas.
+    </p>
 
     <div class="alertas-panel">
         <h3>⚡ Panel de Alertas Personalizables</h3>
@@ -165,6 +180,40 @@
 
     <div class="sirgas-historico" id="ztdPanel">
         <h3>💧 Retardo Troposférico Cenital (ZTD) - Datos reales SIRGAS</h3>
+
+        <details style="margin-bottom:12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;">ℹ️ ¿Qué es el ZTD y por qué importa?</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                <p>
+                    Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco.
+                    Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>.
+                    Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión
+                    atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el
+                    <strong>vapor de agua</strong> en el aire, muy variable).
+                </p>
+                <p>
+                    La parte húmeda es la que interesa para el clima: cuando el vapor de agua se
+                    acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma
+                    perceptible horas antes de que empiece a llover. Por eso las redes GNSS como
+                    SIRGAS —pensadas originalmente para geodesia— también se usan como una fuente
+                    adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y
+                    el <strong>monitoreo de eventos climáticos extremos</strong>, complementando a
+                    las redes meteorológicas tradicionales.
+                </p>
+                <p style="margin-bottom:0;">
+                    <strong>Marco institucional:</strong> cada país andino tiene su propia autoridad
+                    de monitoreo hidrometeorológico y gestión del riesgo — por ejemplo, en Colombia
+                    la Ley 1523 de 2012 crea el Sistema Nacional de Gestión del Riesgo de Desastres
+                    (SNGRD), que exige mantener actualizado un sistema de información sobre riesgo de
+                    desastres. Estos datos de ZTD pueden servir como una capa adicional de información
+                    para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos
+                    oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).
+                    Verifica siempre la normativa vigente y los canales oficiales de tu país antes de
+                    tomar decisiones basadas en estos datos.
+                </p>
+            </div>
+        </details>
+
         <div>
             <label>Estación: </label>
             <select id="estacionZTD">
@@ -279,7 +328,15 @@
     };
 
     let map, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
-    let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia;
+    let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
+    const ztdSerieCache = {};   // { CODIGO: [{fecha, valor, error}, ...] }
+    const coordenadasZTD = {   // coordenadas reales de las estaciones con datos ZTD
+        'BOGT': [4.6400, -74.0800],
+        'CALI': [3.4500, -76.5300],
+        'AREQ': [-16.4000, -71.5300],
+        'ANTC': [-23.7800, -70.5500],
+        'SANT': [-33.4500, -70.6600],
+    };
     let estacionesSIRGAS = [];
 
     // ============================================================
@@ -495,9 +552,11 @@
                 select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
                 return;
             }
-            select.innerHTML = estaciones.map(e =>
-                `<option value="${e.codigo}">${e.codigo} (${e.total_registros} registros)</option>`
-            ).join('');
+            select.innerHTML = estaciones.map(e => {
+                const desde = (e.primera_fecha || '').split(' ')[0] || (e.primera_fecha || '').split('T')[0];
+                const hasta = (e.ultima_fecha || '').split(' ')[0] || (e.ultima_fecha || '').split('T')[0];
+                return `<option value="${e.codigo}">${e.codigo} (${e.total_registros} registros, ${desde} a ${hasta})</option>`;
+            }).join('');
             actualizarGraficoZTD();
         } catch (e) {
             select.innerHTML = '<option value="">Error al conectar con la API</option>';
@@ -591,6 +650,28 @@
         map = L.map('map').setView([-15, -65], 4);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
 
+        // Dibuja el mini-gráfico dentro del popup cuando se abre (usa datos
+        // ya cacheados por cargarCapaZTD, no vuelve a llamar a la API).
+        map.on('popupopen', function(e) {
+            const codigo = e.popup._source && e.popup._source.options && e.popup._source.options.stationCode;
+            if (!codigo || !ztdSerieCache[codigo]) return;
+            const canvas = document.getElementById(`popupChart_${codigo}`);
+            if (!canvas) return;
+            const puntos = ztdSerieCache[codigo];
+            new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: puntos.map(p => new Date(p.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })),
+                    datasets: [{ data: puntos.map(p => p.valor), borderColor: '#2c5f8a', tension: 0.3, pointRadius: 0, borderWidth: 1.5 }],
+                },
+                options: {
+                    responsive: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: true } },
+                },
+            });
+        });
+
         capaCiudades = L.layerGroup();
         ciudades.forEach(c => {
             L.circleMarker([c.lat, c.lon], { radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 })
@@ -606,6 +687,11 @@
             if (this.checked && capaSIRGAS) capaSIRGAS.addTo(map);
             else if (capaSIRGAS) map.removeLayer(capaSIRGAS);
         });
+        document.getElementById('toggleZTD').addEventListener('change', function() {
+            if (this.checked && capaZTD) capaZTD.addTo(map);
+            else if (capaZTD) map.removeLayer(capaZTD);
+        });
+        cargarCapaZTD();
         document.getElementById('toggleEstaciones').addEventListener('change', function() {
             if (this.checked && capaEstaciones) capaEstaciones.addTo(map);
             else if (capaEstaciones) map.removeLayer(capaEstaciones);
@@ -654,6 +740,143 @@
     document.querySelectorAll('.btn-alerta').forEach(btn => {
         btn.addEventListener('click', actualizarCiudad);
     });
+    // ============================================================
+    // Capa ZTD en el mapa: marcadores coloreados + popup con gráfico
+    // ============================================================
+    function colorZTD(valor, min, max) {
+        if (max === min) return 'hsl(200,70%,50%)';
+        const t = (valor - min) / (max - min);           // 0 = mínimo, 1 = máximo
+        const hue = 220 - (t * 220);                       // 220 (azul) -> 0 (rojo)
+        return `hsl(${hue}, 75%, 48%)`;
+    }
+
+    async function cargarCapaZTD() {
+        const badge = document.getElementById('ztdMapBadge');
+        if (capaZTD) map.removeLayer(capaZTD);
+        capaZTD = L.layerGroup();
+
+        const codigos = Object.keys(coordenadasZTD);
+        const ultimos = {};
+
+        for (const codigo of codigos) {
+            try {
+                const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/${codigo}/serie?limite=500`);
+                const data = await res.json();
+                const puntos = data.datos || [];
+                if (puntos.length > 0) {
+                    ztdSerieCache[codigo] = puntos;
+                    ultimos[codigo] = puntos[puntos.length - 1].valor;
+                }
+            } catch (e) {
+                console.warn(`No se pudo cargar ZTD de ${codigo}`, e);
+            }
+        }
+
+        const valores = Object.values(ultimos);
+        if (valores.length === 0) {
+            badge.innerText = '💧 Sin datos ZTD';
+            return;
+        }
+        const min = Math.min(...valores);
+        const max = Math.max(...valores);
+        document.getElementById('ztdLeyendaMin').innerText = `${min.toFixed(0)} mm`;
+        document.getElementById('ztdLeyendaMax').innerText = `${max.toFixed(0)} mm`;
+
+        codigos.forEach(codigo => {
+            if (!(codigo in ultimos)) return;
+            const [lat, lon] = coordenadasZTD[codigo];
+            const valor = ultimos[codigo];
+            const color = colorZTD(valor, min, max);
+            const puntos = ztdSerieCache[codigo] || [];
+
+            // Anillo (sin relleno) alrededor del punto de la estación SIRGAS ya
+            // existente: distinguible incluso cuando comparten la misma ubicación,
+            // sin desplazar el marcador de su coordenada geográfica real.
+            const marker = L.circleMarker([lat, lon], {
+                radius: 18,
+                fillOpacity: 0,
+                color: color,
+                weight: 5,
+                stationCode: codigo,   // propiedad custom, accesible vía marker.options
+            });
+
+            marker.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top', offset: [0, -18] });
+            marker.bindPopup(construirPopupZTD(codigo, puntos));
+            marker.addTo(capaZTD);
+        });
+
+        badge.innerText = `💧 ZTD: ${valores.length} estaciones`;
+        if (document.getElementById('toggleZTD').checked) capaZTD.addTo(map);
+    }
+
+    // Arma el contenido del popup: "biografía" de lo registrado en el período
+    // (valor actual, promedio, máximo/mínimo con sus fechas, rango de datos).
+    function construirPopupZTD(codigo, puntos) {
+        if (puntos.length === 0) {
+            return `<div style="min-width:220px;"><strong>💧 ${codigo}</strong><br>Sin datos disponibles.</div>`;
+        }
+
+        const valores = puntos.map(p => p.valor);
+        const actual = puntos[puntos.length - 1];
+        const promedio = valores.reduce((a, b) => a + b, 0) / valores.length;
+
+        let idxMax = 0, idxMin = 0;
+        valores.forEach((v, i) => {
+            if (v > valores[idxMax]) idxMax = i;
+            if (v < valores[idxMin]) idxMin = i;
+        });
+        const puntoMax = puntos[idxMax];
+        const puntoMin = puntos[idxMin];
+
+        const formatoFecha = (f) => new Date(f).toLocaleString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        const formatoFechaCorta = (f) => new Date(f).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+
+        const promedioTexto = actual.valor > promedio
+            ? `${(actual.valor - promedio).toFixed(1)} mm por encima del promedio`
+            : `${(promedio - actual.valor).toFixed(1)} mm por debajo del promedio`;
+
+        return `
+            <div style="min-width:260px;font-size:13px;">
+                <strong style="font-size:15px;">💧 ${codigo}</strong>
+                <div style="color:#8aa08a;margin-bottom:6px;">Última actualización: ${formatoFecha(actual.fecha)}</div>
+
+                <table style="width:100%;border-collapse:collapse;margin-bottom:6px;">
+                    <tr title="Retardo Troposférico Cenital: cuánto se retrasa la señal GNSS por la atmósfera sobre esta estación en este momento. A mayor valor, más vapor de agua/humedad hay en la columna de aire.">
+                        <td>📍 Valor actual <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;font-weight:600;">${actual.valor.toFixed(1)} mm</td>
+                    </tr>
+                    <tr title="Promedio de todo el período de datos disponible para esta estación. Sirve como referencia para saber si el valor actual es alto o bajo comparado con lo habitual.">
+                        <td>📊 Promedio del período <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;">${promedio.toFixed(1)} mm</td>
+                    </tr>
+                    <tr title="El valor más alto suele coincidir con condiciones de mayor humedad atmosférica -- por ejemplo, antes o durante eventos de lluvia intensa.">
+                        <td>📈 Máximo <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;">${puntoMax.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMax.fecha)})</td>
+                    </tr>
+                    <tr title="El valor más bajo suele coincidir con aire más seco (menor vapor de agua en la columna atmosférica).">
+                        <td>📉 Mínimo <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;">${puntoMin.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMin.fecha)})</td>
+                    </tr>
+                    <tr title="Cuántas mediciones horarias componen este período.">
+                        <td>🗓️ Registros <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;">${puntos.length}</td>
+                    </tr>
+                </table>
+
+                <div style="font-size:11px;color:#5a7a8a;background:#eef4f8;border-radius:6px;padding:4px 8px;margin-bottom:6px;">
+                    ${promedioTexto}
+                </div>
+
+                <canvas id="popupChart_${codigo}" width="230" height="120"></canvas>
+                <div style="font-size:10px;color:#aaa;margin-top:4px;">
+                    Dato geodésico complementario -- no reemplaza los datos oficiales de tu agencia meteorológica nacional.
+                </div>
+            </div>
+        `;
+    }
+
+    // (el listener de popupopen para los mini-gráficos ZTD se registra dentro de initMap())
+
     document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
@@ -668,12 +891,10 @@
         actualizarCiudad();
         actualizarSirgasHistorico();
 
-        // Fechas por defecto para el panel ZTD: últimos 30 días
-        const hoy = new Date();
-        const hace30 = new Date(hoy);
-        hace30.setDate(hace30.getDate() - 30);
-        document.getElementById('ztdHasta').value = hoy.toISOString().split('T')[0];
-        document.getElementById('ztdDesde').value = hace30.toISOString().split('T')[0];
+        // Sin fechas por defecto: muestra todo lo disponible (limitado por 'limite'
+        // en la consulta). La ventana real de datos depende de la latencia de
+        // publicación de SIRGAS (~30-40 días), que varía, así que un rango fijo
+        // de "últimos N días desde hoy" podría no coincidir con los datos reales.
         cargarEstacionesZTD();
 
         setInterval(actualizarCiudad, 300000);

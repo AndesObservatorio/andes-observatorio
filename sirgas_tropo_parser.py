@@ -25,11 +25,9 @@ from typing import Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 # Nombres de columna del bloque TROP/SOLUTION que nos interesa mapear a nuestro esquema.
-# (hay más columnas posibles como NSAT, GDOP, PRESS, etc. que ignoramos por ahora)
 FIELD_MAP = {
     "TROTOT": "ztd_total_mm",
-    "STDDEV": "ztd_stddev_mm",   # nota: STDDEV aparece más de una vez en algunos archivos;
-                                 # nos quedamos con la que sigue inmediatamente a TROTOT
+    "STDDEV": "ztd_stddev_mm",
     "TRODRY": "ztd_dry_mm",
     "TROWET": "ztd_wet_mm",
     "TGNTOT": "gradient_north_mm",
@@ -46,30 +44,37 @@ def _open_text(path: str):
 
 def _sinex_epoch_to_datetime(epoch_str: str) -> Optional[datetime]:
     """
-    Convierte una época SINEX a datetime UTC. Soporta dos formatos confirmados
-    en archivos reales de SIRGAS:
-      Legacy (hasta ~2022?): 'yy:ddd:sssss'   año 2 dígitos, ej. '20:350:00000' -> 2020-12-15
-      Actual (2026 en adelante): 'yyyy:ddd:sssss' año 4 dígitos, ej. '2026:157:00000' -> 2026-06-06
+    Convierte una época SINEX a datetime UTC. Soporta dos formatos:
+      Formato 1: '20:350:00000' -> 2020-12-15 (año 2 dígitos)
+      Formato 2: '2025:350:00000' -> 2025-12-15 (año 4 dígitos)
     """
     try:
-        y, ddd, sssss = epoch_str.split(":")
+        parts = epoch_str.split(":")
+        if len(parts) != 3:
+            return None
+        
+        y, ddd, sssss = parts
+        year = int(y)
+        
+        # Si el año tiene 4 dígitos, usarlo directamente
         if len(y) == 4:
-            year = int(y)
+            pass  # year ya es correcto
         else:
-            year = int(y)
-            year += 2000 if year < 80 else 1900  # convención SINEX estándar para año de 2 dígitos
+            # Si tiene 2 dígitos, aplicar la convención SINEX
+            if year >= 70:
+                year += 1900
+            else:
+                year += 2000
+        
         base = datetime(year, 1, 1) + timedelta(days=int(ddd) - 1)
         return base + timedelta(seconds=int(sssss))
-    except (ValueError, AttributeError):
+    except (ValueError, AttributeError) as e:
+        logger.warning(f"Error parseando fecha '{epoch_str}': {e}")
         return None
 
 
 def _extract_station_code(raw_code: str) -> str:
-    """
-    Normaliza el código de estación a 4 caracteres, soportando ambos formatos:
-      Legacy: ya viene como 4 caracteres (ej. 'AACR')
-      Actual: viene como 9 caracteres ESTACION+MONUMENTO+PAIS (ej. 'ANTC00CHL' -> 'ANTC')
-    """
+    """Normaliza el código de estación a 4 caracteres."""
     raw_code = raw_code.strip()
     if len(raw_code) == 9 and raw_code[:4].isalpha() and raw_code[4:6].isdigit():
         return raw_code[:4].upper()
@@ -77,7 +82,7 @@ def _extract_station_code(raw_code: str) -> str:
 
 
 def _extract_block(lines: List[str], block_name: str) -> List[str]:
-    """Extrae las líneas de contenido entre +BLOCK_NAME y -BLOCK_NAME (sin los headers ni comentarios '*')."""
+    """Extrae las líneas de contenido entre +BLOCK_NAME y -BLOCK_NAME."""
     start_tag = f"+{block_name}"
     end_tag = f"-{block_name}"
     content = []
@@ -94,12 +99,7 @@ def _extract_block(lines: List[str], block_name: str) -> List[str]:
 
 
 def _extract_block_header(lines: List[str], block_name: str) -> Optional[str]:
-    """
-    Extrae la última línea de comentario ('*...') dentro de un bloque antes de
-    los datos -- es el encabezado real de la tabla (ej. '*SITE ___EPOCH___ TROTOT STDDEV #T').
-    Es más confiable que una etiqueta separada en TROP/DESCRIPTION porque
-    siempre coincide exactamente con las columnas que realmente vienen después.
-    """
+    """Extrae la última línea de comentario dentro de un bloque."""
     start_tag = f"+{block_name}"
     end_tag = f"-{block_name}"
     inside = False
@@ -116,24 +116,10 @@ def _extract_block_header(lines: List[str], block_name: str) -> Optional[str]:
 
 
 def _parse_field_order(lines: List[str]) -> List[str]:
-    """
-    Determina el orden real de columnas de datos en +TROP/SOLUTION (después de
-    estación+época). Dos estrategias, en orden de confiabilidad:
-
-    1. Leer el encabezado de comentario de la propia tabla +TROP/SOLUTION
-       (ej. '*SITE ___EPOCH___ TROTOT STDDEV #T') -- siempre coincide exactamente
-       con las columnas de datos que le siguen, sin importar qué etiqueta se
-       use en TROP/DESCRIPTION (que varió entre versiones de SIRGAS: se vio
-       'SOLUTION_FIELDS_1' en archivos de 2020 y 'TROPO PARAMETER NAMES' en
-       archivos de 2026, con distinto número de columnas listadas).
-    2. Si ese encabezado no está disponible, recurre a la etiqueta en
-       TROP/DESCRIPTION (soporta ambas variantes conocidas).
-    """
+    """Determina el orden real de columnas en +TROP/SOLUTION."""
     solution_header = _extract_block_header(lines, "TROP/SOLUTION")
     if solution_header:
         parts = solution_header.lstrip("*").split()
-        # Descarta las columnas de identificación (estación y época), que
-        # siempre son las primeras y contienen la palabra 'EPOCH' o son 'SITE'.
         data_fields = [p for p in parts if p.upper() != "SITE" and "EPOCH" not in p.upper()]
         if data_fields:
             return data_fields
@@ -150,7 +136,6 @@ def _parse_field_order(lines: List[str]) -> List[str]:
         if len(parts) >= 2 and parts[0].upper() == "SOLUTION" and parts[1].upper().startswith("FIELDS"):
             return parts[2:]
         if first_normalized.startswith("TROPO PARAMETER NAMES"):
-            # Etiqueta vista en archivos 2026: 'TROPO PARAMETER NAMES   TROTOT STDDEV ACOK'
             idx = next((i for i, p in enumerate(parts) if p.upper() == "NAMES"), None)
             if idx is not None:
                 return parts[idx + 1:]
@@ -160,26 +145,13 @@ def _parse_field_order(lines: List[str]) -> List[str]:
 
 
 def parse_tro_file(path: str) -> Dict:
-    """
-    Parsea un archivo SINEX TRO completo.
-    Retorna un dict:
-        {
-            "stations": {codigo: {"domes": ..., "x":..,"y":..,"z":..}},
-            "observations": [
-                {"station": codigo, "epoch": datetime, "ztd_total_mm": ..., ...},
-                ...
-            ]
-        }
-    """
+    """Parsea un archivo SINEX TRO completo."""
     with _open_text(path) as f:
         lines = f.readlines()
 
     result = {"stations": {}, "observations": []}
 
-    # --- Estaciones: SITE/ID y TROP/STA_COORDINATES ---
-    # Formato real confirmado: CODE PT DOMES T STATION_DESCRIPTION... APPROX_LON APPROX_LAT APP_H
-    # (el DOMES está en la posición 2, no en la 1 -- antes va la columna PT)
-    # CODE puede venir como 4 caracteres (legacy) o 9 caracteres ESTACION+MONUMENTO+PAIS (2026+)
+    # Estaciones: SITE/ID
     for line in _extract_block(lines, "SITE/ID"):
         parts = line.split()
         if len(parts) >= 3:
@@ -187,32 +159,29 @@ def parse_tro_file(path: str) -> Dict:
             domes = parts[2]
             result["stations"].setdefault(code, {})["domes"] = domes
 
+    # Estaciones: TROP/STA_COORDINATES
     for line in _extract_block(lines, "TROP/STA_COORDINATES"):
         parts = line.split()
         if len(parts) < 4:
             continue
         code = _extract_station_code(parts[0])
-        # Las columnas finales (SYSTEM, REMRK) no son numéricas; se buscan las 3
-        # primeras columnas numéricas consecutivas de izquierda a derecha después
-        # del código de estación y el número de soln, en vez de asumir posición fija.
         numeric_values = []
         for token in parts[1:]:
             try:
                 numeric_values.append(float(token))
             except ValueError:
                 if len(numeric_values) >= 3:
-                    break  # ya encontramos X,Y,Z; lo que sigue no nos interesa
+                    break
                 continue
         if len(numeric_values) >= 3:
             x, y, z = numeric_values[-3:]
             result["stations"].setdefault(code, {}).update({"x": x, "y": y, "z": z})
 
-    # --- Orden de columnas de este archivo en particular ---
+    # Orden de columnas
     field_order = _parse_field_order(lines)
 
-    # --- Observaciones: TROP/SOLUTION ---
+    # Observaciones: TROP/SOLUTION
     solution_lines = _extract_block(lines, "TROP/SOLUTION")
-    seen_stddev_count = 0
     for line in solution_lines:
         parts = line.split()
         if len(parts) < 3:
@@ -232,8 +201,6 @@ def parse_tro_file(path: str) -> Dict:
                 continue
 
             if field_name == "STDDEV":
-                # La primera STDDEV tras TROTOT es la que nos interesa (ztd_stddev_mm);
-                # las siguientes (gradientes) las ignoramos por simplicidad en esta v1.
                 stddev_seen += 1
                 if stddev_seen == 1:
                     obs["ztd_stddev_mm"] = value
