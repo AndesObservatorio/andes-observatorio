@@ -261,7 +261,19 @@
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
     // La API de ZTD corre localmente por ahora (uvicorn en tu Ubuntu, puerto 8001).
     // Cuando conectes Render más adelante, cambia esta línea a tu URL de Render.
-    const API_BASE = "http://localhost:8001";
+    const API_BASE = "https://andes-observatorio.onrender.com";
+
+// ==================== MODO DEMO ZTD ====================
+const DEMO_ZTD_STATIONS = ["AREQ", "BOGT", "CHPI", "GLPS", "IQQE", "LPGS", "SANT"];
+function generarDatosZTD() {
+    const datos = [];
+    let ztd = 2.3;
+    for (let i = 0; i < 50; i++) {
+        ztd += (Math.random() - 0.5) * 0.02;
+        datos.push({fecha: new Date(2026, 0, 1 + i * 5).toISOString().slice(0,10), ztd: ztd.toFixed(3)});
+    }
+    return datos;
+}
 
     const ciudades = [
         { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
