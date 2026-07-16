@@ -3,335 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andes Observatorio - Dashboard Unificado</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Andes Observatorio · Monitoreo Ambiental</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; padding: 20px; }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header {
-            background: linear-gradient(135deg, #1a3a5c 0%, #2c5f8a 100%);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .header h1 { font-size: 28px; display: flex; align-items: center; gap: 10px; }
-        .header-info { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .status-badge { background: #2ecc71; padding: 5px 15px; border-radius: 20px; font-size: 12px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-        .tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab { padding: 10px 25px; border-radius: 10px 10px 0 0; cursor: pointer; background: #e8ecf0; font-weight: 600; transition: all 0.3s; border: none; font-size: 14px; }
-        .tab.active { background: white; color: #1a3a5c; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .tab:hover { background: #d5dce4; }
-        .tab-content { display: none; background: white; border-radius: 0 15px 15px 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-        .tab-content.active { display: block; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-        .card { background: #fcfaf7; padding: 20px; border-radius: 15px; border: 1px solid #ede8e0; }
-        .card h3 { color: #1a3a5c; margin-bottom: 10px; font-size: 15px; }
-        #map { height: 400px; border-radius: 12px; }
-        canvas { max-height: 250px; width: 100% !important; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-box { background: white; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #ede8e0; }
-        .stat-box .number { font-size: 24px; font-weight: bold; color: #1a3a5c; }
-        .stat-box .label { font-size: 12px; color: #8aa08a; }
-        .controls { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; margin: 15px 0; }
-        .controls select, .controls input, .controls button { padding: 8px 15px; border-radius: 30px; border: 1.5px solid #d6cfc4; background: white; font-size: 14px; }
-        .controls button { background: #2c5f8a; color: white; border: none; cursor: pointer; }
-        .controls button:hover { background: #1a3a5c; }
-        .footer { text-align: center; color: #95a5a6; font-size: 13px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #ede8e0; }
-        @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .header { flex-direction: column; text-align: center; } }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0e17; color: #f9fafb; line-height: 1.6; min-height: 100vh; }
+        a { text-decoration: none; color: inherit; }
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 24px; background: linear-gradient(180deg, #0a0e17 0%, #0f1a2e 50%, #0a0e17 100%); }
+        .hero h1 { font-size: clamp(2.8rem, 8vw, 5.2rem); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+        .hero h1 .highlight { background: linear-gradient(135deg, #60a5fa, #34d399, #fbbf24); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+        .hero p { font-size: clamp(1rem, 1.4vw, 1.25rem); color: #9ca3af; max-width: 650px; margin: 0 auto 32px; }
+        .btn { display: inline-block; padding: 14px 34px; border-radius: 60px; font-weight: 700; font-size: 1rem; transition: all 0.3s ease; border: 2px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; box-shadow: 0 4px 20px rgba(59,130,246,0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 35px rgba(59,130,246,0.4); }
+        .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: white; box-shadow: 0 4px 20px rgba(16,185,129,0.25); }
+        .btn-success:hover { transform: translateY(-3px); box-shadow: 0 8px 35px rgba(16,185,129,0.35); }
+        .btn-secondary { background: rgba(255,255,255,0.05); color: #e5e7eb; border-color: rgba(255,255,255,0.12); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); }
+        .hero-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+        .features { padding: 80px 24px; max-width: 1200px; margin: 0 auto; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .feature-card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 28px 24px; transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-5px); border-color: #3b82f6; }
+        .feature-icon { font-size: 2.2rem; margin-bottom: 12px; }
+        .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+        .feature-card p { color: #9ca3af; font-size: 0.9rem; }
+        .countries-section { padding: 60px 24px; max-width: 1200px; margin: 0 auto; border-top: 1px solid #1f2937; }
+        .countries-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+        .country-pill { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: #111827; border: 1px solid #1f2937; border-radius: 60px; font-size: 0.85rem; font-weight: 600; }
+        .country-pill:hover { border-color: #3b82f6; background: #1a2744; }
+        footer { background: #0f172a; border-top: 1px solid #1f2937; padding: 40px 24px 24px; text-align: center; }
+        .footer-links { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; }
+        .footer-links a { color: #9ca3af; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-links a:hover { color: #f9fafb; }
+        footer p { color: #6b7280; font-size: 0.8rem; }
+        .live-indicator { display: inline-flex; align-items: center; gap: 8px; padding: 4px 16px 4px 12px; border-radius: 100px; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.2); font-size: 0.75rem; font-weight: 600; color: #34d399; margin-bottom: 8px; }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: pulse-dot 1.8s infinite; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.7); } }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.4rem; } .features-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 480px) { .hero-buttons { flex-direction: column; align-items: center; } .btn { width: 100%; text-align: center; } }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Header -->
-    <div class="header">
-        <h1>🌄 Andes Observatorio</h1>
-        <div class="header-info">
-            <span id="updateTime">🔄 Actualizando...</span>
-            <span class="status-badge">● En Vivo</span>
-        </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-        <button class="tab active" data-tab="clima">🌤️ Clima y Ciudades</button>
-        <button class="tab" data-tab="sirgas">🛰️ SIRGAS y Geodesia</button>
-        <button class="tab" data-tab="alertas">⚡ Alertas</button>
-        <button class="tab" data-tab="dashboard">📊 Dashboards</button>
-    </div>
-
-    <!-- Tab: Clima y Ciudades -->
-    <div id="tab-clima" class="tab-content active">
-        <div class="controls">
-            <label>📍 Ciudad:</label>
-            <select id="citySelect">
-                <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
-                <option value="Quito,EC,-0.1807,-78.4678">Quito, Ecuador</option>
-                <option value="Lima,PE,-12.0464,-77.0428">Lima, Perú</option>
-                <option value="La Paz,BO,-16.5000,-68.1500">La Paz, Bolivia</option>
-                <option value="Santiago,CL,-33.4489,-70.6693">Santiago, Chile</option>
-                <option value="Buenos Aires,AR,-34.6037,-58.3816">Buenos Aires, Argentina</option>
-            </select>
-        </div>
-        <div class="stats" id="climaStats">
-            <div class="stat-box"><span class="number" id="tempDisplay">--</span><div class="label">🌡️ Temperatura</div></div>
-            <div class="stat-box"><span class="number" id="humDisplay">--</span><div class="label">💧 Humedad</div></div>
-            <div class="stat-box"><span class="number" id="feelsDisplay">--</span><div class="label">🌡️ Sensación</div></div>
-        </div>
-        <div id="map"></div>
-        <div class="grid-3" style="margin-top:15px;">
-            <div class="card"><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
-            <div class="card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
-            <div class="card"><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div>
-        </div>
-    </div>
-
-    <!-- Tab: SIRGAS y Geodesia -->
-    <div id="tab-sirgas" class="tab-content">
-        <div class="controls">
-            <label>📍 Estación ZTD:</label>
-            <select id="stationZTD"><option value="">Cargando...</option></select>
-            <label>Desde:</label>
-            <input type="date" id="dateFrom">
-            <label>Hasta:</label>
-            <input type="date" id="dateTo">
-            <button id="updateZTD">🔄 Actualizar</button>
-        </div>
-        <div class="stats" id="ztdStats">
-            <div class="stat-box"><span class="number" id="avgZTD">--</span><div class="label">Promedio ZTD (mm)</div></div>
-            <div class="stat-box"><span class="number" id="minZTD">--</span><div class="label">Mínimo ZTD (mm)</div></div>
-            <div class="stat-box"><span class="number" id="maxZTD">--</span><div class="label">Máximo ZTD (mm)</div></div>
-            <div class="stat-box"><span class="number" id="countZTD">--</span><div class="label">Registros</div></div>
-        </div>
-        <div class="grid-2">
-            <div class="card"><h3>📈 Retardo Troposférico Cenital (ZTD)</h3><canvas id="ztdChart"></canvas></div>
-            <div class="card"><h3>💧 Vapor de Agua Integrado (IWV)</h3><canvas id="iwvChart"></canvas></div>
-        </div>
-        <div style="margin-top:15px;font-size:12px;color:#8aa08a;background:#f4f8f4;padding:12px 16px;border-radius:12px;border-left:4px solid #2c5f8a;">
-            <strong>📌 Citación obligatoria:</strong> Mackern M.V., Mateo M.L., Camisay M.F., Morichetti P.V. (2020). Tropospheric Products from High-Level GNSS Processing in Latin America. IAG Symposia Series, Vol 152. doi: 10.1007/1345_2020_121
-        </div>
-    </div>
-
-    <!-- Tab: Alertas -->
-    <div id="tab-alertas" class="tab-content">
-        <div class="grid-3">
-            <div class="card"><h3>🌡️ Temperatura</h3><input type="number" id="umbralTemp" value="28"><span id="estadoTemp">✅ Normal</span></div>
-            <div class="card"><h3>💧 Humedad</h3><input type="number" id="umbralHum" value="80"><span id="estadoHum">✅ Normal</span></div>
-            <div class="card"><h3>🌡️ Sensación</h3><input type="number" id="umbralFeels" value="30"><span id="estadoFeels">✅ Normal</span></div>
-        </div>
-        <button class="btn-reporte" id="btnReporte">📄 Descargar Reporte Ambiental</button>
-    </div>
-
-    <!-- Tab: Dashboards -->
-    <div id="tab-dashboard" class="tab-content">
-        <div class="grid-2">
-            <div class="card">
-                <h3>📊 Panel de Control</h3>
-                <p>Monitoreo integrado de datos climáticos y geodésicos.</p>
-                <ul style="margin-top:10px;list-style:none;">
-                    <li>✅ 12+ estaciones SIRGAS monitoreadas</li>
-                    <li>✅ Datos climáticos en tiempo real</li>
-                    <li>✅ Alertas personalizables</li>
-                    <li>✅ Gráficos interactivos</li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>🛰️ Estado del Sistema</h3>
-                <p><strong>API:</strong> <span id="apiStatus">✅ Conectada</span></p>
-                <p><strong>Base de datos:</strong> <span id="dbStatus">✅ Activa</span></p>
-                <p><strong>Última ingesta:</strong> <span id="lastIngest">--</span></p>
+    <section class="hero">
+        <div>
+            <div class="live-indicator"><span class="live-dot"></span> Datos en vivo · Actualización automática</div>
+            <h1><span class="highlight">Andes</span> Observatorio</h1>
+            <p>Monitoreo interactivo de la región andina con datos en tiempo real de OpenWeatherMap, estaciones GNSS SIRGAS y proyecciones climáticas hasta 2100.</p>
+            <div class="hero-buttons">
+                <a href="dashboard.html" class="btn btn-primary">📊 Ver Dashboard</a>
+                <a href="simulador-climatico-v2.html" class="btn btn-success">🌦️ Simulador Climático</a>
+                <a href="https://github.com/andesobservatorio/andes-observatorio" target="_blank" class="btn btn-secondary">📁 GitHub</a>
             </div>
         </div>
-    </div>
-
-    <div class="footer">
-        🌄 Andes Observatorio v3.0 · Datos de OpenWeatherMap y SIRGAS-CON · Actualización automática
-    </div>
-</div>
-
-<script>
-    const API_BASE = "http://localhost:8001";
-    const API_KEY = "257ead5e0a9128276d4c947480000ebb";
-
-    let ztdChart, iwvChart, tempChart, protectedChart, trendChart;
-    let map;
-
-    // ===== TABS =====
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            document.getElementById('tab-' + this.dataset.tab).classList.add('active');
-        });
-    });
-
-    // ===== MAPA =====
-    function initMap() {
-        map = L.map('map').setView([-15, -70], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
-    }
-
-    // ===== CLIMA =====
-    async function getClima(query) {
-        try {
-            const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`);
-            const data = await res.json();
-            if (data.cod === 200) return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
-        } catch(e) {}
-        return null;
-    }
-
-    async function actualizarClima() {
-        const select = document.getElementById('citySelect');
-        const partes = select.value.split(',');
-        const query = partes[0] + ',' + partes[1];
-        const lat = parseFloat(partes[2]);
-        const lon = parseFloat(partes[3]);
-
-        if (map) map.flyTo([lat, lon], 6);
-
-        const clima = await getClima(query);
-        if (clima) {
-            document.getElementById('tempDisplay').textContent = clima.temp.toFixed(1) + '°C';
-            document.getElementById('humDisplay').textContent = clima.hum + '%';
-            document.getElementById('feelsDisplay').textContent = clima.feels.toFixed(1) + '°C';
-        }
-        document.getElementById('updateTime').textContent = '🔄 ' + new Date().toLocaleTimeString();
-    }
-
-    // ===== SIRGAS ZTD =====
-    async function cargarEstacionesZTD() {
-        try {
-            const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
-            const data = await res.json();
-            const select = document.getElementById('stationZTD');
-            if (!data.estaciones || data.estaciones.length === 0) {
-                select.innerHTML = '<option value="">Sin estaciones</option>';
-                return;
-            }
-            select.innerHTML = data.estaciones.map(e =>
-                `<option value="${e.codigo}">${e.codigo} (${e.total_registros} registros)</option>`
-            ).join('');
-            if (data.estaciones.length > 0) {
-                select.value = data.estaciones[0].codigo;
-                actualizarZTD();
-            }
-        } catch(e) {
-            console.error('Error cargando estaciones:', e);
-        }
-    }
-
-    async function actualizarZTD() {
-        const codigo = document.getElementById('stationZTD').value;
-        if (!codigo) return;
-
-        const desde = document.getElementById('dateFrom').value;
-        const hasta = document.getElementById('dateTo').value;
-        let url = `${API_BASE}/api/v1/geodesia/tropo/${codigo}/serie?limite=2000`;
-        if (desde) url += `&desde=${desde}`;
-        if (hasta) url += `&hasta=${hasta}`;
-
-        try {
-            const res = await fetch(url);
-            const data = await res.json();
-            const puntos = data.datos || [];
-            if (puntos.length === 0) return;
-
-            const fechas = puntos.map(p => new Date(p.fecha).toLocaleDateString('es-ES', { month: 'short', day: '2-digit' }));
-            const valores = puntos.map(p => p.valor);
-            const errores = puntos.map(p => p.error || 0);
-            const iwv = puntos.map(p => p.iwv_kg_m2 || null);
-
-            // Estadísticas
-            const avg = valores.reduce((a,b) => a+b, 0) / valores.length;
-            document.getElementById('avgZTD').textContent = avg.toFixed(2);
-            document.getElementById('minZTD').textContent = Math.min(...valores).toFixed(2);
-            document.getElementById('maxZTD').textContent = Math.max(...valores).toFixed(2);
-            document.getElementById('countZTD').textContent = puntos.length;
-
-            // Gráfico ZTD
-            if (ztdChart) ztdChart.destroy();
-            ztdChart = new Chart(document.getElementById('ztdChart').getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: fechas,
-                    datasets: [
-                        { label: 'ZTD (mm)', data: valores, borderColor: '#2c5f8a', backgroundColor: 'rgba(44,95,138,0.1)', tension: 0.2, pointRadius: 1 },
-                        { label: 'Error', data: errores, borderColor: '#e74c3c', borderDash: [5,5], pointRadius: 0 }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
-            });
-
-            // Gráfico IWV
-            if (iwvChart) iwvChart.destroy();
-            if (iwv.some(v => v !== null)) {
-                iwvChart = new Chart(document.getElementById('iwvChart').getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: fechas,
-                        datasets: [{ label: 'IWV (kg/m²)', data: iwv, borderColor: '#27ae60', backgroundColor: 'rgba(39,174,96,0.1)', tension: 0.2, pointRadius: 1 }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
-                });
-            }
-        } catch(e) {
-            console.error('Error actualizando ZTD:', e);
-        }
-    }
-
-    // ===== GRÁFICOS INICIALES =====
-    function initCharts() {
-        const ctx1 = document.getElementById('tempChart').getContext('2d');
-        tempChart = new Chart(ctx1, { type: 'bar', data: { labels: ['Col', 'Ecu', 'Per', 'Bol', 'Chi', 'Arg'], datasets: [{ label: 'Temperatura (°C)', data: [0,0,0,0,0,0], backgroundColor: '#2c5f8a' }] }, options: { responsive: true } });
-        const ctx2 = document.getElementById('protectedChart').getContext('2d');
-        protectedChart = new Chart(ctx2, { type: 'bar', data: { labels: ['Col', 'Ecu', 'Per', 'Bol', 'Chi', 'Arg'], datasets: [{ label: 'Áreas protegidas (%)', data: [16.8,19.2,17.5,22.1,21.5,9.8], backgroundColor: '#27ae60' }] }, options: { responsive: true } });
-        const ctx3 = document.getElementById('trendChart').getContext('2d');
-        trendChart = new Chart(ctx3, { type: 'line', data: { labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], datasets: [{ label: 'Temperatura (°C)', data: [0,0,0,0,0,0,0], borderColor: '#2c5f8a', tension: 0.3 }] }, options: { responsive: true } });
-    }
-
-    // ===== REPORTE =====
-    document.getElementById('btnReporte')?.addEventListener('click', function() {
-        const contenido = `🌄 ANDES OBSERVATORIO - REPORTE\nFecha: ${new Date().toLocaleString()}\nTemperatura: ${document.getElementById('tempDisplay').textContent}\nHumedad: ${document.getElementById('humDisplay').textContent}\nSensación: ${document.getElementById('feelsDisplay').textContent}`;
-        const blob = new Blob([contenido], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `reporte_andes_${new Date().toISOString().slice(0,10)}.txt`;
-        link.click();
-    });
-
-    // ===== EVENTOS =====
-    document.getElementById('citySelect').addEventListener('change', actualizarClima);
-    document.getElementById('updateZTD').addEventListener('click', actualizarZTD);
-    document.getElementById('stationZTD').addEventListener('change', actualizarZTD);
-
-    // ===== INICIO =====
-    document.addEventListener('DOMContentLoaded', function() {
-        initMap();
-        initCharts();
-
-        // Fechas por defecto (últimos 30 días)
-        const hoy = new Date();
-        const hace30 = new Date(hoy);
-        hace30.setDate(hace30.getDate() - 30);
-        document.getElementById('dateFrom').value = hace30.toISOString().split('T')[0];
-        document.getElementById('dateTo').value = hoy.toISOString().split('T')[0];
-
-        actualizarClima();
-        cargarEstacionesZTD();
-
-        setInterval(actualizarClima, 60000);
-    });
-</script>
+    </section>
+    <section class="features">
+        <h2 style="text-align:center;font-size:2rem;font-weight:800;margin-bottom:12px;">🧭 ¿Qué ofrece <span style="color:#60a5fa;">Andes Observatorio</span>?</h2>
+        <p style="text-align:center;color:#9ca3af;font-size:1.1rem;margin-bottom:48px;">Una plataforma integral para el monitoreo y análisis climático de la región andina</p>
+        <div class="features-grid">
+            <div class="feature-card"><div class="feature-icon">🌡️</div><h3>Datos en Tiempo Real</h3><p>Temperatura, humedad y sensación térmica actualizada desde OpenWeatherMap para todas las capitales andinas.</p></div>
+            <div class="feature-card"><div class="feature-icon">🗺️</div><h3>Mapa Interactivo</h3><p>Visualización de estaciones SIRGAS, vectores de velocidad y áreas de influencia en toda la región.</p></div>
+            <div class="feature-card"><div class="feature-icon">🛰️</div><h3>Datos Geodésicos SIRGAS</h3><p>Velocidades de estaciones GNSS y Retardo Troposférico Cenital (ZTD) para monitoreo atmosférico.</p></div>
+            <div class="feature-card"><div class="feature-icon">📈</div><h3>Simulador Climático</h3><p>Proyecciones interactivas 2020-2100 con escenarios RCP 4.5 y RCP 8.5 para 11 países andinos.</p></div>
+            <div class="feature-card"><div class="feature-icon">📋</div><h3>Alertas Personalizables</h3><p>Configura umbrales de temperatura, humedad y sensación térmica con notificaciones visuales.</p></div>
+            <div class="feature-card"><div class="feature-icon">📄</div><h3>Reportes y Exportación</h3><p>Descarga reportes ambientales en TXT y exporta datos del simulador en formato JSON.</p></div>
+        </div>
+    </section>
+    <section class="countries-section">
+        <h2 style="text-align:center;font-size:1.8rem;font-weight:800;margin-bottom:8px;">📍 Países monitoreados</h2>
+        <p style="text-align:center;color:#9ca3af;margin-bottom:40px;">11 países de la región andina y sudamericana</p>
+        <div class="countries-grid">
+            <div class="country-pill"><span style="font-size:1.2rem;">🇨🇴</span> Colombia</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇪🇨</span> Ecuador</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇵🇪</span> Perú</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇧🇴</span> Bolivia</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇻🇪</span> Venezuela</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇨🇱</span> Chile</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇦🇷</span> Argentina</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇬🇾</span> Guyana</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇸🇷</span> Surinam</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇵🇾</span> Paraguay</div>
+            <div class="country-pill"><span style="font-size:1.2rem;">🇺🇾</span> Uruguay</div>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-links">
+            <a href="dashboard.html">📊 Dashboard</a>
+            <a href="simulador-climatico-v2.html">🌦️ Simulador Climático</a>
+            <a href="https://github.com/andesobservatorio/andes-observatorio" target="_blank">📁 GitHub</a>
+            <a href="mailto:andesobservatorio@gmail.com">📧 Contacto</a>
+        </div>
+        <p><strong>🌄 Andes Observatorio</strong> · Monitoreo de Ecosistemas Andinos · Datos actualizados en tiempo real desde OpenWeatherMap y SIRGAS</p>
+        <p style="margin-top:8px;font-size:0.7rem;">📧 andesobservatorio@gmail.com · 📞 +57 3337211047</p>
+    </footer>
 </body>
 </html>
