@@ -553,6 +553,13 @@ function generarDatosZTD() {
     // ============================================================
     // ZTD (Retardo Troposférico Cenital) - Datos reales de SIRGAS
     // ============================================================
+    const DEMO_ZTD_STATIONS = [
+        {codigo: "ANTC", nombre: "Antofagasta", pais: "Chile", lat: -23.65, lon: -70.40},
+        {codigo: "AREQ", nombre: "Arequipa", pais: "Perú", lat: -16.47, lon: -71.49},
+        {codigo: "BOGT", nombre: "Bogotá", pais: "Colombia", lat: 4.64, lon: -74.08},
+        {codigo: "CALI", nombre: "Cali", pais: "Colombia", lat: 3.45, lon: -76.53},
+        {codigo: "SANT", nombre: "Santiago", pais: "Chile", lat: -33.44, lon: -70.66}
+    ];
 async function cargarEstacionesZTD() {
     const select = document.getElementById('estacionZTD');
     select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
