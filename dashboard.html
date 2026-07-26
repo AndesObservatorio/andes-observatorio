@@ -650,7 +650,10 @@ async function cargarEstacionesZTD() {
             badge.innerText = `📡 SIRGAS: ${data.length} estaciones (últ. act. ${ahora.toLocaleTimeString()})`;
             dibujarSIRGAS(data);
         } catch(e) {
-            badge.innerText = '⚠️ Error SIRGAS';
+            console.warn('⚠️ API SIRGAS no disponible, usando DEMO');
+            estacionesSIRGAS = DEMO_SIRGAS_STATIONS;
+            badge.innerText = `📡 SIRGAS: ${DEMO_SIRGAS_STATIONS.length} estaciones ⚠️ DEMO`;
+            dibujarSIRGAS(DEMO_SIRGAS_STATIONS);
         }
     }
 
