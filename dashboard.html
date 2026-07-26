@@ -629,6 +629,16 @@ async function cargarEstacionesZTD() {
     // ============================================================
     // SIRGAS
     // ============================================================
+    // Datos DEMO SIRGAS (velocidades reales aproximadas)
+    const DEMO_SIRGAS_STATIONS = [
+        {id: "AREQ", lat: -16.47, lon: -71.49, vn: 15.2, ve: -2.1},
+        {id: "BOGT", lat: 4.64, lon: -74.08, vn: 8.7, ve: 3.4},
+        {id: "CHPI", lat: -22.68, lon: -44.98, vn: -5.3, ve: -8.9},
+        {id: "GLPS", lat: -0.74, lon: -90.30, vn: 22.1, ve: 5.6},
+        {id: "IQQE", lat: -20.27, lon: -69.86, vn: 18.4, ve: -0.8},
+        {id: "LPGS", lat: -34.90, lon: -57.93, vn: -3.2, ve: -6.7},
+        {id: "SANT", lat: -33.44, lon: -70.66, vn: 12.8, ve: -4.3}
+    ];
     async function cargarSIRGAS() {
         const badge = document.getElementById('sirgasBadge');
         badge.innerText = '🔄 Actualizando SIRGAS…';
