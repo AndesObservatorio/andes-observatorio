@@ -552,48 +552,38 @@ function generarDatosZTD() {
 
     // ============================================================
     // ZTD (Retardo Troposférico Cenital) - Datos reales de SIRGAS
+    // ============================================================
+async function cargarEstacionesZTD() {
+    const select = document.getElementById('estacionZTD');
+    select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
     
-    // Datos DEMO con ubicaciones reales SIRGAS
-    const DEMO_ZTD_STATIONS = [
-        {codigo: "ANTC", nombre: "Antofagasta", pais: "Chile", lat: -23.65, lon: -70.40},
-        {codigo: "AREQ", nombre: "Arequipa", pais: "Perú", lat: -16.47, lon: -71.49},
-        {codigo: "BOGT", nombre: "Bogotá", pais: "Colombia", lat: 4.64, lon: -74.08},
-        {codigo: "CALI", nombre: "Cali", pais: "Colombia", lat: 3.45, lon: -76.53},
-        {codigo: "SANT", nombre: "Santiago", pais: "Chile", lat: -33.44, lon: -70.66}
-    ];
-
-    async function cargarEstacionesZTD() {
-        const select = document.getElementById('estacionZTD');
-        select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
+    try {
+        const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
+        if (!res.ok) throw new Error("API no disponible");
+        const data = await res.json();
+        const estaciones = data.estaciones || [];
         
-        try {
-            const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
-            if (!res.ok) throw new Error("API no disponible");
-            const data = await res.json();
-            const estaciones = data.estaciones || [];
-            
-            if (estaciones.length === 0) {
-                select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
-                return;
-            }
-            
-            select.innerHTML = '<option value="">📍 Seleccionar estación</option>';
-            estaciones.forEach(est => {
-                const info = DEMO_ZTD_STATIONS.find(e => e.codigo === est.codigo);
-                const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : est.codigo;
-                select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${nombreMostrar} (${est.total_registros} reg.)</option>`;
-            });
-            actualizarGraficoZTD();
-            
-        } catch (e) {
-            select.innerHTML = '<option value="">📍 Estaciones DEMO ⚠️</option>';
-            DEMO_ZTD_STATIONS.forEach(est => {
-                select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${est.nombre}, ${est.pais}</option>`;
-            });
-            document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible.';
+        if (estaciones.length === 0) {
+            select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
+            return;
         }
+        
+        select.innerHTML = '<option value="">📍 Seleccionar estación</option>';
+        estaciones.forEach(est => {
+            const info = DEMO_ZTD_STATIONS.find(e => e.codigo === est.codigo);
+            const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : est.codigo;
+            select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${nombreMostrar} (${est.total_registros} reg.)</option>`;
+        });
+        actualizarGraficoZTD();
+        
+    } catch (e) {
+        select.innerHTML = '<option value="">📍 Estaciones DEMO ⚠️</option>';
+        DEMO_ZTD_STATIONS.forEach(est => {
+            select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${est.nombre}, ${est.pais}</option>`;
+        });
+        document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible.';
     }
-
+}
     async function actualizarGraficoZTD() {
         const codigo = document.getElementById('estacionZTD').value;
         if (!codigo) return;
@@ -604,118 +594,173 @@ function generarDatosZTD() {
         if (desde) url += `&desde=${desde}`;
         if (hasta) url += `&hasta=${hasta}`;
 
-        const info = DEMO_ZTD_STATIONS.find(e => e.codigo === codigo) || {nombre: codigo, pais: "SIRGAS"};
         document.getElementById('ztdInfo').innerText = '🔄 Cargando datos…';
-        
         try {
             const res = await fetch(url);
-            if (!res.ok) throw new Error("API caída");
             const data = await res.json();
             const puntos = data.datos || [];
 
             if (puntos.length === 0) {
-                document.getElementById('ztdInfo').innerText = `⚠️ Sin datos ZTD para ${codigo}`;
-                if (window.ztdChartInstance) {
-                    window.ztdChartInstance.data.labels = [];
-                    window.ztdChartInstance.data.datasets[0].data = [];
-                    window.ztdChartInstance.update();
-                }
+                document.getElementById('ztdInfo').innerText = `⚠️ Sin datos de ZTD para ${codigo} en ese rango de fechas.`;
+                ztdChart.data.labels = [];
+                ztdChart.data.datasets[0].data = [];
+                ztdChart.update();
                 return;
             }
-            
-            const fechas = puntos.map(d => d.fecha);
-            const valores = puntos.map(d => d.ztd);
-            
-            if (window.ztdChartInstance) window.ztdChartInstance.destroy();
-            const ctx = document.getElementById('ztdChart').getContext('2d');
-            window.ztdChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: fechas,
-                    datasets: [{
-                        label: `${codigo} - ${info.nombre}, ${info.pais}`,
-                        data: valores,
-                        borderColor: '#2D6A4F',
-                        backgroundColor: 'rgba(45,106,79,0.1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        pointRadius: 2,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: { 
-                            display: true, 
-                            text: `ZTD - ${codigo} (${info.nombre}, ${info.pais})`,
-                            font: { family: 'Montserrat', size: 14 }
-                        }
-                    },
-                    scales: {
-                        y: { 
-                            title: { display: true, text: 'ZTD (m)' },
-                            min: 2.0,
-                            max: 2.8,
-                            ticks: { stepSize: 0.1 }
-                        },
-                        x: { title: { display: true, text: 'Fecha' } }
-                    }
-                }
-            });
-            document.getElementById('ztdInfo').innerHTML = `✅ ${codigo} - ${info.nombre}, ${info.pais} | ${puntos.length} registros`;
-            
+
+            ztdChart.data.labels = puntos.map(p => new Date(p.fecha).toLocaleString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit' }));
+            ztdChart.data.datasets[0].data = puntos.map(p => p.valor);
+            ztdChart.update();
+
+            document.getElementById('ztdInfo').innerText =
+                `📊 ${data.total_registros} registros para ${codigo} (${puntos[0].fecha.split('T')[0]} a ${puntos[puntos.length - 1].fecha.split('T')[0]})`;
         } catch (e) {
-            console.warn("⚠️ Usando DEMO para ZTD:", codigo);
-            const demoData = [];
-            let ztd = 2.35;
-            for (let i = 0; i < 40; i++) {
-                ztd += (Math.random() - 0.5) * 0.03;
-                demoData.push({fecha: new Date(2026, 0, 1 + i*5).toISOString().slice(0,10), ztd: ztd.toFixed(4)});
-            }
-            const fechas = demoData.map(d => d.fecha);
-            const valores = demoData.map(d => parseFloat(d.ztd));
-            
-            if (window.ztdChartInstance) window.ztdChartInstance.destroy();
-            const ctx = document.getElementById('ztdChart').getContext('2d');
-            window.ztdChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: fechas,
-                    datasets: [{
-                        label: `${codigo} - ${info.nombre}, ${info.pais} ⚠️ DEMO`,
-                        data: valores,
-                        borderColor: '#2D6A4F',
-                        backgroundColor: 'rgba(45,106,79,0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: { 
-                            display: true, 
-                            text: `ZTD - ${codigo} (${info.nombre}, ${info.pais}) ⚠️ DEMO`,
-                            font: { family: 'Montserrat', size: 14 }
-                        }
-                    },
-                    scales: {
-                        y: { 
-                            title: { display: true, text: 'ZTD (m)' },
-                            min: 2.0,
-                            max: 2.8
-                        },
-                        x: { title: { display: true, text: 'Fecha' } }
-                    }
-                }
-            });
-            document.getElementById('ztdInfo').innerHTML = `⚠️ <strong>DEMO:</strong> ${codigo} - ${info.nombre}, ${info.pais} | Datos simulados`;
+            document.getElementById('ztdInfo').innerText = '⚠️ Error al obtener la serie de ZTD.';
         }
     }
+
+    // ============================================================
+    // SIRGAS
+    // ============================================================
+    async function cargarSIRGAS() {
+        const badge = document.getElementById('sirgasBadge');
+        badge.innerText = '🔄 Actualizando SIRGAS…';
+        try {
+            const res = await fetch(API_SIRGAS);
+            const data = await res.json();
+            estacionesSIRGAS = data;
+            const ahora = new Date();
+            badge.innerText = `📡 SIRGAS: ${data.length} estaciones (últ. act. ${ahora.toLocaleTimeString()})`;
+            dibujarSIRGAS(data);
+        } catch(e) {
+            badge.innerText = '⚠️ Error SIRGAS';
+        }
+    }
+
+    function dibujarSIRGAS(estaciones) {
+        if (capaSIRGAS) map.removeLayer(capaSIRGAS);
+        if (capaEstaciones) map.removeLayer(capaEstaciones);
+        if (capaInfluencia) map.removeLayer(capaInfluencia);
+
+        capaSIRGAS = L.layerGroup();
+        capaEstaciones = L.layerGroup();
+        capaInfluencia = L.layerGroup();
+
+        estaciones.forEach(est => {
+            const start = [est.lat, est.lon];
+            const end = [est.lat + (est.vn / 15000), est.lon + (est.ve / 15000)];
+            L.polyline([start, end], { color: '#c0392b', weight: 4, dashArray: '6,4' }).addTo(capaSIRGAS);
+            L.circleMarker(start, { radius: 10, fillColor: '#e67e22', color: '#c0392b', weight: 2.5, fillOpacity: 0.9 })
+                .bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año`)
+                .addTo(capaEstaciones);
+            L.circle(start, { radius: 50*1000, color: '#2980b9', weight: 1.5, fillColor: '#3498db', fillOpacity: 0.08 })
+                .addTo(capaInfluencia);
+        });
+
+        capaSIRGAS.addTo(map);
+        capaEstaciones.addTo(map);
+        capaInfluencia.addTo(map);
+    }
+
+    // ============================================================
+    // MAPA
+    // ============================================================
+    function initMap() {
+        if (map) map.remove();
+        map = L.map('map').setView([-15, -65], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+
+        // Dibuja el mini-gráfico dentro del popup cuando se abre (usa datos
+        // ya cacheados por cargarCapaZTD, no vuelve a llamar a la API).
+        map.on('popupopen', function(e) {
+            const codigo = e.popup._source && e.popup._source.options && e.popup._source.options.stationCode;
+            if (!codigo || !ztdSerieCache[codigo]) return;
+            const canvas = document.getElementById(`popupChart_${codigo}`);
+            if (!canvas) return;
+            const puntos = ztdSerieCache[codigo];
+            new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: puntos.map(p => new Date(p.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })),
+                    datasets: [{ data: puntos.map(p => p.valor), borderColor: '#2c5f8a', tension: 0.3, pointRadius: 0, borderWidth: 1.5 }],
+                },
+                options: {
+                    responsive: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: true } },
+                },
+            });
+        });
+
+        capaCiudades = L.layerGroup();
+        ciudades.forEach(c => {
+            L.circleMarker([c.lat, c.lon], { radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 })
+                .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`)
+                .addTo(capaCiudades);
+        });
+        capaCiudades.addTo(map);
+
+        document.getElementById('toggleCiudades').addEventListener('change', function() {
+            this.checked ? capaCiudades.addTo(map) : map.removeLayer(capaCiudades);
+        });
+        document.getElementById('toggleSIRGAS').addEventListener('change', function() {
+            if (this.checked && capaSIRGAS) capaSIRGAS.addTo(map);
+            else if (capaSIRGAS) map.removeLayer(capaSIRGAS);
+        });
+        document.getElementById('toggleZTD').addEventListener('change', function() {
+            if (this.checked && capaZTD) capaZTD.addTo(map);
+            else if (capaZTD) map.removeLayer(capaZTD);
+        });
+        cargarCapaZTD();
+        document.getElementById('toggleEstaciones').addEventListener('change', function() {
+            if (this.checked && capaEstaciones) capaEstaciones.addTo(map);
+            else if (capaEstaciones) map.removeLayer(capaEstaciones);
+        });
+        document.getElementById('toggleInfluencia').addEventListener('change', function() {
+            if (this.checked && capaInfluencia) capaInfluencia.addTo(map);
+            else if (capaInfluencia) map.removeLayer(capaInfluencia);
+        });
+
+        cargarSIRGAS();
+    }
+
+    // ============================================================
+    // REPORTE
+    // ============================================================
+    function descargarReporte() {
+        const ahora = new Date();
+        const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
+        const temp = document.getElementById('temp').innerText;
+        const hum = document.getElementById('hum').innerText;
+        const feels = document.getElementById('feels').innerText;
+        const contenido = `
+        ============================================
+        🌄 ANDES OBSERVATORIO - REPORTE AMBIENTAL
+        ============================================
+        Fecha: ${ahora.toLocaleDateString()}
+        Hora: ${ahora.toLocaleTimeString()}
+        Ciudad: ${ciudad}
+        Temperatura: ${temp}
+        Humedad: ${hum}
+        Sensación: ${feels}
+        ============================================
+        `;
+        const blob = new Blob([contenido], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `reporte_andes_${ahora.toISOString().slice(0,10)}.txt`;
+        link.click();
+    }
+
+    // ============================================================
+    // EVENTOS
+    // ============================================================
+    document.getElementById('citySelect').addEventListener('change', actualizarCiudad);
+    document.getElementById('btnReporte').addEventListener('click', descargarReporte);
+    document.querySelectorAll('.btn-alerta').forEach(btn => {
+        btn.addEventListener('click', actualizarCiudad);
+    });
+    // ============================================================
     // Capa ZTD en el mapa: marcadores coloreados + popup con gráfico
     // ============================================================
     function colorZTD(valor, min, max) {
