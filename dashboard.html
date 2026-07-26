@@ -554,28 +554,37 @@ function generarDatosZTD() {
     // ============================================================
     // ZTD (Retardo Troposférico Cenital) - Datos reales de SIRGAS
     // ============================================================
-    async function cargarEstacionesZTD() {
-        const select = document.getElementById('estacionZTD');
-        try {
-            const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
-            const data = await res.json();
-            const estaciones = data.estaciones || [];
-            if (estaciones.length === 0) {
-                select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
-                return;
-            }
-            select.innerHTML = estaciones.map(e => {
-                const desde = (e.primera_fecha || '').split(' ')[0] || (e.primera_fecha || '').split('T')[0];
-                const hasta = (e.ultima_fecha || '').split(' ')[0] || (e.ultima_fecha || '').split('T')[0];
-                return `<option value="${e.codigo}">${e.codigo} (${e.total_registros} registros, ${desde} a ${hasta})</option>`;
-            }).join('');
-            actualizarGraficoZTD();
-        } catch (e) {
-            select.innerHTML = '<option value="">Error al conectar con la API</option>';
-            document.getElementById('ztdInfo').innerText = '⚠️ No se pudo conectar con la API de datos troposféricos.';
+async function cargarEstacionesZTD() {
+    const select = document.getElementById('estacionZTD');
+    select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
+    
+    try {
+        const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
+        if (!res.ok) throw new Error("API no disponible");
+        const data = await res.json();
+        const estaciones = data.estaciones || [];
+        
+        if (estaciones.length === 0) {
+            select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
+            return;
         }
+        
+        select.innerHTML = '<option value="">📍 Seleccionar estación</option>';
+        estaciones.forEach(est => {
+            const info = DEMO_ZTD_STATIONS.find(e => e.codigo === est.codigo);
+            const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : est.codigo;
+            select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${nombreMostrar} (${est.total_registros} reg.)</option>`;
+        });
+        actualizarGraficoZTD();
+        
+    } catch (e) {
+        select.innerHTML = '<option value="">📍 Estaciones DEMO ⚠️</option>';
+        DEMO_ZTD_STATIONS.forEach(est => {
+            select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${est.nombre}, ${est.pais}</option>`;
+        });
+        document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible.';
     }
-
+}
     async function actualizarGraficoZTD() {
         const codigo = document.getElementById('estacionZTD').value;
         if (!codigo) return;
