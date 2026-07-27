@@ -670,12 +670,33 @@ async function cargarEstacionesZTD() {
             const start = [est.lat, est.lon];
             const end = [est.lat + (est.vn / 15000), est.lon + (est.ve / 15000)];
             L.polyline([start, end], { color: '#c0392b', weight: 4, dashArray: '6,4' }).addTo(capaSIRGAS);
-            L.circleMarker(start, { radius: 10, fillColor: '#e67e22', color: '#c0392b', weight: 2.5, fillOpacity: 0.9 })
-                .bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año`)
-                .addTo(capaEstaciones);
-            L.circle(start, { radius: 50*1000, color: '#2980b9', weight: 1.5, fillColor: '#3498db', fillOpacity: 0.08 })
-                .addTo(capaInfluencia);
-        });
+                       // Efecto sombrilla: color y tamaño según magnitud de velocidad
+            const magnitud = Math.sqrt(est.ve ** 2 + est.vn ** 2);
+            const radio = Math.min(80, Math.max(30, magnitud * 2)) * 1000;
+            const opacidad = Math.min(0.3, Math.max(0.08, magnitud / 50));
+            
+            const ratio = Math.min(1, magnitud / 30);
+            const r = Math.round(255 * ratio);
+            const g = Math.round(255 * (1 - ratio));
+            const colorVel = `rgb(${r},${g},80)`;
+            
+            const circle = L.circle(start, {
+                radius: radio,
+                color: colorVel,
+                weight: 1.5,
+                fillColor: colorVel,
+                fillOpacity: opacidad
+            }).addTo(capaInfluencia);
+            
+            // Flecha de dirección
+            const endLat = start[0] + (est.vn / 15000) * (radio / 50000);
+            const endLon = start[1] + (est.ve / 15000) * (radio / 50000);
+            L.polyline([start, [endLat, endLon]], {
+                color: colorVel,
+                weight: 3,
+                opacity: 0.7,
+                dashArray: '8,6'
+            }).addTo(capaInfluencia); 
 
         capaSIRGAS.addTo(map);
         capaEstaciones.addTo(map);
