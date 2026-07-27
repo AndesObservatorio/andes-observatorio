@@ -1,0 +1,8 @@
+{
+  "type": "Feature",
+  "properties": { "name": "Santiago", "country": "Chile", "station": "SANT" },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[[-70.85,-33.60],[-70.45,-33.60],[-70.45,-33.30],[-70.85,-33.30],[-70.85,-33.60]]]
+  }
+}

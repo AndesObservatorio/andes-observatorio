@@ -1,0 +1,8 @@
+{
+  "type": "Feature",
+  "properties": { "name": "Arequipa", "country": "Perú", "station": "AREQ" },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[[-71.70,-16.55],[-71.35,-16.55],[-71.35,-16.35],[-71.70,-16.35],[-71.70,-16.55]]]
+  }
+}

@@ -832,14 +832,37 @@ async function cargarEstacionesZTD() {
             // Anillo (sin relleno) alrededor del punto de la estación SIRGAS ya
             // existente: distinguible incluso cuando comparten la misma ubicación,
             // sin desplazar el marcador de su coordenada geográfica real.
-            const marker = L.circleMarker([lat, lon], {
-                radius: 18,
-                fillOpacity: 0,
-                color: color,
-                weight: 5,
-                stationCode: codigo,   // propiedad custom, accesible vía marker.options
-            });
-
+            // Buscar archivo GeoJSON de la ciudad
+            const cityNames = {AREQ: "arequipa", BOGT: "bogota", CALI: "cali", ANTC: "antofagasta", SANT: "santiago"};
+            const cityFile = cityNames[codigo];
+            
+            if (cityFile) {
+                fetch(`assets/geojson/${cityFile}.json`)
+                    .then(r => r.json())
+                    .then(geojson => {
+                        const polygon = L.geoJSON(geojson, {
+                            style: {
+                                color: color,
+                                weight: 2,
+                                fillColor: color,
+                                fillOpacity: 0.25
+                            }
+                        }).addTo(capaZTD);
+                        polygon.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm | ${geojson.properties.name}, ${geojson.properties.country}`, { direction: 'top' });
+                        polygon.bindPopup(construirPopupZTD(codigo, puntos));
+                    })
+                    .catch(() => {
+                        const fallback = L.circleMarker([lat, lon], { radius: 18, fillOpacity: 0, color: color, weight: 5, stationCode: codigo });
+                        fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top', offset: [0, -18] });
+                        fallback.bindPopup(construirPopupZTD(codigo, puntos));
+                        fallback.addTo(capaZTD);
+                    });
+            } else {
+                const marker = L.circleMarker([lat, lon], { radius: 18, fillOpacity: 0, color: color, weight: 5, stationCode: codigo });
+                marker.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top', offset: [0, -18] });
+                marker.bindPopup(construirPopupZTD(codigo, puntos));
+                marker.addTo(capaZTD);
+            }
             marker.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top', offset: [0, -18] });
             marker.bindPopup(construirPopupZTD(codigo, puntos));
             marker.addTo(capaZTD);

@@ -1,0 +1,8 @@
+{
+  "type": "Feature",
+  "properties": { "name": "Cali", "country": "Colombia", "station": "CALI" },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[[-76.65,3.30],[-76.40,3.30],[-76.40,3.55],[-76.65,3.55],[-76.65,3.30]]]
+  }
+}

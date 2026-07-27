@@ -1,0 +1,8 @@
+{
+  "type": "Feature",
+  "properties": { "name": "Bogotá", "country": "Colombia", "station": "BOGT" },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[[-74.25,4.50],[-73.95,4.50],[-73.95,4.85],[-74.25,4.85],[-74.25,4.50]]]
+  }
+}

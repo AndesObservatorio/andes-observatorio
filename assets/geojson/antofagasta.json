@@ -1,0 +1,8 @@
+{
+  "type": "Feature",
+  "properties": { "name": "Antofagasta", "country": "Chile", "station": "ANTC" },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[[-70.55,-23.75],[-70.25,-23.75],[-70.25,-23.50],[-70.55,-23.50],[-70.55,-23.75]]]
+  }
+}
