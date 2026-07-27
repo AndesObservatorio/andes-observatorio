@@ -107,6 +107,64 @@ app.layout = dbc.Container([
                 ], width=9)
             ])
         ]),
+                
+        dbc.Tab(label="🚦 MAME Escazú", tab_id="tab-mame", children=[
+            dbc.Row([
+                dbc.Col([
+                    html.H4("Monitoreo Ambiental con Marco Escazú", className="mt-3 mb-3"),
+                    html.P("Vinculación de alertas ambientales con normas georreferenciadas y territorios vulnerables.",
+                           className="text-muted mb-4"),
+                ], width=12)
+            ]),
+            dbc.Row([
+                dbc.Col([
+                    html.H5("🚦 Semáforo Escazú"),
+                    dbc.Card([
+                        dbc.CardBody([
+                            html.Div([
+                                html.P("🟢 Colombia: 3 normas activas", className="fs-5"),
+                                html.P("🟡 Perú: 2 normas en revisión", className="fs-5"),
+                                html.P("🔴 Chile: 1 alerta activa", className="fs-5"),
+                            ])
+                        ])
+                    ], className="mb-3"),
+                ], width=4),
+                dbc.Col([
+                    html.H5("📋 Feed de Alertas"),
+                    dbc.Card([
+                        dbc.CardBody([
+                            html.Div([
+                                html.P("⚠️ 2026-07-26 | Caquetá, Colombia", className="text-danger"),
+                                html.P("Deforestación > 100 ha en Resguardo Nukak. Ley 2173/2021 Art.5.", className="small"),
+                                html.Hr(),
+                                html.P("⚠️ 2026-07-25 | La Guajira, Colombia", className="text-warning"),
+                                html.P("Sequía extrema en territorio Wayúu. Ley 1931/2018 Art.8.", className="small"),
+                                html.Hr(),
+                                html.P("✅ 2026-07-24 | Santiago, Chile", className="text-success"),
+                                html.P("Velocidad SIRGAS dentro de umbral normal.", className="small"),
+                            ])
+                        ])
+                    ], className="mb-3"),
+                ], width=4),
+                dbc.Col([
+                    html.H5("🗺️ Territorios Vulnerables"),
+                    dbc.Card([
+                        dbc.CardBody([
+                            html.P("Resguardos indígenas monitoreados:"),
+                            html.Ul([
+                                html.Li("Nukak (Guaviare)"),
+                                html.Li("Arhuaco (Cesar)"),
+                                html.Li("Embera (Chocó)"),
+                                html.Li("Wayúu (La Guajira)"),
+                                html.Li("Misak (Cauca)"),
+                            ]),
+                            html.Hr(),
+                            html.P("📊 5 territorios | 3 países | 10 normas vinculadas", className="small text-muted"),
+                        ])
+                    ], className="mb-3"),
+                ], width=4),
+            ]),
+        ]),
         
         dbc.Tab(label="Simulador", tab_id="tab-simulator", children=[
             dbc.Row([
