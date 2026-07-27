@@ -863,9 +863,6 @@ async function cargarEstacionesZTD() {
                 marker.bindPopup(construirPopupZTD(codigo, puntos));
                 marker.addTo(capaZTD);
             }
-            marker.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top', offset: [0, -18] });
-            marker.bindPopup(construirPopupZTD(codigo, puntos));
-            marker.addTo(capaZTD);
         });
 
         badge.innerText = `💧 ZTD: ${valores.length} estaciones`;
