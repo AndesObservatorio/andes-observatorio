@@ -671,8 +671,7 @@ async function cargarEstacionesZTD() {
             const end = [est.lat + (est.vn / 15000), est.lon + (est.ve / 15000)];
             L.polyline([start, end], { color: '#c0392b', weight: 4, dashArray: '6,4' }).addTo(capaSIRGAS);
             L.circle(start, { radius: 50*1000, color: '#2980b9', weight: 1.5, fillColor: '#3498db', fillOpacity: 0.08 }).addTo(capaInfluencia);
-            
-
+              });
         capaSIRGAS.addTo(map);
         capaEstaciones.addTo(map);
         capaInfluencia.addTo(map);
