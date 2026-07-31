@@ -375,6 +375,30 @@ function generarDatosZTD() {
         const select = document.getElementById('citySelect');
         const partes = select.value.split(',');
         const query = partes[0] + ',' + partes[1];
+        // Mapeo de ciudad a disponibilidad de datos
+        const cityToStation = {
+            "Bogota,CO,4.7110,-74.0721": {codigo: "BOGT", ztd: true, sirgas: true, poligono: true},
+            "Cali,CO,3.4516,-76.5320": {codigo: "CALI", ztd: true, sirgas: false, poligono: true},
+            "Santiago,CL,-33.4489,-70.6693": {codigo: "SANT", ztd: true, sirgas: true, poligono: false},
+            "Lima,PE,-12.0464,-77.0428": {codigo: "LIMA", ztd: false, sirgas: true, poligono: false},
+            "Quito,EC,-0.1807,-78.4678": {codigo: "QUIT", ztd: false, sirgas: true, poligono: false},
+            "La Paz,BO,-16.5000,-68.1500": {codigo: "LPBZ", ztd: false, sirgas: true, poligono: false}
+        };
+        const estacionInfo = cityToStation[select.value];
+        const codigoEstacion = estacionInfo ? estacionInfo.codigo : null;
+
+        // Mostrar/ocultar badges
+        if (estacionInfo) {
+            document.getElementById('badgeZTD').style.display = estacionInfo.ztd ? 'inline' : 'none';
+            document.getElementById('badgeSIRGAS').style.display = estacionInfo.sirgas ? 'inline' : 'none';
+            document.getElementById('badgePoligono').style.display = estacionInfo.poligono ? 'inline' : 'none';
+            document.getElementById('badgeSoloClima').style.display = (!estacionInfo.ztd && !estacionInfo.sirgas) ? 'inline' : 'none';
+        } else {
+            document.getElementById('badgeZTD').style.display = 'none';
+            document.getElementById('badgeSIRGAS').style.display = 'none';
+            document.getElementById('badgePoligono').style.display = 'none';
+            document.getElementById('badgeSoloClima').style.display = 'inline';
+        }
         const lat = parseFloat(partes[2]);
         const lon = parseFloat(partes[3]);
         const codigoPais = partes[1];
