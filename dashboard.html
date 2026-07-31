@@ -117,6 +117,13 @@
         <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
     </div>
 
+        <div id="disponibilidadDatos" style="display:flex;gap:10px;padding:8px 16px;font-size:13px;font-weight:600;background:#f8f9fa;border-radius:8px;margin:10px 16px;flex-wrap:wrap;">
+        <span style="color:#6c757d;">📊 Datos disponibles:</span>
+        <span id="badgeZTD" style="display:none;background:#2D6A4F;color:white;padding:3px 10px;border-radius:12px;">💧 ZTD</span>
+        <span id="badgeSIRGAS" style="display:none;background:#e67e22;color:white;padding:3px 10px;border-radius:12px;">🛰️ SIRGAS</span>
+        <span id="badgePoligono" style="display:none;background:#2980b9;color:white;padding:3px 10px;border-radius:12px;">🗺️ Polígono</span>
+        <span id="badgeSoloClima" style="display:none;background:#e74c3c;color:white;padding:3px 10px;border-radius:12px;">⚠️ Solo clima</span>
+    </div>
     <div id="map"></div>
     <div id="ztdLeyenda" style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;padding:6px 12px 0;" title="Los colores comparan las estaciones ENTRE SÍ en este momento (el valor más bajo del grupo es azul, el más alto es rojo). No es un umbral fijo de peligro, ya que el ZTD normal varía según la altitud de cada estación.">
         <span>ZTD (mm), relativo entre estaciones:</span>
@@ -386,13 +393,33 @@ function generarDatosZTD() {
         const lon = parseFloat(partes[3]);
         const codigoPais = partes[1];         // Mapeo de ciudad a estación ZTD/SIRGAS
         const cityToStation = {
-            "Bogota,CO,4.7110,-74.0721": "BOGT",
-            "Cali,CO,3.4516,-76.5320": "CALI",
-            "Santiago,CL,-33.4489,-70.6693": "SANT",
-            "Lima,PE,-12.0464,-77.0428": "LIMA",
-            "Quito,EC,-0.1807,-78.4678": "QUIT",
-            "La Paz,BO,-16.5000,-68.1500": "LPBZ"
+            "Bogota,CO,4.7110,-74.0721": {codigo: "BOGT", ztd: true, sirgas: true, poligono: true},
+            "Cali,CO,3.4516,-76.5320": {codigo: "CALI", ztd: true, sirgas: false, poligono: true},
+            "Santiago,CL,-33.4489,-70.6693": {codigo: "SANT", ztd: true, sirgas: true, poligono: false},
+            "Lima,PE,-12.0464,-77.0428": {codigo: "LIMA", ztd: false, sirgas: true, poligono: false},
+            "Quito,EC,-0.1807,-78.4678": {codigo: "QUIT", ztd: false, sirgas: true, poligono: false},
+            "La Paz,BO,-16.5000,-68.1500": {codigo: "LPBZ", ztd: false, sirgas: true, poligono: false}
         };
+        const estacionInfo = cityToStation[select.value];
+        const codigoEstacion = estacionInfo ? estacionInfo.codigo : null;
+                // Actualizar badges de disponibilidad
+        const badgeZTD = document.getElementById('badgeZTD');
+        const badgeSIRGAS = document.getElementById('badgeSIRGAS');
+        const badgePoligono = document.getElementById('badgePoligono');
+        const badgeSoloClima = document.getElementById('badgeSoloClima');
+        
+        if (estacionInfo) {
+            badgeZTD.style.display = estacionInfo.ztd ? 'inline' : 'none';
+            badgeSIRGAS.style.display = estacionInfo.sirgas ? 'inline' : 'none';
+            badgePoligono.style.display = estacionInfo.poligono ? 'inline' : 'none';
+            badgeSoloClima.style.display = (!estacionInfo.ztd && !estacionInfo.sirgas) ? 'inline' : 'none';
+        } else {
+            badgeZTD.style.display = 'none';
+            badgeSIRGAS.style.display = 'none';
+            badgePoligono.style.display = 'none';
+            badgeSoloClima.style.display = 'inline';
+        }
+
         const codigoEstacion = cityToStation[select.value];
 
         if (map) map.flyTo([lat, lon], 8, { duration: 1.5 });
