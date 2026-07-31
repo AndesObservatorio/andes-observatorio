@@ -265,7 +265,7 @@
 </div>
 
 <script>
-    const API_KEY = "257ead5e0a9128276d4c947480000ebb";
+    const API_KEY = "70232a5a2fff0ed9923878e1a513d00e";
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
     // La API de ZTD corre localmente por ahora (uvicorn en tu Ubuntu, puerto 8001).
     // Cuando conectes Render más adelante, cambia esta línea a tu URL de Render.
@@ -301,7 +301,12 @@ function generarDatosZTD() {
         { nombre: "Brasilia", pais: "Brasil", query: "Brasilia,BR", lat: -15.8267, lon: -47.9218 },
         { nombre: "Caracas", pais: "Venezuela", query: "Caracas,VE", lat: 10.4806, lon: -66.9036 },
         { nombre: "Panamá", pais: "Panamá", query: "Panama City,PA", lat: 8.9824, lon: -79.5199 }
-    ];
+    ]; ciudades.sort((a, b) => {
+    if (a.pais === b.pais) {
+        return a.nombre.localeCompare(b.nombre);
+    }
+    return a.pais.localeCompare(b.pais);
+});
 
     const normativas = {
         "CO": [
@@ -379,7 +384,16 @@ function generarDatosZTD() {
         const query = partes[0] + ',' + partes[1];
         const lat = parseFloat(partes[2]);
         const lon = parseFloat(partes[3]);
-        const codigoPais = partes[1];
+        const codigoPais = partes[1];         // Mapeo de ciudad a estación ZTD/SIRGAS
+        const cityToStation = {
+            "Bogota,CO,4.7110,-74.0721": "BOGT",
+            "Cali,CO,3.4516,-76.5320": "CALI",
+            "Santiago,CL,-33.4489,-70.6693": "SANT",
+            "Lima,PE,-12.0464,-77.0428": "LIMA",
+            "Quito,EC,-0.1807,-78.4678": "QUIT",
+            "La Paz,BO,-16.5000,-68.1500": "LPBZ"
+        };
+        const codigoEstacion = cityToStation[select.value];
 
         if (map) map.flyTo([lat, lon], 8, { duration: 1.5 });
 
@@ -403,7 +417,23 @@ function generarDatosZTD() {
             placeholder.innerText = `No hay normativas para este país.`;
             lista.innerHTML = '';
         }
-
+        // Sincronizar selector ZTD y SIRGAS histórico
+        if (codigoEstacion) {
+            const selectZTD = document.getElementById('estacionZTD');
+            if (selectZTD && selectZTD.querySelector(`option[value="${codigoEstacion}"]`)) {
+                selectZTD.value = codigoEstacion;
+                actualizarGraficoZTD();
+            }
+            
+            const selectSIRGAS = document.getElementById('estacionHistorica');
+            if (selectSIRGAS && selectSIRGAS.querySelector(`option[value="${codigoEstacion}"]`)) {
+                selectSIRGAS.value = codigoEstacion;
+                actualizarSirgasHistorico();
+            }
+            
+            // Zoom al polígono en el mapa
+            if (map) map.flyTo([lat, lon], 10, { duration: 1.5 });
+        }
         await actualizarTendencia(query);
         await actualizarGrafico();
     }
