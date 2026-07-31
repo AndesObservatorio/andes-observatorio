@@ -1,0 +1,32 @@
+[
+    {
+        "id_norma": "CHL-Ley19300-1994",
+        "pais": "Chile",
+        "titulo": "Ley de Bases Generales del Medio Ambiente",
+        "articulo": 1,
+        "obligacion": "Derecho a un ambiente libre de contaminación",
+        "geometria_asociada": "areas_protegidas_chile.geojson",
+        "consecuencia": "Sanciones y exigencias de reparación",
+        "vinculo_escazu": "Artículo 4.1 - Garantía de derechos"
+    },
+    {
+        "id_norma": "CHL-Ley21455-2022",
+        "pais": "Chile",
+        "titulo": "Ley Marco de Cambio Climático",
+        "articulo": 4,
+        "obligacion": "Meta de carbono neutralidad 2050 y monitoreo",
+        "geometria_asociada": "zonas_emisiones_chile.geojson",
+        "consecuencia": "Planes sectoriales de mitigación",
+        "vinculo_escazu": "Artículo 5.2 - Acceso a la información"
+    },
+    {
+        "id_norma": "CHL-Decreto40-2013",
+        "pais": "Chile",
+        "titulo": "Reglamento del Sistema de Evaluación de Impacto Ambiental",
+        "articulo": 18,
+        "obligacion": "Participación ciudadana en evaluación ambiental",
+        "geometria_asociada": "proyectos_evaluacion_chile.geojson",
+        "consecuencia": "Suspensión de proyectos sin evaluación",
+        "vinculo_escazu": "Artículo 7 - Participación pública"
+    }
+]

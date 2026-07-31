@@ -1,0 +1,32 @@
+[
+    {
+        "id_norma": "PER-Ley28611-2005",
+        "pais": "Perú",
+        "titulo": "Ley General del Ambiente",
+        "articulo": 1,
+        "obligacion": "Derecho a un ambiente saludable y deber de protección",
+        "geometria_asociada": "areas_protegidas_peru.geojson",
+        "consecuencia": "Sanciones administrativas y penales",
+        "vinculo_escazu": "Artículo 4 - Garantía de derechos de acceso"
+    },
+    {
+        "id_norma": "PER-DS004-2021-MINAM",
+        "pais": "Perú",
+        "titulo": "Reglamento de la Ley Marco sobre Cambio Climático",
+        "articulo": 7,
+        "obligacion": "Monitoreo de emisiones y vulnerabilidad climática",
+        "geometria_asociada": "zonas_vulnerables_peru.geojson",
+        "consecuencia": "Planes de adaptación obligatorios",
+        "vinculo_escazu": "Artículo 5.2 - Facilitar acceso a la información"
+    },
+    {
+        "id_norma": "PER-Ley29763-2011",
+        "pais": "Perú",
+        "titulo": "Ley Forestal y de Fauna Silvestre",
+        "articulo": 38,
+        "obligacion": "Prohibición de deforestación en bosques primarios",
+        "geometria_asociada": "bosques_peru.geojson",
+        "consecuencia": "Multas y recuperación de áreas degradadas",
+        "vinculo_escazu": "Artículo 6.3 - Información ambiental"
+    }
+]
