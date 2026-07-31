@@ -101,6 +101,14 @@
     <div class="layer-control">
         <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
         <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores SIRGAS</label>
+                <div id="sirgasLeyenda" style="display:flex;align-items:center;gap:6px;font-size:10px;color:#8aa08a;padding:2px 12px 0;flex-wrap:wrap;">
+            <span>🟢 Lento</span>
+            <span style="background:linear-gradient(to right,#27ae60,#f1c40f,#e74c3c);width:80px;height:8px;border-radius:4px;display:inline-block;"></span>
+            <span>🔴 Rápido</span>
+            <span style="margin-left:8px;">|</span>
+            <span>→ Dirección del movimiento</span>
+            <span style="color:#aaa;font-size:9px;">(mm/año)</span>
+        </div>
         <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
         <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
         <label><input type="checkbox" id="toggleZTD" checked> 💧 ZTD en mapa</label>
