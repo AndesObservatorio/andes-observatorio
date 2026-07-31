@@ -371,11 +371,15 @@ function generarDatosZTD() {
         return null;
     }
 
-    async function actualizarCiudad() {
+        async function actualizarCiudad() {
         const select = document.getElementById('citySelect');
         const partes = select.value.split(',');
         const query = partes[0] + ',' + partes[1];
-        // Mapeo de ciudad a disponibilidad de datos
+        const lat = parseFloat(partes[2]);
+        const lon = parseFloat(partes[3]);
+        const codigoPais = partes[1];
+
+        // Mapeo completo de ciudad a estaciones y disponibilidad
         const cityToStation = {
             "Bogota,CO,4.7110,-74.0721": {codigo: "BOGT", ztd: true, sirgas: true, poligono: true},
             "Cali,CO,3.4516,-76.5320": {codigo: "CALI", ztd: true, sirgas: false, poligono: true},
@@ -387,24 +391,16 @@ function generarDatosZTD() {
         const estacionInfo = cityToStation[select.value];
         const codigoEstacion = estacionInfo ? estacionInfo.codigo : null;
 
-        // Mostrar/ocultar badges
-        if (estacionInfo) {
-            document.getElementById('badgeZTD').style.display = estacionInfo.ztd ? 'inline' : 'none';
-            document.getElementById('badgeSIRGAS').style.display = estacionInfo.sirgas ? 'inline' : 'none';
-            document.getElementById('badgePoligono').style.display = estacionInfo.poligono ? 'inline' : 'none';
-            document.getElementById('badgeSoloClima').style.display = (!estacionInfo.ztd && !estacionInfo.sirgas) ? 'inline' : 'none';
-        } else {
-            document.getElementById('badgeZTD').style.display = 'none';
-            document.getElementById('badgeSIRGAS').style.display = 'none';
-            document.getElementById('badgePoligono').style.display = 'none';
-            document.getElementById('badgeSoloClima').style.display = 'inline';
-        }
-        const lat = parseFloat(partes[2]);
-        const lon = parseFloat(partes[3]);
-        const codigoPais = partes[1];
+        // === BADGES DE DISPONIBILIDAD ===
+        document.getElementById('badgeZTD').style.display = estacionInfo && estacionInfo.ztd ? 'inline' : 'none';
+        document.getElementById('badgeSIRGAS').style.display = estacionInfo && estacionInfo.sirgas ? 'inline' : 'none';
+        document.getElementById('badgePoligono').style.display = estacionInfo && estacionInfo.poligono ? 'inline' : 'none';
+        document.getElementById('badgeSoloClima').style.display = (!estacionInfo || (!estacionInfo.ztd && !estacionInfo.sirgas)) ? 'inline' : 'none';
 
+        // === MAPA: volar a la ciudad ===
         if (map) map.flyTo([lat, lon], 8, { duration: 1.5 });
 
+        // === CLIMA ===
         const clima = await getClima(query);
         if (clima) {
             document.getElementById('temp').innerHTML = clima.temp.toFixed(1) + '<small>°C</small>';
@@ -413,6 +409,7 @@ function generarDatosZTD() {
             actualizarAlertas(clima);
         }
 
+        // === NORMATIVAS ===
         const lista = document.getElementById('normativasLista');
         const placeholder = document.getElementById('normativasPlaceholder');
         if (normativas[codigoPais]) {
@@ -426,6 +423,29 @@ function generarDatosZTD() {
             lista.innerHTML = '';
         }
 
+        // === SINCRONIZAR ZTD ===
+        if (codigoEstacion && estacionInfo.ztd) {
+            const selectZTD = document.getElementById('estacionZTD');
+            if (selectZTD) {
+                // Esperar a que las estaciones ZTD carguen
+                await cargarEstacionesZTD();
+                if (selectZTD.querySelector(`option[value="${codigoEstacion}"]`)) {
+                    selectZTD.value = codigoEstacion;
+                    actualizarGraficoZTD();
+                }
+            }
+        }
+
+        // === SINCRONIZAR SIRGAS HISTÓRICO ===
+        if (codigoEstacion && estacionInfo.sirgas) {
+            const selectSIRGAS = document.getElementById('estacionHistorica');
+            if (selectSIRGAS && selectSIRGAS.querySelector(`option[value="${codigoEstacion}"]`)) {
+                selectSIRGAS.value = codigoEstacion;
+                actualizarSirgasHistorico();
+            }
+        }
+
+        // === TENDENCIA Y GRÁFICO ===
         await actualizarTendencia(query);
         await actualizarGrafico();
     }
