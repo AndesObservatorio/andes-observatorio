@@ -685,6 +685,7 @@ async function cargarEstacionesZTD() {
             const endLon = start[1] + (est.ve / 15000) * (radio / 50000);
             L.polyline([start, [endLat, endLon]], { color: colorVel, weight: 3, opacity: 0.7, dashArray: '8,6' }).addTo(capaInfluencia);
               });
+              
         capaSIRGAS.addTo(map);
         capaEstaciones.addTo(map);
         capaInfluencia.addTo(map);
@@ -860,14 +861,14 @@ async function cargarEstacionesZTD() {
                         polygon.bindPopup(construirPopupZTD(codigo, puntos));
                     })
                     .catch(() => {
-                        const fallback = L.circleMarker([lat, lon], { radius: 18, fillOpacity: 0, color: color, weight: 5, stationCode: codigo });
-                        fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top', offset: [0, -18] });
+                        const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
+                        fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm | ${codigo === 'AREQ' ? 'Arequipa, Perú' : 'Santiago, Chile'}`, { direction: 'top' });
                         fallback.bindPopup(construirPopupZTD(codigo, puntos));
                         fallback.addTo(capaZTD);
                     });
             } else {
-                const marker = L.circleMarker([lat, lon], { radius: 18, fillOpacity: 0, color: color, weight: 5, stationCode: codigo });
-                marker.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top', offset: [0, -18] });
+                const marker = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
+                marker.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top' });
                 marker.bindPopup(construirPopupZTD(codigo, puntos));
                 marker.addTo(capaZTD);
             }
