@@ -61,6 +61,25 @@
             .update-badge { margin-left: 0; }
             #map { height: 280px; }
         }
+        .map-tab {
+    padding: 10px 24px;
+    border-radius: 30px;
+    border: 1.5px solid #d6cfc4;
+    background: white;
+    color: #5a7a5a;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.map-tab:hover {
+    background: #f4f8f4;
+}
+.map-tab.active {
+    background: #5a7a5a;
+    color: white;
+    border-color: #5a7a5a;
+}
     </style>
 </head>
 <body>
@@ -98,37 +117,44 @@
         <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
     </div>
 
-    <div class="layer-control">
-        <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
-        <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores SIRGAS</label>
-        <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
-        <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
-        <label><input type="checkbox" id="toggleZTD" checked> 💧 ZTD en mapa</label>
-        <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
-        <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
-        <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
-    </div>
-    <div id="disponibilidadDatos" style="display:flex;gap:10px;padding:8px 16px;font-size:13px;font-weight:600;background:#f8f9fa;border-radius:8px;margin:10px 16px;flex-wrap:wrap;">
-        <span style="color:#6c757d;">📊 Datos disponibles:</span>
-        <span id="badgeZTD" style="display:none;background:#2D6A4F;color:white;padding:3px 10px;border-radius:12px;">💧 ZTD</span>
-        <span id="badgeSIRGAS" style="display:none;background:#e67e22;color:white;padding:3px 10px;border-radius:12px;">🛰️ SIRGAS</span>
-        <span id="badgePoligono" style="display:none;background:#2980b9;color:white;padding:3px 10px;border-radius:12px;">🗺️ Polígono</span>
-        <span id="badgeSoloClima" style="display:none;background:#e74c3c;color:white;padding:3px 10px;border-radius:12px;">⚠️ Solo clima</span>
-    </div>
-    <div id="map"></div>
-    <div id="ztdLeyenda" style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;padding:6px 12px 0;" title="Los colores comparan las estaciones ENTRE SÍ en este momento (el valor más bajo del grupo es azul, el más alto es rojo). No es un umbral fijo de peligro, ya que el ZTD normal varía según la altitud de cada estación.">
-        <span>ZTD (mm), relativo entre estaciones:</span>
-        <span style="background:linear-gradient(to right,#2c7bb6,#ffffbf,#d7191c);width:120px;height:10px;border-radius:4px;display:inline-block;"></span>
-        <span id="ztdLeyendaMin">--</span>
-        <span style="flex:1"></span>
-        <span id="ztdLeyendaMax">--</span>
+    <!-- TABS para alternar entre mapas -->
+<div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
+    <button id="tabSirgas" class="map-tab active" onclick="mostrarMapa('sirgas')">🛰️ Mapa SIRGAS</button>
+    <button id="tabZTD" class="map-tab" onclick="mostrarMapa('ztd')">💧 Mapa ZTD</button>
+</div>
+
+<!-- CONTROLES SIRGAS -->
+<div id="controlesSirgas" class="layer-control">
+    <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
+    <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
+    <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
+    <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
+    <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
+    <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
+</div>
+
+<!-- CONTROLES ZTD -->
+<div id="controlesZTD" class="layer-control" style="display:none;">
+    <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
+    <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
+    <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;">
+        <span>ZTD relativo:</span>
+        <span style="background:linear-gradient(to right,#2c7bb6,#ffffbf,#d7191c);width:100px;height:10px;border-radius:4px;display:inline-block;"></span>
+        <span id="ztdLeyendaMin">--</span> … <span id="ztdLeyendaMax">--</span>
         <span style="color:#aaa;">ⓘ</span>
-    </div>
-    <p style="font-size:11px;color:#8aa08a;padding:2px 12px 0;margin:0;">
-        Nota: el ZTD "normal" es distinto en cada estación según su altitud (estaciones más altas tienen naturalmente
-        menos atmósfera encima, y por tanto menor ZTD). Compara la evolución de una misma estación en el tiempo,
-        no el color absoluto entre estaciones de altitudes muy distintas.
-    </p>
+    </span>
+</div>
+
+<!-- MAPA SIRGAS -->
+<div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
+
+<!-- MAPA ZTD -->
+<div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
+
+<!-- Nota ZTD -->
+<p id="notaZTD" style="display:none;font-size:11px;color:#8aa08a;padding:2px 12px 0;margin:0;">
+    Nota: el ZTD "normal" es distinto en cada estación según su altitud.
+</p>
 
     <div class="alertas-panel">
         <h3>⚡ Panel de Alertas Personalizables</h3>
@@ -344,7 +370,7 @@ function generarDatosZTD() {
         'Argentina':9.8,'Paraguay':12.5,'Uruguay':4.5,'Brasil':29.5,'Venezuela':35.2,'Panamá':25.6
     };
 
-    let map, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
+    let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
     const ztdSerieCache = {};   // { CODIGO: [{fecha, valor, error}, ...] }
     const coordenadasZTD = {   // coordenadas reales de las estaciones con datos ZTD
@@ -398,7 +424,8 @@ function generarDatosZTD() {
         document.getElementById('badgeSoloClima').style.display = (!estacionInfo || (!estacionInfo.ztd && !estacionInfo.sirgas)) ? 'inline' : 'none';
 
         // === MAPA: volar a la ciudad ===
-        if (map) map.flyTo([lat, lon], 8, { duration: 1.5 });
+        if (mapSirgas) mapSirgas.flyTo([lat, lon], 8, { duration: 1.5 });
+        if (mapZTD) mapZTD.flyTo([lat, lon], 8, { duration: 1.5 });
 
         // === CLIMA ===
         const clima = await getClima(query);
@@ -688,9 +715,9 @@ async function cargarEstacionesZTD() {
     }
 
     function dibujarSIRGAS(estaciones) {
-        if (capaSIRGAS) map.removeLayer(capaSIRGAS);
-        if (capaEstaciones) map.removeLayer(capaEstaciones);
-        if (capaInfluencia) map.removeLayer(capaInfluencia);
+        if (capaSIRGAS) mapSirgas.removeLayer(capaSIRGAS);
+        if (capaEstaciones) mapSirgas.removeLayer(capaEstaciones);
+        if (capaInfluencia) mapSirgas.removeLayer(capaInfluencia);
 
         capaSIRGAS = L.layerGroup();
         capaEstaciones = L.layerGroup();
@@ -707,22 +734,95 @@ async function cargarEstacionesZTD() {
                 .addTo(capaInfluencia);
         });
 
-        capaSIRGAS.addTo(map);
-        capaEstaciones.addTo(map);
-        capaInfluencia.addTo(map);
+        capaSIRGAS.addTo(initMapSirgas);
+        capaEstaciones.addTo(mapSirgas);
+        capaInfluencia.addTo(mapSirgas);
     }
-
     // ============================================================
     // MAPA
     // ============================================================
-    function initMap() {
-        if (map) map.remove();
-        map = L.map('map').setView([-15, -65], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+         // ============================================================
+    // TABS: Alternar entre mapas
+    // ============================================================
+    function mostrarMapa(tipo) {
+        const tabSirgas = document.getElementById('tabSirgas');
+        const tabZTD = document.getElementById('tabZTD');
+        const divSirgas = document.getElementById('map-sirgas');
+        const divZTD = document.getElementById('map-ztd');
+        const ctrlSirgas = document.getElementById('controlesSirgas');
+        const ctrlZTD = document.getElementById('controlesZTD');
+        const notaZTD = document.getElementById('notaZTD');
 
-        // Dibuja el mini-gráfico dentro del popup cuando se abre (usa datos
-        // ya cacheados por cargarCapaZTD, no vuelve a llamar a la API).
-        map.on('popupopen', function(e) {
+        if (tipo === 'sirgas') {
+            tabSirgas.classList.add('active');
+            tabZTD.classList.remove('active');
+            divSirgas.style.display = 'block';
+            divZTD.style.display = 'none';
+            ctrlSirgas.style.display = 'flex';
+            ctrlZTD.style.display = 'none';
+            notaZTD.style.display = 'none';
+            if (mapSirgas) mapSirgas.invalidateSize();
+        } else {
+            tabSirgas.classList.remove('active');
+            tabZTD.classList.add('active');
+            divSirgas.style.display = 'none';
+            divZTD.style.display = 'block';
+            ctrlSirgas.style.display = 'none';
+            ctrlZTD.style.display = 'flex';
+            notaZTD.style.display = 'block';
+            if (mapZTD) mapZTD.invalidateSize();
+        }
+    }
+    // ============================================================
+    // MAPA SIRGAS
+    // ============================================================
+    function initMapSirgas() {
+        if (mapSirgas) mapSirgas.remove();
+        mapSirgas = L.map('map-sirgas').setView([-15, -65], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapSirgas);
+
+        capaCiudades = L.layerGroup();
+        ciudades.forEach(c => {
+            L.circleMarker([c.lat, c.lon], { radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 })
+                .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`).addTo(capaCiudades);
+        });
+        capaCiudades.addTo(mapSirgas);
+
+        document.getElementById('toggleCiudades').addEventListener('change', function() {
+            this.checked ? capaCiudades.addTo(mapSirgas) : mapSirgas.removeLayer(capaCiudades);
+        });
+        document.getElementById('toggleSIRGAS').addEventListener('change', function() {
+            if (this.checked && capaSIRGAS) capaSIRGAS.addTo(mapSirgas);
+            else if (capaSIRGAS) mapSirgas.removeLayer(capaSIRGAS);
+        });
+        document.getElementById('toggleEstaciones').addEventListener('change', function() {
+            if (this.checked && capaEstaciones) capaEstaciones.addTo(mapSirgas);
+            else if (capaEstaciones) mapSirgas.removeLayer(capaEstaciones);
+        });
+        document.getElementById('toggleInfluencia').addEventListener('change', function() {
+            if (this.checked && capaInfluencia) capaInfluencia.addTo(mapSirgas);
+            else if (capaInfluencia) mapSirgas.removeLayer(capaInfluencia);
+        });
+
+        cargarSIRGAS();
+    }
+
+    // ============================================================
+    // MAPA ZTD
+    // ============================================================
+    function initMapZTD() {
+        if (mapZTD) mapZTD.remove();
+        mapZTD = L.map('map-ztd').setView([-15, -65], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapZTD);
+
+        const capaCiudadesZTD = L.layerGroup();
+        ciudades.forEach(c => {
+            L.circleMarker([c.lat, c.lon], { radius: 6, fillColor: '#27ae60', color: '#1e8449', weight: 1.5, fillOpacity: 0.4 })
+                .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`).addTo(capaCiudadesZTD);
+        });
+        capaCiudadesZTD.addTo(mapZTD);
+
+        mapZTD.on('popupopen', function(e) {
             const codigo = e.popup._source && e.popup._source.options && e.popup._source.options.stationCode;
             if (!codigo || !ztdSerieCache[codigo]) return;
             const canvas = document.getElementById(`popupChart_${codigo}`);
@@ -734,41 +834,33 @@ async function cargarEstacionesZTD() {
                     labels: puntos.map(p => new Date(p.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })),
                     datasets: [{ data: puntos.map(p => p.valor), borderColor: '#2c5f8a', tension: 0.3, pointRadius: 0, borderWidth: 1.5 }],
                 },
-                options: {
-                    responsive: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { display: false }, y: { display: true } },
-                },
+                options: { responsive: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: true } } },
             });
         });
 
-        capaCiudades = L.layerGroup();
-        ciudades.forEach(c => {
-            L.circleMarker([c.lat, c.lon], { radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 })
-                .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`)
-                .addTo(capaCiudades);
+        document.getElementById('toggleZTD').addEventListener('change', function() {
+            if (this.checked && capaZTD) capaZTD.addTo(mapZTD);
+            else if (capaZTD) mapZTD.removeLayer(capaZTD);
         });
-        capaCiudades.addTo(map);
 
-        document.getElementById('toggleCiudades').addEventListener('change', function() {
-            this.checked ? capaCiudades.addTo(map) : map.removeLayer(capaCiudades);
-        });
+        cargarCapaZTD();
+    }
         document.getElementById('toggleSIRGAS').addEventListener('change', function() {
-            if (this.checked && capaSIRGAS) capaSIRGAS.addTo(map);
-            else if (capaSIRGAS) map.removeLayer(capaSIRGAS);
+            if (this.checked && capaSIRGAS) capaSIRGAS.addTo(map.ZTD);
+            else if (capaSIRGAS) mapZTD.removeLayer(capaSIRGAS);
         });
         document.getElementById('toggleZTD').addEventListener('change', function() {
             if (this.checked && capaZTD) capaZTD.addTo(map);
-            else if (capaZTD) map.removeLayer(capaZTD);
+            else if (capaZTD) mapZTD.removeLayer(capaZTD);
         });
         cargarCapaZTD();
         document.getElementById('toggleEstaciones').addEventListener('change', function() {
             if (this.checked && capaEstaciones) capaEstaciones.addTo(map);
-            else if (capaEstaciones) map.removeLayer(capaEstaciones);
+            else if (capaEstaciones) mapZTD.removeLayer(capaEstaciones);
         });
         document.getElementById('toggleInfluencia').addEventListener('change', function() {
             if (this.checked && capaInfluencia) capaInfluencia.addTo(map);
-            else if (capaInfluencia) map.removeLayer(capaInfluencia);
+            else if (capaInfluencia) mapZTD.removeLayer(capaInfluencia);
         });
 
         cargarSIRGAS();
@@ -956,7 +1048,8 @@ async function cargarEstacionesZTD() {
     // INICIO
     // ============================================================
     window.onload = function() {
-        initMap();
+        initMapSirgas();
+        initMapZTD();
         initCharts();
         actualizarCiudad();
         actualizarSirgasHistorico();
