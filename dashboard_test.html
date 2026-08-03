@@ -119,8 +119,8 @@
 
     <!-- TABS para alternar entre mapas -->
 <div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
-    <button id="tabSirgas" class="map-tab active" onclick="mostrarMapa('sirgas')">🛰️ Mapa SIRGAS</button>
-    <button id="tabZTD" class="map-tab" onclick="mostrarMapa('ztd')">💧 Mapa ZTD</button>
+    <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
+    <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
 </div>
 
 <!-- CONTROLES SIRGAS -->
@@ -845,22 +845,6 @@ async function cargarEstacionesZTD() {
 
         cargarCapaZTD();
     }
-        document.getElementById('toggleSIRGAS').addEventListener('change', function() {
-            if (this.checked && capaSIRGAS) capaSIRGAS.addTo(map.ZTD);
-            else if (capaSIRGAS) mapZTD.removeLayer(capaSIRGAS);
-        });
-        document.getElementById('toggleZTD').addEventListener('change', function() {
-            if (this.checked && capaZTD) capaZTD.addTo(mapZTD);
-            else if (capaZTD) mapZTD.removeLayer(capaZTD);
-        });
-        cargarCapaZTD();
-        document.getElementById('toggleEstaciones').addEventListener('change', function() {
-            else if (capaEstaciones) mapZTD.removeLayer(capaEstaciones);
-        });
-        document.getElementById('toggleInfluencia').addEventListener('change', function() {
-        });
-
-        cargarSIRGAS();
 
     // ============================================================
     // REPORTE
@@ -911,6 +895,8 @@ async function cargarEstacionesZTD() {
     async function cargarCapaZTD() {
         const badge = document.getElementById('ztdMapBadge');
         if (capaZTD) map.removeLayer(capaZTD);
+        document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
+        document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
         capaZTD = L.layerGroup();
 
         const codigos = Object.keys(coordenadasZTD);
