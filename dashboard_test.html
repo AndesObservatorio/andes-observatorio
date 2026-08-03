@@ -850,21 +850,17 @@ async function cargarEstacionesZTD() {
             else if (capaSIRGAS) mapZTD.removeLayer(capaSIRGAS);
         });
         document.getElementById('toggleZTD').addEventListener('change', function() {
-            if (this.checked && capaZTD) capaZTD.addTo(map);
+            if (this.checked && capaZTD) capaZTD.addTo(mapZTD);
             else if (capaZTD) mapZTD.removeLayer(capaZTD);
         });
         cargarCapaZTD();
         document.getElementById('toggleEstaciones').addEventListener('change', function() {
-            if (this.checked && capaEstaciones) capaEstaciones.addTo(map);
             else if (capaEstaciones) mapZTD.removeLayer(capaEstaciones);
         });
         document.getElementById('toggleInfluencia').addEventListener('change', function() {
-            if (this.checked && capaInfluencia) capaInfluencia.addTo(map);
-            else if (capaInfluencia) mapZTD.removeLayer(capaInfluencia);
         });
 
         cargarSIRGAS();
-    }
 
     // ============================================================
     // REPORTE
@@ -968,7 +964,7 @@ async function cargarEstacionesZTD() {
         });
 
         badge.innerText = `💧 ZTD: ${valores.length} estaciones`;
-        if (document.getElementById('toggleZTD').checked) capaZTD.addTo(map);
+        if (document.getElementById('toggleZTD').checked) capaZTD.addTo(mapZTD);
     }
 
     // Arma el contenido del popup: "biografía" de lo registrado en el período
