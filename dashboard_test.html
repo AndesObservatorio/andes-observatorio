@@ -28,6 +28,14 @@
         .map-tab:hover { background: #f4f8f4; }
         .map-tab.active { background: #5a7a5a; color: white; border-color: #5a7a5a; }
         
+        /* BADGES DE DISPONIBILIDAD */
+        .disponibilidad-badges { display: flex; gap: 10px; padding: 8px 16px; font-size: 13px; font-weight: 600; background: #f8f9fa; border-radius: 8px; margin: 10px 0; flex-wrap: wrap; align-items: center; }
+        .disponibilidad-badges span { color: #6c757d; }
+        .badge-ztd { display: none; background: #2D6A4F; color: white; padding: 3px 10px; border-radius: 12px; }
+        .badge-sirgas { display: none; background: #e67e22; color: white; padding: 3px 10px; border-radius: 12px; }
+        .badge-poligono { display: none; background: #2980b9; color: white; padding: 3px 10px; border-radius: 12px; }
+        .badge-soloclima { display: none; background: #e74c3c; color: white; padding: 3px 10px; border-radius: 12px; }
+        
         .layer-control { display: flex; flex-wrap: wrap; gap: 16px 24px; background: #fcfaf7; padding: 10px 20px; border-radius: 40px; margin: 10px 0; align-items: center; border: 1px solid #ede8e0; }
         .layer-control label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
         .update-badge { background: #8aaa8a; color: white; padding: 4px 16px; border-radius: 30px; font-size: 13px; margin-left: auto; }
@@ -112,6 +120,15 @@
         <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
         <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--<small>%</small></div><div class="fuente">OpenWeatherMap</div></div>
         <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
+    </div>
+
+    <!-- BADGES DE DISPONIBILIDAD -->
+    <div class="disponibilidad-badges" id="disponibilidadDatos">
+        <span>📊 Datos disponibles:</span>
+        <span id="badgeZTD" class="badge-ztd">💧 ZTD</span>
+        <span id="badgeSIRGAS" class="badge-sirgas">🛰️ SIRGAS</span>
+        <span id="badgePoligono" class="badge-poligono">🗺️ Polígono</span>
+        <span id="badgeSoloClima" class="badge-soloclima">⚠️ Solo clima</span>
     </div>
 
     <!-- TABS DE MAPAS -->
@@ -257,7 +274,7 @@
 </div>
 
 <script>
-    const API_KEY = "TU_API_KEY_AQUI";
+    const API_KEY = "70232a5a2fff0ed9923878e1a513d00e";
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
     const API_BASE = "https://andes-observatorio.onrender.com";
 
@@ -268,6 +285,18 @@
         { codigo: "ANTC", nombre: "Antofagasta", pais: "Chile" },
         { codigo: "SANT", nombre: "Santiago", pais: "Chile" }
     ];
+
+    // ============================================================
+    // MAPEO CIUDAD → ESTACIONES Y DISPONIBILIDAD
+    // ============================================================
+    const cityToStation = {
+        "Bogota,CO,4.7110,-74.0721": { codigo: "BOGT", ztd: true, sirgas: true, poligono: true },
+        "Cali,CO,3.4516,-76.5320":   { codigo: "CALI", ztd: true, sirgas: false, poligono: true },
+        "Santiago,CL,-33.4489,-70.6693": { codigo: "SANT", ztd: true, sirgas: true, poligono: false },
+        "Lima,PE,-12.0464,-77.0428":     { codigo: "LIMA", ztd: false, sirgas: true, poligono: false },
+        "Quito,EC,-0.1807,-78.4678":     { codigo: "QUIT", ztd: false, sirgas: true, poligono: false },
+        "La Paz,BO,-16.5000,-68.1500":   { codigo: "LPBZ", ztd: false, sirgas: true, poligono: false }
+    };
 
     const ciudades = [
         { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
@@ -290,7 +319,6 @@
         { nombre: "Panamá", pais: "Panamá", query: "Panama City,PA", lat: 8.9824, lon: -79.5199 }
     ];
 
-    // Ordenar ciudades por país y luego por nombre
     ciudades.sort((a, b) => {
         if (a.pais === b.pais) return a.nombre.localeCompare(b.nombre);
         return a.pais.localeCompare(b.pais);
@@ -341,7 +369,7 @@
     };
 
     let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
-    let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
+    let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD, capaPoligonosZTD;
     const ztdSerieCache = {};
     const coordenadasZTD = {
         'BOGT': [4.6400, -74.0800],
@@ -351,19 +379,23 @@
         'SANT': [-33.4500, -70.6600],
     };
     let estacionesSIRGAS = [];
+    let climaCache = {};
 
     // ============================================================
     // CLIMA
     // ============================================================
     async function getClima(query) {
+        if (climaCache[query]) return climaCache[query];
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
         try {
             const res = await fetch(url);
             const data = await res.json();
             if (data.cod === 200) {
-                return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
+                const result = { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
+                climaCache[query] = result;
+                return result;
             }
-        } catch(e) {}
+        } catch(e) { console.warn('Error clima:', e); }
         return null;
     }
 
@@ -374,18 +406,34 @@
         const lat = parseFloat(partes[2]);
         const lon = parseFloat(partes[3]);
         const codigoPais = partes[1];
+        const estacionInfo = cityToStation[select.value];
 
+        // === BADGES DE DISPONIBILIDAD ===
+        const badgeZTD = document.getElementById('badgeZTD');
+        const badgeSIRGAS = document.getElementById('badgeSIRGAS');
+        const badgePoligono = document.getElementById('badgePoligono');
+        const badgeSoloClima = document.getElementById('badgeSoloClima');
+        
+        if (badgeZTD) badgeZTD.style.display = estacionInfo && estacionInfo.ztd ? 'inline' : 'none';
+        if (badgeSIRGAS) badgeSIRGAS.style.display = estacionInfo && estacionInfo.sirgas ? 'inline' : 'none';
+        if (badgePoligono) badgePoligono.style.display = estacionInfo && estacionInfo.poligono ? 'inline' : 'none';
+        if (badgeSoloClima) badgeSoloClima.style.display = (!estacionInfo || (!estacionInfo.ztd && !estacionInfo.sirgas)) ? 'inline' : 'none';
+
+        // === MAPAS: volar a la ciudad ===
         if (mapSirgas) mapSirgas.flyTo([lat, lon], 8, { duration: 1.5 });
         if (mapZTD) mapZTD.flyTo([lat, lon], 8, { duration: 1.5 });
 
+        // === CLIMA ===
         const clima = await getClima(query);
         if (clima) {
             document.getElementById('temp').innerHTML = clima.temp.toFixed(1) + '<small>°C</small>';
             document.getElementById('hum').innerHTML = clima.hum + '<small>%</small>';
             document.getElementById('feels').innerHTML = clima.feels.toFixed(1) + '<small>°C</small>';
             actualizarAlertas(clima);
+            actualizarPopupsCiudades();
         }
 
+        // === NORMATIVAS ===
         const lista = document.getElementById('normativasLista');
         const placeholder = document.getElementById('normativasPlaceholder');
         if (normativas[codigoPais]) {
@@ -397,6 +445,24 @@
             placeholder.style.display = 'block';
             placeholder.innerText = `No hay normativas para este país.`;
             lista.innerHTML = '';
+        }
+
+        // === SINCRONIZAR ZTD ===
+        if (estacionInfo && estacionInfo.ztd) {
+            const selectZTD = document.getElementById('estacionZTD');
+            if (selectZTD && selectZTD.querySelector(`option[value="${estacionInfo.codigo}"]`)) {
+                selectZTD.value = estacionInfo.codigo;
+                actualizarGraficoZTD();
+            }
+        }
+
+        // === SINCRONIZAR SIRGAS HISTÓRICO ===
+        if (estacionInfo && estacionInfo.sirgas) {
+            const selectSIRGAS = document.getElementById('estacionHistorica');
+            if (selectSIRGAS && selectSIRGAS.querySelector(`option[value="${estacionInfo.codigo}"]`)) {
+                selectSIRGAS.value = estacionInfo.codigo;
+                actualizarSirgasHistorico();
+            }
         }
 
         await actualizarTendencia(query);
@@ -590,11 +656,12 @@
             });
             actualizarGraficoZTD();
         } catch (e) {
+            console.warn('ZTD API no disponible, usando DEMO:', e);
             select.innerHTML = '<option value="">📍 Estaciones DEMO ⚠️</option>';
             DEMO_ZTD_STATIONS.forEach(est => {
                 select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${est.nombre}, ${est.pais}</option>`;
             });
-            document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible.';
+            document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible. Selecciona una estación.';
         }
     }
 
@@ -630,8 +697,16 @@
     }
 
     // ============================================================
-    // SIRGAS
+    // SIRGAS - EFECTO SOMBRILLA
     // ============================================================
+    function colorSIRGAS(magnitud) {
+        // Verde (lento) → Amarillo → Rojo (rápido)
+        const maxMag = 50; // mm/año
+        const t = Math.min(magnitud / maxMag, 1);
+        const hue = 120 - (t * 120); // 120 (verde) → 0 (rojo)
+        return `hsl(${hue}, 80%, 45%)`;
+    }
+
     async function cargarSIRGAS() {
         const badge = document.getElementById('sirgasBadge');
         badge.innerText = '🔄 Actualizando SIRGAS…';
@@ -658,12 +733,25 @@
         capaInfluencia = L.layerGroup();
 
         estaciones.forEach(est => {
+            const magnitud = Math.sqrt(est.ve**2 + est.vn**2);
+            const color = colorSIRGAS(magnitud);
             const start = [est.lat, est.lon];
             const end = [est.lat + (est.vn / 15000), est.lon + (est.ve / 15000)];
-            L.polyline([start, end], { color: '#c0392b', weight: 4, dashArray: '6,4' }).addTo(capaSIRGAS);
-            L.circleMarker(start, { radius: 10, fillColor: '#e67e22', color: '#c0392b', weight: 2.5, fillOpacity: 0.9 })
-                .bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año`)
-                .addTo(capaEstaciones);
+            
+            // Flecha de dirección
+            L.polyline([start, end], { color: color, weight: 4, dashArray: '6,4' }).addTo(capaSIRGAS);
+            
+            // Círculo sombrilla (color según magnitud)
+            L.circleMarker(start, { 
+                radius: 10 + (magnitud / 5), 
+                fillColor: color, 
+                color: color, 
+                weight: 2, 
+                fillOpacity: 0.7 
+            }).bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año<br>Magnitud: ${magnitud.toFixed(1)} mm/año`)
+            .addTo(capaEstaciones);
+            
+            // Área de influencia
             L.circle(start, { radius: 50*1000, color: '#2980b9', weight: 1.5, fillColor: '#3498db', fillOpacity: 0.08 })
                 .addTo(capaInfluencia);
         });
@@ -713,8 +801,10 @@
 
         capaCiudades = L.layerGroup();
         ciudades.forEach(c => {
-            L.circleMarker([c.lat, c.lon], { radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 })
-                .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`).addTo(capaCiudades);
+            const marker = L.circleMarker([c.lat, c.lon], { 
+                radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 
+            }).bindPopup(`<b>${c.nombre}, ${c.pais}</b><br><span id="popup-${c.query}">Cargando clima...</span>`)
+            .addTo(capaCiudades);
         });
         capaCiudades.addTo(mapSirgas);
 
@@ -735,6 +825,19 @@
         });
 
         cargarSIRGAS();
+    }
+
+    async function actualizarPopupsCiudades() {
+        for (const c of ciudades) {
+            const popupEl = document.getElementById(`popup-${c.query}`);
+            if (!popupEl) continue;
+            const clima = await getClima(c.query);
+            if (clima) {
+                popupEl.innerHTML = `🌡️ ${clima.temp.toFixed(1)}°C | 💧 ${clima.hum}% | 🌡️ ${clima.feels.toFixed(1)}°C`;
+            } else {
+                popupEl.innerHTML = '❌ Sin datos';
+            }
+        }
     }
 
     function initMapZTD() {
@@ -803,19 +906,17 @@
             const color = colorZTD(valor, min, max);
             const puntos = ztdSerieCache[codigo] || [];
 
-            const marker = L.circleMarker([lat, lon], {
+            L.circleMarker([lat, lon], {
                 radius: 18,
                 color: color,
                 weight: 3,
                 fillColor: color,
-                fillOpacity: 0.6,
-                stationCode: codigo
+                fillOpacity: 0.6
             }).bindPopup(`
                 <div style="min-width:200px;">
                     <b>📍 ${codigo}</b><br>
                     <span style="color:${color};font-weight:bold;">ZTD: ${valor.toFixed(2)} mm</span>
                     <br><small>Último registro</small>
-                    <canvas id="popupChart_${codigo}" width="200" height="80"></canvas>
                 </div>
             `).addTo(capaZTD);
         });
