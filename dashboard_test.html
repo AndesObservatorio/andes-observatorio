@@ -730,7 +730,7 @@ async function cargarEstacionesZTD() {
             L.circleMarker(start, { radius: 10, fillColor: '#e67e22', color: '#c0392b', weight: 2.5, fillOpacity: 0.9 })
                 .bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año`)
                 .addTo(capaEstaciones);
-                        // Efecto sombrilla: color y tamaño según magnitud
+         // Efecto sombrilla: color y tamaño según magnitud
             const magnitud = Math.sqrt(est.ve ** 2 + est.vn ** 2);
             const radio = Math.min(80, Math.max(30, magnitud * 2)) * 1000;
             const opacidad = Math.min(0.3, Math.max(0.08, magnitud / 50));
@@ -746,7 +746,7 @@ async function cargarEstacionesZTD() {
             L.polyline([start, [endLat, endLon]], { color: colorVel, weight: 3, opacity: 0.7, dashArray: '8,6' }).addTo(capaInfluencia);
         });
 
-        capaSIRGAS.addTo(initMapSirgas);
+        capaSIRGAS.addTo(MapSirgas);
         capaEstaciones.addTo(mapSirgas);
         capaInfluencia.addTo(mapSirgas);
     }
@@ -854,8 +854,6 @@ async function cargarEstacionesZTD() {
             if (this.checked && capaZTD) capaZTD.addTo(mapZTD);
             else if (capaZTD) mapZTD.removeLayer(capaZTD);
         });
-
-        cargarCapaZTD();
     }
 
     // ============================================================
@@ -948,17 +946,32 @@ async function cargarEstacionesZTD() {
             // Anillo (sin relleno) alrededor del punto de la estación SIRGAS ya
             // existente: distinguible incluso cuando comparten la misma ubicación,
             // sin desplazar el marcador de su coordenada geográfica real.
-            const marker = L.circleMarker([lat, lon], {
-                radius: 18,
-                fillOpacity: 0,
-                color: color,
-                weight: 5,
-                stationCode: codigo,   // propiedad custom, accesible vía marker.options
-            });
-
-            marker.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top', offset: [0, -18] });
-            marker.bindPopup(construirPopupZTD(codigo, puntos));
-            marker.addTo(capaZTD);
+                        // Buscar archivo GeoJSON de la ciudad
+            const cityNames = {AREQ: "arequipa", BOGT: "bogota", CALI: "cali", ANTC: "antofagasta", SANT: "santiago"};
+            const cityFile = cityNames[codigo];
+            
+            if (cityFile) {
+                fetch(`assets/geojson/${cityFile}.json`)
+                    .then(r => r.json())
+                    .then(geojson => {
+                        const polygon = L.geoJSON(geojson, {
+                            style: { color: color, weight: 2, fillColor: color, fillOpacity: 0.25 }
+                        }).addTo(capaZTD);
+                        polygon.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm | ${geojson.properties.name}, ${geojson.properties.country}`, { direction: 'top' });
+                        polygon.bindPopup(construirPopupZTD(codigo, puntos));
+                    })
+                    .catch(() => {
+                        const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
+                        fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top' });
+                        fallback.bindPopup(construirPopupZTD(codigo, puntos));
+                        fallback.addTo(capaZTD);
+                    });
+            } else {
+                const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
+                fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top' });
+                fallback.bindPopup(construirPopupZTD(codigo, puntos));
+                fallback.addTo(capaZTD);
+            }
         });
 
         badge.innerText = `💧 ZTD: ${valores.length} estaciones`;
