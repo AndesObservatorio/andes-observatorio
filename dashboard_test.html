@@ -746,7 +746,7 @@ async function cargarEstacionesZTD() {
             L.polyline([start, [endLat, endLon]], { color: colorVel, weight: 3, opacity: 0.7, dashArray: '8,6' }).addTo(capaInfluencia);
         });
 
-        capaSIRGAS.addTo(MapSirgas);
+        capaSIRGAS.addTo(mapSirgas);
         capaEstaciones.addTo(mapSirgas);
         capaInfluencia.addTo(mapSirgas);
     }
@@ -854,6 +854,8 @@ async function cargarEstacionesZTD() {
             if (this.checked && capaZTD) capaZTD.addTo(mapZTD);
             else if (capaZTD) mapZTD.removeLayer(capaZTD);
         });
+
+        cargarCapaZTD(); 
     }
 
     // ============================================================
@@ -946,7 +948,7 @@ async function cargarEstacionesZTD() {
             // Anillo (sin relleno) alrededor del punto de la estación SIRGAS ya
             // existente: distinguible incluso cuando comparten la misma ubicación,
             // sin desplazar el marcador de su coordenada geográfica real.
-                        // Buscar archivo GeoJSON de la ciudad
+                       // Buscar archivo GeoJSON de la ciudad
             const cityNames = {AREQ: "arequipa", BOGT: "bogota", CALI: "cali", ANTC: "antofagasta", SANT: "santiago"};
             const cityFile = cityNames[codigo];
             
