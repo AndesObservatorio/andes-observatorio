@@ -21,28 +21,11 @@
         .value { font-size: 32px; font-weight: 700; color: #d4a017; }
         .value small { font-size: 18px; color: #8aaa8a; }
         .fuente { font-size: 11px; color: #b0b8a0; margin-top: 4px; }
-        
-        /* TABS */
-        .map-tabs { display: flex; gap: 8px; margin: 14px 0; justify-content: center; }
-        .map-tab { padding: 10px 24px; border-radius: 30px; border: 1.5px solid #d6cfc4; background: white; color: #5a7a5a; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .map-tab:hover { background: #f4f8f4; }
-        .map-tab.active { background: #5a7a5a; color: white; border-color: #5a7a5a; }
-        
-        /* BADGES DE DISPONIBILIDAD */
-        .disponibilidad-badges { display: flex; gap: 10px; padding: 8px 16px; font-size: 13px; font-weight: 600; background: #f8f9fa; border-radius: 8px; margin: 10px 0; flex-wrap: wrap; align-items: center; }
-        .disponibilidad-badges span { color: #6c757d; }
-        .badge-ztd { display: none; background: #2D6A4F; color: white; padding: 3px 10px; border-radius: 12px; }
-        .badge-sirgas { display: none; background: #e67e22; color: white; padding: 3px 10px; border-radius: 12px; }
-        .badge-poligono { display: none; background: #2980b9; color: white; padding: 3px 10px; border-radius: 12px; }
-        .badge-soloclima { display: none; background: #e74c3c; color: white; padding: 3px 10px; border-radius: 12px; }
-        
         .layer-control { display: flex; flex-wrap: wrap; gap: 16px 24px; background: #fcfaf7; padding: 10px 20px; border-radius: 40px; margin: 10px 0; align-items: center; border: 1px solid #ede8e0; }
         .layer-control label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
         .update-badge { background: #8aaa8a; color: white; padding: 4px 16px; border-radius: 30px; font-size: 13px; margin-left: auto; }
         .btn-reporte { background: #d4a017; color: white; border: none; padding: 6px 18px; border-radius: 30px; font-size: 13px; cursor: pointer; }
-        
-        #map-sirgas, #map-ztd { height: 400px; width: 100%; border-radius: 18px; margin: 12px 0; border: 1px solid #ede8e0; }
-        
+        #map { height: 400px; width: 100%; border-radius: 18px; margin: 12px 0; border: 1px solid #ede8e0; }
         .alertas-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
         .alertas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; }
         .alerta-item { background: white; padding: 12px 16px; border-radius: 12px; border: 1px solid #ede8e0; }
@@ -54,38 +37,51 @@
         .estado-alerta.alerta { background: #ffe6cc; color: #b85a00; }
         .estado-alerta.critico { background: #ffcccc; color: #b30000; }
         .btn-alerta { background: #8aaa8a; color: white; border: none; padding: 4px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; margin-top: 4px; }
-        
         .charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin: 18px 0; }
         .chart-card { background: #fcfaf7; padding: 16px; border-radius: 18px; border: 1px solid #ede8e0; }
         .chart-card h3 { text-align: center; color: #5a7a5a; font-size: 0.95rem; margin-bottom: 8px; }
         canvas { max-height: 190px; width: 100% !important; }
-        
         .sirgas-historico { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
         .sirgas-historico select { padding: 6px 12px; border-radius: 30px; border: 1.5px solid #d6cfc4; }
-        
         .oficiales-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
         .oficiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; }
         .oficial-item { background: white; padding: 12px 16px; border-radius: 12px; border: 1px solid #ede8e0; }
         .fuente-oficial { font-size: 12px; font-weight: 600; color: #5a7a5a; background: #e6f2e6; padding: 2px 10px; border-radius: 12px; display: inline-block; }
         .oficial-item .dato { font-size: 20px; font-weight: 700; color: #1a4a1a; }
         .oficial-item .label { font-size: 13px; color: #8aa08a; }
-        
         .normativas-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
         .normativas-panel ul { list-style: none; padding: 0; }
         .normativas-panel li { padding: 6px 14px; background: white; margin-bottom: 6px; border-radius: 10px; border-left: 4px solid #8aaa8a; font-size: 14px; }
-        .placeholder { color: #8aa08a; font-style: italic; }
-        
         footer { background: #5a7a5a; color: #e8efe8; text-align: center; padding: 16px; border-radius: 18px; margin-top: 18px; }
-        
         @media (max-width: 768px) {
             .container { padding: 16px; }
             .stats { grid-template-columns: 1fr 1fr; }
             .charts { grid-template-columns: 1fr; }
             .layer-control { flex-direction: column; align-items: stretch; }
             .update-badge { margin-left: 0; }
-            #map-sirgas, #map-ztd { height: 280px; }
+            #map { height: 280px; }
         }
+        .map-tab {
+    padding: 10px 24px;
+    border-radius: 30px;
+    border: 1.5px solid #d6cfc4;
+    background: white;
+    color: #5a7a5a;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.map-tab:hover {
+    background: #f4f8f4;
+}
+.map-tab.active {
+    background: #5a7a5a;
+    color: white;
+    border-color: #5a7a5a;
+}
     </style>
+<base target="_blank">
 </head>
 <body>
 <div class="container">
@@ -122,50 +118,44 @@
         <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
     </div>
 
-    <!-- BADGES DE DISPONIBILIDAD -->
-    <div class="disponibilidad-badges" id="disponibilidadDatos">
-        <span>📊 Datos disponibles:</span>
-        <span id="badgeZTD" class="badge-ztd">💧 ZTD</span>
-        <span id="badgeSIRGAS" class="badge-sirgas">🛰️ SIRGAS</span>
-        <span id="badgePoligono" class="badge-poligono">🗺️ Polígono</span>
-        <span id="badgeSoloClima" class="badge-soloclima">⚠️ Solo clima</span>
-    </div>
+    <!-- TABS para alternar entre mapas -->
+<div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
+    <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
+    <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
+</div>
 
-    <!-- TABS DE MAPAS -->
-    <div class="map-tabs">
-        <button id="tabSirgas" class="map-tab active" onclick="mostrarMapa('sirgas')">🛰️ Mapa SIRGAS</button>
-        <button id="tabZTD" class="map-tab" onclick="mostrarMapa('ztd')">💧 Mapa ZTD</button>
-    </div>
+<!-- CONTROLES SIRGAS -->
+<div id="controlesSirgas" class="layer-control">
+    <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
+    <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
+    <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
+    <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
+    <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
+    <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
+</div>
 
-    <!-- CONTROLES MAPA SIRGAS -->
-    <div id="controlesSirgas" class="layer-control">
-        <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
-        <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
-        <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
-        <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
-        <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
-        <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
-    </div>
+<!-- CONTROLES ZTD -->
+<div id="controlesZTD" class="layer-control" style="display:none;">
+    <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
+    <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
+    <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;">
+        <span>ZTD relativo:</span>
+        <span style="background:linear-gradient(to right,#2c7bb6,#ffffbf,#d7191c);width:100px;height:10px;border-radius:4px;display:inline-block;"></span>
+        <span id="ztdLeyendaMin">--</span> … <span id="ztdLeyendaMax">--</span>
+        <span style="color:#aaa;">ⓘ</span>
+    </span>
+</div>
 
-    <!-- CONTROLES MAPA ZTD -->
-    <div id="controlesZTD" class="layer-control" style="display:none;">
-        <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
-        <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
-        <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;">
-            <span>ZTD relativo:</span>
-            <span style="background:linear-gradient(to right,#2c7bb6,#ffffbf,#d7191c);width:100px;height:10px;border-radius:4px;display:inline-block;"></span>
-            <span id="ztdLeyendaMin">--</span> … <span id="ztdLeyendaMax">--</span>
-        </span>
-    </div>
+<!-- MAPA SIRGAS -->
+<div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
 
-    <!-- MAPA SIRGAS -->
-    <div id="map-sirgas"></div>
-    <!-- MAPA ZTD -->
-    <div id="map-ztd" style="display:none;"></div>
+<!-- MAPA ZTD -->
+<div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
-    <p id="notaZTD" style="display:none;font-size:11px;color:#8aa08a;padding:2px 12px 0;margin:0;">
-        Nota: el ZTD "normal" es distinto en cada estación según su altitud (estaciones más altas tienen naturalmente menos atmósfera encima, y por tanto menor ZTD). Compara la evolución de una misma estación en el tiempo, no el color absoluto entre estaciones de altitudes muy distintas.
-    </p>
+<!-- Nota ZTD -->
+<p id="notaZTD" style="display:none;font-size:11px;color:#8aa08a;padding:2px 12px 0;margin:0;">
+    Nota: el ZTD "normal" es distinto en cada estación según su altitud.
+</p>
 
     <div class="alertas-panel">
         <h3>⚡ Panel de Alertas Personalizables</h3>
@@ -227,9 +217,33 @@
         <details style="margin-bottom:12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
             <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;">ℹ️ ¿Qué es el ZTD y por qué importa?</summary>
             <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
-                <p>Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco. Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>. Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el <strong>vapor de agua</strong> en el aire, muy variable).</p>
-                <p>La parte húmeda es la que interesa para el clima: cuando el vapor de agua se acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma perceptible horas antes de que empiece a llover. Por eso las redes GNSS como SIRGAS también se usan como una fuente adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y el <strong>monitoreo de eventos climáticos extremos</strong>, complementando a las redes meteorológicas tradicionales.</p>
-                <p style="margin-bottom:0;"><strong>Marco institucional:</strong> cada país andino tiene su propia autoridad de monitoreo hidrometeorológico y gestión del riesgo. Estos datos de ZTD pueden servir como una capa adicional de información para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).</p>
+                <p>
+                    Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco.
+                    Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>.
+                    Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión
+                    atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el
+                    <strong>vapor de agua</strong> en el aire, muy variable).
+                </p>
+                <p>
+                    La parte húmeda es la que interesa para el clima: cuando el vapor de agua se
+                    acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma
+                    perceptible horas antes de que empiece a llover. Por eso las redes GNSS como
+                    SIRGAS —pensadas originalmente para geodesia— también se usan como una fuente
+                    adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y
+                    el <strong>monitoreo de eventos climáticos extremos</strong>, complementando a
+                    las redes meteorológicas tradicionales.
+                </p>
+                <p style="margin-bottom:0;">
+                    <strong>Marco institucional:</strong> cada país andino tiene su propia autoridad
+                    de monitoreo hidrometeorológico y gestión del riesgo — por ejemplo, en Colombia
+                    la Ley 1523 de 2012 crea el Sistema Nacional de Gestión del Riesgo de Desastres
+                    (SNGRD), que exige mantener actualizado un sistema de información sobre riesgo de
+                    desastres. Estos datos de ZTD pueden servir como una capa adicional de información
+                    para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos
+                    oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).
+                    Verifica siempre la normativa vigente y los canales oficiales de tu país antes de
+                    tomar decisiones basadas en estos datos.
+                </p>
             </div>
         </details>
 
@@ -250,14 +264,16 @@
 
     <div class="oficiales-panel">
         <h3>🏛️ Datos oficiales en integración (IDEAM / SENAMHI)</h3>
-        <div style="background:#fff8e1;padding:8px 14px;border-radius:8px;margin-bottom:12px;border-left:4px solid #d4a017;">
-            <p style="font-size:13px;color:#7a6a3a;margin:0;">⚠️ Datos de ejemplo mientras se integran las APIs oficiales de IDEAM y SENAMHI.</p>
-        </div>
         <div class="oficiales-grid">
             <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamTemp">16.5 °C</div><div class="label">Temperatura promedio</div></div>
             <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamHum">72 %</div><div class="label">Humedad promedio</div></div>
             <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiTemp">18.2 °C</div><div class="label">Temperatura promedio</div></div>
             <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiPrecip">12.5 mm</div><div class="label">Precipitación promedio</div></div>
+        </div>
+        <div style="background:#f0f5f0;padding:12px 16px;border-radius:12px;margin-top:12px;border-left:4px solid #8aaa8a;">
+            <p style="font-size:13px;color:#4a6a4a;margin:0;"><strong>📌 Nota:<p style="color: #27ae60; font-size: 0.9rem; font-weight: 500;">
+    ✅ Datos actualizados automáticamente desde fuentes oficiales
+            </p> 
         </div>
     </div>
 
@@ -276,27 +292,20 @@
 <script>
     const API_KEY = "70232a5a2fff0ed9923878e1a513d00e";
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
+    // La API de ZTD corre localmente por ahora (uvicorn en tu Ubuntu, puerto 8001).
+    // Cuando conectes Render más adelante, cambia esta línea a tu URL de Render.
     const API_BASE = "https://andes-observatorio.onrender.com";
 
-    const DEMO_ZTD_STATIONS = [
-        { codigo: "BOGT", nombre: "Bogotá", pais: "Colombia" },
-        { codigo: "CALI", nombre: "Cali", pais: "Colombia" },
-        { codigo: "AREQ", nombre: "Arequipa", pais: "Perú" },
-        { codigo: "ANTC", nombre: "Antofagasta", pais: "Chile" },
-        { codigo: "SANT", nombre: "Santiago", pais: "Chile" }
-    ];
-
-    // ============================================================
-    // MAPEO CIUDAD → ESTACIONES Y DISPONIBILIDAD
-    // ============================================================
-    const cityToStation = {
-        "Bogota,CO,4.7110,-74.0721": { codigo: "BOGT", ztd: true, sirgas: true, poligono: true },
-        "Cali,CO,3.4516,-76.5320":   { codigo: "CALI", ztd: true, sirgas: false, poligono: true },
-        "Santiago,CL,-33.4489,-70.6693": { codigo: "SANT", ztd: true, sirgas: true, poligono: false },
-        "Lima,PE,-12.0464,-77.0428":     { codigo: "LIMA", ztd: false, sirgas: true, poligono: false },
-        "Quito,EC,-0.1807,-78.4678":     { codigo: "QUIT", ztd: false, sirgas: true, poligono: false },
-        "La Paz,BO,-16.5000,-68.1500":   { codigo: "LPBZ", ztd: false, sirgas: true, poligono: false }
-    };
+// ==================== MODO DEMO ZTD ====================
+function generarDatosZTD() {
+    const datos = [];
+    let ztd = 2.3;
+    for (let i = 0; i < 50; i++) {
+        ztd += (Math.random() - 0.5) * 0.02;
+        datos.push({fecha: new Date(2026, 0, 1 + i * 5).toISOString().slice(0,10), ztd: ztd.toFixed(3)});
+    }
+    return datos;
+}
 
     const ciudades = [
         { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
@@ -318,7 +327,6 @@
         { nombre: "Caracas", pais: "Venezuela", query: "Caracas,VE", lat: 10.4806, lon: -66.9036 },
         { nombre: "Panamá", pais: "Panamá", query: "Panama City,PA", lat: 8.9824, lon: -79.5199 }
     ];
-
     ciudades.sort((a, b) => {
         if (a.pais === b.pais) return a.nombre.localeCompare(b.nombre);
         return a.pais.localeCompare(b.pais);
@@ -363,15 +371,15 @@
     };
 
     const areasProtegidas = {
-        'Argentina': 9.8, 'Bolivia': 22.1, 'Brasil': 29.5, 'Chile': 21.5,
-        'Colombia': 16.8, 'Ecuador': 19.2, 'Panamá': 25.6, 'Paraguay': 12.5,
-        'Perú': 17.5, 'Uruguay': 4.5, 'Venezuela': 35.2
+        'Argentina':9.8,'Bolivia':22.1,'Brasil':29.5,'Chile':21.5,
+        'Colombia':16.8,'Ecuador':19.2,'Panamá':25.6,'Paraguay':12.5,
+        'Perú':17.5,'Uruguay':4.5,'Venezuela':35.2
     };
 
     let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
-    let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD, capaPoligonosZTD;
-    const ztdSerieCache = {};
-    const coordenadasZTD = {
+    let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
+    const ztdSerieCache = {};   // { CODIGO: [{fecha, valor, error}, ...] }
+    const coordenadasZTD = {   // coordenadas reales de las estaciones con datos ZTD
         'BOGT': [4.6400, -74.0800],
         'CALI': [3.4500, -76.5300],
         'AREQ': [-16.4000, -71.5300],
@@ -379,47 +387,55 @@
         'SANT': [-33.4500, -70.6600],
     };
     let estacionesSIRGAS = [];
-    let climaCache = {};
 
     // ============================================================
     // CLIMA
     // ============================================================
     async function getClima(query) {
-        if (climaCache[query]) return climaCache[query];
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${API_KEY}`;
         try {
             const res = await fetch(url);
             const data = await res.json();
             if (data.cod === 200) {
-                const result = { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
-                climaCache[query] = result;
-                return result;
+                return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
             }
-        } catch(e) { console.warn('Error clima:', e); }
+        } catch(e) {}
         return null;
     }
 
-    async function actualizarCiudad() {
+        async function actualizarCiudad() {
         const select = document.getElementById('citySelect');
         const partes = select.value.split(',');
         const query = partes[0] + ',' + partes[1];
         const lat = parseFloat(partes[2]);
         const lon = parseFloat(partes[3]);
         const codigoPais = partes[1];
+
+        // Validar coordenadas
+        if (isNaN(lat) || isNaN(lon)) {
+            console.warn('Coordenadas inválidas para ciudad:', select.value);
+            return;
+        }
+
+        // Mapeo completo de ciudad a estaciones y disponibilidad
+        const cityToStation = {
+            "Bogota,CO,4.7110,-74.0721": {codigo: "BOGT", ztd: true, sirgas: true, poligono: true},
+            "Cali,CO,3.4516,-76.5320": {codigo: "CALI", ztd: true, sirgas: false, poligono: true},
+            "Santiago,CL,-33.4489,-70.6693": {codigo: "SANT", ztd: true, sirgas: true, poligono: false},
+            "Lima,PE,-12.0464,-77.0428": {codigo: "LIMA", ztd: false, sirgas: true, poligono: false},
+            "Quito,EC,-0.1807,-78.4678": {codigo: "QUIT", ztd: false, sirgas: true, poligono: false},
+            "La Paz,BO,-16.5000,-68.1500": {codigo: "LPBZ", ztd: false, sirgas: true, poligono: false}
+        };
         const estacionInfo = cityToStation[select.value];
+        const codigoEstacion = estacionInfo ? estacionInfo.codigo : null;
 
         // === BADGES DE DISPONIBILIDAD ===
-        const badgeZTD = document.getElementById('badgeZTD');
-        const badgeSIRGAS = document.getElementById('badgeSIRGAS');
-        const badgePoligono = document.getElementById('badgePoligono');
-        const badgeSoloClima = document.getElementById('badgeSoloClima');
-        
-        if (badgeZTD) badgeZTD.style.display = estacionInfo && estacionInfo.ztd ? 'inline' : 'none';
-        if (badgeSIRGAS) badgeSIRGAS.style.display = estacionInfo && estacionInfo.sirgas ? 'inline' : 'none';
-        if (badgePoligono) badgePoligono.style.display = estacionInfo && estacionInfo.poligono ? 'inline' : 'none';
-        if (badgeSoloClima) badgeSoloClima.style.display = (!estacionInfo || (!estacionInfo.ztd && !estacionInfo.sirgas)) ? 'inline' : 'none';
+        document.getElementById('badgeZTD').style.display = estacionInfo && estacionInfo.ztd ? 'inline' : 'none';
+        document.getElementById('badgeSIRGAS').style.display = estacionInfo && estacionInfo.sirgas ? 'inline' : 'none';
+        document.getElementById('badgePoligono').style.display = estacionInfo && estacionInfo.poligono ? 'inline' : 'none';
+        document.getElementById('badgeSoloClima').style.display = (!estacionInfo || (!estacionInfo.ztd && !estacionInfo.sirgas)) ? 'inline' : 'none';
 
-        // === MAPAS: volar a la ciudad ===
+        // === MAPA: volar a la ciudad ===
         if (mapSirgas) mapSirgas.flyTo([lat, lon], 8, { duration: 1.5 });
         if (mapZTD) mapZTD.flyTo([lat, lon], 8, { duration: 1.5 });
 
@@ -430,7 +446,6 @@
             document.getElementById('hum').innerHTML = clima.hum + '<small>%</small>';
             document.getElementById('feels').innerHTML = clima.feels.toFixed(1) + '<small>°C</small>';
             actualizarAlertas(clima);
-            actualizarPopupsCiudades();
         }
 
         // === NORMATIVAS ===
@@ -448,23 +463,28 @@
         }
 
         // === SINCRONIZAR ZTD ===
-        if (estacionInfo && estacionInfo.ztd) {
+        if (codigoEstacion && estacionInfo.ztd) {
             const selectZTD = document.getElementById('estacionZTD');
-            if (selectZTD && selectZTD.querySelector(`option[value="${estacionInfo.codigo}"]`)) {
-                selectZTD.value = estacionInfo.codigo;
-                actualizarGraficoZTD();
+            if (selectZTD) {
+                // Esperar a que las estaciones ZTD carguen
+                await cargarEstacionesZTD();
+                if (selectZTD.querySelector(`option[value="${codigoEstacion}"]`)) {
+                    selectZTD.value = codigoEstacion;
+                    actualizarGraficoZTD();
+                }
             }
         }
 
         // === SINCRONIZAR SIRGAS HISTÓRICO ===
-        if (estacionInfo && estacionInfo.sirgas) {
+        if (codigoEstacion && estacionInfo.sirgas) {
             const selectSIRGAS = document.getElementById('estacionHistorica');
-            if (selectSIRGAS && selectSIRGAS.querySelector(`option[value="${estacionInfo.codigo}"]`)) {
-                selectSIRGAS.value = estacionInfo.codigo;
+            if (selectSIRGAS && selectSIRGAS.querySelector(`option[value="${codigoEstacion}"]`)) {
+                selectSIRGAS.value = codigoEstacion;
                 actualizarSirgasHistorico();
             }
         }
 
+        // === TENDENCIA Y GRÁFICO ===
         await actualizarTendencia(query);
         await actualizarGrafico();
     }
@@ -515,27 +535,18 @@
     // GRÁFICOS
     // ============================================================
     async function actualizarGrafico() {
+        const labels = [];
+        const datos = [];
+        const colores = [];
         const paleta = ['#fff5cc','#ffebb3','#ffd699','#ffb366','#ff8c42','#ff6b35','#e63946'];
-        const tempsPorPais = {};
         for (const c of ciudades) {
             const clima = await getClima(c.query);
-            if (!clima) continue;
-            if (!tempsPorPais[c.pais]) tempsPorPais[c.pais] = [];
-            tempsPorPais[c.pais].push(clima.temp);
-        }
-        const paisesOrdenados = Object.keys(tempsPorPais)
-            .sort((a, b) => a.localeCompare(b))
-            .map(pais => {
-                const temps = tempsPorPais[pais];
-                const promedio = temps.reduce((a, b) => a + b, 0) / temps.length;
-                return { pais, temp: promedio };
-            });
-        const labels = paisesOrdenados.map(p => p.pais);
-        const datos = paisesOrdenados.map(p => Number(p.temp.toFixed(1)));
-        const colores = datos.map(temp => {
+            labels.push(c.pais);
+            const temp = clima ? clima.temp : 0;
+            datos.push(temp);
             let idx = Math.min(Math.floor(temp / 5), paleta.length - 1);
-            return paleta[idx] || paleta[0];
-        });
+            colores.push(paleta[idx] || paleta[0]);
+        }
         if (tempChart) {
             tempChart.data.labels = labels;
             tempChart.data.datasets[0].data = datos;
@@ -545,11 +556,6 @@
     }
 
     function initCharts() {
-        const areasOrdenadas = Object.entries(areasProtegidas)
-            .sort(([a], [b]) => a.localeCompare(b));
-        const labelsAP = areasOrdenadas.map(([pais]) => pais);
-        const datosAP = areasOrdenadas.map(([, val]) => val);
-
         const ctx = document.getElementById('tempChart').getContext('2d');
         tempChart = new Chart(ctx, {
             type: 'bar',
@@ -560,7 +566,7 @@
         const ctx2 = document.getElementById('protectedChart').getContext('2d');
         protectedChart = new Chart(ctx2, {
             type: 'bar',
-            data: { labels: labelsAP, datasets: [{ label: 'Áreas protegidas (%)', data: datosAP, backgroundColor: '#99cc99', borderColor: '#4caf50', borderWidth: 1, borderRadius: 4 }] },
+            data: { labels: Object.keys(areasProtegidas), datasets: [{ label: 'Áreas protegidas (%)', data: Object.values(areasProtegidas), backgroundColor: '#99cc99', borderColor: '#4caf50', borderWidth: 1, borderRadius: 4 }] },
             options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 40, title: { display: true, text: 'Áreas protegidas (%)' } } } }
         });
 
@@ -634,40 +640,43 @@
     }
 
     // ============================================================
-    // ZTD
+    // ZTD (Retardo Troposférico Cenital) - Datos reales de SIRGAS
     // ============================================================
-    async function cargarEstacionesZTD() {
-        const select = document.getElementById('estacionZTD');
-        select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
-        try {
-            const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
-            if (!res.ok) throw new Error("API no disponible");
-            const data = await res.json();
-            const estaciones = data.estaciones || [];
-            if (estaciones.length === 0) {
-                select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
-                return;
-            }
-            select.innerHTML = '<option value="">📍 Seleccionar estación</option>';
-            estaciones.forEach(est => {
-                const info = DEMO_ZTD_STATIONS.find(e => e.codigo === est.codigo);
-                const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : est.codigo;
-                select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${nombreMostrar} (${est.total_registros} reg.)</option>`;
-            });
-            actualizarGraficoZTD();
-        } catch (e) {
-            console.warn('ZTD API no disponible, usando DEMO:', e);
-            select.innerHTML = '<option value="">📍 Estaciones DEMO ⚠️</option>';
-            DEMO_ZTD_STATIONS.forEach(est => {
-                select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${est.nombre}, ${est.pais}</option>`;
-            });
-            document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible. Selecciona una estación.';
+async function cargarEstacionesZTD() {
+    const select = document.getElementById('estacionZTD');
+    select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
+    
+    try {
+        const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
+        if (!res.ok) throw new Error("API no disponible");
+        const data = await res.json();
+        const estaciones = data.estaciones || [];
+        
+        if (estaciones.length === 0) {
+            select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
+            return;
         }
+        
+        select.innerHTML = '<option value="">📍 Seleccionar estación</option>';
+        estaciones.forEach(est => {
+            const info = DEMO_ZTD_STATIONS.find(e => e.codigo === est.codigo);
+            const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : est.codigo;
+            select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${nombreMostrar} (${est.total_registros} reg.)</option>`;
+        });
+        actualizarGraficoZTD();
+        
+    } catch (e) {
+        select.innerHTML = '<option value="">📍 Estaciones DEMO ⚠️</option>';
+        DEMO_ZTD_STATIONS.forEach(est => {
+            select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${est.nombre}, ${est.pais}</option>`;
+        });
+        document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible.';
     }
-
+}
     async function actualizarGraficoZTD() {
         const codigo = document.getElementById('estacionZTD').value;
         if (!codigo) return;
+
         const desde = document.getElementById('ztdDesde').value;
         const hasta = document.getElementById('ztdHasta').value;
         let url = `${API_BASE}/api/v1/geodesia/tropo/${codigo}/serie?limite=500`;
@@ -679,6 +688,7 @@
             const res = await fetch(url);
             const data = await res.json();
             const puntos = data.datos || [];
+
             if (puntos.length === 0) {
                 document.getElementById('ztdInfo').innerText = `⚠️ Sin datos de ZTD para ${codigo} en ese rango de fechas.`;
                 ztdChart.data.labels = [];
@@ -686,9 +696,11 @@
                 ztdChart.update();
                 return;
             }
+
             ztdChart.data.labels = puntos.map(p => new Date(p.fecha).toLocaleString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit' }));
             ztdChart.data.datasets[0].data = puntos.map(p => p.valor);
             ztdChart.update();
+
             document.getElementById('ztdInfo').innerText =
                 `📊 ${data.total_registros} registros para ${codigo} (${puntos[0].fecha.split('T')[0]} a ${puntos[puntos.length - 1].fecha.split('T')[0]})`;
         } catch (e) {
@@ -697,16 +709,8 @@
     }
 
     // ============================================================
-    // SIRGAS - EFECTO SOMBRILLA
+    // SIRGAS
     // ============================================================
-    function colorSIRGAS(magnitud) {
-        // Verde (lento) → Amarillo → Rojo (rápido)
-        const maxMag = 50; // mm/año
-        const t = Math.min(magnitud / maxMag, 1);
-        const hue = 120 - (t * 120); // 120 (verde) → 0 (rojo)
-        return `hsl(${hue}, 80%, 45%)`;
-    }
-
     async function cargarSIRGAS() {
         const badge = document.getElementById('sirgasBadge');
         badge.innerText = '🔄 Actualizando SIRGAS…';
@@ -718,8 +722,7 @@
             badge.innerText = `📡 SIRGAS: ${data.length} estaciones (últ. act. ${ahora.toLocaleTimeString()})`;
             dibujarSIRGAS(data);
         } catch(e) {
-            badge.innerText = '⚠️ Servidor en pausa (30s) o caído';
-            badge.style.background = '#e74c3c';
+            badge.innerText = '⚠️ Error SIRGAS';
         }
     }
 
@@ -733,36 +736,37 @@
         capaInfluencia = L.layerGroup();
 
         estaciones.forEach(est => {
-            const magnitud = Math.sqrt(est.ve**2 + est.vn**2);
-            const color = colorSIRGAS(magnitud);
             const start = [est.lat, est.lon];
             const end = [est.lat + (est.vn / 15000), est.lon + (est.ve / 15000)];
+            L.polyline([start, end], { color: '#c0392b', weight: 4, dashArray: '6,4' }).addTo(capaSIRGAS);
+            L.circleMarker(start, { radius: 10, fillColor: '#e67e22', color: '#c0392b', weight: 2.5, fillOpacity: 0.9 })
+                .bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año`)
+                .addTo(capaEstaciones);
+         // Efecto sombrilla: color y tamaño según magnitud
+            const magnitud = Math.sqrt(est.ve ** 2 + est.vn ** 2);
+            const radio = Math.min(80, Math.max(30, magnitud * 2)) * 1000;
+            const opacidad = Math.min(0.3, Math.max(0.08, magnitud / 50));
+            const ratio = Math.min(1, magnitud / 30);
+            const r = Math.round(255 * ratio);
+            const g = Math.round(255 * (1 - ratio));
+            const colorVel = `rgb(${r},${g},80)`;
             
-            // Flecha de dirección
-            L.polyline([start, end], { color: color, weight: 4, dashArray: '6,4' }).addTo(capaSIRGAS);
+            L.circle(start, { radius: radio, color: colorVel, weight: 1.5, fillColor: colorVel, fillOpacity: opacidad }).addTo(capaInfluencia);
             
-            // Círculo sombrilla (color según magnitud)
-            L.circleMarker(start, { 
-                radius: 10 + (magnitud / 5), 
-                fillColor: color, 
-                color: color, 
-                weight: 2, 
-                fillOpacity: 0.7 
-            }).bindPopup(`<b>${est.id}</b><br>VE: ${est.ve} mm/año<br>VN: ${est.vn} mm/año<br>Magnitud: ${magnitud.toFixed(1)} mm/año`)
-            .addTo(capaEstaciones);
-            
-            // Área de influencia
-            L.circle(start, { radius: 50*1000, color: '#2980b9', weight: 1.5, fillColor: '#3498db', fillOpacity: 0.08 })
-                .addTo(capaInfluencia);
+            const endLat = start[0] + (est.vn / 15000) * (radio / 50000);
+            const endLon = start[1] + (est.ve / 15000) * (radio / 50000);
+            L.polyline([start, [endLat, endLon]], { color: colorVel, weight: 3, opacity: 0.7, dashArray: '8,6' }).addTo(capaInfluencia);
         });
 
         capaSIRGAS.addTo(mapSirgas);
         capaEstaciones.addTo(mapSirgas);
         capaInfluencia.addTo(mapSirgas);
     }
-
     // ============================================================
-    // TABS Y MAPAS
+    // MAPA
+    // ============================================================
+         // ============================================================
+    // TABS: Alternar entre mapas
     // ============================================================
     function mostrarMapa(tipo) {
         const tabSirgas = document.getElementById('tabSirgas');
@@ -781,7 +785,7 @@
             ctrlSirgas.style.display = 'flex';
             ctrlZTD.style.display = 'none';
             notaZTD.style.display = 'none';
-            if (mapSirgas) setTimeout(() => mapSirgas.invalidateSize(), 100);
+            if (mapSirgas) mapSirgas.invalidateSize();
         } else {
             tabSirgas.classList.remove('active');
             tabZTD.classList.add('active');
@@ -790,10 +794,12 @@
             ctrlSirgas.style.display = 'none';
             ctrlZTD.style.display = 'flex';
             notaZTD.style.display = 'block';
-            if (mapZTD) setTimeout(() => mapZTD.invalidateSize(), 100);
+            if (mapZTD) mapZTD.invalidateSize();
         }
     }
-
+    // ============================================================
+    // MAPA SIRGAS
+    // ============================================================
     function initMapSirgas() {
         if (mapSirgas) mapSirgas.remove();
         mapSirgas = L.map('map-sirgas').setView([-15, -65], 4);
@@ -801,10 +807,8 @@
 
         capaCiudades = L.layerGroup();
         ciudades.forEach(c => {
-            const marker = L.circleMarker([c.lat, c.lon], { 
-                radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 
-            }).bindPopup(`<b>${c.nombre}, ${c.pais}</b><br><span id="popup-${c.query}">Cargando clima...</span>`)
-            .addTo(capaCiudades);
+            L.circleMarker([c.lat, c.lon], { radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 })
+                .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`).addTo(capaCiudades);
         });
         capaCiudades.addTo(mapSirgas);
 
@@ -827,19 +831,9 @@
         cargarSIRGAS();
     }
 
-    async function actualizarPopupsCiudades() {
-        for (const c of ciudades) {
-            const popupEl = document.getElementById(`popup-${c.query}`);
-            if (!popupEl) continue;
-            const clima = await getClima(c.query);
-            if (clima) {
-                popupEl.innerHTML = `🌡️ ${clima.temp.toFixed(1)}°C | 💧 ${clima.hum}% | 🌡️ ${clima.feels.toFixed(1)}°C`;
-            } else {
-                popupEl.innerHTML = '❌ Sin datos';
-            }
-        }
-    }
-
+    // ============================================================
+    // MAPA ZTD
+    // ============================================================
     function initMapZTD() {
         if (mapZTD) mapZTD.remove();
         mapZTD = L.map('map-ztd').setView([-15, -65], 4);
@@ -852,24 +846,81 @@
         });
         capaCiudadesZTD.addTo(mapZTD);
 
+        mapZTD.on('popupopen', function(e) {
+            const codigo = e.popup._source && e.popup._source.options && e.popup._source.options.stationCode;
+            if (!codigo || !ztdSerieCache[codigo]) return;
+            const canvas = document.getElementById(`popupChart_${codigo}`);
+            if (!canvas) return;
+            const puntos = ztdSerieCache[codigo];
+            new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: puntos.map(p => new Date(p.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })),
+                    datasets: [{ data: puntos.map(p => p.valor), borderColor: '#2c5f8a', tension: 0.3, pointRadius: 0, borderWidth: 1.5 }],
+                },
+                options: { responsive: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: true } } },
+            });
+        });
+
         document.getElementById('toggleZTD').addEventListener('change', function() {
             if (this.checked && capaZTD) capaZTD.addTo(mapZTD);
             else if (capaZTD) mapZTD.removeLayer(capaZTD);
         });
 
-        cargarCapaZTD();
+        cargarCapaZTD(); 
     }
 
+    // ============================================================
+    // REPORTE
+    // ============================================================
+    function descargarReporte() {
+        const ahora = new Date();
+        const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
+        const temp = document.getElementById('temp').innerText;
+        const hum = document.getElementById('hum').innerText;
+        const feels = document.getElementById('feels').innerText;
+        const contenido = `
+        ============================================
+        🌄 ANDES OBSERVATORIO - REPORTE AMBIENTAL
+        ============================================
+        Fecha: ${ahora.toLocaleDateString()}
+        Hora: ${ahora.toLocaleTimeString()}
+        Ciudad: ${ciudad}
+        Temperatura: ${temp}
+        Humedad: ${hum}
+        Sensación: ${feels}
+        ============================================
+        `;
+        const blob = new Blob([contenido], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `reporte_andes_${ahora.toISOString().slice(0,10)}.txt`;
+        link.click();
+    }
+
+    // ============================================================
+    // EVENTOS
+    // ============================================================
+    document.getElementById('citySelect').addEventListener('change', actualizarCiudad);
+    document.getElementById('btnReporte').addEventListener('click', descargarReporte);
+    document.querySelectorAll('.btn-alerta').forEach(btn => {
+        btn.addEventListener('click', actualizarCiudad);
+    });
+    // ============================================================
+    // Capa ZTD en el mapa: marcadores coloreados + popup con gráfico
+    // ============================================================
     function colorZTD(valor, min, max) {
         if (max === min) return 'hsl(200,70%,50%)';
-        const t = (valor - min) / (max - min);
-        const hue = 220 - (t * 220);
+        const t = (valor - min) / (max - min);           // 0 = mínimo, 1 = máximo
+        const hue = 220 - (t * 220);                       // 220 (azul) -> 0 (rojo)
         return `hsl(${hue}, 75%, 48%)`;
     }
 
     async function cargarCapaZTD() {
         const badge = document.getElementById('ztdMapBadge');
-        if (capaZTD) mapZTD.removeLayer(capaZTD);
+        if (capaZTD) map.removeLayer(capaZTD);
+        document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
+        document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
         capaZTD = L.layerGroup();
 
         const codigos = Object.keys(coordenadasZTD);
@@ -906,70 +957,133 @@
             const color = colorZTD(valor, min, max);
             const puntos = ztdSerieCache[codigo] || [];
 
-            L.circleMarker([lat, lon], {
-                radius: 18,
-                color: color,
-                weight: 3,
-                fillColor: color,
-                fillOpacity: 0.6
-            }).bindPopup(`
-                <div style="min-width:200px;">
-                    <b>📍 ${codigo}</b><br>
-                    <span style="color:${color};font-weight:bold;">ZTD: ${valor.toFixed(2)} mm</span>
-                    <br><small>Último registro</small>
-                </div>
-            `).addTo(capaZTD);
+            // Anillo (sin relleno) alrededor del punto de la estación SIRGAS ya
+            // existente: distinguible incluso cuando comparten la misma ubicación,
+            // sin desplazar el marcador de su coordenada geográfica real.
+                       // Buscar archivo GeoJSON de la ciudad
+            const cityNames = {AREQ: "arequipa", BOGT: "bogota", CALI: "cali", ANTC: "antofagasta", SANT: "santiago"};
+            const cityFile = cityNames[codigo];
+            
+            if (cityFile) {
+                fetch(`assets/geojson/${cityFile}.json`)
+                    .then(r => r.json())
+                    .then(geojson => {
+                        const polygon = L.geoJSON(geojson, {
+                            style: { color: color, weight: 2, fillColor: color, fillOpacity: 0.25 }
+                        }).addTo(capaZTD);
+                        polygon.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm | ${geojson.properties.name}, ${geojson.properties.country}`, { direction: 'top' });
+                        polygon.bindPopup(construirPopupZTD(codigo, puntos));
+                    })
+                    .catch(() => {
+                        const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
+                        fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top' });
+                        fallback.bindPopup(construirPopupZTD(codigo, puntos));
+                        fallback.addTo(capaZTD);
+                    });
+            } else {
+                const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
+                fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top' });
+                fallback.bindPopup(construirPopupZTD(codigo, puntos));
+                fallback.addTo(capaZTD);
+            }
         });
 
-        capaZTD.addTo(mapZTD);
-        badge.innerText = `💧 ZTD: ${valores.length} estaciones activas`;
+        badge.innerText = `💧 ZTD: ${valores.length} estaciones`;
+        if (document.getElementById('toggleZTD').checked) capaZTD.addTo(mapZTD);
     }
 
-    // ============================================================
-    // REPORTE
-    // ============================================================
-    function descargarReporte() {
-        const ahora = new Date();
-        const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
-        const temp = document.getElementById('temp').innerText;
-        const hum = document.getElementById('hum').innerText;
-        const feels = document.getElementById('feels').innerText;
-        const contenido = `
-============================================
-🌄 ANDES OBSERVATORIO - REPORTE AMBIENTAL
-============================================
-Fecha: ${ahora.toLocaleDateString()}
-Hora: ${ahora.toLocaleTimeString()}
-Ciudad: ${ciudad}
-Temperatura: ${temp}
-Humedad: ${hum}
-Sensación: ${feels}
-============================================
+    // Arma el contenido del popup: "biografía" de lo registrado en el período
+    // (valor actual, promedio, máximo/mínimo con sus fechas, rango de datos).
+    function construirPopupZTD(codigo, puntos) {
+        if (puntos.length === 0) {
+            return `<div style="min-width:220px;"><strong>💧 ${codigo}</strong><br>Sin datos disponibles.</div>`;
+        }
+
+        const valores = puntos.map(p => p.valor);
+        const actual = puntos[puntos.length - 1];
+        const promedio = valores.reduce((a, b) => a + b, 0) / valores.length;
+
+        let idxMax = 0, idxMin = 0;
+        valores.forEach((v, i) => {
+            if (v > valores[idxMax]) idxMax = i;
+            if (v < valores[idxMin]) idxMin = i;
+        });
+        const puntoMax = puntos[idxMax];
+        const puntoMin = puntos[idxMin];
+
+        const formatoFecha = (f) => new Date(f).toLocaleString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        const formatoFechaCorta = (f) => new Date(f).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+
+        const promedioTexto = actual.valor > promedio
+            ? `${(actual.valor - promedio).toFixed(1)} mm por encima del promedio`
+            : `${(promedio - actual.valor).toFixed(1)} mm por debajo del promedio`;
+
+        return `
+            <div style="min-width:260px;font-size:13px;">
+                <strong style="font-size:15px;">💧 ${codigo}</strong>
+                <div style="color:#8aa08a;margin-bottom:6px;">Última actualización: ${formatoFecha(actual.fecha)}</div>
+
+                <table style="width:100%;border-collapse:collapse;margin-bottom:6px;">
+                    <tr title="Retardo Troposférico Cenital: cuánto se retrasa la señal GNSS por la atmósfera sobre esta estación en este momento. A mayor valor, más vapor de agua/humedad hay en la columna de aire.">
+                        <td>📍 Valor actual <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;font-weight:600;">${actual.valor.toFixed(1)} mm</td>
+                    </tr>
+                    <tr title="Promedio de todo el período de datos disponible para esta estación. Sirve como referencia para saber si el valor actual es alto o bajo comparado con lo habitual.">
+                        <td>📊 Promedio del período <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;">${promedio.toFixed(1)} mm</td>
+                    </tr>
+                    <tr title="El valor más alto suele coincidir con condiciones de mayor humedad atmosférica -- por ejemplo, antes o durante eventos de lluvia intensa.">
+                        <td>📈 Máximo <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;">${puntoMax.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMax.fecha)})</td>
+                    </tr>
+                    <tr title="El valor más bajo suele coincidir con aire más seco (menor vapor de agua en la columna atmosférica).">
+                        <td>📉 Mínimo <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;">${puntoMin.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMin.fecha)})</td>
+                    </tr>
+                    <tr title="Cuántas mediciones horarias componen este período.">
+                        <td>🗓️ Registros <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;">${puntos.length}</td>
+                    </tr>
+                </table>
+
+                <div style="font-size:11px;color:#5a7a8a;background:#eef4f8;border-radius:6px;padding:4px 8px;margin-bottom:6px;">
+                    ${promedioTexto}
+                </div>
+
+                <canvas id="popupChart_${codigo}" width="230" height="120"></canvas>
+                <div style="font-size:10px;color:#aaa;margin-top:4px;">
+                    Dato geodésico complementario -- no reemplaza los datos oficiales de tu agencia meteorológica nacional.
+                </div>
+            </div>
         `;
-        const blob = new Blob([contenido], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `reporte_andes_${ahora.toISOString().slice(0,10)}.txt`;
-        link.click();
     }
 
-    // ============================================================
-    // INICIALIZACIÓN
-    // ============================================================
-    document.getElementById('citySelect').addEventListener('change', actualizarCiudad);
-    document.getElementById('btnReporte').addEventListener('click', descargarReporte);
-    document.querySelectorAll('.btn-alerta').forEach(btn => {
-        btn.addEventListener('click', actualizarCiudad);
-    });
+    // (el listener de popupopen para los mini-gráficos ZTD se registra dentro de initMap())
+
     document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
+    document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
-    initMapSirgas();
-    initMapZTD();
-    initCharts();
-    cargarEstacionesZTD();
-    actualizarCiudad();
+    // ============================================================
+    // INICIO
+    // ============================================================
+    window.onload = function() {
+        initMapSirgas();
+        initMapZTD();
+        initCharts();
+        actualizarCiudad();
+        actualizarSirgasHistorico();
+
+        // Sin fechas por defecto: muestra todo lo disponible (limitado por 'limite'
+        // en la consulta). La ventana real de datos depende de la latencia de
+        // publicación de SIRGAS (~30-40 días), que varía, así que un rango fijo
+        // de "últimos N días desde hoy" podría no coincidir con los datos reales.
+        cargarEstacionesZTD();
+
+        setInterval(actualizarCiudad, 300000);
+        setInterval(cargarSIRGAS, 600000);
+    };
 </script>
 </body>
 </html>
