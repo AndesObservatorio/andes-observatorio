@@ -82,6 +82,7 @@
 }
     </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <div class="container">
@@ -909,11 +910,36 @@ async function cargarEstacionesZTD() {
     // ============================================================
     // Capa ZTD en el mapa: marcadores coloreados + popup con gráfico
     // ============================================================
-    function colorZTD(valor, min, max) {
-        if (max === min) return 'hsl(200,70%,50%)';
-        const t = (valor - min) / (max - min);           // 0 = mínimo, 1 = máximo
-        const hue = 220 - (t * 220);                       // 220 (azul) -> 0 (rojo)
-        return `hsl(${hue}, 75%, 48%)`;
+    // ============================================================
+    // ANOMALÍA ZTD - Escala divergente centrada en cero
+    // ============================================================
+    // El ZTD absoluto depende fuertemente de la altitud (estaciones altas 
+    // tienen menos atmósfera → ZTD más bajo). Comparar valores absolutos
+    // entre estaciones de distinta altitud es geofísicamente incorrecto.
+    // 
+    // La ANOMALÍA = ZTD_actual − ZTD_promedio_estación elimina ese sesgo
+    // y muestra cuánto vapor de agua hay RELATIVO a lo habitual en CADA
+    // estación. Anomalía +20 mm en Bogotá y +20 mm en Cali significan lo
+    // mismo: condición anómalamente húmeda, independientemente de la altitud.
+    //
+    // Escala de colores:
+    //   🔵 Azul  = anomalía negativa (más seco de lo normal)
+    //   🟢 Verde = anomalía ~0 (condición normal)
+    //   🔴 Rojo  = anomalía positiva (más húmedo de lo normal)
+    // ============================================================
+    function colorZTDAnomalia(anomalia, maxAbs) {
+        if (maxAbs === 0) return 'hsl(120, 60%, 50%)';
+        const t = anomalia / maxAbs; // -1 (muy seco) → 0 (normal) → 1 (muy húmedo)
+
+        if (t < 0) {
+            // Seco: verde (120) → azul (220)
+            const hue = 120 + (Math.abs(t) * 100);
+            return `hsl(${Math.round(hue)}, 80%, 42%)`;
+        } else {
+            // Húmedo: verde (120) → rojo (0)
+            const hue = 120 - (t * 120);
+            return `hsl(${Math.round(hue)}, 80%, 42%)`;
+        }
     }
 
     async function cargarCapaZTD() {
@@ -994,14 +1020,16 @@ async function cargarEstacionesZTD() {
 
     // Arma el contenido del popup: "biografía" de lo registrado en el período
     // (valor actual, promedio, máximo/mínimo con sus fechas, rango de datos).
-    function construirPopupZTD(codigo, puntos) {
+    function construirPopupZTD(codigo, puntos, promedioEstacion, anomalia) {
         if (puntos.length === 0) {
             return `<div style="min-width:220px;"><strong>💧 ${codigo}</strong><br>Sin datos disponibles.</div>`;
         }
 
         const valores = puntos.map(p => p.valor);
         const actual = puntos[puntos.length - 1];
-        const promedio = valores.reduce((a, b) => a + b, 0) / valores.length;
+        // Si no se pasó promedio, calcularlo (compatibilidad)
+        const promedio = promedioEstacion !== undefined ? promedioEstacion : (valores.reduce((a, b) => a + b, 0) / valores.length);
+        const anom = anomalia !== undefined ? anomalia : (actual.valor - promedio);
 
         let idxMax = 0, idxMin = 0;
         valores.forEach((v, i) => {
@@ -1014,26 +1042,51 @@ async function cargarEstacionesZTD() {
         const formatoFecha = (f) => new Date(f).toLocaleString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         const formatoFechaCorta = (f) => new Date(f).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
 
-        const promedioTexto = actual.valor > promedio
-            ? `${(actual.valor - promedio).toFixed(1)} mm por encima del promedio`
-            : `${(promedio - actual.valor).toFixed(1)} mm por debajo del promedio`;
+        // Interpretación de la anomalía
+        let interpretacion, colorAnom, iconoAnom;
+        if (anom > 15) {
+            interpretacion = 'Condición anómalamente húmeda. Posible acumulación de vapor de agua antes de precipitación.';
+            colorAnom = '#c0392b'; iconoAnom = '🔴';
+        } else if (anom > 5) {
+            interpretacion = 'Más húmedo de lo habitual. Monitorear evolución.';
+            colorAnom = '#e67e22'; iconoAnom = '🟠';
+        } else if (anom > -5) {
+            interpretacion = 'Condición dentro del rango normal para esta estación.';
+            colorAnom = '#27ae60'; iconoAnom = '🟢';
+        } else if (anom > -15) {
+            interpretacion = 'Más seco de lo habitual. Menor contenido de vapor de agua.';
+            colorAnom = '#2980b9'; iconoAnom = '🔵';
+        } else {
+            interpretacion = 'Condición anómalamente seca. Bajo contenido de vapor de agua.';
+            colorAnom = '#2c3e50'; iconoAnom = '🔵';
+        }
+        const signo = anom >= 0 ? '+' : '';
 
         return `
-            <div style="min-width:260px;font-size:13px;">
+            <div style="min-width:280px;font-size:13px;">
                 <strong style="font-size:15px;">💧 ${codigo}</strong>
                 <div style="color:#8aa08a;margin-bottom:6px;">Última actualización: ${formatoFecha(actual.fecha)}</div>
 
+                <div style="background:${colorAnom}15;border-left:4px solid ${colorAnom};padding:8px 10px;border-radius:6px;margin-bottom:8px;">
+                    <strong style="color:${colorAnom};font-size:14px;">${iconoAnom} Anomalía: ${signo}${anom.toFixed(1)} mm</strong>
+                    <div style="font-size:12px;color:#5a5a5a;margin-top:2px;">${interpretacion}</div>
+                </div>
+
                 <table style="width:100%;border-collapse:collapse;margin-bottom:6px;">
-                    <tr title="Retardo Troposférico Cenital: cuánto se retrasa la señal GNSS por la atmósfera sobre esta estación en este momento. A mayor valor, más vapor de agua/humedad hay en la columna de aire.">
-                        <td>📍 Valor actual <span style="color:#aaa;">ⓘ</span></td>
+                    <tr title="ZTD absoluto: valor medido en esta estación. Depende de la altitud (más altitud = menos atmósfera = ZTD menor). NO comparar entre estaciones de distinta altitud.">
+                        <td>📍 ZTD actual <span style="color:#aaa;">ⓘ</span></td>
                         <td style="text-align:right;font-weight:600;">${actual.valor.toFixed(1)} mm</td>
                     </tr>
-                    <tr title="Promedio de todo el período de datos disponible para esta estación. Sirve como referencia para saber si el valor actual es alto o bajo comparado con lo habitual.">
-                        <td>📊 Promedio del período <span style="color:#aaa;">ⓘ</span></td>
+                    <tr title="Promedio histórico de esta estación = 'lo normal' para este lugar. Se calcula de toda la serie descargada.">
+                        <td>📊 Promedio histórico <span style="color:#aaa;">ⓘ</span></td>
                         <td style="text-align:right;">${promedio.toFixed(1)} mm</td>
                     </tr>
-                    <tr title="El valor más alto suele coincidir con condiciones de mayor humedad atmosférica -- por ejemplo, antes o durante eventos de lluvia intensa.">
-                        <td>📈 Máximo <span style="color:#aaa;">ⓘ</span></td>
+                    <tr title="Diferencia entre actual y promedio. Es el indicador clave: positivo = más vapor de agua de lo habitual.">
+                        <td>📈 Desviación <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;color:${colorAnom};font-weight:600;">${signo}${anom.toFixed(1)} mm</td>
+                    </tr>
+                    <tr title="El máximo histórico suele coincidir con eventos de lluvia intensa o tormentas.">
+                        <td>⬆️ Máximo histórico <span style="color:#aaa;">ⓘ</span></td>
                         <td style="text-align:right;">${puntoMax.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMax.fecha)})</td>
                     </tr>
                     <tr title="El valor más bajo suele coincidir con aire más seco (menor vapor de agua en la columna atmosférica).">
