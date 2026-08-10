@@ -306,6 +306,13 @@
     // La API de ZTD corre localmente por ahora (uvicorn en tu Ubuntu, puerto 8001).
     // Cuando conectes Render más adelante, cambia esta línea a tu URL de Render.
     const API_BASE = "https://andes-observatorio.onrender.com";
+        const DEMO_ZTD_STATIONS = [
+        { codigo: "BOGT", nombre: "Bogotá", pais: "Colombia" },
+        { codigo: "CALI", nombre: "Cali", pais: "Colombia" },
+        { codigo: "AREQ", nombre: "Arequipa", pais: "Perú" },
+        { codigo: "ANTC", nombre: "Antofagasta", pais: "Chile" },
+        { codigo: "SANT", nombre: "Santiago", pais: "Chile" }
+    ];
 
 // ==================== MODO DEMO ZTD ====================
 function generarDatosZTD() {
