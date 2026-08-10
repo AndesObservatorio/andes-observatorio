@@ -921,6 +921,7 @@ async function cargarEstacionesZTD() {
             ctrlSirgas.style.display = 'none';
             ctrlZTD.style.display = 'flex';
             notaZTD.style.display = 'block';
+            if (!mapZTD) initMapZTD();
             if (mapZTD) mapZTD.invalidateSize();
         }
     }
@@ -1313,7 +1314,6 @@ async function cargarEstacionesZTD() {
        window.onload = function() {
         initMapSirgas();
         // initMapZTD();  ← Se inicializa al hacer clic en el tab ZTD
-        initCharts();
         initCharts();
         actualizarCiudad();
         actualizarSirgasHistorico();
