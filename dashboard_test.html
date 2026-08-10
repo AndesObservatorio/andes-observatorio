@@ -129,6 +129,7 @@
 <!-- CONTROLES SIRGAS -->
 <div id="controlesSirgas" class="layer-control">
     <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
+    <label><input type="checkbox" id="toggleTopografia"> 🛰️ Vista satélite</label>
     <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
     <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
     <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
@@ -1329,4 +1330,12 @@ async function cargarEstacionesZTD() {
     };
 </script>
 </body>
-</html>
+    <!-- BADGES DE DISPONIBILIDAD -->
+    <div class="disponibilidad-badges" id="disponibilidadDatos" style="display:flex;gap:10px;padding:8px 16px;font-size:13px;font-weight:600;background:#f8f9fa;border-radius:8px;margin:10px 16px;flex-wrap:wrap;">
+        <span>📊 Datos disponibles:</span>
+        <span id="badgeZTD" class="badge-ztd" style="display:none;background:#2D6A4F;color:white;padding:3px 10px;border-radius:12px;">💧 ZTD</span>
+        <span id="badgeSIRGAS" class="badge-sirgas" style="display:none;background:#e67e22;color:white;padding:3px 10px;border-radius:12px;">🛰️ SIRGAS</span>
+        <span id="badgePoligono" class="badge-poligono" style="display:none;background:#2980b9;color:white;padding:3px 10px;border-radius:12px;">🗺️ Polígono</span>
+        <span id="badgeSoloClima" class="badge-soloclima" style="display:none;background:#e74c3c;color:white;padding:3px 10px;border-radius:12px;">⚠️ Solo clima</span>
+    </div>
+    </html>
