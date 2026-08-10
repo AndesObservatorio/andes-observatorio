@@ -1310,9 +1310,10 @@ async function cargarEstacionesZTD() {
     // ============================================================
     // INICIO
     // ============================================================
-    window.onload = function() {
+       window.onload = function() {
         initMapSirgas();
-        initMapZTD();
+        // initMapZTD();  ← Se inicializa al hacer clic en el tab ZTD
+        initCharts();
         initCharts();
         actualizarCiudad();
         actualizarSirgasHistorico();
