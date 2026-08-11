@@ -84,6 +84,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <div class="container">
@@ -128,7 +129,6 @@
 
 <!-- CONTROLES SIRGAS -->
 <div id="controlesSirgas" class="layer-control">
-    <label><input type="checkbox" id="toggleTopografia"> 🛰️ Vista satélite</label>
     <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
     <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
     <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
@@ -139,14 +139,15 @@
 
 <!-- CONTROLES ZTD -->
 <div id="controlesZTD" class="layer-control" style="display:none;">
-    <label><input type="checkbox" id="toggleTopografiaZTD"> 🛰️ Vista satélite</label>
     <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
     <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
-    <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;">
-        <span>ZTD relativo:</span>
-        <span style="background:linear-gradient(to right,#2c7bb6,#ffffbf,#d7191c);width:100px;height:10px;border-radius:4px;display:inline-block;"></span>
-        <span id="ztdLeyendaMin">--</span> … <span id="ztdLeyendaMax">--</span>
-        <span style="color:#aaa;">ⓘ</span>
+    <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;flex-wrap:wrap;">
+        <span title="Anomalía = ZTD actual − promedio histórico de la estación. Elimina el sesgo altitudinal.">📊 Anomalía ZTD:</span>
+        <span style="background:linear-gradient(to right,#2c5f8a,#4a9,#2c5f2c,#d4a017,#c0392b);width:140px;height:10px;border-radius:4px;display:inline-block;" title="Azul=seco | Verde=normal | Rojo=húmedo"></span>
+        <span id="ztdLeyendaMin">--</span>
+        <span style="color:#aaa;">normal</span>
+        <span id="ztdLeyendaMax">--</span>
+        <span style="color:#aaa;" title="Valores en mm de desviación respecto al promedio de cada estación">ⓘ</span>
     </span>
 </div>
 
@@ -157,8 +158,11 @@
 <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
 <!-- Nota ZTD -->
-<p id="notaZTD" style="display:none;font-size:11px;color:#8aa08a;padding:2px 12px 0;margin:0;">
-    Nota: el ZTD "normal" es distinto en cada estación según su altitud.
+<p id="notaZTD" style="display:none;font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
+    <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
+    (Bogotá a 2600 m siempre tiene menos ZTD que Cali a 1000 m). Ahora mostramos la <strong>ANOMALÍA</strong>: cuánto se desvía 
+    el valor actual del promedio histórico de CADA estación. Esto elimina el sesgo altitudinal y permite comparar condiciones 
+    atmosféricas entre estaciones. <strong>🔴 Rojo = más húmedo de lo normal | 🟢 Verde = normal | 🔵 Azul = más seco de lo normal.</strong>
 </p>
 
     <div class="alertas-panel">
@@ -930,7 +934,11 @@ async function cargarEstacionesZTD() {
             ctrlSirgas.style.display = 'none';
             ctrlZTD.style.display = 'flex';
             notaZTD.style.display = 'block';
-            if (mapZTD) mapZTD.invalidateSize();
+            if (!mapZTD) {
+                initMapZTD();
+            } else {
+                setTimeout(() => mapZTD.invalidateSize(), 100);
+            }
         }
     }
 
@@ -1160,11 +1168,23 @@ async function cargarEstacionesZTD() {
     // ============================================================
     // Capa ZTD en el mapa: marcadores coloreados + popup con gráfico
     // ============================================================
-    function colorZTD(valor, min, max) {
-        if (max === min) return 'hsl(200,70%,50%)';
-        const t = (valor - min) / (max - min);           // 0 = mínimo, 1 = máximo
-        const hue = 220 - (t * 220);                       // 220 (azul) -> 0 (rojo)
-        return `hsl(${hue}, 75%, 48%)`;
+    // ============================================================
+    // ANOMALÍA ZTD - Escala divergente centrada en cero
+    // ============================================================
+    // El ZTD absoluto depende fuertemente de la altitud. La ANOMALÍA
+    // = ZTD_actual − promedio_estación elimina ese sesgo y permite
+    // comparar condiciones atmosféricas entre estaciones.
+    // ============================================================
+    function colorZTDAnomalia(anomalia, maxAbs) {
+        if (maxAbs === 0) return 'hsl(120, 60%, 50%)';
+        const t = anomalia / maxAbs; // -1 (muy seco) → 0 (normal) → 1 (muy húmedo)
+        if (t < 0) {
+            const hue = 120 + (Math.abs(t) * 100); // verde → azul
+            return `hsl(${Math.round(hue)}, 80%, 42%)`;
+        } else {
+            const hue = 120 - (t * 120); // verde → rojo
+            return `hsl(${Math.round(hue)}, 80%, 42%)`;
+        }
     }
 
     async function cargarCapaZTD() {
@@ -1176,6 +1196,8 @@ async function cargarEstacionesZTD() {
 
         const codigos = Object.keys(coordenadasZTD);
         const ultimos = {};
+        const promedios = {};
+        const anomalias = {};
 
         for (const codigo of codigos) {
             try {
@@ -1185,28 +1207,36 @@ async function cargarEstacionesZTD() {
                 if (puntos.length > 0) {
                     ztdSerieCache[codigo] = puntos;
                     ultimos[codigo] = puntos[puntos.length - 1].valor;
+                    const suma = puntos.reduce((acc, p) => acc + p.valor, 0);
+                    promedios[codigo] = suma / puntos.length;
+                    anomalias[codigo] = ultimos[codigo] - promedios[codigo];
                 }
             } catch (e) {
                 console.warn(`No se pudo cargar ZTD de ${codigo}`, e);
             }
         }
 
-        const valores = Object.values(ultimos);
-        if (valores.length === 0) {
+        const valoresAnom = Object.values(anomalias);
+        if (valoresAnom.length === 0) {
             badge.innerText = '💧 Sin datos ZTD';
             return;
         }
-        const min = Math.min(...valores);
-        const max = Math.max(...valores);
-        document.getElementById('ztdLeyendaMin').innerText = `${min.toFixed(0)} mm`;
-        document.getElementById('ztdLeyendaMax').innerText = `${max.toFixed(0)} mm`;
+        const minAnom = Math.min(...valoresAnom);
+        const maxAnom = Math.max(...valoresAnom);
+        const maxAbs = Math.max(Math.abs(minAnom), Math.abs(maxAnom));
+        document.getElementById('ztdLeyendaMin').innerText = `−${maxAbs.toFixed(0)} mm`;
+        document.getElementById('ztdLeyendaMax').innerText = `+${maxAbs.toFixed(0)} mm`;
 
         codigos.forEach(codigo => {
             if (!(codigo in ultimos)) return;
             const [lat, lon] = coordenadasZTD[codigo];
             const valor = ultimos[codigo];
-            const color = colorZTD(valor, min, max);
+            const promedio = promedios[codigo];
+            const anomalia = anomalias[codigo];
+            const color = colorZTDAnomalia(anomalia, maxAbs);
             const puntos = ztdSerieCache[codigo] || [];
+            const simbolo = anomalia > 5 ? '🔴 +' : anomalia < -5 ? '🔵 ' : '🟢 ';
+            const signo = anomalia >= 0 ? '+' : '';
 
             // Anillo (sin relleno) alrededor del punto de la estación SIRGAS ya
             // existente: distinguible incluso cuando comparten la misma ubicación,
@@ -1222,37 +1252,46 @@ async function cargarEstacionesZTD() {
                         const polygon = L.geoJSON(geojson, {
                             style: { color: color, weight: 2, fillColor: color, fillOpacity: 0.25 }
                         }).addTo(capaZTD);
-                        polygon.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm | ${geojson.properties.name}, ${geojson.properties.country}`, { direction: 'top' });
-                        polygon.bindPopup(construirPopupZTD(codigo, puntos));
+                        polygon.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía | ${geojson.properties.name}`, { direction: 'top' });
+                        polygon.bindPopup(construirPopupZTD(codigo, puntos, promedio, anomalia));
                     })
                     .catch(() => {
                         const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
-                        fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top' });
-                        fallback.bindPopup(construirPopupZTD(codigo, puntos));
+                        fallback.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía`, { direction: 'top' });
+                        fallback.bindPopup(construirPopupZTD(codigo, puntos, promedio, anomalia));
                         fallback.addTo(capaZTD);
                     });
             } else {
-                const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
-                fallback.bindTooltip(`💧 ${codigo}: ${valor.toFixed(1)} mm`, { direction: 'top' });
-                fallback.bindPopup(construirPopupZTD(codigo, puntos));
+                const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2.5, fillColor: color, fillOpacity: 0.25 });
+                fallback.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía`, { direction: 'top' });
+                fallback.bindPopup(construirPopupZTD(codigo, puntos, promedio, anomalia));
                 fallback.addTo(capaZTD);
             }
         });
 
-        badge.innerText = `💧 ZTD: ${valores.length} estaciones`;
+        badge.innerText = `💧 ZTD: ${valoresAnom.length} estaciones | Anomalía ±${maxAbs.toFixed(0)} mm`;
         if (document.getElementById('toggleZTD').checked) capaZTD.addTo(mapZTD);
     }
 
     // Arma el contenido del popup: "biografía" de lo registrado en el período
     // (valor actual, promedio, máximo/mínimo con sus fechas, rango de datos).
-    function construirPopupZTD(codigo, puntos) {
+    function construirPopupZTD(codigo, puntos, promedioEstacion, anomalia) {
         if (puntos.length === 0) {
             return `<div style="min-width:220px;"><strong>💧 ${codigo}</strong><br>Sin datos disponibles.</div>`;
         }
 
         const valores = puntos.map(p => p.valor);
         const actual = puntos[puntos.length - 1];
-        const promedio = valores.reduce((a, b) => a + b, 0) / valores.length;
+        const promedio = promedioEstacion !== undefined ? promedioEstacion : (valores.reduce((a, b) => a + b, 0) / valores.length);
+        const anom = anomalia !== undefined ? anomalia : (actual.valor - promedio);
+
+        let interpretacion, colorAnom, iconoAnom;
+        if (anom > 15) { interpretacion = 'Condición anómalamente húmeda. Posible acumulación de vapor de agua antes de precipitación.'; colorAnom = '#c0392b'; iconoAnom = '🔴'; }
+        else if (anom > 5) { interpretacion = 'Más húmedo de lo habitual. Monitorear evolución.'; colorAnom = '#e67e22'; iconoAnom = '🟠'; }
+        else if (anom > -5) { interpretacion = 'Condición dentro del rango normal para esta estación.'; colorAnom = '#27ae60'; iconoAnom = '🟢'; }
+        else if (anom > -15) { interpretacion = 'Más seco de lo habitual. Menor contenido de vapor de agua.'; colorAnom = '#2980b9'; iconoAnom = '🔵'; }
+        else { interpretacion = 'Condición anómalamente seca. Bajo contenido de vapor de agua.'; colorAnom = '#2c3e50'; iconoAnom = '🔵'; }
+        const signo = anom >= 0 ? '+' : '';
 
         let idxMax = 0, idxMin = 0;
         valores.forEach((v, i) => {
@@ -1270,18 +1309,27 @@ async function cargarEstacionesZTD() {
             : `${(promedio - actual.valor).toFixed(1)} mm por debajo del promedio`;
 
         return `
-            <div style="min-width:260px;font-size:13px;">
+            <div style="min-width:280px;font-size:13px;">
                 <strong style="font-size:15px;">💧 ${codigo}</strong>
                 <div style="color:#8aa08a;margin-bottom:6px;">Última actualización: ${formatoFecha(actual.fecha)}</div>
 
+                <div style="background:${colorAnom}15;border-left:4px solid ${colorAnom};padding:8px 10px;border-radius:6px;margin-bottom:8px;">
+                    <strong style="color:${colorAnom};font-size:14px;">${iconoAnom} Anomalía: ${signo}${anom.toFixed(1)} mm</strong>
+                    <div style="font-size:12px;color:#5a5a5a;margin-top:2px;">${interpretacion}</div>
+                </div>
+
                 <table style="width:100%;border-collapse:collapse;margin-bottom:6px;">
-                    <tr title="Retardo Troposférico Cenital: cuánto se retrasa la señal GNSS por la atmósfera sobre esta estación en este momento. A mayor valor, más vapor de agua/humedad hay en la columna de aire.">
-                        <td>📍 Valor actual <span style="color:#aaa;">ⓘ</span></td>
+                    <tr title="ZTD absoluto: valor medido en esta estación. Depende de la altitud (más altitud = menos atmósfera = ZTD menor). NO comparar entre estaciones de distinta altitud.">
+                        <td>📍 ZTD actual <span style="color:#aaa;">ⓘ</span></td>
                         <td style="text-align:right;font-weight:600;">${actual.valor.toFixed(1)} mm</td>
                     </tr>
-                    <tr title="Promedio de todo el período de datos disponible para esta estación. Sirve como referencia para saber si el valor actual es alto o bajo comparado con lo habitual.">
-                        <td>📊 Promedio del período <span style="color:#aaa;">ⓘ</span></td>
+                    <tr title="Promedio histórico de esta estación = 'lo normal' para este lugar. Se calcula de toda la serie descargada.">
+                        <td>📊 Promedio histórico <span style="color:#aaa;">ⓘ</span></td>
                         <td style="text-align:right;">${promedio.toFixed(1)} mm</td>
+                    </tr>
+                    <tr title="Diferencia entre actual y promedio. Es el indicador clave: positivo = más vapor de agua de lo habitual.">
+                        <td>📈 Desviación <span style="color:#aaa;">ⓘ</span></td>
+                        <td style="text-align:right;color:${colorAnom};font-weight:600;">${signo}${anom.toFixed(1)} mm</td>
                     </tr>
                     <tr title="El valor más alto suele coincidir con condiciones de mayor humedad atmosférica -- por ejemplo, antes o durante eventos de lluvia intensa.">
                         <td>📈 Máximo <span style="color:#aaa;">ⓘ</span></td>
