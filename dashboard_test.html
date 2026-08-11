@@ -1177,7 +1177,7 @@ async function cargarEstacionesZTD() {
 
     async function cargarCapaZTD() {
         const badge = document.getElementById('ztdMapBadge');
-        if (capaZTD) map.removeLayer(capaZTD);
+        if (capaZTD) mapZTD.removeLayer(capaZTD);
         document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
         document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
         capaZTD = L.layerGroup();
