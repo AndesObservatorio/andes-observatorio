@@ -746,7 +746,7 @@ async function cargarEstacionesZTD() {
             estacionesSIRGAS = data.estaciones;
             const ahora = new Date();
             badge.innerText = `📡 SIRGAS: ${data.estaciones.length} estaciones (últ. act. ${ahora.toLocaleTimeString()})`;
-            dibujarSIRGAS(data.estaciones);
+            dibujarSIRGAS(data.estaciones); 
         } catch(e) {
             badge.innerText = '⚠️ Error SIRGAS';
         }
@@ -763,13 +763,13 @@ async function cargarEstacionesZTD() {
 
         estaciones.forEach(est => {
             const start = [est.lat, est.lon];
-            const magnitud = Math.sqrt(est.ve ** 2 + est.vn ** 2);
+            const magnitud = Math.sqrt((est.velocidad_este || est.ve) ** 2 + (est.velocidad_norte || est.vn) ** 2);
             const colorInfo = colorSIRGAS(magnitud);
             const color = colorInfo.color;
 
             // Vector con escala proporcional: 1 mm/año ≈ 0.5 km en mapa
-            const deltaLat = (est.vn / 111000) * ESCALA_SIRGAS * 1000;
-            const deltaLon = (est.ve / (111000 * Math.cos(est.lat * Math.PI / 180))) * ESCALA_SIRGAS * 1000;
+            const deltaLat = (est.velocidad_norte || est.vn / 111000) * ESCALA_SIRGAS * 1000;
+            const deltaLon = (est.velocidad_este || est.ve / (111000 * Math.cos(est.lat * Math.PI / 180))) * ESCALA_SIRGAS * 1000;
             const end = [est.lat + deltaLat, est.lon + deltaLon];
 
             // Vector principal con flecha
@@ -816,7 +816,9 @@ async function cargarEstacionesZTD() {
         return { color: '#c0392b', label: 'Muy rápido (>30)' };
     }
 
-    function azimut(ve, vn) {
+    function azimut(est) {
+        const ve = est.velocidad_este || est.ve;
+        const vn = est.velocidad_norte || est.vn;
         let ang = Math.atan2(ve, vn) * (180 / Math.PI);
         if (ang < 0) ang += 360;
         return ang.toFixed(1);
@@ -835,7 +837,7 @@ async function cargarEstacionesZTD() {
     }
 
     function construirPopupSIRGAS(est, magnitud, colorInfo) {
-        const az = azimut(est.ve, est.vn);
+        const az = azimut(est);
         const direccion = az < 22.5 || az >= 337.5 ? 'N' :
                          az < 67.5 ? 'NE' :
                          az < 112.5 ? 'E' :
@@ -871,11 +873,11 @@ async function cargarEstacionesZTD() {
                     </tr>
                     <tr style="background:#f8f9fa;">
                         <td>➡️ Este (VE)</td>
-                        <td style="text-align:right;">${est.ve > 0 ? '+' : ''}${est.ve.toFixed(1)} mm/año</td>
+                        <td style="text-align:right;">${((est.velocidad_este || est.ve) > 0 ? '+' : '') + (est.velocidad_este || est.ve).toFixed(1)} mm/año</td>
                     </tr>
                     <tr>
                         <td>⬆️ Norte (VN)</td>
-                        <td style="text-align:right;">${est.vn > 0 ? '+' : ''}${est.vn.toFixed(1)} mm/año</td>
+                        <td style="text-align:right;">${((est.velocidad_norte || est.vn) > 0 ? '+' : '') + (est.velocidad_norte || est.vn).toFixed(1)} mm/año</td>
                     </tr>
                     ${vuText}
                     ${sigmaText}
@@ -1200,7 +1202,7 @@ async function cargarEstacionesZTD() {
 
     async function cargarCapaZTD() {
         const badge = document.getElementById('ztdMapBadge');
-        if (capaZTD) map.removeLayer(capaZTD);
+        if (capaZTD) mapZTD.removeLayer(capaZTD);
         document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
         document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
         capaZTD = L.layerGroup();
