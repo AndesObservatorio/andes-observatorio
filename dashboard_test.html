@@ -747,8 +747,8 @@
             const colorInfo = colorSIRGAS(magnitud);
             const color = colorInfo.color;
             const deltaLat = (vn / 111000) * ESCALA_SIRGAS * 1000;
-            const deltaLon = (ve / (111000 * Math.cos(est.lat * Math.PI / 180))) * ESCALA_SIRGAS * 1000;
-            const end = [est.lat + deltaLat, est.lon + deltaLon];
+            const deltaLon = (ve / (111000 * Math.cos(coords[0] * Math.PI / 180))) * ESCALA_SIRGAS * 1000;
+            const end = [coords[0] + deltaLat, coords[1] + deltaLon];
             dibujarFlecha(capaSIRGAS, start, end, color, 3);
             L.circleMarker(start, { radius: 7, fillColor: color, color: '#333', weight: 1.5, fillOpacity: 0.9 })
                 .bindPopup(construirPopupSIRGAS(est, magnitud, colorInfo)).addTo(capaEstaciones);
