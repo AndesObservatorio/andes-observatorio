@@ -768,8 +768,10 @@ async function cargarEstacionesZTD() {
             const color = colorInfo.color;
 
             // Vector con escala proporcional: 1 mm/año ≈ 0.5 km en mapa
-            const deltaLat = (est.velocidad_norte || est.vn / 111000) * ESCALA_SIRGAS * 1000;
-            const deltaLon = (est.velocidad_este || est.ve / (111000 * Math.cos(est.lat * Math.PI / 180))) * ESCALA_SIRGAS * 1000;
+            const vn = est.velocidad_norte || est.vn || 0;
+            const ve = est.velocidad_este || est.ve || 0;
+            const deltaLat = (vn / 111000) * ESCALA_SIRGAS * 1000;
+            const deltaLon = (ve / (111000 * Math.cos(est.lat * Math.PI / 180))) * ESCALA_SIRGAS * 1000;
             const end = [est.lat + deltaLat, est.lon + deltaLon];
 
             // Vector principal con flecha
