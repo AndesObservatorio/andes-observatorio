@@ -1159,10 +1159,10 @@
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
-    window.onload = function() {
+        window.onload = function() {
         initMapSirgas();
         initCharts();
-        actualizarCiudad();
+        setTimeout(() => actualizarCiudad(), 500);
         actualizarSirgasHistorico();
         cargarEstacionesZTD();
         setInterval(actualizarCiudad, 300000);
