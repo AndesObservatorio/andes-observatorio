@@ -809,7 +809,7 @@
                     <tr style="background:#f8f9fa;"><td>➡️ Este (VE)</td><td style="text-align:right;">${ve > 0 ? '+' : ''}${ve.toFixed(1)} mm/año</td></tr>
                     <tr><td>⬆️ Norte (VN)</td><td style="text-align:right;">${vn > 0 ? '+' : ''}${vn.toFixed(1)} mm/año</td></tr>
                     ${vuText}${sigmaText}
-                    <tr style="background:#f8f9fa;"><td>📍 Coordenadas</td><td style="text-align:right;font-size:11px;">${est.lat.toFixed(4)}°, ${est.lon.toFixed(4)}°</td></tr>
+                    <tr style="background:#f8f9fa;"><td>📍 Coordenadas</td><td style="text-align:right;font-size:11px;">${(est.lat || coordenadasSIRGAS[est.codigo]?.[0] || 0).toFixed(4)}°, ${(est.lon || coordenadasSIRGAS[est.codigo]?.[1] || 0).toFixed(4)}°</td></tr>
                 </table>
                 <div style="font-size:11px;color:#666;border-top:1px solid #eee;padding-top:6px;">
                     <strong>Interpretación:</strong> ${magnitud < 10 ? 'Movimiento tectónico lento. Zona intraplaca estable.' : magnitud < 20 ? 'Movimiento moderado. Posible influencia de fallas cercanas.' : magnitud < 30 ? 'Movimiento rápido. Cercanía a zonas de borde de placa o fallas activas.' : 'Movimiento muy rápido. Zona de borde de placa activa (subducción/transformación).'}
