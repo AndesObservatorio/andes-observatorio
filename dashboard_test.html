@@ -466,8 +466,12 @@
         const estacionInfo = cityToStation[select.value];
         const codigoEstacion = estacionInfo ? estacionInfo.codigo : null;
 
-        if (mapSirgas) mapSirgas.flyTo([lat, lon], 8, { duration: 1.5 });
-        if (mapZTD) mapZTD.flyTo([lat, lon], 8, { duration: 1.5 });
+        if (mapSirgas && !isNaN(lat) && !isNaN(lon)) {
+            mapSirgas.flyTo([lat, lon], 8, { duration: 1.5 });
+        }
+        if (mapZTD && !isNaN(lat) && !isNaN(lon)) {
+            mapZTD.flyTo([lat, lon], 8, { duration: 1.5 });
+        }
 
         const clima = await getClima(query);
         if (clima) {
