@@ -723,6 +723,15 @@
 
     function dibujarSIRGAS(estaciones) {
         if (!Array.isArray(estaciones)) return;
+        
+        // Coordenadas conocidas de estaciones SIRGAS
+        const coordenadasSIRGAS = {
+            "BOGT": [4.6400, -74.0800],
+            "QUIT": [-0.1807, -78.4678],
+            "LIMA": [-12.0464, -77.0428],
+            "LPBZ": [-16.5000, -68.1500],
+            "SANT": [-33.4489, -70.6693]
+        };
         if (capaSIRGAS) mapSirgas.removeLayer(capaSIRGAS);
         if (capaEstaciones) mapSirgas.removeLayer(capaEstaciones);
         if (capaInfluencia) mapSirgas.removeLayer(capaInfluencia);
@@ -730,7 +739,8 @@
         capaEstaciones = L.layerGroup();
         capaInfluencia = L.layerGroup();
         estaciones.forEach(est => {
-            const start = [est.lat, est.lon];
+            const coords = coordenadasSIRGAS[est.codigo] || [est.lat || 0, est.lon || 0];
+            const start = coords;
             const ve = est.velocidad_este || est.ve || 0;
             const vn = est.velocidad_norte || est.vn || 0;
             const magnitud = Math.sqrt(ve ** 2 + vn ** 2);
