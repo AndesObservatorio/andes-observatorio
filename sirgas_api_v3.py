@@ -26,6 +26,10 @@ def get_db_connection():
     return conn
 
 @app.get("/")
+@app.get("/api/config")
+def get_config():
+    import os
+    return {"openweather_api_key": os.environ.get("OPENWEATHER_API_KEY", "")}
 async def root():
     return {
         "message": "Andes Observatorio - API Geodésica",
