@@ -53,6 +53,32 @@
         .normativas-panel ul { list-style: none; padding: 0; }
         .normativas-panel li { padding: 6px 14px; background: white; margin-bottom: 6px; border-radius: 10px; border-left: 4px solid #8aaa8a; font-size: 14px; }
         footer { background: #5a7a5a; color: #e8efe8; text-align: center; padding: 16px; border-radius: 18px; margin-top: 18px; }
+
+        /* ========== FASES DEL MONITOREO ========== */
+        .fases-panel { background: linear-gradient(135deg, #f4f8f4 0%, #fcfaf7 100%); padding: 20px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
+        .fases-panel h3 { color: #5a7a5a; margin-bottom: 14px; font-size: 1rem; text-align: center; }
+        .fases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .fase-item { background: white; padding: 18px 14px; border-radius: 16px; border: 2px solid #ede8e0; text-align: center; transition: all 0.35s ease; position: relative; overflow: hidden; }
+        .fase-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #d6cfc4; transition: all 0.35s ease; }
+        .fase-item.activa { border-color: #27ae60; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39,174,96,0.12); }
+        .fase-item.activa::before { background: #27ae60; }
+        .fase-item.pendiente { border-color: #f1c40f; }
+        .fase-item.pendiente::before { background: #f1c40f; }
+        .fase-item.error { border-color: #e74c3c; }
+        .fase-item.error::before { background: #e74c3c; }
+        .fase-icon { font-size: 32px; margin-bottom: 8px; }
+        .fase-nombre { font-size: 13px; font-weight: 700; color: #4a6a4a; margin-bottom: 6px; }
+        .fase-estado { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 6px; }
+        .fase-estado.activo { background: #d4edda; color: #155724; }
+        .fase-estado.pendiente { background: #fff3cd; color: #856404; }
+        .fase-estado.error { background: #f8d7da; color: #721c24; }
+        .fase-detalles { font-size: 11px; color: #8aa08a; line-height: 1.5; }
+        .fase-barra { width: 100%; height: 6px; background: #f0ebe4; border-radius: 3px; margin-top: 10px; overflow: hidden; }
+        .fase-barra-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; width: 0%; }
+        .fase-item.activa .fase-barra-fill { width: 100%; background: #27ae60; }
+        .fase-item.pendiente .fase-barra-fill { width: 60%; background: #f1c40f; }
+        .fase-item.error .fase-barra-fill { width: 100%; background: #e74c3c; }
+
         @media (max-width: 768px) {
             .container { padding: 16px; }
             .stats { grid-template-columns: 1fr 1fr; }
@@ -60,36 +86,56 @@
             .layer-control { flex-direction: column; align-items: stretch; }
             .update-badge { margin-left: 0; }
             #map { height: 280px; }
+            .fases-grid { grid-template-columns: 1fr; }
         }
         .map-tab {
-    padding: 10px 24px;
-    border-radius: 30px;
-    border: 1.5px solid #d6cfc4;
-    background: white;
-    color: #5a7a5a;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.map-tab:hover {
-    background: #f4f8f4;
-}
-.map-tab.active {
-    background: #5a7a5a;
-    color: white;
-    border-color: #5a7a5a;
-}
+            padding: 10px 24px;
+            border-radius: 30px;
+            border: 1.5px solid #d6cfc4;
+            background: white;
+            color: #5a7a5a;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .map-tab:hover { background: #f4f8f4; }
+        .map-tab.active { background: #5a7a5a; color: white; border-color: #5a7a5a; }
     </style>
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
 <base target="_blank">
 </head>
 <body>
 <div class="container">
     <h1>🏔️ Andes Observatorio</h1>
     <div class="subtitle">Monitoreo ambiental en tiempo real · Región Andina</div>
+
+    <!-- ========== 3 FASES DEL MONITOREO ========== -->
+    <div class="fases-panel">
+        <h3>🔄 Fases del Monitoreo — Estado del Sistema</h3>
+        <div class="fases-grid">
+            <div class="fase-item pendiente" id="faseClima">
+                <div class="fase-icon">🌡️</div>
+                <div class="fase-nombre">Fase 1: Clima</div>
+                <div class="fase-estado pendiente" id="estadoClima">⏳ Pendiente</div>
+                <div class="fase-detalles" id="detalleClima">Esperando datos de OpenWeatherMap…</div>
+                <div class="fase-barra"><div class="fase-barra-fill" id="barraClima"></div></div>
+            </div>
+            <div class="fase-item pendiente" id="faseSirgas">
+                <div class="fase-icon">🛰️</div>
+                <div class="fase-nombre">Fase 2: SIRGAS</div>
+                <div class="fase-estado pendiente" id="estadoSirgas">⏳ Pendiente</div>
+                <div class="fase-detalles" id="detalleSirgas">Esperando datos geodésicos…</div>
+                <div class="fase-barra"><div class="fase-barra-fill" id="barraSirgas"></div></div>
+            </div>
+            <div class="fase-item pendiente" id="faseZTD">
+                <div class="fase-icon">💧</div>
+                <div class="fase-nombre">Fase 3: ZTD Atmosférico</div>
+                <div class="fase-estado pendiente" id="estadoZTD">⏳ Pendiente</div>
+                <div class="fase-detalles" id="detalleZTD">Esperando datos troposféricos…</div>
+                <div class="fase-barra"><div class="fase-barra-fill" id="barraZTD"></div></div>
+            </div>
+        </div>
+    </div>
 
     <div class="selector">
         <label for="citySelect">📍 Selecciona una ciudad: </label>
@@ -121,60 +167,44 @@
         <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
     </div>
 
-    <!-- BADGES DE DISPONIBILIDAD -->
-<div class="disponibilidad-badges" id="disponibilidadDatos" style="display:flex;gap:10px;padding:8px 16px;font-size:13px;font-weight:600;background:#f8f9fa;border-radius:8px;margin:10px 16px;flex-wrap:wrap;">
-        <span>📊 Datos disponibles:</span>
-        <span id="badgeZTD" class="badge-ztd" style="display:none;background:#2D6A4F;color:white;padding:3px 10px;border-radius:12px;">💧 ZTD</span>
-        <span id="badgeSIRGAS" class="badge-sirgas" style="display:none;background:#e67e22;color:white;padding:3px 10px;border-radius:12px;">🛰️ SIRGAS</span>
-        <span id="badgePoligono" class="badge-poligono" style="display:none;background:#2980b9;color:white;padding:3px 10px;border-radius:12px;">🗺️ Polígono</span>
-        <span id="badgeSoloClima" class="badge-soloclima" style="display:none;background:#e74c3c;color:white;padding:3px 10px;border-radius:12px;">⚠️ Solo clima</span>
-</div>
-    
-    <!-- TABS para alternar entre mapas -->
-<div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
-    <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
-    <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
-</div>
+    <div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
+        <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
+        <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
+    </div>
 
-<!-- CONTROLES SIRGAS -->
-<div id="controlesSirgas" class="layer-control">
-    <label><input type="checkbox" id="toggleTopografia"> 🛰️ Vista satélite</label>
-    <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
-    <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
-    <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
-    <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
-    <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
-    <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
-</div>
+    <div id="controlesSirgas" class="layer-control">
+        <label><input type="checkbox" id="toggleTopografia"> 🛰️ Vista satélite</label>
+        <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
+        <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
+        <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
+        <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
+        <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
+        <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
+    </div>
 
-<!-- CONTROLES ZTD -->
-<div id="controlesZTD" class="layer-control" style="display:none;">
-    <label><input type="checkbox" id="toggleTopografiaZTD"> 🛰️ Vista satélite</label>
-    <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
-    <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
-    <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;flex-wrap:wrap;">
-        <span title="Anomalía = ZTD actual − promedio histórico de la estación. Elimina el sesgo altitudinal.">📊 Anomalía ZTD:</span>
-        <span style="background:linear-gradient(to right,#2c5f8a,#4a9,#2c5f2c,#d4a017,#c0392b);width:140px;height:10px;border-radius:4px;display:inline-block;" title="Azul=seco | Verde=normal | Rojo=húmedo"></span>
-        <span id="ztdLeyendaMin">--</span>
-        <span style="color:#aaa;">normal</span>
-        <span id="ztdLeyendaMax">--</span>
-        <span style="color:#aaa;" title="Valores en mm de desviación respecto al promedio de cada estación">ⓘ</span>
-    </span>
-</div>
+    <div id="controlesZTD" class="layer-control" style="display:none;">
+        <label><input type="checkbox" id="toggleTopografiaZTD"> 🛰️ Vista satélite</label>
+        <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
+        <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;flex-wrap:wrap;">
+            <span title="Anomalía = ZTD actual − promedio histórico de la estación. Elimina el sesgo altitudinal.">📊 Anomalía ZTD:</span>
+            <span style="background:linear-gradient(to right,#2c5f8a,#4a9,#2c5f2c,#d4a017,#c0392b);width:140px;height:10px;border-radius:4px;display:inline-block;" title="Azul=seco | Verde=normal | Rojo=húmedo"></span>
+            <span id="ztdLeyendaMin">--</span>
+            <span style="color:#aaa;">normal</span>
+            <span id="ztdLeyendaMax">--</span>
+            <span style="color:#aaa;" title="Valores en mm de desviación respecto al promedio de cada estación">ⓘ</span>
+        </span>
+    </div>
 
-<!-- MAPA SIRGAS -->
-<div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
+    <div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
+    <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
-<!-- MAPA ZTD -->
-<div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
-
-<!-- Nota ZTD -->
-<p id="notaZTD" style="display:none;font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
-    <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
-    (Bogotá a 2600 m siempre tiene menos ZTD que Cali a 1000 m). Ahora mostramos la <strong>ANOMALÍA</strong>: cuánto se desvía 
-    el valor actual del promedio histórico de CADA estación. Esto elimina el sesgo altitudinal y permite comparar condiciones 
-    atmosféricas entre estaciones. <strong>🔴 Rojo = más húmedo de lo normal | 🟢 Verde = normal | 🔵 Azul = más seco de lo normal.</strong>
-</p>
+    <p id="notaZTD" style="display:none;font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
+        <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
+        (Bogotá a 2600 m siempre tiene menos ZTD que Cali a 1000 m). Ahora mostramos la <strong>ANOMALÍA</strong>: cuánto se desvía 
+        el valor actual del promedio histórico de CADA estación. Esto elimina el sesgo altitudinal y permite comparar condiciones 
+        atmosféricas entre estaciones. <strong>🔴 Rojo = más húmedo de lo normal | 🟢 Verde = normal | 🔵 Azul = más seco de lo normal.</strong>
+    </p>
 
     <div class="alertas-panel">
         <h3>⚡ Panel de Alertas Personalizables</h3>
@@ -232,49 +262,19 @@
 
     <div class="sirgas-historico" id="ztdPanel">
         <h3>💧 Retardo Troposférico Cenital (ZTD) - Datos reales SIRGAS</h3>
-
         <details style="margin-bottom:12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
             <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;">ℹ️ ¿Qué es el ZTD y por qué importa?</summary>
             <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
-                <p>
-                    Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco.
-                    Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>.
-                    Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión
-                    atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el
-                    <strong>vapor de agua</strong> en el aire, muy variable).
-                </p>
-                <p>
-                    La parte húmeda es la que interesa para el clima: cuando el vapor de agua se
-                    acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma
-                    perceptible horas antes de que empiece a llover. Por eso las redes GNSS como
-                    SIRGAS —pensadas originalmente para geodesia— también se usan como una fuente
-                    adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y
-                    el <strong>monitoreo de eventos climáticos extremos</strong>, complementando a
-                    las redes meteorológicas tradicionales.
-                </p>
-                <p style="margin-bottom:0;">
-                    <strong>Marco institucional:</strong> cada país andino tiene su propia autoridad
-                    de monitoreo hidrometeorológico y gestión del riesgo — por ejemplo, en Colombia
-                    la Ley 1523 de 2012 crea el Sistema Nacional de Gestión del Riesgo de Desastres
-                    (SNGRD), que exige mantener actualizado un sistema de información sobre riesgo de
-                    desastres. Estos datos de ZTD pueden servir como una capa adicional de información
-                    para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos
-                    oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).
-                    Verifica siempre la normativa vigente y los canales oficiales de tu país antes de
-                    tomar decisiones basadas en estos datos.
-                </p>
+                <p>Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco. Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>. Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el <strong>vapor de agua</strong> en el aire, muy variable).</p>
+                <p>La parte húmeda es la que interesa para el clima: cuando el vapor de agua se acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma perceptible horas antes de que empiece a llover. Por eso las redes GNSS como SIRGAS también se usan como una fuente adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y el <strong>monitoreo de eventos climáticos extremos</strong>.</p>
+                <p style="margin-bottom:0;"><strong>Marco institucional:</strong> cada país andino tiene su propia autoridad de monitoreo hidrometeorológico y gestión del riesgo. Estos datos de ZTD pueden servir como una capa adicional de información para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).</p>
             </div>
         </details>
-
         <div>
             <label>Estación: </label>
-            <select id="estacionZTD">
-                <option value="">Cargando estaciones…</option>
-            </select>
-            <label>Desde: </label>
-            <input type="date" id="ztdDesde">
-            <label>Hasta: </label>
-            <input type="date" id="ztdHasta">
+            <select id="estacionZTD"><option value="">Cargando estaciones…</option></select>
+            <label>Desde: </label><input type="date" id="ztdDesde">
+            <label>Hasta: </label><input type="date" id="ztdHasta">
             <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
         </div>
         <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
@@ -290,9 +290,7 @@
             <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiPrecip">12.5 mm</div><div class="label">Precipitación promedio</div></div>
         </div>
         <div style="background:#f0f5f0;padding:12px 16px;border-radius:12px;margin-top:12px;border-left:4px solid #8aaa8a;">
-            <p style="font-size:13px;color:#4a6a4a;margin:0;"><strong>📌 Nota:<p style="color: #27ae60; font-size: 0.9rem; font-weight: 500;">
-    ✅ Datos actualizados automáticamente desde fuentes oficiales
-            </p> 
+            <p style="font-size:13px;color:#4a6a4a;margin:0;"><strong>📌 Nota:</strong> Datos actualizados automáticamente desde fuentes oficiales</p>
         </div>
     </div>
 
@@ -307,31 +305,18 @@
         <p>📧 andesobservatorio@gmail.com · 📞 +57 3337211047</p>
     </footer>
 </div>
-
 <script>
     const API_KEY = "70232a5a2fff0ed9923878e1a513d00e";
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
-    // La API de ZTD corre localmente por ahora (uvicorn en tu Ubuntu, puerto 8001).
-    // Cuando conectes Render más adelante, cambia esta línea a tu URL de Render.
     const API_BASE = "https://andes-observatorio.onrender.com";
-    const DEMO_ZTD_STATIONS = [
-    { codigo: "BOGT", nombre: "Bogotá", pais: "Colombia" },
-    { codigo: "CALI", nombre: "Cali", pais: "Colombia" },
-    { codigo: "AREQ", nombre: "Arequipa", pais: "Perú" },
-    { codigo: "ANTC", nombre: "Antofagasta", pais: "Chile" },
-    { codigo: "SANT", nombre: "Santiago", pais: "Chile" }
-];
 
-// ==================== MODO DEMO ZTD ====================
-function generarDatosZTD() {
-    const datos = [];
-    let ztd = 2.3;
-    for (let i = 0; i < 50; i++) {
-        ztd += (Math.random() - 0.5) * 0.02;
-        datos.push({fecha: new Date(2026, 0, 1 + i * 5).toISOString().slice(0,10), ztd: ztd.toFixed(3)});
-    }
-    return datos;
-}
+    const DEMO_ZTD_STATIONS = [
+        { codigo: "BOGT", nombre: "Bogotá", pais: "Colombia" },
+        { codigo: "CALI", nombre: "Cali", pais: "Colombia" },
+        { codigo: "AREQ", nombre: "Arequipa", pais: "Perú" },
+        { codigo: "ANTC", nombre: "Antofagasta", pais: "Chile" },
+        { codigo: "SANT", nombre: "Santiago", pais: "Chile" }
+    ];
 
     const ciudades = [
         { nombre: "Bogotá", pais: "Colombia", query: "Bogota,CO", lat: 4.7110, lon: -74.0721 },
@@ -404,8 +389,8 @@ function generarDatosZTD() {
 
     let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
-    const ztdSerieCache = {};   // { CODIGO: [{fecha, valor, error}, ...] }
-    const coordenadasZTD = {   // coordenadas reales de las estaciones con datos ZTD
+    const ztdSerieCache = {};
+    const coordenadasZTD = {
         'BOGT': [4.6400, -74.0800],
         'CALI': [3.4500, -76.5300],
         'AREQ': [-16.4000, -71.5300],
@@ -413,6 +398,31 @@ function generarDatosZTD() {
         'SANT': [-33.4500, -70.6600],
     };
     let estacionesSIRGAS = [];
+
+    // ============================================================
+    // ACTUALIZADOR DE FASES
+    // ============================================================
+    function actualizarFase(idFase, estado, mensaje, detalle) {
+        const fase = document.getElementById(idFase);
+        const estadoEl = document.getElementById('estado' + idFase.replace('fase', ''));
+        const detalleEl = document.getElementById('detalle' + idFase.replace('fase', ''));
+        fase.classList.remove('activa', 'pendiente', 'error');
+        estadoEl.classList.remove('activo', 'pendiente', 'error');
+        if (estado === 'activa') {
+            fase.classList.add('activa');
+            estadoEl.classList.add('activo');
+            estadoEl.innerText = '✅ Activo';
+        } else if (estado === 'error') {
+            fase.classList.add('error');
+            estadoEl.classList.add('error');
+            estadoEl.innerText = '❌ Error';
+        } else {
+            fase.classList.add('pendiente');
+            estadoEl.classList.add('pendiente');
+            estadoEl.innerText = '⏳ ' + (mensaje || 'Pendiente');
+        }
+        if (detalle) detalleEl.innerText = detalle;
+    }
 
     // ============================================================
     // CLIMA
@@ -423,27 +433,28 @@ function generarDatosZTD() {
             const res = await fetch(url);
             const data = await res.json();
             if (data.cod === 200) {
+                actualizarFase('faseClima', 'activa', 'Activo', `Temp: ${data.main.temp.toFixed(1)}°C · Hum: ${data.main.humidity}%`);
                 return { temp: data.main.temp, hum: data.main.humidity, feels: data.main.feels_like };
+            } else {
+                actualizarFase('faseClima', 'error', 'Error', `API: ${data.message || 'Error desconocido'}`);
             }
-        } catch(e) {}
+        } catch(e) {
+            actualizarFase('faseClima', 'error', 'Error', 'Sin conexión a OpenWeatherMap');
+        }
         return null;
     }
 
-        async function actualizarCiudad() {
+    async function actualizarCiudad() {
         const select = document.getElementById('citySelect');
         const partes = select.value.split(',');
         const query = partes[0] + ',' + partes[1];
         const lat = parseFloat(partes[2]);
         const lon = parseFloat(partes[3]);
         const codigoPais = partes[1];
-
-        // Validar coordenadas
         if (isNaN(lat) || isNaN(lon)) {
             console.warn('Coordenadas inválidas para ciudad:', select.value);
             return;
         }
-
-        // Mapeo completo de ciudad a estaciones y disponibilidad
         const cityToStation = {
             "Bogota,CO,4.7110,-74.0721": {codigo: "BOGT", ztd: true, sirgas: true, poligono: true},
             "Cali,CO,3.4516,-76.5320": {codigo: "CALI", ztd: true, sirgas: false, poligono: true},
@@ -455,17 +466,9 @@ function generarDatosZTD() {
         const estacionInfo = cityToStation[select.value];
         const codigoEstacion = estacionInfo ? estacionInfo.codigo : null;
 
-        // === BADGES DE DISPONIBILIDAD ===
-        document.getElementById('badgeZTD').style.display = estacionInfo && estacionInfo.ztd ? 'inline' : 'none';
-        document.getElementById('badgeSIRGAS').style.display = estacionInfo && estacionInfo.sirgas ? 'inline' : 'none';
-        document.getElementById('badgePoligono').style.display = estacionInfo && estacionInfo.poligono ? 'inline' : 'none';
-        document.getElementById('badgeSoloClima').style.display = (!estacionInfo || (!estacionInfo.ztd && !estacionInfo.sirgas)) ? 'inline' : 'none';
-
-        // === MAPA: volar a la ciudad ===
         if (mapSirgas) mapSirgas.flyTo([lat, lon], 8, { duration: 1.5 });
         if (mapZTD) mapZTD.flyTo([lat, lon], 8, { duration: 1.5 });
 
-        // === CLIMA ===
         const clima = await getClima(query);
         if (clima) {
             document.getElementById('temp').innerHTML = clima.temp.toFixed(1) + '<small>°C</small>';
@@ -474,7 +477,6 @@ function generarDatosZTD() {
             actualizarAlertas(clima);
         }
 
-        // === NORMATIVAS ===
         const lista = document.getElementById('normativasLista');
         const placeholder = document.getElementById('normativasPlaceholder');
         if (normativas[codigoPais]) {
@@ -488,11 +490,9 @@ function generarDatosZTD() {
             lista.innerHTML = '';
         }
 
-        // === SINCRONIZAR ZTD ===
         if (codigoEstacion && estacionInfo.ztd) {
             const selectZTD = document.getElementById('estacionZTD');
             if (selectZTD) {
-                // Esperar a que las estaciones ZTD carguen
                 await cargarEstacionesZTD();
                 if (selectZTD.querySelector(`option[value="${codigoEstacion}"]`)) {
                     selectZTD.value = codigoEstacion;
@@ -500,8 +500,6 @@ function generarDatosZTD() {
                 }
             }
         }
-
-        // === SINCRONIZAR SIRGAS HISTÓRICO ===
         if (codigoEstacion && estacionInfo.sirgas) {
             const selectSIRGAS = document.getElementById('estacionHistorica');
             if (selectSIRGAS && selectSIRGAS.querySelector(`option[value="${codigoEstacion}"]`)) {
@@ -509,8 +507,6 @@ function generarDatosZTD() {
                 actualizarSirgasHistorico();
             }
         }
-
-        // === TENDENCIA Y GRÁFICO ===
         await actualizarTendencia(query);
         await actualizarGrafico();
     }
@@ -535,31 +531,23 @@ function generarDatosZTD() {
         const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
         const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
         const umbralFeels = parseFloat(document.getElementById('umbralFeels').value) || 30;
-
         document.getElementById('tempActual').innerText = clima.temp.toFixed(1);
         document.getElementById('humActual').innerText = clima.hum;
         document.getElementById('feelsActual').innerText = clima.feels.toFixed(1);
-
         const tempEl = document.getElementById('estadoTemp');
         const humEl = document.getElementById('estadoHum');
         const feelsEl = document.getElementById('estadoFeels');
-
         if (clima.temp > umbralTemp) { tempEl.className = 'estado-alerta critico'; tempEl.innerText = '🔴 Supera umbral'; }
         else if (clima.temp > umbralTemp * 0.8) { tempEl.className = 'estado-alerta alerta'; tempEl.innerText = '🟡 Cerca del umbral'; }
         else { tempEl.className = 'estado-alerta ok'; tempEl.innerText = '✅ Normal'; }
-
         if (clima.hum > umbralHum) { humEl.className = 'estado-alerta critico'; humEl.innerText = '🔴 Supera umbral'; }
         else if (clima.hum > umbralHum * 0.8) { humEl.className = 'estado-alerta alerta'; humEl.innerText = '🟡 Cerca del umbral'; }
         else { humEl.className = 'estado-alerta ok'; humEl.innerText = '✅ Normal'; }
-
         if (clima.feels > umbralFeels) { feelsEl.className = 'estado-alerta critico'; feelsEl.innerText = '🔴 Supera umbral'; }
         else if (clima.feels > umbralFeels * 0.8) { feelsEl.className = 'estado-alerta alerta'; feelsEl.innerText = '🟡 Cerca del umbral'; }
         else { feelsEl.className = 'estado-alerta ok'; feelsEl.innerText = '✅ Normal'; }
     }
 
-    // ============================================================
-    // GRÁFICOS
-    // ============================================================
     async function actualizarGrafico() {
         const labels = [];
         const datos = [];
@@ -588,47 +576,35 @@ function generarDatosZTD() {
             data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: [] }] },
             options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 35, title: { display: true, text: 'Temperatura (°C)' } } } }
         });
-
         const ctx2 = document.getElementById('protectedChart').getContext('2d');
         protectedChart = new Chart(ctx2, {
             type: 'bar',
             data: { labels: Object.keys(areasProtegidas), datasets: [{ label: 'Áreas protegidas (%)', data: Object.values(areasProtegidas), backgroundColor: '#99cc99', borderColor: '#4caf50', borderWidth: 1, borderRadius: 4 }] },
             options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 40, title: { display: true, text: 'Áreas protegidas (%)' } } } }
         });
-
         const ctx3 = document.getElementById('trendChart').getContext('2d');
         trendChart = new Chart(ctx3, {
             type: 'line',
             data: { labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], datasets: [{ label: 'Temperatura (°C)', data: [0,0,0,0,0,0,0], borderColor: '#8aaa8a', tension: 0.3, fill: true, backgroundColor: 'rgba(138,170,138,0.1)' }] },
             options: { responsive: true, plugins: { legend: { display: false } } }
         });
-
         const ctx4 = document.getElementById('sirgasHistoryChart').getContext('2d');
         sirgasHistoryChart = new Chart(ctx4, {
             type: 'line',
             data: { labels: [], datasets: [{ label: 'Serie temporal', data: [], borderColor: '#2980b9', tension: 0.3, fill: true, backgroundColor: 'rgba(41,128,185,0.08)' }] },
             options: { responsive: true, plugins: { legend: { display: false } } }
         });
-
         const ctx5 = document.getElementById('ztdChart').getContext('2d');
         ztdChart = new Chart(ctx5, {
             type: 'line',
             data: { labels: [], datasets: [
                 { label: 'ZTD total (mm)', data: [], borderColor: '#2c5f8a', tension: 0.3, fill: true, backgroundColor: 'rgba(44,95,138,0.08)', pointRadius: 1 }
             ] },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: true } },
-                scales: { y: { title: { display: true, text: 'ZTD (mm)' } } }
-            }
+            options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { title: { display: true, text: 'ZTD (mm)' } } } }
         });
-
         actualizarGrafico();
     }
 
-    // ============================================================
-    // SIRGAS HISTÓRICO
-    // ============================================================
     function generarDatosHistoricos(estacion, variable) {
         const params = {
             'BOGT': { base: 0, tendencia: 2.5, ruido: 1.2 },
@@ -665,56 +641,47 @@ function generarDatosZTD() {
         }
     }
 
-    // ============================================================
-    // ZTD (Retardo Troposférico Cenital) - Datos reales de SIRGAS
-    // ============================================================
-async function cargarEstacionesZTD() {
-    const select = document.getElementById('estacionZTD');
-    select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
-    
-    try {
-        const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
-        if (!res.ok) throw new Error("API no disponible");
-        const data = await res.json();
-        const estaciones = data.estaciones || [];
-        
-        if (estaciones.length === 0) {
-            select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
-            return;
+    async function cargarEstacionesZTD() {
+        const select = document.getElementById('estacionZTD');
+        select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
+        try {
+            const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
+            if (!res.ok) throw new Error("API no disponible");
+            const data = await res.json();
+            const estaciones = data.estaciones || [];
+            if (estaciones.length === 0) {
+                select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
+                return;
+            }
+            select.innerHTML = '<option value="">📍 Seleccionar estación</option>';
+            estaciones.forEach(est => {
+                const info = DEMO_ZTD_STATIONS.find(e => e.codigo === est.codigo);
+                const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : est.codigo;
+                select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${nombreMostrar} (${est.total_registros} reg.)</option>`;
+            });
+            actualizarGraficoZTD();
+        } catch (e) {
+            select.innerHTML = '<option value="">📍 Estaciones DEMO ⚠️</option>';
+            DEMO_ZTD_STATIONS.forEach(est => {
+                select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${est.nombre}, ${est.pais}</option>`;
+            });
+            document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible.';
         }
-        
-        select.innerHTML = '<option value="">📍 Seleccionar estación</option>';
-        estaciones.forEach(est => {
-            const info = DEMO_ZTD_STATIONS.find(e => e.codigo === est.codigo);
-            const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : est.codigo;
-            select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${nombreMostrar} (${est.total_registros} reg.)</option>`;
-        });
-        actualizarGraficoZTD();
-        
-    } catch (e) {
-        select.innerHTML = '<option value="">📍 Estaciones DEMO ⚠️</option>';
-        DEMO_ZTD_STATIONS.forEach(est => {
-            select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${est.nombre}, ${est.pais}</option>`;
-        });
-        document.getElementById('ztdInfo').innerHTML = '⚠️ Modo DEMO: API no disponible.';
     }
-}
+
     async function actualizarGraficoZTD() {
         const codigo = document.getElementById('estacionZTD').value;
         if (!codigo) return;
-
         const desde = document.getElementById('ztdDesde').value;
         const hasta = document.getElementById('ztdHasta').value;
         let url = `${API_BASE}/api/v1/geodesia/tropo/${codigo}/serie?limite=500`;
         if (desde) url += `&desde=${desde}`;
         if (hasta) url += `&hasta=${hasta}`;
-
         document.getElementById('ztdInfo').innerText = '🔄 Cargando datos…';
         try {
             const res = await fetch(url);
             const data = await res.json();
             const puntos = data.datos || [];
-
             if (puntos.length === 0) {
                 document.getElementById('ztdInfo').innerText = `⚠️ Sin datos de ZTD para ${codigo} en ese rango de fechas.`;
                 ztdChart.data.labels = [];
@@ -722,11 +689,9 @@ async function cargarEstacionesZTD() {
                 ztdChart.update();
                 return;
             }
-
             ztdChart.data.labels = puntos.map(p => new Date(p.fecha).toLocaleString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit' }));
             ztdChart.data.datasets[0].data = puntos.map(p => p.valor);
             ztdChart.update();
-
             document.getElementById('ztdInfo').innerText =
                 `📊 ${data.total_registros} registros para ${codigo} (${puntos[0].fecha.split('T')[0]} a ${puntos[puntos.length - 1].fecha.split('T')[0]})`;
         } catch (e) {
@@ -734,98 +699,66 @@ async function cargarEstacionesZTD() {
         }
     }
 
-    // ============================================================
-    // SIRGAS
-    // ============================================================
     async function cargarSIRGAS() {
         const badge = document.getElementById('sirgasBadge');
         badge.innerText = '🔄 Actualizando SIRGAS…';
         try {
             const res = await fetch(API_SIRGAS);
             const data = await res.json();
-            estacionesSIRGAS = data.estaciones;
+            estacionesSIRGAS = data.estaciones || data;
             const ahora = new Date();
-            badge.innerText = `📡 SIRGAS: ${data.estaciones.length} estaciones (últ. act. ${ahora.toLocaleTimeString()})`;
-            dibujarSIRGAS(data.estaciones); 
+            const count = Array.isArray(estacionesSIRGAS) ? estacionesSIRGAS.length : 0;
+            badge.innerText = `📡 SIRGAS: ${count} estaciones (últ. act. ${ahora.toLocaleTimeString()})`;
+            actualizarFase('faseSirgas', 'activa', 'Activo', `${count} estaciones cargadas · ${ahora.toLocaleTimeString()}`);
+            dibujarSIRGAS(estacionesSIRGAS);
         } catch(e) {
             badge.innerText = '⚠️ Error SIRGAS';
+            actualizarFase('faseSirgas', 'error', 'Error', 'No se pudo conectar a la API SIRGAS');
         }
     }
 
     function dibujarSIRGAS(estaciones) {
+        if (!Array.isArray(estaciones)) return;
         if (capaSIRGAS) mapSirgas.removeLayer(capaSIRGAS);
         if (capaEstaciones) mapSirgas.removeLayer(capaEstaciones);
         if (capaInfluencia) mapSirgas.removeLayer(capaInfluencia);
-
         capaSIRGAS = L.layerGroup();
         capaEstaciones = L.layerGroup();
         capaInfluencia = L.layerGroup();
-
         estaciones.forEach(est => {
             const start = [est.lat, est.lon];
-            const magnitud = Math.sqrt((est.velocidad_este || est.ve) ** 2 + (est.velocidad_norte || est.vn) ** 2);
+            const ve = est.velocidad_este || est.ve || 0;
+            const vn = est.velocidad_norte || est.vn || 0;
+            const magnitud = Math.sqrt(ve ** 2 + vn ** 2);
             const colorInfo = colorSIRGAS(magnitud);
             const color = colorInfo.color;
-
-            // Vector con escala proporcional: 1 mm/año ≈ 0.5 km en mapa
-            const vn = est.velocidad_norte || est.vn || 0;
-            const ve = est.velocidad_este || est.ve || 0;
             const deltaLat = (vn / 111000) * ESCALA_SIRGAS * 1000;
             const deltaLon = (ve / (111000 * Math.cos(est.lat * Math.PI / 180))) * ESCALA_SIRGAS * 1000;
             const end = [est.lat + deltaLat, est.lon + deltaLon];
-
-            // Vector principal con flecha
             dibujarFlecha(capaSIRGAS, start, end, color, 3);
-
-            // Estación: marcador con color según magnitud
-            L.circleMarker(start, { 
-                radius: 7, 
-                fillColor: color, 
-                color: '#333', 
-                weight: 1.5, 
-                fillOpacity: 0.9 
-            }).bindPopup(construirPopupSIRGAS(est, magnitud, colorInfo))
-              .addTo(capaEstaciones);
-
-            // Círculo de influencia (área representativa)
+            L.circleMarker(start, { radius: 7, fillColor: color, color: '#333', weight: 1.5, fillOpacity: 0.9 })
+                .bindPopup(construirPopupSIRGAS(est, magnitud, colorInfo)).addTo(capaEstaciones);
             const radioKm = Math.min(100, Math.max(30, magnitud * 3));
-            L.circle(start, { 
-                radius: radioKm * 1000, 
-                color: color, 
-                weight: 1, 
-                fillColor: color, 
-                fillOpacity: 0.06,
-                dashArray: '4,4'
-            }).addTo(capaInfluencia);
+            L.circle(start, { radius: radioKm * 1000, color: color, weight: 1, fillColor: color, fillOpacity: 0.06, dashArray: '4,4' }).addTo(capaInfluencia);
         });
-
         capaSIRGAS.addTo(mapSirgas);
         capaEstaciones.addTo(mapSirgas);
         capaInfluencia.addTo(mapSirgas);
-
         actualizarLeyendaSIRGAS();
     }
 
-    // ============================================================
-    // FUNCIONES AUXILIARES SIRGAS
-    // ============================================================
-    const ESCALA_SIRGAS = 0.5; // km en mapa por mm/año
-
+    const ESCALA_SIRGAS = 0.5;
     function colorSIRGAS(magnitud) {
         if (magnitud <= 10)  return { color: '#27ae60', label: 'Lento (0–10)' };
         if (magnitud <= 20)  return { color: '#f1c40f', label: 'Moderado (10–20)' };
         if (magnitud <= 30)  return { color: '#e67e22', label: 'Rápido (20–30)' };
         return { color: '#c0392b', label: 'Muy rápido (>30)' };
     }
-
-    function azimut(est) {
-        const ve = est.velocidad_este || est.ve;
-        const vn = est.velocidad_norte || est.vn;
+    function azimut(ve, vn) {
         let ang = Math.atan2(ve, vn) * (180 / Math.PI);
         if (ang < 0) ang += 360;
         return ang.toFixed(1);
     }
-
     function dibujarFlecha(mapa, start, end, color, weight) {
         L.polyline([start, end], { color: color, weight: weight, opacity: 0.9 }).addTo(mapa);
         const dx = end[1] - start[1];
@@ -837,26 +770,18 @@ async function cargarEstacionesZTD() {
         const p2 = [end[0] - headLen * Math.sin(angle + arrowAngle), end[1] - headLen * Math.cos(angle + arrowAngle)];
         L.polygon([end, p1, p2], { color: color, fillColor: color, fillOpacity: 0.9, weight: 1 }).addTo(mapa);
     }
-
     function construirPopupSIRGAS(est, magnitud, colorInfo) {
-        const az = azimut(est);
-        const direccion = az < 22.5 || az >= 337.5 ? 'N' :
-                         az < 67.5 ? 'NE' :
-                         az < 112.5 ? 'E' :
-                         az < 157.5 ? 'SE' :
-                         az < 202.5 ? 'S' :
-                         az < 247.5 ? 'SW' :
-                         az < 292.5 ? 'W' : 'NW';
-
+        const az = azimut(est.ve || est.velocidad_este || 0, est.vn || est.velocidad_norte || 0);
+        const direccion = az < 22.5 || az >= 337.5 ? 'N' : az < 67.5 ? 'NE' : az < 112.5 ? 'E' : az < 157.5 ? 'SE' : az < 202.5 ? 'S' : az < 247.5 ? 'SW' : az < 292.5 ? 'W' : 'NW';
+        const ve = est.ve !== undefined ? est.ve : (est.velocidad_este || 0);
+        const vn = est.vn !== undefined ? est.vn : (est.velocidad_norte || 0);
         const vuText = est.vu !== undefined 
             ? `<tr><td>⬆️ Vertical (Up)</td><td style="text-align:right;font-weight:600;">${est.vu > 0 ? '+' : ''}${est.vu.toFixed(1)} mm/año</td></tr>
                <tr><td colspan="2" style="font-size:11px;color:#888;">${est.vu > 1 ? '⬆️ Ascenso (uplift)' : est.vu < -1 ? '⬇️ Descenso (subsidence)' : '➡️ Estable verticalmente'}</td></tr>`
             : '<tr><td colspan="2" style="font-size:11px;color:#888;">Componente vertical no disponible</td></tr>';
-
         const sigmaText = est.se || est.sn
             ? `<tr><td>📐 Incertidumbre (1σ)</td><td style="text-align:right;">E: ±${(est.se || 0).toFixed(2)} | N: ±${(est.sn || 0).toFixed(2)} mm/año</td></tr>`
             : '';
-
         return `
             <div style="min-width:280px;font-size:13px;">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
@@ -865,36 +790,18 @@ async function cargarEstacionesZTD() {
                     <span style="font-size:11px;color:#888;margin-left:auto;">${colorInfo.label} mm/año</span>
                 </div>
                 <table style="width:100%;border-collapse:collapse;margin-bottom:8px;">
-                    <tr style="background:#f8f9fa;">
-                        <td>📏 Magnitud total</td>
-                        <td style="text-align:right;font-weight:600;font-size:15px;color:${colorInfo.color};">${magnitud.toFixed(1)} mm/año</td>
-                    </tr>
-                    <tr>
-                        <td>🧭 Dirección (azimut)</td>
-                        <td style="text-align:right;">${az}° ${direccion}</td>
-                    </tr>
-                    <tr style="background:#f8f9fa;">
-                        <td>➡️ Este (VE)</td>
-                        <td style="text-align:right;">${((est.velocidad_este || est.ve) > 0 ? '+' : '') + (est.velocidad_este || est.ve).toFixed(1)} mm/año</td>
-                    </tr>
-                    <tr>
-                        <td>⬆️ Norte (VN)</td>
-                        <td style="text-align:right;">${((est.velocidad_norte || est.vn) > 0 ? '+' : '') + (est.velocidad_norte || est.vn).toFixed(1)} mm/año</td>
-                    </tr>
-                    ${vuText}
-                    ${sigmaText}
-                    <tr style="background:#f8f9fa;">
-                        <td>📍 Coordenadas</td>
-                        <td style="text-align:right;font-size:11px;">${est.lat.toFixed(4)}°, ${est.lon.toFixed(4)}°</td>
-                    </tr>
+                    <tr style="background:#f8f9fa;"><td>📏 Magnitud total</td><td style="text-align:right;font-weight:600;font-size:15px;color:${colorInfo.color};">${magnitud.toFixed(1)} mm/año</td></tr>
+                    <tr><td>🧭 Dirección (azimut)</td><td style="text-align:right;">${az}° ${direccion}</td></tr>
+                    <tr style="background:#f8f9fa;"><td>➡️ Este (VE)</td><td style="text-align:right;">${ve > 0 ? '+' : ''}${ve.toFixed(1)} mm/año</td></tr>
+                    <tr><td>⬆️ Norte (VN)</td><td style="text-align:right;">${vn > 0 ? '+' : ''}${vn.toFixed(1)} mm/año</td></tr>
+                    ${vuText}${sigmaText}
+                    <tr style="background:#f8f9fa;"><td>📍 Coordenadas</td><td style="text-align:right;font-size:11px;">${est.lat.toFixed(4)}°, ${est.lon.toFixed(4)}°</td></tr>
                 </table>
                 <div style="font-size:11px;color:#666;border-top:1px solid #eee;padding-top:6px;">
                     <strong>Interpretación:</strong> ${magnitud < 10 ? 'Movimiento tectónico lento. Zona intraplaca estable.' : magnitud < 20 ? 'Movimiento moderado. Posible influencia de fallas cercanas.' : magnitud < 30 ? 'Movimiento rápido. Cercanía a zonas de borde de placa o fallas activas.' : 'Movimiento muy rápido. Zona de borde de placa activa (subducción/transformación).'}
                 </div>
-            </div>
-        `;
+            </div>`;
     }
-
     function actualizarLeyendaSIRGAS() {
         const oldLegend = document.querySelector('.sirgas-legend');
         if (oldLegend) oldLegend.remove();
@@ -909,20 +816,13 @@ async function cargarEstacionesZTD() {
                 <div style="margin-bottom:4px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#e67e22;margin-right:6px;vertical-align:middle;"></span> Rápido 20–30</div>
                 <div style="margin-bottom:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#c0392b;margin-right:6px;vertical-align:middle;"></span> Muy rápido >30</div>
                 <div style="border-top:1px solid #eee;padding-top:6px;font-size:11px;color:#666;">
-                    📐 Escala: 10 mm/año ≈ 5 km en el mapa<br>
-                    🧭 Azimut: desde el Norte (0°), horario
-                </div>
-            `;
+                    📐 Escala: 10 mm/año ≈ 5 km en el mapa<br>🧭 Azimut: desde el Norte (0°), horario
+                </div>`;
             return div;
         };
         legend.addTo(mapSirgas);
     }
-    // ============================================================
-    // MAPA
-    // ============================================================
-         // ============================================================
-    // TABS: Alternar entre mapas
-    // ============================================================
+
     function mostrarMapa(tipo) {
         const tabSirgas = document.getElementById('tabSirgas');
         const tabZTD = document.getElementById('tabZTD');
@@ -931,7 +831,6 @@ async function cargarEstacionesZTD() {
         const ctrlSirgas = document.getElementById('controlesSirgas');
         const ctrlZTD = document.getElementById('controlesZTD');
         const notaZTD = document.getElementById('notaZTD');
-
         if (tipo === 'sirgas') {
             tabSirgas.classList.add('active');
             tabZTD.classList.remove('active');
@@ -957,93 +856,52 @@ async function cargarEstacionesZTD() {
         }
     }
 
-    // ============================================================
-    // SINCRONIZACIÓN DE MAPAS
-    // ============================================================
-    // Cuando el usuario mueve o hace zoom en un mapa, el otro sigue
-    // automáticamente. Esto permite comparar SIRGAS y ZTD en la misma
-    // región sin tener que ajustar manualmente cada uno.
-    // ============================================================
     let sincronizando = false;
-
     function sincronizarMapas() {
         if (!mapSirgas || !mapZTD) return;
-
         mapSirgas.on('moveend', function() {
             if (sincronizando) return;
             sincronizando = true;
-            const center = mapSirgas.getCenter();
-            const zoom = mapSirgas.getZoom();
-            mapZTD.setView(center, zoom, { animate: false });
+            mapZTD.setView(mapSirgas.getCenter(), mapSirgas.getZoom(), { animate: false });
             sincronizando = false;
         });
-
         mapZTD.on('moveend', function() {
             if (sincronizando) return;
             sincronizando = true;
-            const center = mapZTD.getCenter();
-            const zoom = mapZTD.getZoom();
-            mapSirgas.setView(center, zoom, { animate: false });
+            mapSirgas.setView(mapZTD.getCenter(), mapZTD.getZoom(), { animate: false });
             sincronizando = false;
         });
     }
 
-    // ============================================================
-    // CUADRÍCULA GEOGRÁFICA
-    // ============================================================
-    // Dibuja líneas de meridianos y paralelos cada 5° para dar
-    // referencia cartográfica profesional a los mapas.
-    // ============================================================
     function dibujarCuadricula(mapa) {
         const cuadricula = L.layerGroup();
         const estilo = { color: '#999', weight: 0.5, opacity: 0.4, dashArray: '4,4' };
         const estiloEcuador = { color: '#c0392b', weight: 1, opacity: 0.6 };
-        const estiloMeridiano = { color: '#2980b9', weight: 1, opacity: 0.6 };
-
-        // Paralelos (líneas horizontales)
         for (let lat = -60; lat <= 20; lat += 5) {
             const estiloLinea = lat === 0 ? estiloEcuador : estilo;
             const label = lat === 0 ? 'Ecuador' : `${lat}°`;
-            L.polyline([[lat, -90], [lat, -30]], estiloLinea)
-                .bindTooltip(label, { permanent: false, direction: 'right', className: 'grid-label' })
-                .addTo(cuadricula);
+            L.polyline([[lat, -90], [lat, -30]], estiloLinea).bindTooltip(label, { permanent: false, direction: 'right', className: 'grid-label' }).addTo(cuadricula);
         }
-
-        // Meridianos (líneas verticales)
         for (let lon = -90; lon <= -30; lon += 5) {
-            const label = `${lon}°`;
-            L.polyline([[-60, lon], [20, lon]], estilo)
-                .bindTooltip(label, { permanent: false, direction: 'top', className: 'grid-label' })
-                .addTo(cuadricula);
+            L.polyline([[-60, lon], [20, lon]], estilo).bindTooltip(`${lon}°`, { permanent: false, direction: 'top', className: 'grid-label' }).addTo(cuadricula);
         }
-
         cuadricula.addTo(mapa);
         return cuadricula;
     }
 
-    // ============================================================
-    // MAPA SIRGAS
-    // ============================================================
     function initMapSirgas() {
         if (mapSirgas) mapSirgas.remove();
         mapSirgas = L.map('map-sirgas').setView([-15, -65], 4);
-
-        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-            attribution: '© OpenStreetMap', name: 'osm'
-        });
-        const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '© Esri', name: 'topo'
-        });
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', name: 'osm' });
+        const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '© Esri', name: 'topo' });
         osmLayer.addTo(mapSirgas);
         window.sirgasBaseLayers = { osm: osmLayer, topo: topoLayer };
-
         capaCiudades = L.layerGroup();
         ciudades.forEach(c => {
             L.circleMarker([c.lat, c.lon], { radius: 9, fillColor: '#27ae60', color: '#1e8449', weight: 2, fillOpacity: 0.5 })
                 .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`).addTo(capaCiudades);
         });
         capaCiudades.addTo(mapSirgas);
-
         document.getElementById('toggleCiudades').addEventListener('change', function() {
             this.checked ? capaCiudades.addTo(mapSirgas) : mapSirgas.removeLayer(capaCiudades);
         });
@@ -1059,57 +917,38 @@ async function cargarEstacionesZTD() {
             if (this.checked && capaInfluencia) capaInfluencia.addTo(mapSirgas);
             else if (capaInfluencia) mapSirgas.removeLayer(capaInfluencia);
         });
-
-        document.getElementById('toggleTopografia').addEventListener('change', function() {
-            if (this.checked) {
-                mapSirgas.removeLayer(window.sirgasBaseLayers.osm);
-                window.sirgasBaseLayers.topo.addTo(mapSirgas);
-            } else {
-                mapSirgas.removeLayer(window.sirgasBaseLayers.topo);
-                window.sirgasBaseLayers.osm.addTo(mapSirgas);
-            }
-        });
-
-        // Cuadrícula geográfica
+        const toggleTopografia = document.getElementById('toggleTopografia');
+        if (toggleTopografia) {
+            toggleTopografia.addEventListener('change', function() {
+                if (this.checked) {
+                    mapSirgas.removeLayer(window.sirgasBaseLayers.osm);
+                    window.sirgasBaseLayers.topo.addTo(mapSirgas);
+                } else {
+                    mapSirgas.removeLayer(window.sirgasBaseLayers.topo);
+                    window.sirgasBaseLayers.osm.addTo(mapSirgas);
+                }
+            });
+        }
         window.cuadriculaSirgas = dibujarCuadricula(mapSirgas);
-
-        // Sincronizar con mapa ZTD cuando ambos existan
         if (mapZTD) sincronizarMapas();
-
         cargarSIRGAS();
     }
 
-    // ============================================================
-    // MAPA ZTD
-    // ============================================================
     function initMapZTD() {
         if (mapZTD) mapZTD.remove();
         mapZTD = L.map('map-ztd').setView([-15, -65], 4);
-
-        // Capa base OSM
-        const osmLayerZTD = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-            attribution: '© OpenStreetMap', name: 'osm'
-        });
-        // Capa base topográfica
-        const topoLayerZTD = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '© Esri', name: 'topo'
-        });
+        const osmLayerZTD = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', name: 'osm' });
+        const topoLayerZTD = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '© Esri', name: 'topo' });
         osmLayerZTD.addTo(mapZTD);
         window.ztdBaseLayers = { osm: osmLayerZTD, topo: topoLayerZTD };
-
         const capaCiudadesZTD = L.layerGroup();
         ciudades.forEach(c => {
             L.circleMarker([c.lat, c.lon], { radius: 6, fillColor: '#27ae60', color: '#1e8449', weight: 1.5, fillOpacity: 0.4 })
                 .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`).addTo(capaCiudadesZTD);
         });
         capaCiudadesZTD.addTo(mapZTD);
-
-        // Cuadrícula geográfica
         window.cuadriculaZTD = dibujarCuadricula(mapZTD);
-
-        // Sincronizar con mapa SIRGAS
         if (mapSirgas) sincronizarMapas();
-
         mapZTD.on('popupopen', function(e) {
             const codigo = e.popup._source && e.popup._source.options && e.popup._source.options.stationCode;
             if (!codigo || !ztdSerieCache[codigo]) return;
@@ -1125,12 +964,10 @@ async function cargarEstacionesZTD() {
                 options: { responsive: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: true } } },
             });
         });
-
         document.getElementById('toggleZTD').addEventListener('change', function() {
             if (this.checked && capaZTD) capaZTD.addTo(mapZTD);
             else if (capaZTD) mapZTD.removeLayer(capaZTD);
         });
-
         document.getElementById('toggleTopografiaZTD').addEventListener('change', function() {
             if (this.checked) {
                 mapZTD.removeLayer(window.ztdBaseLayers.osm);
@@ -1140,13 +977,9 @@ async function cargarEstacionesZTD() {
                 window.ztdBaseLayers.osm.addTo(mapZTD);
             }
         });
-
-        cargarCapaZTD(); 
+        cargarCapaZTD();
     }
 
-    // ============================================================
-    // REPORTE
-    // ============================================================
     function descargarReporte() {
         const ahora = new Date();
         const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
@@ -1172,32 +1005,22 @@ async function cargarEstacionesZTD() {
         link.click();
     }
 
-    // ============================================================
-    // EVENTOS
-    // ============================================================
     document.getElementById('citySelect').addEventListener('change', actualizarCiudad);
     document.getElementById('btnReporte').addEventListener('click', descargarReporte);
     document.querySelectorAll('.btn-alerta').forEach(btn => {
         btn.addEventListener('click', actualizarCiudad);
     });
-    // ============================================================
-    // Capa ZTD en el mapa: marcadores coloreados + popup con gráfico
-    // ============================================================
-    // ============================================================
-    // ANOMALÍA ZTD - Escala divergente centrada en cero
-    // ============================================================
-    // El ZTD absoluto depende fuertemente de la altitud. La ANOMALÍA
-    // = ZTD_actual − promedio_estación elimina ese sesgo y permite
-    // comparar condiciones atmosféricas entre estaciones.
-    // ============================================================
+    document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
+    document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
+
     function colorZTDAnomalia(anomalia, maxAbs) {
         if (maxAbs === 0) return 'hsl(120, 60%, 50%)';
-        const t = anomalia / maxAbs; // -1 (muy seco) → 0 (normal) → 1 (muy húmedo)
+        const t = anomalia / maxAbs;
         if (t < 0) {
-            const hue = 120 + (Math.abs(t) * 100); // verde → azul
+            const hue = 120 + (Math.abs(t) * 100);
             return `hsl(${Math.round(hue)}, 80%, 42%)`;
         } else {
-            const hue = 120 - (t * 120); // verde → rojo
+            const hue = 120 - (t * 120);
             return `hsl(${Math.round(hue)}, 80%, 42%)`;
         }
     }
@@ -1205,14 +1028,12 @@ async function cargarEstacionesZTD() {
     async function cargarCapaZTD() {
         const badge = document.getElementById('ztdMapBadge');
         if (capaZTD) mapZTD.removeLayer(capaZTD);
-        document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
-        document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
         capaZTD = L.layerGroup();
-
         const codigos = Object.keys(coordenadasZTD);
         const ultimos = {};
         const promedios = {};
         const anomalias = {};
+        let estacionesConDatos = 0;
 
         for (const codigo of codigos) {
             try {
@@ -1225,6 +1046,7 @@ async function cargarEstacionesZTD() {
                     const suma = puntos.reduce((acc, p) => acc + p.valor, 0);
                     promedios[codigo] = suma / puntos.length;
                     anomalias[codigo] = ultimos[codigo] - promedios[codigo];
+                    estacionesConDatos++;
                 }
             } catch (e) {
                 console.warn(`No se pudo cargar ZTD de ${codigo}`, e);
@@ -1234,6 +1056,7 @@ async function cargarEstacionesZTD() {
         const valoresAnom = Object.values(anomalias);
         if (valoresAnom.length === 0) {
             badge.innerText = '💧 Sin datos ZTD';
+            actualizarFase('faseZTD', 'error', 'Error', 'No hay datos ZTD disponibles');
             return;
         }
         const minAnom = Math.min(...valoresAnom);
@@ -1245,21 +1068,13 @@ async function cargarEstacionesZTD() {
         codigos.forEach(codigo => {
             if (!(codigo in ultimos)) return;
             const [lat, lon] = coordenadasZTD[codigo];
-            const valor = ultimos[codigo];
-            const promedio = promedios[codigo];
             const anomalia = anomalias[codigo];
             const color = colorZTDAnomalia(anomalia, maxAbs);
             const puntos = ztdSerieCache[codigo] || [];
             const simbolo = anomalia > 5 ? '🔴 +' : anomalia < -5 ? '🔵 ' : '🟢 ';
             const signo = anomalia >= 0 ? '+' : '';
-
-            // Anillo (sin relleno) alrededor del punto de la estación SIRGAS ya
-            // existente: distinguible incluso cuando comparten la misma ubicación,
-            // sin desplazar el marcador de su coordenada geográfica real.
-                       // Buscar archivo GeoJSON de la ciudad
             const cityNames = {AREQ: "arequipa", BOGT: "bogota", CALI: "cali", ANTC: "antofagasta", SANT: "santiago"};
             const cityFile = cityNames[codigo];
-            
             if (cityFile) {
                 fetch(`assets/geojson/${cityFile}.json`)
                     .then(r => r.json())
@@ -1268,38 +1083,35 @@ async function cargarEstacionesZTD() {
                             style: { color: color, weight: 2, fillColor: color, fillOpacity: 0.25 }
                         }).addTo(capaZTD);
                         polygon.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía | ${geojson.properties.name}`, { direction: 'top' });
-                        polygon.bindPopup(construirPopupZTD(codigo, puntos, promedio, anomalia));
+                        polygon.bindPopup(construirPopupZTD(codigo, puntos, promedios[codigo], anomalia));
                     })
                     .catch(() => {
                         const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
                         fallback.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía`, { direction: 'top' });
-                        fallback.bindPopup(construirPopupZTD(codigo, puntos, promedio, anomalia));
+                        fallback.bindPopup(construirPopupZTD(codigo, puntos, promedios[codigo], anomalia));
                         fallback.addTo(capaZTD);
                     });
             } else {
                 const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2.5, fillColor: color, fillOpacity: 0.25 });
                 fallback.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía`, { direction: 'top' });
-                fallback.bindPopup(construirPopupZTD(codigo, puntos, promedio, anomalia));
+                fallback.bindPopup(construirPopupZTD(codigo, puntos, promedios[codigo], anomalia));
                 fallback.addTo(capaZTD);
             }
         });
 
         badge.innerText = `💧 ZTD: ${valoresAnom.length} estaciones | Anomalía ±${maxAbs.toFixed(0)} mm`;
+        actualizarFase('faseZTD', 'activa', 'Activo', `${valoresAnom.length} estaciones · Anomalía ±${maxAbs.toFixed(0)} mm`);
         if (document.getElementById('toggleZTD').checked) capaZTD.addTo(mapZTD);
     }
 
-    // Arma el contenido del popup: "biografía" de lo registrado en el período
-    // (valor actual, promedio, máximo/mínimo con sus fechas, rango de datos).
     function construirPopupZTD(codigo, puntos, promedioEstacion, anomalia) {
         if (puntos.length === 0) {
             return `<div style="min-width:220px;"><strong>💧 ${codigo}</strong><br>Sin datos disponibles.</div>`;
         }
-
         const valores = puntos.map(p => p.valor);
         const actual = puntos[puntos.length - 1];
         const promedio = promedioEstacion !== undefined ? promedioEstacion : (valores.reduce((a, b) => a + b, 0) / valores.length);
         const anom = anomalia !== undefined ? anomalia : (actual.valor - promedio);
-
         let interpretacion, colorAnom, iconoAnom;
         if (anom > 15) { interpretacion = 'Condición anómalamente húmeda. Posible acumulación de vapor de agua antes de precipitación.'; colorAnom = '#c0392b'; iconoAnom = '🔴'; }
         else if (anom > 5) { interpretacion = 'Más húmedo de lo habitual. Monitorear evolución.'; colorAnom = '#e67e22'; iconoAnom = '🟠'; }
@@ -1307,94 +1119,48 @@ async function cargarEstacionesZTD() {
         else if (anom > -15) { interpretacion = 'Más seco de lo habitual. Menor contenido de vapor de agua.'; colorAnom = '#2980b9'; iconoAnom = '🔵'; }
         else { interpretacion = 'Condición anómalamente seca. Bajo contenido de vapor de agua.'; colorAnom = '#2c3e50'; iconoAnom = '🔵'; }
         const signo = anom >= 0 ? '+' : '';
-
         let idxMax = 0, idxMin = 0;
-        valores.forEach((v, i) => {
-            if (v > valores[idxMax]) idxMax = i;
-            if (v < valores[idxMin]) idxMin = i;
-        });
+        valores.forEach((v, i) => { if (v > valores[idxMax]) idxMax = i; if (v < valores[idxMin]) idxMin = i; });
         const puntoMax = puntos[idxMax];
         const puntoMin = puntos[idxMin];
-
         const formatoFecha = (f) => new Date(f).toLocaleString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         const formatoFechaCorta = (f) => new Date(f).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-
         const promedioTexto = actual.valor > promedio
             ? `${(actual.valor - promedio).toFixed(1)} mm por encima del promedio`
             : `${(promedio - actual.valor).toFixed(1)} mm por debajo del promedio`;
-
         return `
             <div style="min-width:280px;font-size:13px;">
                 <strong style="font-size:15px;">💧 ${codigo}</strong>
                 <div style="color:#8aa08a;margin-bottom:6px;">Última actualización: ${formatoFecha(actual.fecha)}</div>
-
                 <div style="background:${colorAnom}15;border-left:4px solid ${colorAnom};padding:8px 10px;border-radius:6px;margin-bottom:8px;">
                     <strong style="color:${colorAnom};font-size:14px;">${iconoAnom} Anomalía: ${signo}${anom.toFixed(1)} mm</strong>
                     <div style="font-size:12px;color:#5a5a5a;margin-top:2px;">${interpretacion}</div>
                 </div>
-
                 <table style="width:100%;border-collapse:collapse;margin-bottom:6px;">
-                    <tr title="ZTD absoluto: valor medido en esta estación. Depende de la altitud (más altitud = menos atmósfera = ZTD menor). NO comparar entre estaciones de distinta altitud.">
-                        <td>📍 ZTD actual <span style="color:#aaa;">ⓘ</span></td>
-                        <td style="text-align:right;font-weight:600;">${actual.valor.toFixed(1)} mm</td>
-                    </tr>
-                    <tr title="Promedio histórico de esta estación = 'lo normal' para este lugar. Se calcula de toda la serie descargada.">
-                        <td>📊 Promedio histórico <span style="color:#aaa;">ⓘ</span></td>
-                        <td style="text-align:right;">${promedio.toFixed(1)} mm</td>
-                    </tr>
-                    <tr title="Diferencia entre actual y promedio. Es el indicador clave: positivo = más vapor de agua de lo habitual.">
-                        <td>📈 Desviación <span style="color:#aaa;">ⓘ</span></td>
-                        <td style="text-align:right;color:${colorAnom};font-weight:600;">${signo}${anom.toFixed(1)} mm</td>
-                    </tr>
-                    <tr title="El valor más alto suele coincidir con condiciones de mayor humedad atmosférica -- por ejemplo, antes o durante eventos de lluvia intensa.">
-                        <td>📈 Máximo <span style="color:#aaa;">ⓘ</span></td>
-                        <td style="text-align:right;">${puntoMax.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMax.fecha)})</td>
-                    </tr>
-                    <tr title="El valor más bajo suele coincidir con aire más seco (menor vapor de agua en la columna atmosférica).">
-                        <td>📉 Mínimo <span style="color:#aaa;">ⓘ</span></td>
-                        <td style="text-align:right;">${puntoMin.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMin.fecha)})</td>
-                    </tr>
-                    <tr title="Cuántas mediciones horarias componen este período.">
-                        <td>🗓️ Registros <span style="color:#aaa;">ⓘ</span></td>
-                        <td style="text-align:right;">${puntos.length}</td>
-                    </tr>
+                    <tr><td>📍 ZTD actual <span style="color:#aaa;">ⓘ</span></td><td style="text-align:right;font-weight:600;">${actual.valor.toFixed(1)} mm</td></tr>
+                    <tr><td>📊 Promedio histórico <span style="color:#aaa;">ⓘ</span></td><td style="text-align:right;">${promedio.toFixed(1)} mm</td></tr>
+                    <tr><td>📈 Desviación <span style="color:#aaa;">ⓘ</span></td><td style="text-align:right;color:${colorAnom};font-weight:600;">${signo}${anom.toFixed(1)} mm</td></tr>
+                    <tr><td>📈 Máximo <span style="color:#aaa;">ⓘ</span></td><td style="text-align:right;">${puntoMax.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMax.fecha)})</td></tr>
+                    <tr><td>📉 Mínimo <span style="color:#aaa;">ⓘ</span></td><td style="text-align:right;">${puntoMin.valor.toFixed(1)} mm (${formatoFechaCorta(puntoMin.fecha)})</td></tr>
+                    <tr><td>🗓️ Registros <span style="color:#aaa;">ⓘ</span></td><td style="text-align:right;">${puntos.length}</td></tr>
                 </table>
-
-                <div style="font-size:11px;color:#5a7a8a;background:#eef4f8;border-radius:6px;padding:4px 8px;margin-bottom:6px;">
-                    ${promedioTexto}
-                </div>
-
+                <div style="font-size:11px;color:#5a7a8a;background:#eef4f8;border-radius:6px;padding:4px 8px;margin-bottom:6px;">${promedioTexto}</div>
                 <canvas id="popupChart_${codigo}" width="230" height="120"></canvas>
-                <div style="font-size:10px;color:#aaa;margin-top:4px;">
-                    Dato geodésico complementario -- no reemplaza los datos oficiales de tu agencia meteorológica nacional.
-                </div>
-            </div>
-        `;
+                <div style="font-size:10px;color:#aaa;margin-top:4px;">Dato geodésico complementario -- no reemplaza los datos oficiales de tu agencia meteorológica nacional.</div>
+            </div>`;
     }
-
-    // (el listener de popupopen para los mini-gráficos ZTD se registra dentro de initMap())
 
     document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
-    // ============================================================
-    // INICIO
-    // ============================================================
     window.onload = function() {
         initMapSirgas();
-        // initMapZTD();  // Se carga al hacer clic en el tab ZTD
         initCharts();
         actualizarCiudad();
         actualizarSirgasHistorico();
-
-        // Sin fechas por defecto: muestra todo lo disponible (limitado por 'limite'
-        // en la consulta). La ventana real de datos depende de la latencia de
-        // publicación de SIRGAS (~30-40 días), que varía, así que un rango fijo
-        // de "últimos N días desde hoy" podría no coincidir con los datos reales.
         cargarEstacionesZTD();
-
         setInterval(actualizarCiudad, 300000);
         setInterval(cargarSIRGAS, 600000);
     };
