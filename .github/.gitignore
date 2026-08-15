@@ -1,0 +1,19 @@
+# Entornos virtuales
+venv/
+venv_api/
+env/
+__pycache__/
+*.pyc
+
+# Backups y archivos temporales
+*.backup
+*.bak
+*backup*.html
+dashboard_backup_*.html
+
+# VS Code y sistema
+.vscode/
+.DS_Store
+
+# Dependencias
+node_modules/

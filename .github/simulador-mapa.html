@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Deformación · Andes Observatorio</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0e17; color: #f9fafb; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: #111827; border-radius: 24px; padding: 24px 30px; border: 1px solid #374151; }
+        h1 { color: #60a5fa; text-align: center; font-size: 2rem; }
+        .subtitle { text-align: center; color: #9ca3af; margin-bottom: 18px; border-bottom: 2px solid #374151; padding-bottom: 12px; }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+        }
+        
+        #map { height: 550px; width: 100%; border-radius: 18px; border: 1px solid #374151; z-index: 1; }
+        
+        .panel-control {
+            background: #1f2937;
+            border-radius: 18px;
+            padding: 20px;
+            border: 1px solid #374151;
+            max-height: 550px;
+            overflow-y: auto;
+        }
+        .panel-control h3 { color: #60a5fa; font-size: 1rem; margin-bottom: 16px; border-bottom: 1px solid #374151; padding-bottom: 8px; }
+        .panel-control label { display: block; font-size: 12px; color: #9ca3af; margin-top: 12px; margin-bottom: 4px; }
+        .panel-control input[type="range"] { width: 100%; accent-color: #3b82f6; }
+        .panel-control .valor { font-size: 14px; font-weight: 600; color: #f9fafb; }
+        .panel-control select { width: 100%; padding: 6px 10px; border-radius: 8px; background: #111827; color: #f9fafb; border: 1px solid #374151; }
+        .btn-simular { width: 100%; padding: 10px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 16px; transition: all 0.3s; }
+        .btn-simular:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(59,130,246,0.3); }
+        .btn-limpiar { width: 100%; padding: 8px; background: #374151; color: #9ca3af; border: none; border-radius: 8px; cursor: pointer; margin-top: 8px; }
+        
+        .leyenda-simulador {
+            display: flex; flex-wrap: wrap; gap: 12px 20px;
+            background: #1f2937; padding: 10px 16px; border-radius: 12px;
+            margin: 8px 0; border: 1px solid #374151; align-items: center;
+        }
+        .leyenda-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #9ca3af; }
+        .leyenda-color { width: 16px; height: 16px; border-radius: 4px; border: 1px solid #555; }
+        
+        .info-simulacion {
+            background: #1f2937; padding: 12px 16px; border-radius: 12px;
+            margin-top: 12px; border: 1px solid #374151;
+            font-size: 12px; color: #9ca3af; line-height: 1.6;
+        }
+        .info-simulacion strong { color: #f9fafb; }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .panel-control { max-height: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 Simulador de Deformación</h1>
+    <div class="subtitle">Modelado de fuentes sísmicas y volcánicas · Región Andina</div>
+
+    <div class="leyenda-simulador">
+        <span style="font-weight:600;font-size:12px;color:#f9fafb;">📊 Leyenda:</span>
+        <div class="leyenda-item"><span class="leyenda-color" style="background:#d7191c;"></span>Deformación positiva (uplift)</div>
+        <div class="leyenda-item"><span class="leyenda-color" style="background:#2c7bb6;"></span>Deformación negativa (subsidencia)</div>
+        <div class="leyenda-item"><span class="leyenda-color" style="background:#fdae61;"></span>Zona neutra</div>
+        <div class="leyenda-item"><span style="color:#fbbf24;">★</span> Fuente activa</div>
+        <div class="leyenda-item"><span style="color:#34d399;">●</span> Estación GNSS</div>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- MAPA -->
+        <div>
+            <div id="map"></div>
+            <div class="info-simulacion" id="infoSimulacion">
+                <strong>🔄 Simulación lista.</strong> Ajusta los parámetros en el panel derecho y presiona "Simular".
+            </div>
+        </div>
+
+        <!-- PANEL DE CONTROL -->
+        <div class="panel-control">
+            <h3>🎛️ Controles de Simulación</h3>
+            
+            <label>Tipo de fuente</label>
+            <select id="tipoFuente">
+                <option value="mogi">Mogi (esférica)</option>
+                <option value="sill">Sill (horizontal)</option>
+                <option value="dique">Dique (vertical)</option>
+            </select>
+            
+            <label>Profundidad (km)</label>
+            <input type="range" id="profundidad" min="1" max="20" value="5" step="0.5">
+            <span class="valor" id="profundidadVal">5.0 km</span>
+            
+            <label>Volumen / Apertura (m³ ×10⁶)</label>
+            <input type="range" id="volumen" min="0.1" max="10" value="2" step="0.1">
+            <span class="valor" id="volumenVal">2.0 ×10⁶ m³</span>
+            
+            <label>Ubicación (latitud)</label>
+            <input type="range" id="latFuente" min="-35" max="10" value="-20" step="0.1">
+            <span class="valor" id="latFuenteVal">-20.0°</span>
+            
+            <label>Ubicación (longitud)</label>
+            <input type="range" id="lonFuente" min="-80" max="-60" value="-68" step="0.1">
+            <span class="valor" id="lonFuenteVal">-68.0°</span>
+            
+            <label>Número de estaciones GNSS</label>
+            <select id="numEstaciones">
+                <option value="5">5 estaciones</option>
+                <option value="10" selected>10 estaciones</option>
+                <option value="15">15 estaciones</option>
+                <option value="20">20 estaciones</option>
+            </select>
+            
+            <button class="btn-simular" onclick="ejecutarSimulacion()">▶️ Ejecutar Simulación</button>
+            <button class="btn-limpiar" onclick="limpiarSimulacion()">🗑️ Limpiar</button>
+        </div>
+    </div>
+
+    <footer style="text-align:center;color:#6b7280;font-size:12px;margin-top:20px;border-top:1px solid #374151;padding-top:16px;">
+        <p>🌄 Andes Observatorio · Simulador de Deformación · Datos sintéticos</p>
+    </footer>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+let map, capaSimulacion, capaEstaciones, capaFuente;
+let estacionesGeneradas = [];
+let resultadoSimulacion = null;
+
+// ============================================================
+// FUNCIÓN: MODELO MOGI (simplificado)
+// ============================================================
+function calcularMogi(latFuente, lonFuente, profundidad, volumen, latEst, lonEst) {
+    // Convertir a coordenadas cartesianas (aproximación)
+    const R = 6371; // Radio de la Tierra en km
+    const dx = (lonEst - lonFuente) * Math.cos(latFuente * Math.PI / 180) * Math.PI / 180 * R;
+    const dy = (latEst - latFuente) * Math.PI / 180 * R;
+    const dz = profundidad;
+    
+    const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+    if (d < 0.1) return { ux: 0, uy: 0, uz: 0 };
+    
+    // Deformación superficial (Mogi simplificado)
+    const factor = volumen * 1e6 / (4 * Math.PI * d * d * d);
+    const ux = factor * dx;
+    const uy = factor * dy;
+    const uz = factor * dz;
+    
+    return { ux, uy, uz };
+}
+
+// ============================================================
+// FUNCIÓN: GENERAR ESTACIONES
+// ============================================================
+function generarEstaciones(latCentro, lonCentro, num) {
+    const estaciones = [];
+    for (let i = 0; i < num; i++) {
+        const angulo = Math.random() * 2 * Math.PI;
+        const radio = 1 + Math.random() * 3; // 1-4 grados
+        const lat = latCentro + Math.sin(angulo) * radio * 0.8;
+        const lon = lonCentro + Math.cos(angulo) * radio * 0.8;
+        const nombre = String.fromCharCode(65 + i % 26) + String.fromCharCode(65 + Math.floor(i/26) % 26) + String(i);
+        estaciones.push({
+            id: nombre,
+            lat: lat,
+            lon: lon,
+            desplazamiento: { ux: 0, uy: 0, uz: 0 }
+        });
+    }
+    return estaciones;
+}
+
+// ============================================================
+// FUNCIÓN: EJECUTAR SIMULACIÓN
+// ============================================================
+function ejecutarSimulacion() {
+    // Leer parámetros
+    const tipo = document.getElementById('tipoFuente').value;
+    const profundidad = parseFloat(document.getElementById('profundidad').value);
+    const volumen = parseFloat(document.getElementById('volumen').value);
+    const latFuente = parseFloat(document.getElementById('latFuente').value);
+    const lonFuente = parseFloat(document.getElementById('lonFuente').value);
+    const numEst = parseInt(document.getElementById('numEstaciones').value);
+    
+    // Actualizar displays
+    document.getElementById('profundidadVal').textContent = profundidad + ' km';
+    document.getElementById('volumenVal').textContent = volumen + ' ×10⁶ m³';
+    document.getElementById('latFuenteVal').textContent = latFuente.toFixed(1) + '°';
+    document.getElementById('lonFuenteVal').textContent = lonFuente.toFixed(1) + '°';
+    
+    // Generar estaciones alrededor de la fuente
+    estacionesGeneradas = generarEstaciones(latFuente, lonFuente, numEst);
+    
+    // Calcular deformación en cada estación
+    estacionesGeneradas.forEach(est => {
+        const resultado = calcularMogi(latFuente, lonFuente, profundidad, volumen, est.lat, est.lon);
+        est.desplazamiento = resultado;
+    });
+    
+    // Guardar resultado
+    resultadoSimulacion = { latFuente, lonFuente, profundidad, volumen, tipo, estaciones: estacionesGeneradas };
+    
+    // Actualizar mapa
+    actualizarMapaSimulacion();
+    
+    // Actualizar info
+    document.getElementById('infoSimulacion').innerHTML = `
+        <strong>✅ Simulación completada</strong><br>
+        Tipo: ${tipo} · Profundidad: ${profundidad} km · Volumen: ${volumen} ×10⁶ m³<br>
+        Estaciones: ${numEst} · Deformación máxima: ${Math.max(...estacionesGeneradas.map(e => Math.abs(e.desplazamiento.uz))).toFixed(2)} m
+    `;
+}
+
+// ============================================================
+// FUNCIÓN: ACTUALIZAR MAPA
+// ============================================================
+function actualizarMapaSimulacion() {
+    if (!resultadoSimulacion) return;
+    
+    // Limpiar capas anteriores
+    if (capaSimulacion) map.removeLayer(capaSimulacion);
+    if (capaEstaciones) map.removeLayer(capaEstaciones);
+    if (capaFuente) map.removeLayer(capaFuente);
+    
+    capaSimulacion = L.layerGroup();
+    capaEstaciones = L.layerGroup();
+    capaFuente = L.layerGroup();
+    
+    const { latFuente, lonFuente, estaciones } = resultadoSimulacion;
+    
+    // === 1. ISOLÍNEAS DE DEFORMACIÓN ===
+    // Generar grid de puntos alrededor de la fuente
+    const puntos = [];
+    const step = 0.2;
+    for (let lat = latFuente - 3; lat <= latFuente + 3; lat += step) {
+        for (let lon = lonFuente - 3; lon <= lonFuente + 3; lon += step) {
+            const dist = Math.sqrt(Math.pow(lat - latFuente, 2) + Math.pow(lon - lonFuente, 2));
+            if (dist > 0.1) {
+                const def = calcularMogi(latFuente, lonFuente, 
+                    parseFloat(document.getElementById('profundidad').value),
+                    parseFloat(document.getElementById('volumen').value),
+                    lat, lon);
+                puntos.push({ lat, lon, uz: def.uz });
+            }
+        }
+    }
+    
+    // Dibujar isolíneas por niveles
+    const niveles = [-0.5, -0.2, -0.1, 0, 0.1, 0.2, 0.5, 1.0, 2.0];
+    const colores = ['#2c7bb6', '#2c7bb6', '#abd9e9', '#ffffbf', '#fdae61', '#fdae61', '#d7191c', '#d7191c'];
+    
+    niveles.forEach((nivel, idx) => {
+        const pts = puntos.filter(p => Math.abs(p.uz - nivel) < 0.05);
+        if (pts.length > 3) {
+            const coords = pts.map(p => [p.lat, p.lon]);
+            // Agrupar puntos cercanos para formar líneas
+            try {
+                L.polyline(coords, {
+                    color: colores[idx % colores.length],
+                    weight: 1.5,
+                    opacity: 0.6,
+                    dashArray: '4,4'
+                }).addTo(capaSimulacion);
+            } catch(e) {}
+        }
+    });
+    
+    // === 2. ESTACIONES GNSS ===
+    estaciones.forEach(est => {
+        const color = est.desplazamiento.uz > 0 ? '#d7191c' : '#2c7bb6';
+        const tamaño = 6 + Math.abs(est.desplazamiento.uz) * 20;
+        
+        L.circleMarker([est.lat, est.lon], {
+            radius: Math.min(tamaño, 16),
+            fillColor: color,
+            color: '#fff',
+            weight: 1.5,
+            fillOpacity: 0.8
+        }).bindPopup(`
+            <b>${est.id}</b><br>
+            Lat: ${est.lat.toFixed(3)}° · Lon: ${est.lon.toFixed(3)}°<br>
+            Ux: ${est.desplazamiento.ux.toFixed(3)} m<br>
+            Uy: ${est.desplazamiento.uy.toFixed(3)} m<br>
+            Uz: ${est.desplazamiento.uz.toFixed(3)} m
+        `).addTo(capaEstaciones);
+    });
+    
+    // === 3. FUENTE ===
+    L.circleMarker([latFuente, lonFuente], {
+        radius: 12,
+        fillColor: '#fbbf24',
+        color: '#f59e0b',
+        weight: 3,
+        fillOpacity: 0.9,
+        className: 'fuente-pulso'
+    }).bindPopup(`
+        <b>📍 Fuente</b><br>
+        Tipo: ${resultadoSimulacion.tipo}<br>
+        Profundidad: ${resultadoSimulacion.profundidad} km<br>
+        Volumen: ${resultadoSimulacion.volumen} ×10⁶ m³
+    `).addTo(capaFuente);
+    
+    // Agregar capas al mapa
+    capaSimulacion.addTo(map);
+    capaEstaciones.addTo(map);
+    capaFuente.addTo(map);
+    
+    // Mover mapa a la fuente
+    map.flyTo([latFuente, lonFuente], 6, { duration: 1 });
+}
+
+// ============================================================
+// FUNCIÓN: LIMPIAR
+// ============================================================
+function limpiarSimulacion() {
+    if (capaSimulacion) map.removeLayer(capaSimulacion);
+    if (capaEstaciones) map.removeLayer(capaEstaciones);
+    if (capaFuente) map.removeLayer(capaFuente);
+    resultadoSimulacion = null;
+    document.getElementById('infoSimulacion').innerHTML = '<strong>🔄 Simulación limpiada.</strong> Ajusta los parámetros y presiona "Simular".';
+}
+
+// ============================================================
+// FUNCIÓN: INICIALIZAR MAPA
+// ============================================================
+function initMap() {
+    if (map) map.remove();
+    map = L.map('map').setView([-20, -68], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+    
+    // Fondo oscuro para el mapa
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© OpenStreetMap © CartoDB'
+    }).addTo(map);
+    
+    // Capas vacías
+    capaSimulacion = L.layerGroup();
+    capaEstaciones = L.layerGroup();
+    capaFuente = L.layerGroup();
+}
+
+// ============================================================
+// EVENTOS DE CONTROLES (actualización en vivo)
+// ============================================================
+document.getElementById('profundidad').addEventListener('input', function() {
+    document.getElementById('profundidadVal').textContent = this.value + ' km';
+});
+document.getElementById('volumen').addEventListener('input', function() {
+    document.getElementById('volumenVal').textContent = this.value + ' ×10⁶ m³';
+});
+document.getElementById('latFuente').addEventListener('input', function() {
+    document.getElementById('latFuenteVal').textContent = parseFloat(this.value).toFixed(1) + '°';
+});
+document.getElementById('lonFuente').addEventListener('input', function() {
+    document.getElementById('lonFuenteVal').textContent = parseFloat(this.value).toFixed(1) + '°';
+});
+
+// ============================================================
+// INICIO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    initMap();
+    // Ejecutar simulación inicial
+    setTimeout(ejecutarSimulacion, 500);
+});
+</script>
+</body>
+</html>

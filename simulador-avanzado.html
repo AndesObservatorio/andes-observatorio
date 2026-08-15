@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Avanzado · Andes Observatorio</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0e17; color: #f9fafb; padding: 20px; }
+        .container { max-width: 1500px; margin: 0 auto; background: #111827; border-radius: 24px; padding: 24px 30px; border: 1px solid #374151; }
+        h1 { color: #60a5fa; text-align: center; font-size: 2rem; }
+        .subtitle { text-align: center; color: #9ca3af; margin-bottom: 18px; border-bottom: 2px solid #374151; padding-bottom: 12px; }
+        
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+        #map { height: 500px; width: 100%; border-radius: 18px; border: 1px solid #374151; z-index: 1; }
+        
+        .panel-control {
+            background: #1f2937; border-radius: 18px; padding: 20px;
+            border: 1px solid #374151; max-height: 600px; overflow-y: auto;
+        }
+        .panel-control h3 { color: #60a5fa; font-size: 1rem; margin-bottom: 16px; border-bottom: 1px solid #374151; padding-bottom: 8px; }
+        .panel-control label { display: block; font-size: 12px; color: #9ca3af; margin-top: 12px; margin-bottom: 4px; }
+        .panel-control input[type="range"] { width: 100%; accent-color: #3b82f6; }
+        .panel-control .valor { font-size: 14px; font-weight: 600; color: #f9fafb; }
+        .panel-control select { width: 100%; padding: 6px 10px; border-radius: 8px; background: #111827; color: #f9fafb; border: 1px solid #374151; }
+        
+        .btn-simular { width: 100%; padding: 10px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 16px; transition: all 0.3s; }
+        .btn-simular:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(59,130,246,0.3); }
+        .btn-animar { width: 100%; padding: 8px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .btn-exportar { width: 48%; padding: 8px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 8px; }
+        .btn-limpiar { width: 48%; padding: 8px; background: #374151; color: #9ca3af; border: none; border-radius: 8px; cursor: pointer; margin-top: 8px; }
+        .btn-group { display: flex; gap: 8px; }
+        
+        .info-simulacion {
+            background: #1f2937; padding: 12px 16px; border-radius: 12px;
+            margin-top: 12px; border: 1px solid #374151;
+            font-size: 12px; color: #9ca3af; line-height: 1.6;
+        }
+        .info-simulacion strong { color: #f9fafb; }
+        
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; margin-bottom: 8px; }
+        .status-badge.online { background: #10b981; color: white; }
+        .status-badge.offline { background: #ef4444; color: white; }
+        
+        .charts-sim { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+        .chart-card { background: #1f2937; padding: 12px; border-radius: 12px; border: 1px solid #374151; }
+        .chart-card h4 { color: #9ca3af; font-size: 12px; text-align: center; margin-bottom: 8px; }
+        canvas { max-height: 120px; width: 100% !important; }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .panel-control { max-height: none; }
+            .btn-exportar, .btn-limpiar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 Simulador Avanzado de Deformación</h1>
+    <div class="subtitle">Mogi · Sill · Dique · Con datos reales de SIRGAS</div>
+
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+        <span class="status-badge" id="apiStatus">🔄 Conectando...</span>
+        <span style="color:#9ca3af;font-size:12px;" id="estacionesInfo">Cargando estaciones...</span>
+    </div>
+
+    <div class="dashboard-grid">
+        <div>
+            <div id="map"></div>
+            <div class="info-simulacion" id="infoSimulacion">
+                <strong>🔄 Listo.</strong> Ajusta los parámetros y presiona "Simular".
+            </div>
+            <div class="charts-sim">
+                <div class="chart-card"><h4>📊 Deformación vertical (Uz)</h4><canvas id="uzChart"></canvas></div>
+                <div class="chart-card"><h4>📊 Deformación horizontal (Uxy)</h4><canvas id="uxyChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="panel-control">
+            <h3>🎛️ Controles</h3>
+            
+            <label>Estación base (fuente)</label>
+            <select id="estacionBase">
+                <option value="">Cargando...</option>
+            </select>
+            
+            <label>Tipo de fuente</label>
+            <select id="tipoFuente">
+                <option value="mogi">Mogi (esférica)</option>
+                <option value="sill">Sill (horizontal)</option>
+                <option value="dique">Dique (vertical)</option>
+            </select>
+            
+            <label>Profundidad (km)</label>
+            <input type="range" id="profundidad" min="1" max="20" value="5" step="0.5">
+            <span class="valor" id="profundidadVal">5.0 km</span>
+            
+            <label id="labelVolumen">Volumen (×10⁶ m³)</label>
+            <input type="range" id="volumen" min="0.1" max="10" value="2" step="0.1">
+            <span class="valor" id="volumenVal">2.0 ×10⁶ m³</span>
+            
+            <label id="labelApertura">Apertura (m)</label>
+            <input type="range" id="apertura" min="0.1" max="2" value="0.5" step="0.1" style="display:none;">
+            <span class="valor" id="aperturaVal" style="display:none;">0.5 m</span>
+            
+            <label>Número de estaciones</label>
+            <select id="numEstaciones">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+            </select>
+            
+            <button class="btn-simular" onclick="ejecutarSimulacion()">▶️ Ejecutar Simulación</button>
+            <button class="btn-animar" onclick="toggleAnimacion()">🎬 Animar</button>
+            <div class="btn-group">
+                <button class="btn-exportar" onclick="exportarResultados()">📥 JSON</button>
+                <button class="btn-limpiar" onclick="limpiarSimulacion()">🗑️ Limpiar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align:center;color:#6b7280;font-size:12px;margin-top:20px;border-top:1px solid #374151;padding-top:16px;">
+        <p>🌄 Andes Observatorio · Simulador Avanzado v2.0</p>
+    </footer>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURACIÓN
+// ============================================================
+const API_URL = 'http://localhost:5000';
+let map, uzChart, uxyChart;
+let capaSimulacion, capaEstaciones, capaFuente;
+let estacionesReales = [];
+let resultadoActual = null;
+let animacionActiva = false;
+let animacionInterval = null;
+
+// ============================================================
+// CARGAR ESTACIONES
+// ============================================================
+async function cargarEstaciones() {
+    try {
+        const res = await fetch(`${API_URL}/api/estaciones`);
+        const data = await res.json();
+        estacionesReales = data.estaciones || [];
+        
+        const select = document.getElementById('estacionBase');
+        select.innerHTML = '<option value="">Seleccionar estación...</option>';
+        estacionesReales.forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = JSON.stringify({ lat: e.lat, lon: e.lon });
+            opt.textContent = `${e.id} (${e.pais}) · ZTD: ${e.ztd}mm`;
+            select.appendChild(opt);
+        });
+        
+        document.getElementById('apiStatus').textContent = '✅ Conectado';
+        document.getElementById('apiStatus').className = 'status-badge online';
+        document.getElementById('estacionesInfo').textContent = `${estacionesReales.length} estaciones cargadas`;
+        
+        const bogt = estacionesReales.find(e => e.id === 'BOGT');
+        if (bogt) {
+            select.value = JSON.stringify({ lat: bogt.lat, lon: bogt.lon });
+        }
+        
+        setTimeout(ejecutarSimulacion, 500);
+    } catch (error) {
+        document.getElementById('apiStatus').textContent = '❌ Error: ' + error.message;
+        document.getElementById('apiStatus').className = 'status-badge offline';
+        console.error('Error:', error);
+    }
+}
+
+// ============================================================
+// TIPO DE FUENTE - MOSTRAR/OCULTAR PARÁMETROS
+// ============================================================
+document.getElementById('tipoFuente').addEventListener('change', function() {
+    const tipo = this.value;
+    const labelVol = document.getElementById('labelVolumen');
+    const volInput = document.getElementById('volumen');
+    const volVal = document.getElementById('volumenVal');
+    const labelAper = document.getElementById('labelApertura');
+    const aperInput = document.getElementById('apertura');
+    const aperVal = document.getElementById('aperturaVal');
+    
+    if (tipo === 'mogi') {
+        labelVol.textContent = 'Volumen (×10⁶ m³)';
+        volInput.style.display = 'block';
+        volVal.style.display = 'inline';
+        labelAper.style.display = 'none';
+        aperInput.style.display = 'none';
+        aperVal.style.display = 'none';
+    } else {
+        labelVol.textContent = 'Volumen (×10⁶ m³)';
+        volInput.style.display = 'block';
+        volVal.style.display = 'inline';
+        labelAper.style.display = 'block';
+        aperInput.style.display = 'block';
+        aperVal.style.display = 'inline';
+        if (tipo === 'sill') {
+            labelAper.textContent = 'Apertura (m)';
+        } else {
+            labelAper.textContent = 'Apertura (m)';
+        }
+    }
+});
+
+// ============================================================
+// EJECUTAR SIMULACIÓN
+// ============================================================
+async function ejecutarSimulacion() {
+    const tipo = document.getElementById('tipoFuente').value;
+    const profundidad = parseFloat(document.getElementById('profundidad').value);
+    const volumen = parseFloat(document.getElementById('volumen').value);
+    const apertura = parseFloat(document.getElementById('apertura').value) || 0.5;
+    const numEst = parseInt(document.getElementById('numEstaciones').value);
+    
+    const selectVal = document.getElementById('estacionBase').value;
+    let latFuente = -20, lonFuente = -68;
+    if (selectVal) {
+        const coords = JSON.parse(selectVal);
+        latFuente = coords.lat;
+        lonFuente = coords.lon;
+    }
+    
+    document.getElementById('profundidadVal').textContent = profundidad + ' km';
+    document.getElementById('volumenVal').textContent = volumen + ' ×10⁶ m³';
+    document.getElementById('aperturaVal').textContent = apertura + ' m';
+    
+    const payload = {
+        lat: latFuente,
+        lon: lonFuente,
+        profundidad: profundidad,
+        num_estaciones: numEst,
+        volumen: volumen,
+        apertura: apertura
+    };
+    
+    try {
+        const res = await fetch(`${API_URL}/api/simular/${tipo}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        resultadoActual = data;
+        
+        actualizarMapaSimulacion(data);
+        actualizarGraficosSimulacion(data);
+        
+        document.getElementById('infoSimulacion').innerHTML = `
+            <strong>✅ Simulación ${tipo.toUpperCase()} completada</strong><br>
+            Fuente: ${data.fuente.lat.toFixed(3)}°, ${data.fuente.lon.toFixed(3)}°<br>
+            Profundidad: ${profundidad} km · ${tipo === 'mogi' ? 'Volumen' : 'Volumen/Apertura'}: ${tipo === 'mogi' ? volumen : volumen + ' ×10⁶ m³ / ' + apertura + ' m'}<br>
+            Estaciones: ${data.total}
+        `;
+    } catch (error) {
+        document.getElementById('infoSimulacion').innerHTML = `<strong>❌ Error:</strong> ${error.message}`;
+        console.error('Error:', error);
+    }
+}
+
+// ============================================================
+// ACTUALIZAR MAPA
+// ============================================================
+function actualizarMapaSimulacion(data) {
+    if (!map) return;
+    
+    if (capaSimulacion) map.removeLayer(capaSimulacion);
+    if (capaEstaciones) map.removeLayer(capaEstaciones);
+    if (capaFuente) map.removeLayer(capaFuente);
+    
+    capaSimulacion = L.layerGroup();
+    capaEstaciones = L.layerGroup();
+    capaFuente = L.layerGroup();
+    
+    const { latFuente, lonFuente } = data.fuente;
+    
+    // Isolíneas
+    const puntos = [];
+    const step = 0.15;
+    for (let lat = latFuente - 3; lat <= latFuente + 3; lat += step) {
+        for (let lon = lonFuente - 3; lon <= lonFuente + 3; lon += step) {
+            const dist = Math.sqrt(Math.pow(lat - latFuente, 2) + Math.pow(lon - lonFuente, 2));
+            if (dist > 0.05) {
+                const R = 6371;
+                const dx = (lon - lonFuente) * Math.PI / 180 * R * (latFuente * Math.PI / 180);
+                const dy = (lat - latFuente) * Math.PI / 180 * R;
+                const d = Math.sqrt(dx*dx + dy*dy + data.fuente.profundidad*data.fuente.profundidad);
+                if (d > 0.1) {
+                    const uz = data.fuente.volumen * 1e6 * data.fuente.profundidad / (4 * Math.PI * d * d * d);
+                    puntos.push({ lat, lon, uz });
+                }
+            }
+        }
+    }
+    
+    const niveles = [-0.5, -0.2, -0.1, 0, 0.1, 0.2, 0.5, 1.0];
+    const colores = ['#2c7bb6', '#2c7bb6', '#abd9e9', '#ffffbf', '#fdae61', '#fdae61', '#d7191c', '#d7191c'];
+    niveles.forEach((nivel, idx) => {
+        const pts = puntos.filter(p => Math.abs(p.uz - nivel) < 0.03);
+        if (pts.length > 3) {
+            const coords = pts.map(p => [p.lat, p.lon]);
+            try {
+                L.polyline(coords, {
+                    color: colores[idx % colores.length],
+                    weight: 1.5, opacity: 0.5, dashArray: '4,4'
+                }).addTo(capaSimulacion);
+            } catch(e) {}
+        }
+    });
+    
+    // Estaciones con vectores de deformación
+    data.estaciones.forEach(est => {
+        const magnitud = Math.sqrt(est.ux_m*est.ux_m + est.uy_m*est.uy_m + est.uz_m*est.uz_m);
+        const color = est.uz_m > 0 ? '#d7191c' : '#2c7bb6';
+        const tamaño = 4 + Math.min(magnitud * 20, 14);
+        
+        L.circleMarker([est.lat, est.lon], {
+            radius: tamaño,
+            fillColor: color,
+            color: '#fff',
+            weight: 1.5,
+            fillOpacity: 0.8
+        }).bindPopup(`
+            <b>${est.id}</b><br>
+            Ux: ${est.ux_m.toFixed(3)} m<br>
+            Uy: ${est.uy_m.toFixed(3)} m<br>
+            Uz: ${est.uz_m.toFixed(3)} m<br>
+            Magnitud: ${magnitud.toFixed(3)} m
+        `).addTo(capaEstaciones);
+        
+        // Flecha de deformación
+        const escalaFlecha = 0.0005;
+        const end = [est.lat + est.uy_m * escalaFlecha, est.lon + est.ux_m * escalaFlecha];
+        L.polyline([[est.lat, est.lon], end], {
+            color: color,
+            weight: 1.5,
+            opacity: 0.6,
+            dashArray: '2,4'
+        }).addTo(capaEstaciones);
+    });
+    
+    // Fuente
+    L.circleMarker([latFuente, lonFuente], {
+        radius: 14,
+        fillColor: '#fbbf24',
+        color: '#f59e0b',
+        weight: 3,
+        fillOpacity: 0.9
+    }).bindPopup(`
+        <b>📍 Fuente ${data.tipo.toUpperCase()}</b><br>
+        Profundidad: ${data.fuente.profundidad} km
+    `).addTo(capaFuente);
+    
+    capaSimulacion.addTo(map);
+    capaEstaciones.addTo(map);
+    capaFuente.addTo(map);
+    map.flyTo([latFuente, lonFuente], 7, { duration: 1 });
+}
+
+// ============================================================
+// GRÁFICOS DE SIMULACIÓN
+// ============================================================
+function actualizarGraficosSimulacion(data) {
+    const ids = data.estaciones.map(e => e.id);
+    const uz = data.estaciones.map(e => e.uz_m);
+    const uxy = data.estaciones.map(e => Math.sqrt(e.ux_m*e.ux_m + e.uy_m*e.uy_m));
+    const coloresUz = uz.map(v => v > 0 ? '#d7191c' : '#2c7bb6');
+    
+    if (uzChart) {
+        uzChart.data.labels = ids;
+        uzChart.data.datasets[0].data = uz;
+        uzChart.data.datasets[0].backgroundColor = coloresUz;
+        uzChart.update();
+    }
+    
+    if (uxyChart) {
+        uxyChart.data.labels = ids;
+        uxyChart.data.datasets[0].data = uxy;
+        uxyChart.data.datasets[0].backgroundColor = '#60a5fa';
+        uxyChart.update();
+    }
+}
+
+function initChartsSim() {
+    const ctx1 = document.getElementById('uzChart').getContext('2d');
+    uzChart = new Chart(ctx1, {
+        type: 'bar',
+        data: { labels: [], datasets: [{ label: 'Uz (m)', data: [], backgroundColor: [], borderRadius: 4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { title: { display: true, text: 'm' } } } }
+    });
+    
+    const ctx2 = document.getElementById('uxyChart').getContext('2d');
+    uxyChart = new Chart(ctx2, {
+        type: 'bar',
+        data: { labels: [], datasets: [{ label: 'Uxy (m)', data: [], backgroundColor: '#60a5fa', borderRadius: 4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { title: { display: true, text: 'm' } } } }
+    });
+}
+
+// ============================================================
+// ANIMACIÓN
+// ============================================================
+function toggleAnimacion() {
+    if (animacionActiva) {
+        clearInterval(animacionInterval);
+        animacionActiva = false;
+        document.querySelector('.btn-animar').textContent = '🎬 Animar';
+        return;
+    }
+    
+    if (!resultadoActual) {
+        alert('Primero ejecuta una simulación');
+        return;
+    }
+    
+    animacionActiva = true;
+    document.querySelector('.btn-animar').textContent = '⏹️ Detener';
+    
+    let prof = parseFloat(document.getElementById('profundidad').value);
+    let vol = parseFloat(document.getElementById('volumen').value);
+    let paso = 0;
+    
+    animacionInterval = setInterval(() => {
+        paso++;
+        const nuevaProf = Math.max(1, prof + (Math.sin(paso * 0.1) * 0.5));
+        const nuevoVol = Math.max(0.1, vol + (Math.sin(paso * 0.15) * 0.3));
+        
+        document.getElementById('profundidad').value = nuevaProf;
+        document.getElementById('volumen').value = nuevoVol;
+        document.getElementById('profundidadVal').textContent = nuevaProf.toFixed(1) + ' km';
+        document.getElementById('volumenVal').textContent = nuevoVol.toFixed(1) + ' ×10⁶ m³';
+        
+        ejecutarSimulacion();
+    }, 800);
+}
+
+// ============================================================
+// EXPORTAR RESULTADOS
+// ============================================================
+function exportarResultados() {
+    if (!resultadoActual) {
+        alert('Primero ejecuta una simulación');
+        return;
+    }
+    const data = {
+        metadata: {
+            timestamp: new Date().toISOString(),
+            tipo: resultadoActual.tipo,
+            fuente: resultadoActual.fuente
+        },
+        estaciones: resultadoActual.estaciones
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `simulacion_${resultadoActual.tipo}_${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// LIMPIAR
+// ============================================================
+function limpiarSimulacion() {
+    if (animacionActiva) {
+        clearInterval(animacionInterval);
+        animacionActiva = false;
+        document.querySelector('.btn-animar').textContent = '🎬 Animar';
+    }
+    if (capaSimulacion) map.removeLayer(capaSimulacion);
+    if (capaEstaciones) map.removeLayer(capaEstaciones);
+    if (capaFuente) map.removeLayer(capaFuente);
+    resultadoActual = null;
+    document.getElementById('infoSimulacion').innerHTML = '<strong>🔄 Simulación limpiada.</strong>';
+    if (uzChart) {
+        uzChart.data.labels = [];
+        uzChart.data.datasets[0].data = [];
+        uzChart.update();
+    }
+    if (uxyChart) {
+        uxyChart.data.labels = [];
+        uxyChart.data.datasets[0].data = [];
+        uxyChart.update();
+    }
+}
+
+// ============================================================
+// INICIALIZAR MAPA
+// ============================================================
+function initMap() {
+    if (map) map.remove();
+    map = L.map('map').setView([-20, -68], 4);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© OpenStreetMap © CartoDB'
+    }).addTo(map);
+    capaSimulacion = L.layerGroup();
+    capaEstaciones = L.layerGroup();
+    capaFuente = L.layerGroup();
+}
+
+// ============================================================
+// CONTROLES EN VIVO
+// ============================================================
+document.getElementById('profundidad').addEventListener('input', function() {
+    document.getElementById('profundidadVal').textContent = this.value + ' km';
+});
+document.getElementById('volumen').addEventListener('input', function() {
+    document.getElementById('volumenVal').textContent = this.value + ' ×10⁶ m³';
+});
+document.getElementById('apertura').addEventListener('input', function() {
+    document.getElementById('aperturaVal').textContent = this.value + ' m';
+});
+
+// ============================================================
+// INICIO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    initMap();
+    initChartsSim();
+    cargarEstaciones();
+});
+</script>
+</body>
+</html>
