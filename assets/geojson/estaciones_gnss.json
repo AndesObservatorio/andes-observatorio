@@ -1,0 +1,8 @@
+[
+    {"id": "BOGT", "nombre": "Bogotá", "pais": "Colombia", "lat": 4.64, "lon": -74.08, "tipo": "GNSS"},
+    {"id": "AREQ", "nombre": "Arequipa", "pais": "Perú", "lat": -16.40, "lon": -71.53, "tipo": "GNSS"},
+    {"id": "SANT", "nombre": "Santiago", "pais": "Chile", "lat": -33.45, "lon": -70.66, "tipo": "GNSS"},
+    {"id": "QUIT", "nombre": "Quito", "pais": "Ecuador", "lat": -0.18, "lon": -78.47, "tipo": "GNSS"},
+    {"id": "LPBZ", "nombre": "La Paz", "pais": "Bolivia", "lat": -16.50, "lon": -68.15, "tipo": "GNSS"},
+    {"id": "LIMA", "nombre": "Lima", "pais": "Perú", "lat": -12.05, "lon": -77.04, "tipo": "GNSS"}
+]

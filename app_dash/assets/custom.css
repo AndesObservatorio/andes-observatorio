@@ -1,0 +1,77 @@
+/* Estilos Andes Observatorio */
+.andes-card { 
+    border-radius: 16px; 
+    border: 1px solid #e0e6d8; 
+    box-shadow: 0 4px 20px rgba(90,122,90,0.08); 
+    transition: transform 0.2s; 
+}
+.andes-card:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 30px rgba(90,122,90,0.14); 
+}
+.badge-activa { 
+    background: #d4edda; 
+    color: #155724; 
+    padding: 3px 10px; 
+    border-radius: 12px; 
+    font-size: 11px; 
+    font-weight: 600; 
+}
+.badge-revision { 
+    background: #fff3cd; 
+    color: #856404; 
+    padding: 3px 10px; 
+    border-radius: 12px; 
+    font-size: 11px; 
+    font-weight: 600; 
+}
+.badge-propuesta { 
+    background: #e2e3e5; 
+    color: #383d41; 
+    padding: 3px 10px; 
+    border-radius: 12px; 
+    font-size: 11px; 
+    font-weight: 600; 
+}
+.escazu-pill { 
+    display: inline-block; 
+    padding: 2px 8px; 
+    border-radius: 10px; 
+    font-size: 10px; 
+    font-weight: 600; 
+    margin-left: 6px; 
+}
+.pill-info { background: #e8f4fd; color: #0c5460; }
+.pill-part { background: #fff3e0; color: #7c4a00; }
+.pill-just { background: #fce4ec; color: #880e4f; }
+.alerta-critica { border-left: 4px solid #dc3545; }
+.alerta-alta { border-left: 4px solid #fd7e14; }
+.alerta-media { border-left: 4px solid #ffc107; }
+.alerta-baja { border-left: 4px solid #28a745; }
+.resguardo-card { background: linear-gradient(135deg, #f8faf5 0%, #fff 100%); }
+.kpi-box { 
+    text-align: center; 
+    border-radius: 12px; 
+    font-weight: 600; 
+    font-size: 0.9rem; 
+}
+.norma-link { color: #5a7a5a; text-decoration: none; font-weight: 500; }
+.norma-link:hover { color: #3d5a3d; text-decoration: underline; }
+.feed-item { 
+    padding: 12px 16px; 
+    background: white; 
+    border-radius: 12px; 
+    margin-bottom: 10px; 
+    border: 1px solid #f0ebe4; 
+}
+.feed-item:hover { background: #fcfaf7; }
+.escazu-indicator { 
+    text-align: center; 
+    padding: 16px; 
+    border-radius: 14px; 
+    background: white; 
+    border: 1px solid #e0e6d8; 
+}
+.escazu-indicator i { font-size: 28px; margin-bottom: 8px; }
+.escazu-indicator .value { font-size: 24px; font-weight: 700; color: #5a7a5a; }
+.escazu-indicator .label { font-size: 12px; color: #8aa08a; margin-top: 4px; }

@@ -1,0 +1,7 @@
+[
+    {"id": "co-001", "titulo": "Ley 2173 de 2021", "estado": "activa", "tema": "Áreas Protegidas", "ambito": "Nacional", "url": "https://www.funcionpublica.gov.co", "territorios_afectados": ["Nukak", "Embera"], "lat": 4.57, "lon": -74.30, "ano": 2021, "escazu_pilar": "Acceso a la información"},
+    {"id": "co-002", "titulo": "Ley 1931 de 2018", "estado": "activa", "tema": "Cambio Climático", "ambito": "Nacional", "url": "https://www.funcionpublica.gov.co", "territorios_afectados": ["Wayúu", "Arhuaco"], "lat": 4.60, "lon": -74.08, "ano": 2018, "escazu_pilar": "Acceso a la información"},
+    {"id": "co-003", "titulo": "Decreto 1076 de 2015", "estado": "activa", "tema": "Sector Ambiente", "ambito": "Nacional", "url": "https://www.funcionpublica.gov.co", "territorios_afectados": ["Misak", "Nukak"], "lat": 4.65, "lon": -74.10, "ano": 2015, "escazu_pilar": "Participación ciudadana"},
+    {"id": "co-004", "titulo": "Ley 1448 de 2011", "estado": "revision", "tema": "Restitución de Tierras", "ambito": "Nacional", "url": "https://www.funcionpublica.gov.co", "territorios_afectados": ["Embera"], "lat": 2.50, "lon": -72.50, "ano": 2011, "escazu_pilar": "Justicia ambiental"},
+    {"id": "co-005", "titulo": "Ley 99 de 1993", "estado": "activa", "tema": "Marco Ambiental General", "ambito": "Nacional", "url": "https://www.funcionpublica.gov.co", "territorios_afectados": ["Todos"], "lat": 4.71, "lon": -74.07, "ano": 1993, "escazu_pilar": "Acceso a la información"}
+]

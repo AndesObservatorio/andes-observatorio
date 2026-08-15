@@ -1,0 +1,12 @@
+[
+    {"nombre": "Nukak", "pueblo": "Nukak Makú", "departamento": "Guaviare", "pais": "Colombia", "lat": 2.50, "lon": -72.50, "habitantes": 600, "estado": "contacto_inicial", "normas_vinculadas": ["Ley 1523 de 2012", "Decreto 1076 de 2015"]},
+    {"nombre": "Arhuaco", "pueblo": "Arhuaco", "departamento": "Cesar / Magdalena", "pais": "Colombia", "lat": 10.70, "lon": -73.65, "habitantes": 45000, "estado": "organizado", "normas_vinculadas": ["Ley 1955 de 2019", "Decreto 1076 de 2015"]},
+    {"nombre": "Embera", "pueblo": "Emberá", "departamento": "Chocó / Antioquia", "pais": "Colombia", "lat": 6.00, "lon": -76.50, "habitantes": 25000, "estado": "organizado", "normas_vinculadas": ["Ley 1523 de 2012", "Ley 1955 de 2019"]},
+    {"nombre": "Wayúu", "pueblo": "Wayúu", "departamento": "La Guajira", "pais": "Colombia", "lat": 11.50, "lon": -72.00, "habitantes": 380000, "estado": "organizado", "normas_vinculadas": ["Ley 1523 de 2012", "Ley 1955 de 2019"]},
+    {"nombre": "Misak", "pueblo": "Misak / Guambiano", "departamento": "Cauca", "pais": "Colombia", "lat": 2.45, "lon": -76.60, "habitantes": 21000, "estado": "organizado", "normas_vinculadas": ["Decreto 1076 de 2015", "Decreto 2099 de 2021"]},
+    {"nombre": "Asháninka", "pueblo": "Asháninka", "departamento": "Junín / Pasco", "pais": "Perú", "lat": -10.50, "lon": -74.50, "habitantes": 97000, "estado": "organizado", "normas_vinculadas": ["Ley 28611", "Ley 29785"]},
+    {"nombre": "Awajún", "pueblo": "Awajún / Aguaruna", "departamento": "Amazonas", "pais": "Perú", "lat": -5.10, "lon": -78.20, "habitantes": 55000, "estado": "organizado", "normas_vinculadas": ["Ley 29785"]},
+    {"nombre": "Shipibo", "pueblo": "Shipibo-Konibo", "departamento": "Ucayali", "pais": "Perú", "lat": -8.40, "lon": -74.55, "habitantes": 32000, "estado": "organizado", "normas_vinculadas": ["Ley 29785", "Ley 30215"]},
+    {"nombre": "Mapuche", "pueblo": "Mapuche / Mapudungun", "departamento": "Araucanía / Bío Bío", "pais": "Chile", "lat": -38.74, "lon": -72.59, "habitantes": 1800000, "estado": "organizado", "normas_vinculadas": ["Ley 19.300", "Ley 20.600", "Ley 21.600"]},
+    {"nombre": "Rapa Nui", "pueblo": "Rapa Nui", "departamento": "Isla de Pascua", "pais": "Chile", "lat": -27.11, "lon": -109.35, "habitantes": 7750, "estado": "organizado", "normas_vinculadas": ["Ley 19.300", "Ley 21.455"]}
+]

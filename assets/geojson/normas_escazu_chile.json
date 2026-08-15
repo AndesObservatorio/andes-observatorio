@@ -1,32 +1,5 @@
 [
-    {
-        "id_norma": "CHL-Ley19300-1994",
-        "pais": "Chile",
-        "titulo": "Ley de Bases Generales del Medio Ambiente",
-        "articulo": 1,
-        "obligacion": "Derecho a un ambiente libre de contaminación",
-        "geometria_asociada": "areas_protegidas_chile.geojson",
-        "consecuencia": "Sanciones y exigencias de reparación",
-        "vinculo_escazu": "Artículo 4.1 - Garantía de derechos"
-    },
-    {
-        "id_norma": "CHL-Ley21455-2022",
-        "pais": "Chile",
-        "titulo": "Ley Marco de Cambio Climático",
-        "articulo": 4,
-        "obligacion": "Meta de carbono neutralidad 2050 y monitoreo",
-        "geometria_asociada": "zonas_emisiones_chile.geojson",
-        "consecuencia": "Planes sectoriales de mitigación",
-        "vinculo_escazu": "Artículo 5.2 - Acceso a la información"
-    },
-    {
-        "id_norma": "CHL-Decreto40-2013",
-        "pais": "Chile",
-        "titulo": "Reglamento del Sistema de Evaluación de Impacto Ambiental",
-        "articulo": 18,
-        "obligacion": "Participación ciudadana en evaluación ambiental",
-        "geometria_asociada": "proyectos_evaluacion_chile.geojson",
-        "consecuencia": "Suspensión de proyectos sin evaluación",
-        "vinculo_escazu": "Artículo 7 - Participación pública"
-    }
+    {"id": "cl-001", "titulo": "Ley 19.300", "estado": "activa", "tema": "Bases del Medio Ambiente", "ambito": "Nacional", "url": "https://www.bcn.cl", "territorios_afectados": ["Mapuche", "Rapa Nui"], "lat": -33.45, "lon": -70.67, "ano": 1994, "escazu_pilar": "Acceso a la información"},
+    {"id": "cl-002", "titulo": "Ley 20.600", "estado": "activa", "tema": "Evaluación Ambiental", "ambito": "Nacional", "url": "https://www.bcn.cl", "territorios_afectados": ["Mapuche"], "lat": -38.74, "lon": -72.59, "ano": 2012, "escazu_pilar": "Participación ciudadana"},
+    {"id": "cl-003", "titulo": "Ley 21.455", "estado": "activa", "tema": "Marco de Cambio Climático", "ambito": "Nacional", "url": "https://www.bcn.cl", "territorios_afectados": ["Mapuche", "Rapa Nui"], "lat": -27.11, "lon": -109.35, "ano": 2022, "escazu_pilar": "Justicia ambiental"}
 ]
