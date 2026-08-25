@@ -1,0 +1,6 @@
+exclude:
+  - venv_api/
+  - app_dash/
+  - components/
+  - .github/
+  - "*.py"
