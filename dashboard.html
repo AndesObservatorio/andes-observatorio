@@ -533,7 +533,8 @@
         if (trendChart) {
             trendChart.data.labels = dias;
             trendChart.data.datasets[0].data = datos;
-            trendChart.data.datasets[0].label = `Tendencia ${query}`;
+            const ciudadActual = document.getElementById('citySelect').selectedOptions[0]?.text || query;
+            trendChart.data.datasets[0].label = `Tendencia 7 días - ${ciudadActual}`;
             trendChart.update();
         }
     }
