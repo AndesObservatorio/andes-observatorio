@@ -473,15 +473,7 @@
     'Uruguay': [[-30.0,-58.0],[-35.0,-53.0],[-35.0,-58.0],[-30.0,-58.0]],
   };
   
-  // Agregar polígonos
-  Object.entries(window.paisesPoligonos).forEach(([nombre, coords]) => {
-    L.polygon(coords, {
-      color: '#2563eb',
-      weight: 1,
-      fillColor: '#2563eb',
-      fillOpacity: 0.15
-    }).bindTooltip(nombre).addTo(window.latamMapInstance);
-  });
+  // Sin polígonos base (solo se resalta el país seleccionado)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
   }).addTo(window.latamMapInstance);
