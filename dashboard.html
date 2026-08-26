@@ -1140,11 +1140,11 @@
         const promedio = promedioEstacion !== undefined ? promedioEstacion : (valores.reduce((a, b) => a + b, 0) / valores.length);
         const anom = anomalia !== undefined ? anomalia : (actual.valor - promedio);
         let interpretacion, colorAnom, iconoAnom;
-        if (anom > 15) { interpretacion = 'Condición anómalamente húmeda. Posible acumulación de vapor de agua antes de precipitación.'; colorAnom = '#c0392b'; iconoAnom = '🔴'; }
-        else if (anom > 5) { interpretacion = 'Más húmedo de lo habitual. Monitorear evolución.'; colorAnom = '#e67e22'; iconoAnom = '🟠'; }
+        if (anom > 15) { interpretacion = 'Condición anómalamente húmeda. Posible acumulación de vapor de agua antes de precipitación.'; colorAnom = '#2980b9'; iconoAnom = '🔵'; }
+        else if (anom > 5) { interpretacion = 'Más húmedo de lo habitual. Monitorear evolución.'; colorAnom = '#5dade2'; iconoAnom = '🔵'; }
         else if (anom > -5) { interpretacion = 'Condición dentro del rango normal para esta estación.'; colorAnom = '#27ae60'; iconoAnom = '🟢'; }
-        else if (anom > -15) { interpretacion = 'Más seco de lo habitual. Menor contenido de vapor de agua.'; colorAnom = '#2980b9'; iconoAnom = '🔵'; }
-        else { interpretacion = 'Condición anómalamente seca. Bajo contenido de vapor de agua.'; colorAnom = '#2c3e50'; iconoAnom = '🔵'; }
+        else if (anom > -15) { interpretacion = 'Más seco de lo habitual. Menor contenido de vapor de agua.'; colorAnom = '#e67e22'; iconoAnom = '🟠'; }
+        else { interpretacion = 'Condición anómalamente seca. Bajo contenido de vapor de agua.'; colorAnom = '#c0392b'; iconoAnom = '🔴'; }
         const signo = anom >= 0 ? '+' : '';
         let idxMax = 0, idxMin = 0;
         valores.forEach((v, i) => { if (v > valores[idxMax]) idxMax = i; if (v < valores[idxMin]) idxMin = i; });
