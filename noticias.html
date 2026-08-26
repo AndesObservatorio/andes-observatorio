@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias Ambientales | Andes Observatorio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f5f0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { color: #2d4a2d; text-align: center; margin-bottom: 10px; }
+        .volver { display: block; text-align: center; color: #5a7a5a; text-decoration: none; margin-bottom: 30px; font-weight: 600; }
+        .noticias-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        .noticia-card { background: white; border-radius: 18px; padding: 20px; border: 1px solid #ede8e0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .noticia-card h3 { color: #2d4a2d; font-size: 1.05rem; margin-bottom: 8px; }
+        .noticia-card .fecha { color: #8aa08a; font-size: 0.85rem; margin-bottom: 10px; }
+        .noticia-card p { color: #555; font-size: 0.95rem; line-height: 1.6; }
+        .noticia-card .fuente { color: #2980b9; font-size: 0.8rem; margin-top: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📰 Noticias Ambientales</h1>
+    <a class="volver" href="index.html">← Volver al inicio</a>
+    <div class="noticias-grid" id="noticias-container"></div>
+</div>
+
+<script>
+    const NOTICIAS = [
+        { titulo: "Colombia aprueba plan de restauración de páramos", fecha: "2026-08-15", fuente: "MinAmbiente Colombia", resumen: "El gobierno lanzó un plan de restauración ecológica para 1 millón de hectáreas de páramo." },
+        { titulo: "Perú monitorea glaciares con GNSS en tiempo real", fecha: "2026-08-12", fuente: "INAIGEM", resumen: "Nuevas estaciones GNSS en la Cordillera Blanca permitirán detectar desplazamientos." },
+        { titulo: "Chile firma acuerdo para protección de la Araucanía", fecha: "2026-08-10", fuente: "Ministerio Medio Ambiente Chile", resumen: "Se destinarán recursos para la conservación de bosques nativos." },
+        { titulo: "Ecuador amplía red de monitoreo atmosférico", fecha: "2026-08-08", fuente: "INAMHI", resumen: "La red de monitoreo se expande a 12 nuevas ciudades." },
+        { titulo: "Bolivia y Perú coordinan monitoreo del Lago Titicaca", fecha: "2026-08-05", fuente: "SENAMHI", resumen: "Acuerdo binacional para monitorear niveles de agua." },
+        { titulo: "Argentina lanza alerta temprana por sequía en Cuyo", fecha: "2026-08-01", fuente: "SMN Argentina", resumen: "Alerta por déficit hídrico en Mendoza y San Juan." },
+    ];
+    const container = document.getElementById('noticias-container');
+    NOTICIAS.forEach(n => {
+        const card = document.createElement('div');
+        card.className = 'noticia-card';
+        card.innerHTML = `<h3>${n.titulo}</h3><div class="fecha">📅 ${n.fecha}</div><p>${n.resumen}</p><div class="fuente">Fuente: ${n.fuente}</div>`;
+        container.appendChild(card);
+    });
+</script>
+</body>
+</html>
