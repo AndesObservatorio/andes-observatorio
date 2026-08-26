@@ -8,7 +8,9 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f8f5f0 0%, #e8f0e8 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .landing { max-width: 900px; text-align: center; }
-        .logo { font-size: 80px; margin-bottom: 20px; }
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .logo-img { width: 80px; height: 80px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { display: inline; }
         h1 { color: #2d4a2d; font-size: 3rem; margin-bottom: 10px; }
         .subtitle { color: #5a7a5a; font-size: 1.3rem; margin-bottom: 40px; }
         .botones { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
@@ -30,8 +32,10 @@
 </head>
 <body>
 <div class="landing">
-    <div class="logo">🌄</div>
-    <h1>Andes Observatorio</h1>
+    <div class="logo-container">
+        <img src="assets/logo_andes.png" alt="Logo Andes Observatorio" class="logo-img">
+        <h1>Andes Observatorio</h1>
+    </div>
     <div class="subtitle">Monitoreo geodésico y ambiental en tiempo real para la región andina</div>
 
     <div class="botones">
