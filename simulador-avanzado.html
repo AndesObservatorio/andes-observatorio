@@ -425,16 +425,21 @@
 
     if(window.latamMapInstance) {
       window.latamMapInstance.setView([currentCountry.lat, currentCountry.lon], 5);
-      // Resaltar polígono del país
-      if(window.paisActualPoligono) window.paisActualPoligono.setStyle({fillColor:'#2563eb', fillOpacity:0.15, color:'#2563eb', weight:1});
+      // Mover marcador
+      if(window.marcadorActual) {
+        window.marcadorActual.setLatLng([currentCountry.lat, currentCountry.lon]);
+      }
+      // Resaltar polígono
+      if(window.paisActualPoligono) window.paisActualPoligono.remove();
       const coords = window.paisesPoligonos?.[currentCountry.name];
       if(coords) {
         window.paisActualPoligono = L.polygon(coords, {
           color: '#dc2626',
-          weight: 2,
+          weight: 2.5,
           fillColor: '#dc2626',
-          fillOpacity: 0.3
-        }).addTo(window.latamMapInstance);
+          fillOpacity: 0.25,
+          dashArray: '4,4'
+        }).bindPopup(`<b>${currentCountry.name}</b>`).addTo(window.latamMapInstance);
       }
     }
   }
@@ -481,16 +486,14 @@
     attribution: '© OpenStreetMap'
   }).addTo(window.latamMapInstance);
   
-  // Marcadores por país
-  countries.forEach(c => {
-    L.circleMarker([c.lat, c.lon], {
-      radius: 8,
-      fillColor: '#2563eb',
-      color: '#1d4ed8',
-      weight: 1.5,
-      fillOpacity: 0.7
-    }).bindPopup(`<b>${c.name}</b><br>T: ${c.baseTemp.toFixed(1)}°C`).addTo(window.latamMapInstance);
-  });
+  // Un solo marcador para el país seleccionado (se actualizará en updateAll)
+  window.marcadorActual = L.circleMarker([-15, -60], {
+    radius: 10,
+    fillColor: '#dc2626',
+    color: '#991b1b',
+    weight: 2,
+    fillOpacity: 0.9
+  }).addTo(window.latamMapInstance);
 
   updateAll();
 })();
