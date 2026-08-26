@@ -425,6 +425,17 @@
 
     if(window.latamMapInstance) {
       window.latamMapInstance.setView([currentCountry.lat, currentCountry.lon], 5);
+      // Resaltar polígono del país
+      if(window.paisActualPoligono) window.paisActualPoligono.setStyle({fillColor:'#2563eb', fillOpacity:0.15, color:'#2563eb', weight:1});
+      const coords = window.paisesPoligonos?.[currentCountry.name];
+      if(coords) {
+        window.paisActualPoligono = L.polygon(coords, {
+          color: '#dc2626',
+          weight: 2,
+          fillColor: '#dc2626',
+          fillOpacity: 0.3
+        }).addTo(window.latamMapInstance);
+      }
     }
   }
 
@@ -442,6 +453,30 @@
 
   // Inicializar mapa Leaflet
   window.latamMapInstance = L.map('latamMap').setView([-15, -60], 4);
+  
+  // Polígonos simplificados de países
+  window.paisesPoligonos = {
+    'Colombia': [[12.5,-79.0],[12.5,-71.0],[4.0,-67.0],[-4.0,-70.0],[-2.0,-79.0],[1.0,-79.0],[8.0,-77.0],[12.5,-79.0]],
+    'Perú': [[-0.0,-81.0],[-3.0,-80.0],[-18.0,-70.0],[-18.0,-81.0],[-0.0,-81.0]],
+    'Chile': [[-17.0,-72.0],[-56.0,-68.0],[-56.0,-75.0],[-17.0,-72.0]],
+    'Argentina': [[-22.0,-65.0],[-55.0,-58.0],[-55.0,-73.0],[-22.0,-65.0]],
+    'Brasil': [[-33.0,-53.0],[5.0,-35.0],[5.0,-74.0],[-33.0,-53.0]],
+    'Bolivia': [[-10.0,-69.0],[-23.0,-58.0],[-23.0,-69.0],[-10.0,-69.0]],
+    'Ecuador': [[1.0,-81.0],[-5.0,-76.0],[-5.0,-81.0],[1.0,-81.0]],
+    'Venezuela': [[12.0,-73.0],[1.0,-61.0],[1.0,-73.0],[12.0,-73.0]],
+    'Paraguay': [[-19.0,-62.0],[-27.0,-54.0],[-27.0,-62.0],[-19.0,-62.0]],
+    'Uruguay': [[-30.0,-58.0],[-35.0,-53.0],[-35.0,-58.0],[-30.0,-58.0]],
+  };
+  
+  // Agregar polígonos
+  Object.entries(window.paisesPoligonos).forEach(([nombre, coords]) => {
+    L.polygon(coords, {
+      color: '#2563eb',
+      weight: 1,
+      fillColor: '#2563eb',
+      fillOpacity: 0.15
+    }).bindTooltip(nombre).addTo(window.latamMapInstance);
+  });
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
   }).addTo(window.latamMapInstance);
