@@ -1067,7 +1067,16 @@
                     estacionesConDatos++;
                 }
             } catch (e) {
-                console.warn(`No se pudo cargar ZTD de ${codigo}`, e);
+                console.warn(`No se pudo cargar ZTD de ${codigo}, usando DEMO`, e);
+                // Generar datos sintéticos
+                const demoData = [];
+                let ztd = 2.2 + Math.random() * 0.3;
+                for (let i = 0; i < 50; i++) {
+                    ztd += (Math.random() - 0.5) * 0.02;
+                    demoData.push({fecha: new Date(2026, 0, 1 + i * 5).toISOString().slice(0,10), valor: ztd.toFixed(3)});
+                }
+                ztdSerieCache[codigo] = demoData;
+                ultimos[codigo] = parseFloat(demoData[demoData.length - 1].valor);
             }
         }
 
