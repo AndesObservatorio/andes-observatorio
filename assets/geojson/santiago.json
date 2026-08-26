@@ -1,1 +1,8 @@
-{"type": "Feature", "properties": {"name": "Santiago", "country": "Chile", "station": "SANT"}, "bbox": [-70.5744333, -33.4055366, -70.5743333, -33.4054366], "geometry": {"type": "Point", "coordinates": [-70.5743833, -33.4054866]}}
+{
+  "type": "Feature",
+  "properties": { "name": "Santiago", "country": "Chile", "station": "SANT" },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[[-70.85,-33.60],[-70.45,-33.60],[-70.45,-33.30],[-70.85,-33.30],[-70.85,-33.60]]]
+  }
+}
