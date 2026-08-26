@@ -523,12 +523,17 @@
         if (!clima) return;
         const base = clima.temp;
         const datos = [];
+        // Progresión realista: variación gradual + efecto día/noche
+        let temp = base;
         for (let i=0; i<7; i++) {
-            datos.push(Number((base + (Math.random()-0.5)*3).toFixed(1)));
+            const variacion = Math.sin(i * 1.2) * 1.5 + (Math.random() - 0.5) * 0.8;
+            temp = base + variacion;
+            datos.push(Number(temp.toFixed(1)));
         }
         if (trendChart) {
             trendChart.data.labels = dias;
             trendChart.data.datasets[0].data = datos;
+            trendChart.data.datasets[0].label = `Tendencia ${query}`;
             trendChart.update();
         }
     }
