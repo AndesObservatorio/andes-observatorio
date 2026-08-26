@@ -96,6 +96,8 @@
   .legend-item { display:flex; align-items:center; gap:4px; }
   .legend-dot { width:8px; height:8px; border-radius:50%; }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <base target="_blank">
 </head>
 <body>
@@ -142,32 +144,7 @@
 
 <div class="panel">
   <div class="panel-title">Mapa de referencia — América Latina</div>
-  <div class="map-container">
-    <svg class="latam-map" viewBox="0 0 500 600" id="latamMap">
-      <path class="map-country" data-country="México" d="M120,40 L180,35 L200,60 L190,90 L150,100 L110,80 Z"/>
-      <path class="map-country" data-country="Guatemala" d="M150,100 L170,95 L175,110 L155,115 Z"/>
-      <path class="map-country" data-country="Belice" d="M170,95 L185,92 L188,100 L175,105 Z"/>
-      <path class="map-country" data-country="Honduras" d="M155,115 L185,110 L190,125 L160,130 Z"/>
-      <path class="map-country" data-country="El Salvador" d="M160,125 L175,122 L178,132 L162,135 Z"/>
-      <path class="map-country" data-country="Nicaragua" d="M160,130 L190,125 L195,150 L165,155 Z"/>
-      <path class="map-country" data-country="Costa Rica" d="M165,155 L195,150 L200,170 L170,175 Z"/>
-      <path class="map-country" data-country="Panamá" d="M170,175 L200,170 L210,190 L180,195 Z"/>
-      <path class="map-country" data-country="Colombia" d="M180,195 L230,180 L260,210 L240,250 L200,240 L190,220 Z"/>
-      <path class="map-country" data-country="Venezuela" d="M230,180 L290,170 L310,200 L280,230 L260,210 Z"/>
-      <path class="map-country" data-country="Ecuador" d="M190,220 L220,215 L230,240 L200,245 Z"/>
-      <path class="map-country" data-country="Perú" d="M200,240 L230,240 L240,290 L210,320 L190,280 Z"/>
-      <path class="map-country" data-country="Brasil" d="M240,250 L310,200 L350,220 L380,280 L360,350 L300,380 L250,360 L230,300 Z"/>
-      <path class="map-country" data-country="Bolivia" d="M230,290 L270,280 L280,320 L240,330 Z"/>
-      <path class="map-country" data-country="Paraguay" d="M250,360 L290,350 L300,380 L260,390 Z"/>
-      <path class="map-country" data-country="Argentina" d="M210,320 L240,330 L260,390 L300,380 L310,450 L280,520 L220,500 L200,400 Z"/>
-      <path class="map-country" data-country="Chile" d="M190,280 L210,320 L200,400 L220,500 L180,520 L170,400 Z"/>
-      <path class="map-country" data-country="Uruguay" d="M300,380 L330,370 L340,400 L310,410 Z"/>
-      <path class="map-country" data-country="Cuba" d="M250,80 L290,75 L295,95 L260,100 Z"/>
-      <path class="map-country" data-country="República Dominicana" d="M300,100 L320,95 L325,110 L305,115 Z"/>
-      <path class="map-country" data-country="Haití" d="M305,115 L325,110 L328,125 L308,130 Z"/>
-      <path class="map-country" data-country="Jamaica" d="M280,120 L295,118 L298,130 L282,132 Z"/>
-    </svg>
-  </div>
+  <div id="latamMap" style="height:400px;border-radius:12px;"></div>
 </div>
 
 <div class="panel" id="sirgasPanel" style="display:none;">
@@ -446,9 +423,9 @@
       document.getElementById('chartLegend').style.display = 'flex';
     }
 
-    document.querySelectorAll('.map-country').forEach(p => p.classList.remove('active'));
-    const activePath = document.querySelector(`.map-country[data-country="${currentCountry.name}"]`);
-    if(activePath) activePath.classList.add('active');
+    if(window.latamMapInstance) {
+      window.latamMapInstance.setView([currentCountry.lat, currentCountry.lon], 5);
+    }
   }
 
   countrySelect.addEventListener('change', updateAll);
@@ -463,12 +440,21 @@
     });
   });
 
-  document.querySelectorAll('.map-country').forEach(path => {
-    path.addEventListener('click', () => {
-      const cname = path.dataset.country;
-      const found = countries.find(c => c.name === cname);
-      if(found) { countrySelect.value = cname; updateAll(); }
-    });
+  // Inicializar mapa Leaflet
+  window.latamMapInstance = L.map('latamMap').setView([-15, -60], 4);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(window.latamMapInstance);
+  
+  // Marcadores por país
+  countries.forEach(c => {
+    L.circleMarker([c.lat, c.lon], {
+      radius: 8,
+      fillColor: '#2563eb',
+      color: '#1d4ed8',
+      weight: 1.5,
+      fillOpacity: 0.7
+    }).bindPopup(`<b>${c.name}</b><br>T: ${c.baseTemp.toFixed(1)}°C`).addTo(window.latamMapInstance);
   });
 
   updateAll();
