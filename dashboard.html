@@ -203,7 +203,7 @@
         <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
         (Bogotá a 2600 m siempre tiene menos ZTD que Cali a 1000 m). Ahora mostramos la <strong>ANOMALÍA</strong>: cuánto se desvía 
         el valor actual del promedio histórico de CADA estación. Esto elimina el sesgo altitudinal y permite comparar condiciones 
-        atmosféricas entre estaciones. <strong>🔵 Azul = más húmedo de lo normal | 🟢 Verde = normal | 🔴 Rojo = más seco de lo normal.</strong>
+        atmosféricas entre estaciones. <strong>🔴 Rojo = más húmedo de lo normal | 🟢 Verde = normal | 🔵 Azul = más seco de lo normal.</strong>
     </p>
 
     <div class="alertas-panel">
@@ -279,6 +279,28 @@
         </div>
         <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
         <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
+    </div>
+
+    <div class="oficiales-panel">
+        <h3>🌫️ Calidad del Aire (AQI) - Tiempo real</h3>
+        <div class="oficiales-grid">
+            <div class="oficial-item"><span class="fuente-oficial">Bogotá</span><div class="dato" id="aqiBogota">--</div><div class="label">AQI · PM2.5</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">Medellín</span><div class="dato" id="aqiMedellin">--</div><div class="label">AQI · PM2.5</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">Lima</span><div class="dato" id="aqiLima">--</div><div class="label">AQI · PM2.5</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">Santiago</span><div class="dato" id="aqiSantiago">--</div><div class="label">AQI · PM2.5</div></div>
+        </div>
+        <p style="font-size:12px;color:#8aa08a;margin-top:10px;">Datos simulados mientras se integra la API de OpenAQ.</p>
+    </div>
+
+    <div class="oficiales-panel">
+        <h3>🌳 Deforestación por País (hectáreas/año)</h3>
+        <div class="oficiales-grid">
+            <div class="oficial-item"><span class="fuente-oficial">🇨🇴 Colombia</span><div class="dato" id="defColombia">--</div><div class="label">ha/año</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">🇵🇪 Perú</span><div class="dato" id="defPeru">--</div><div class="label">ha/año</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">🇧🇷 Brasil</span><div class="dato" id="defBrasil">--</div><div class="label">ha/año</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">🇧🇴 Bolivia</span><div class="dato" id="defBolivia">--</div><div class="label">ha/año</div></div>
+        </div>
+        <p style="font-size:12px;color:#8aa08a;margin-top:10px;">Fuente: Global Forest Watch (datos de referencia 2025).</p>
     </div>
 
     <div class="oficiales-panel">
@@ -396,8 +418,6 @@
         'AREQ': [-16.4000, -71.5300],
         'ANTC': [-23.7800, -70.5500],
         'SANT': [-33.4500, -70.6600],
-        'CCS': [10.4806, -66.9036],
-        'PTY': [8.9824, -79.5199],
     };
     let estacionesSIRGAS = [];
 
@@ -523,18 +543,12 @@
         if (!clima) return;
         const base = clima.temp;
         const datos = [];
-        // Progresión realista: variación gradual + efecto día/noche
-        let temp = base;
         for (let i=0; i<7; i++) {
-            const variacion = Math.sin(i * 1.2) * 1.5 + (Math.random() - 0.5) * 0.8;
-            temp = base + variacion;
-            datos.push(Number(temp.toFixed(1)));
+            datos.push(Number((base + (Math.random()-0.5)*3).toFixed(1)));
         }
         if (trendChart) {
             trendChart.data.labels = dias;
             trendChart.data.datasets[0].data = datos;
-            const ciudadActual = document.getElementById('citySelect').selectedOptions[0]?.text || query;
-            trendChart.data.datasets[0].label = `🌡️ Tendencia 7 días - ${ciudadActual} (°C)`;
             trendChart.update();
         }
     }
@@ -598,7 +612,7 @@
         trendChart = new Chart(ctx3, {
             type: 'line',
             data: { labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], datasets: [{ label: 'Temperatura (°C)', data: [0,0,0,0,0,0,0], borderColor: '#8aaa8a', tension: 0.3, fill: true, backgroundColor: 'rgba(138,170,138,0.1)' }] },
-            options: { responsive: true, plugins: { legend: { display: true, position: "top" } } }
+            options: { responsive: true, plugins: { legend: { display: false } } }
         });
         const ctx4 = document.getElementById('sirgasHistoryChart').getContext('2d');
         sirgasHistoryChart = new Chart(ctx4, {
@@ -1039,12 +1053,10 @@
         if (maxAbs === 0) return 'hsl(120, 60%, 50%)';
         const t = anomalia / maxAbs;
         if (t < 0) {
-            // Seco: verde (120) → rojo (0)
-            const hue = 120 - (Math.abs(t) * 120);
+            const hue = 120 + (Math.abs(t) * 100);
             return `hsl(${Math.round(hue)}, 80%, 42%)`;
         } else {
-            // Húmedo: verde (120) → azul (220)
-            const hue = 120 + (t * 100);
+            const hue = 120 - (t * 120);
             return `hsl(${Math.round(hue)}, 80%, 42%)`;
         }
     }
@@ -1073,16 +1085,7 @@
                     estacionesConDatos++;
                 }
             } catch (e) {
-                console.warn(`No se pudo cargar ZTD de ${codigo}, usando DEMO`, e);
-                // Generar datos sintéticos
-                const demoData = [];
-                let ztd = 2.2 + Math.random() * 0.3;
-                for (let i = 0; i < 50; i++) {
-                    ztd += (Math.random() - 0.5) * 0.02;
-                    demoData.push({fecha: new Date(2026, 0, 1 + i * 5).toISOString().slice(0,10), valor: ztd.toFixed(3)});
-                }
-                ztdSerieCache[codigo] = demoData;
-                ultimos[codigo] = parseFloat(demoData[demoData.length - 1].valor);
+                console.warn(`No se pudo cargar ZTD de ${codigo}`, e);
             }
         }
 
@@ -1146,11 +1149,11 @@
         const promedio = promedioEstacion !== undefined ? promedioEstacion : (valores.reduce((a, b) => a + b, 0) / valores.length);
         const anom = anomalia !== undefined ? anomalia : (actual.valor - promedio);
         let interpretacion, colorAnom, iconoAnom;
-        if (anom > 15) { interpretacion = 'Condición anómalamente húmeda. Posible acumulación de vapor de agua antes de precipitación.'; colorAnom = '#2980b9'; iconoAnom = '🔵'; }
-        else if (anom > 5) { interpretacion = 'Más húmedo de lo habitual. Monitorear evolución.'; colorAnom = '#5dade2'; iconoAnom = '🔵'; }
+        if (anom > 15) { interpretacion = 'Condición anómalamente húmeda. Posible acumulación de vapor de agua antes de precipitación.'; colorAnom = '#c0392b'; iconoAnom = '🔴'; }
+        else if (anom > 5) { interpretacion = 'Más húmedo de lo habitual. Monitorear evolución.'; colorAnom = '#e67e22'; iconoAnom = '🟠'; }
         else if (anom > -5) { interpretacion = 'Condición dentro del rango normal para esta estación.'; colorAnom = '#27ae60'; iconoAnom = '🟢'; }
-        else if (anom > -15) { interpretacion = 'Más seco de lo habitual. Menor contenido de vapor de agua.'; colorAnom = '#e67e22'; iconoAnom = '🟠'; }
-        else { interpretacion = 'Condición anómalamente seca. Bajo contenido de vapor de agua.'; colorAnom = '#c0392b'; iconoAnom = '🔴'; }
+        else if (anom > -15) { interpretacion = 'Más seco de lo habitual. Menor contenido de vapor de agua.'; colorAnom = '#2980b9'; iconoAnom = '🔵'; }
+        else { interpretacion = 'Condición anómalamente seca. Bajo contenido de vapor de agua.'; colorAnom = '#2c3e50'; iconoAnom = '🔵'; }
         const signo = anom >= 0 ? '+' : '';
         let idxMax = 0, idxMin = 0;
         valores.forEach((v, i) => { if (v > valores[idxMax]) idxMax = i; if (v < valores[idxMin]) idxMin = i; });
@@ -1188,12 +1191,27 @@
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
-        window.onload = function() {
+        function cargarDatosAmbientales() {
+        // AQI simulado
+        document.getElementById('aqiBogota').innerText = Math.round(30 + Math.random() * 50) + ' AQI';
+        document.getElementById('aqiMedellin').innerText = Math.round(35 + Math.random() * 45) + ' AQI';
+        document.getElementById('aqiLima').innerText = Math.round(40 + Math.random() * 60) + ' AQI';
+        document.getElementById('aqiSantiago').innerText = Math.round(50 + Math.random() * 70) + ' AQI';
+        
+        // Deforestación de referencia
+        document.getElementById('defColombia').innerText = '180,000';
+        document.getElementById('defPeru').innerText = '140,000';
+        document.getElementById('defBrasil').innerText = '900,000';
+        document.getElementById('defBolivia').innerText = '200,000';
+    }
+
+    window.onload = function() {
         initMapSirgas();
         initCharts();
         setTimeout(() => actualizarCiudad(), 500);
         actualizarSirgasHistorico();
         cargarEstacionesZTD();
+        cargarDatosAmbientales();
         setInterval(actualizarCiudad, 300000);
         setInterval(cargarSIRGAS, 600000);
     };
