@@ -534,7 +534,7 @@
             trendChart.data.labels = dias;
             trendChart.data.datasets[0].data = datos;
             const ciudadActual = document.getElementById('citySelect').selectedOptions[0]?.text || query;
-            trendChart.data.datasets[0].label = `Tendencia 7 días - ${ciudadActual}`;
+            trendChart.data.datasets[0].label = `🌡️ Tendencia 7 días - ${ciudadActual} (°C)`;
             trendChart.update();
         }
     }
