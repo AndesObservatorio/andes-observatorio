@@ -598,7 +598,7 @@
         trendChart = new Chart(ctx3, {
             type: 'line',
             data: { labels: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], datasets: [{ label: 'Temperatura (°C)', data: [0,0,0,0,0,0,0], borderColor: '#8aaa8a', tension: 0.3, fill: true, backgroundColor: 'rgba(138,170,138,0.1)' }] },
-            options: { responsive: true, plugins: { legend: { display: false } } }
+            options: { responsive: true, plugins: { legend: { display: true, position: "top" } } }
         });
         const ctx4 = document.getElementById('sirgasHistoryChart').getContext('2d');
         sirgasHistoryChart = new Chart(ctx4, {
