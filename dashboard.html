@@ -203,7 +203,7 @@
         <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
         (Bogotá a 2600 m siempre tiene menos ZTD que Cali a 1000 m). Ahora mostramos la <strong>ANOMALÍA</strong>: cuánto se desvía 
         el valor actual del promedio histórico de CADA estación. Esto elimina el sesgo altitudinal y permite comparar condiciones 
-        atmosféricas entre estaciones. <strong>🔴 Rojo = más húmedo de lo normal | 🟢 Verde = normal | 🔵 Azul = más seco de lo normal.</strong>
+        atmosféricas entre estaciones. <strong>🔵 Azul = más húmedo de lo normal | 🟢 Verde = normal | 🔴 Rojo = más seco de lo normal.</strong>
     </p>
 
     <div class="alertas-panel">
@@ -1031,10 +1031,12 @@
         if (maxAbs === 0) return 'hsl(120, 60%, 50%)';
         const t = anomalia / maxAbs;
         if (t < 0) {
-            const hue = 120 + (Math.abs(t) * 100);
+            // Seco: verde (120) → rojo (0)
+            const hue = 120 - (Math.abs(t) * 120);
             return `hsl(${Math.round(hue)}, 80%, 42%)`;
         } else {
-            const hue = 120 - (t * 120);
+            // Húmedo: verde (120) → azul (220)
+            const hue = 120 + (t * 100);
             return `hsl(${Math.round(hue)}, 80%, 42%)`;
         }
     }
