@@ -388,8 +388,7 @@
     
     const yLabel = document.createElementNS('http://www.w3.org/2000/svg','text');
     yLabel.setAttribute('x', 15); yLabel.setAttribute('y', 140); yLabel.setAttribute('text-anchor','middle');
-    yLabel.setAttribute('transform', 'rotate(-90,20,140)');
-    yLabel.setAttribute('x', 8);
+    yLabel.setAttribute('x', 35); yLabel.setAttribute('y', 140); yLabel.setAttribute('text-anchor','middle'); yLabel.setAttribute('transform', 'rotate(-90,35,140)');
     yLabel.setAttribute('class','chart-label');
     yLabel.textContent = varNames[currentVar] || '';
     svg.appendChild(yLabel);
