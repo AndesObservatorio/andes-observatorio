@@ -245,7 +245,7 @@
   function drawChart() {
     const svg = mainChart;
     svg.innerHTML = '';
-    const W = 900, H = 280, pad = {t:30,r:40,b:40,l:60};
+    const W = 900, H = 280, pad = {t:30,r:40,b:50,l:70};
     const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
     const years = [];
     for(let y=2020; y<=2100; y+=2) years.push(y);
@@ -253,6 +253,36 @@
     const minV = Math.min(...data.map(d=>d.val)) * 0.98;
     const maxV = Math.max(...data.map(d=>d.val)) * 1.02;
     const range = maxV - minV || 1;
+
+    // Cuadrícula horizontal (5 líneas)
+    for(let i=0; i<=5; i++) {
+      const y = pad.t + ch * i / 5;
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1', pad.l); line.setAttribute('y1', y); line.setAttribute('x2', W-pad.r); line.setAttribute('y2', y);
+      line.setAttribute('class','chart-grid');
+      svg.appendChild(line);
+      const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+      text.setAttribute('x', pad.l-8); text.setAttribute('y', y+4); text.setAttribute('text-anchor','end');
+      text.setAttribute('class','chart-label');
+      if(currentVar === 'impacto') { text.textContent = formatUSD(maxV - range * i / 5); }
+      else { text.textContent = (maxV - range * i / 5).toFixed(currentVar==='ztd'?3:1); }
+      svg.appendChild(text);
+    }
+
+    // Cuadrícula vertical (cada 20 años)
+    for(let i=0; i<=4; i++) {
+      const x = pad.l + cw * i / 4;
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1', x); line.setAttribute('y1', pad.t); line.setAttribute('x2', x); line.setAttribute('y2', H-pad.b);
+      line.setAttribute('class','chart-grid');
+      svg.appendChild(line);
+      const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+      text.setAttribute('x', x); text.setAttribute('y', H-25); text.setAttribute('text-anchor','middle');
+      text.setAttribute('class','chart-label');
+      text.textContent = 2020 + i * 20;
+      svg.appendChild(text);
+    }
+
     let lineD = '';
     data.forEach((d,i) => {
       const x = pad.l + (d.year - 2020) / 80 * cw;
@@ -264,6 +294,21 @@
     line.setAttribute('stroke', 'var(--kimi-chart-1)');
     line.setAttribute('class', 'chart-line');
     svg.appendChild(line);
+
+    // Puntos con tooltip
+    data.forEach((d,i) => {
+      const x = pad.l + (d.year - 2020) / 80 * cw;
+      const y = pad.t + ch - (d.val - minV) / range * ch;
+      const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', 3);
+      circle.setAttribute('fill', 'var(--kimi-chart-1)');
+      circle.setAttribute('stroke', 'white'); circle.setAttribute('stroke-width', '1');
+      const title = document.createElementNS('http://www.w3.org/2000/svg','title');
+      if(currentVar === 'impacto') { title.textContent = `${d.year}: ${formatUSD(d.val)}`; }
+      else { title.textContent = `${d.year}: ${d.val.toFixed(1)}`; }
+      circle.appendChild(title);
+      svg.appendChild(circle);
+    });
     // Etiquetas de ejes
     const varNames = {temp:'Temperatura (°C)', precip:'Precipitación (mm)', humidity:'Humedad (%)', wind:'Viento (m/s)', ztd:'ZTD (m)', impacto:'Impacto (USD)'};
     const xLabel = document.createElementNS('http://www.w3.org/2000/svg','text');
