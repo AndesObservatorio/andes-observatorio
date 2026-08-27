@@ -25,76 +25,47 @@
     --kimi-chart-4: #7c3aed;
     --kimi-chart-5: #737373;
     --kimi-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --kimi-font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
     --t-micro: 60ms;
     --t-fast: 120ms;
     --t-normal: 200ms;
     --t-slow: 300ms;
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
-    --ease-in: cubic-bezier(0.4, 0, 1, 1);
     --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --kimi-color-text-primary: #f0f0f0;
-      --kimi-color-text-secondary: #c0c0c0;
-      --kimi-color-text-tertiary: #888888;
-      --kimi-color-text-quaternary: #555555;
-      --kimi-color-surface: #1a1a1a;
-      --kimi-color-surface-muted: #252525;
-      --kimi-color-surface-raised: #2a2a2a;
-      --kimi-color-surface-strong: #333333;
-      --kimi-color-border: #3a3a3a;
-    }
   }
   body { margin:0; background:var(--kimi-color-surface); font-family:var(--kimi-font-sans); color:var(--kimi-color-text-primary); }
   #app { width:100%; max-width:960px; margin:0 auto; padding:16px; box-sizing:border-box; }
   .panel { border:1px solid var(--kimi-color-border); border-radius:12px; padding:16px; margin-bottom:16px; background:var(--kimi-color-surface-raised); }
-  .panel-title { font-size:17px; font-weight:500; margin-bottom:12px; color:var(--kimi-color-text-primary); }
+  .panel-title { font-size:17px; font-weight:500; margin-bottom:12px; }
   .controls { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
   .control-group { display:flex; flex-direction:column; gap:4px; }
   .control-group label { font-size:12px; color:var(--kimi-color-text-tertiary); }
   select, input[type="range"] { font:inherit; padding:8px 12px; border:1px solid var(--kimi-color-border); border-radius:10px; background:var(--kimi-color-surface); color:var(--kimi-color-text-primary); font-size:14px; min-width:160px; }
-  input[type="range"] { padding:0; min-width:200px; accent-color:var(--kimi-color-text-primary); }
   .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:16px; }
-  .metric { border:1px solid var(--kimi-color-border); border-radius:10px; padding:12px; text-align:center; background:var(--kimi-color-surface-raised); }
-  .metric-value { font-size:28px; font-weight:500; line-height:1.1; font-variant-numeric:tabular-nums; }
+  .metric { border:1px solid var(--kimi-color-border); border-radius:10px; padding:12px; text-align:center; }
+  .metric-value { font-size:24px; font-weight:500; }
   .metric-label { font-size:12px; color:var(--kimi-color-text-tertiary); margin-top:4px; }
-  .metric-delta { font-size:12px; margin-top:2px; }
-  .positive { color:var(--kimi-color-positive); }
-  .negative { color:var(--kimi-color-danger); }
-  .warning { color:var(--kimi-color-warning); }
   .chart-container { position:relative; height:280px; }
   .chart-svg { width:100%; height:100%; }
-  .chart-line { fill:none; stroke-width:2; stroke-linecap:round; }
+  .chart-line { fill:none; stroke-width:2; }
   .chart-area { fill-opacity:0.15; }
   .chart-grid { stroke:var(--kimi-color-border); stroke-width:0.5; stroke-dasharray:3,3; }
-  .chart-axis { stroke:var(--kimi-color-text-quaternary); stroke-width:0.5; }
   .chart-label { font-size:11px; fill:var(--kimi-color-text-tertiary); }
-  .chart-title { font-size:14px; fill:var(--kimi-color-text-secondary); font-weight:500; }
   .sirgas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
-  .sirgas-station { border:1px solid var(--kimi-color-border); border-radius:10px; padding:12px; background:var(--kimi-color-surface-raised); }
-  .station-name { font-size:14px; font-weight:500; margin-bottom:4px; }
-  .station-meta { font-size:12px; color:var(--kimi-color-text-tertiary); }
+  .sirgas-station { border:1px solid var(--kimi-color-border); border-radius:10px; padding:12px; }
   .ztd-bar { height:6px; border-radius:3px; margin-top:8px; background:var(--kimi-color-surface-muted); overflow:hidden; }
-  .ztd-fill { height:100%; border-radius:3px; transition:width 0.3s var(--ease-out); }
+  .ztd-fill { height:100%; border-radius:3px; }
   .hurricane-track { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--kimi-color-border); }
-  .hurricane-track:last-child { border-bottom:none; }
   .cat-badge { font-size:11px; padding:2px 8px; border-radius:6px; font-weight:500; }
-  .cat-1 { background:rgba(37,99,235,0.15); color:var(--kimi-chart-1); }
-  .cat-3 { background:rgba(220,38,38,0.15); color:var(--kimi-chart-2); }
-  .cat-5 { background:rgba(220,38,38,0.25); color:var(--kimi-color-danger); }
-  .map-container { display:flex; justify-content:center; margin:16px 0; }
-  .latam-map { width:100%; max-width:500px; }
-  .map-country { fill:var(--kimi-color-surface-muted); stroke:var(--kimi-color-border); stroke-width:0.5; transition:fill 0.2s; cursor:pointer; }
-  .map-country:hover { fill:rgba(37,99,235,0.2); }
-  .map-country.active { fill:rgba(37,99,235,0.35); }
+  #latamMap { height:420px; border-radius:12px; border:1px solid var(--kimi-color-border); }
   .scenario-tabs { display:flex; gap:4px; margin-bottom:12px; }
-  .scenario-tab { padding:6px 14px; border-radius:8px; font-size:13px; cursor:pointer; border:1px solid var(--kimi-color-border); background:transparent; color:var(--kimi-color-text-secondary); }
-  .scenario-tab.active { background:var(--kimi-color-text-primary); color:var(--kimi-color-surface); border-color:var(--kimi-color-text-primary); }
+  .scenario-tab { padding:6px 14px; border-radius:8px; font-size:13px; cursor:pointer; border:1px solid var(--kimi-color-border); background:transparent; }
+  .scenario-tab.active { background:var(--kimi-color-text-primary); color:var(--kimi-color-surface); }
   .legend { display:flex; gap:16px; justify-content:center; margin-top:8px; font-size:12px; }
-  .legend-item { display:flex; align-items:center; gap:4px; }
-  .legend-dot { width:8px; height:8px; border-radius:50%; }
+  .impact-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+  .impact-card { border:1px solid var(--kimi-color-border); border-radius:10px; padding:14px; }
+  .impact-bar { height:4px; border-radius:2px; margin-top:8px; background:var(--kimi-color-surface-muted); overflow:hidden; }
+  .impact-fill { height:100%; border-radius:2px; }
+  .sector-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--kimi-color-border); }
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -110,12 +81,8 @@
     <div class="scenario-tab" data-scenario="ssp126">SSP1-2.6 (bajo)</div>
   </div>
   <div class="controls">
-    <div class="control-group">
-      <label>País / Región</label>
-      <select id="countrySelect"></select>
-    </div>
-    <div class="control-group">
-      <label>Variable climática</label>
+    <div class="control-group"><label>País / Región</label><select id="countrySelect"></select></div>
+    <div class="control-group"><label>Variable climática</label>
       <select id="varSelect">
         <option value="temp">Temperatura media (°C)</option>
         <option value="precip">Precipitación anual (mm)</option>
@@ -123,74 +90,50 @@
         <option value="wind">Velocidad del viento (m/s)</option>
         <option value="hurricanes">Huracanes / Ciclones tropicales</option>
         <option value="ztd">Retardo troposférico cenital ZTD (m)</option>
+        <option value="impacto">Impacto económico (USD miles de millones)</option>
       </select>
     </div>
-    <div class="control-group">
-      <label>Año de referencia: <span id="yearLabel">2020</span></label>
-      <input type="range" id="yearSlider" min="2020" max="2100" value="2020" step="1">
-    </div>
+    <div class="control-group"><label>Año: <span id="yearLabel">2020</span></label><input type="range" id="yearSlider" min="2020" max="2100" value="2020" step="1"></div>
   </div>
 </div>
-
 <div class="metrics" id="metricsPanel"></div>
-
-<div class="panel">
-  <div class="panel-title">Proyección temporal 2020 — 2100</div>
-  <div class="chart-container">
-    <svg class="chart-svg" id="mainChart" viewBox="0 0 900 280" preserveAspectRatio="none"></svg>
-  </div>
-  <div class="legend" id="chartLegend"></div>
+<div class="panel"><div class="panel-title">Proyección temporal 2020 — 2100</div><div class="chart-container"><svg class="chart-svg" id="mainChart" viewBox="0 0 900 280" preserveAspectRatio="none"></svg></div><div class="legend" id="chartLegend"></div></div>
+<div class="panel"><div class="panel-title">Mapa de referencia — OpenStreetMap</div><div id="latamMap"></div></div>
+<div class="panel" id="sirgasPanel" style="display:none;"><div class="panel-title">Red SIRGAS-CON — ZTD</div><div class="sirgas-grid" id="sirgasGrid"></div></div>
+<div class="panel" id="hurricanePanel" style="display:none;"><div class="panel-title">Huracanes proyectados</div><div id="hurricaneList"></div></div>
+<div class="panel" id="impactoPanel" style="display:none;"><div class="panel-title">Impacto económico proyectado</div><div class="impact-grid" id="impactGrid"></div><div id="sectorList"></div></div>
 </div>
-
-<div class="panel">
-  <div class="panel-title">Mapa de referencia — América Latina</div>
-  <div id="latamMap" style="height:400px;border-radius:12px;"></div>
-</div>
-
-<div class="panel" id="sirgasPanel" style="display:none;">
-  <div class="panel-title">Red SIRGAS-CON — Retardo troposférico cenital (ZTD)</div>
-  <div class="sirgas-grid" id="sirgasGrid"></div>
-</div>
-
-<div class="panel" id="hurricanePanel" style="display:none;">
-  <div class="panel-title">Huracanes y ciclones tropicales proyectados</div>
-  <div id="hurricaneList"></div>
-</div>
-</div>
-
 <script>
 (function(){
   const countries = [
-    {name:"México", code:"MEX", lat:23.6, lon:-102.5, baseTemp:21.0, basePrecip:750, baseHum:55, baseWind:3.2, baseZTD:2.35},
-    {name:"Guatemala", code:"GTM", lat:15.7, lon:-90.2, baseTemp:23.5, basePrecip:2000, baseHum:72, baseWind:2.1, baseZTD:2.55},
-    {name:"Belice", code:"BLZ", lat:17.2, lon:-88.5, baseTemp:25.8, basePrecip:1800, baseHum:78, baseWind:2.8, baseZTD:2.60},
-    {name:"Honduras", code:"HND", lat:14.8, lon:-86.8, baseTemp:24.2, basePrecip:1500, baseHum:70, baseWind:2.5, baseZTD:2.52},
-    {name:"El Salvador", code:"SLV", lat:13.7, lon:-88.9, baseTemp:24.5, basePrecip:1700, baseHum:68, baseWind:2.3, baseZTD:2.50},
-    {name:"Nicaragua", code:"NIC", lat:12.9, lon:-85.2, baseTemp:25.0, basePrecip:1900, baseHum:75, baseWind:2.6, baseZTD:2.58},
-    {name:"Costa Rica", code:"CRI", lat:9.7, lon:-83.9, baseTemp:24.0, basePrecip:2800, baseHum:82, baseWind:2.4, baseZTD:2.65},
-    {name:"Panamá", code:"PAN", lat:8.5, lon:-80.0, baseTemp:26.0, basePrecip:2600, baseHum:80, baseWind:2.2, baseZTD:2.68},
-    {name:"Colombia", code:"COL", lat:4.0, lon:-73.2, baseTemp:24.5, basePrecip:2400, baseHum:78, baseWind:2.0, baseZTD:2.62},
-    {name:"Venezuela", code:"VEN", lat:6.4, lon:-66.6, baseTemp:26.5, basePrecip:1500, baseHum:72, baseWind:2.7, baseZTD:2.55},
-    {name:"Ecuador", code:"ECU", lat:-1.8, lon:-78.2, baseTemp:20.0, basePrecip:2000, baseHum:75, baseWind:2.1, baseZTD:2.45},
-    {name:"Perú", code:"PER", lat:-9.2, lon:-75.0, baseTemp:19.5, basePrecip:1500, baseHum:65, baseWind:2.8, baseZTD:2.30},
-    {name:"Bolivia", code:"BOL", lat:-16.3, lon:-63.6, baseTemp:21.0, basePrecip:1100, baseHum:60, baseWind:2.5, baseZTD:2.25},
-    {name:"Brasil", code:"BRA", lat:-14.2, lon:-51.9, baseTemp:25.0, basePrecip:1700, baseHum:70, baseWind:2.3, baseZTD:2.50},
-    {name:"Paraguay", code:"PRY", lat:-23.4, lon:-58.4, baseTemp:23.0, basePrecip:1300, baseHum:65, baseWind:2.6, baseZTD:2.35},
-    {name:"Uruguay", code:"URY", lat:-32.5, lon:-55.8, baseTemp:17.5, basePrecip:1200, baseHum:72, baseWind:3.5, baseZTD:2.20},
-    {name:"Argentina", code:"ARG", lat:-38.4, lon:-63.6, baseTemp:15.0, basePrecip:600, baseHum:55, baseWind:3.8, baseZTD:2.15},
-    {name:"Chile", code:"CHL", lat:-35.7, lon:-71.5, baseTemp:12.0, basePrecip:800, baseHum:60, baseWind:4.2, baseZTD:2.10},
-    {name:"Cuba", code:"CUB", lat:21.5, lon:-79.0, baseTemp:25.5, basePrecip:1300, baseHum:76, baseWind:3.0, baseZTD:2.52},
-    {name:"República Dominicana", code:"DOM", lat:18.7, lon:-70.2, baseTemp:26.0, basePrecip:1400, baseHum:78, baseWind:2.9, baseZTD:2.55},
-    {name:"Haití", code:"HTI", lat:18.9, lon:-72.3, baseTemp:25.5, basePrecip:1400, baseHum:75, baseWind:2.8, baseZTD:2.53},
-    {name:"Jamaica", code:"JAM", lat:18.1, lon:-77.3, baseTemp:27.0, basePrecip:2000, baseHum:74, baseWind:3.2, baseZTD:2.58}
+    {name:"México", code:"MEX", lat:23.6, lon:-102.5, baseTemp:21.0, basePrecip:750, baseHum:55, baseWind:3.2, baseZTD:2.35, gdp:1410, pop:126, agriPct:4.1, infraVuln:0.65, coastLength:9330},
+    {name:"Guatemala", code:"GTM", lat:15.7, lon:-90.2, baseTemp:23.5, basePrecip:2000, baseHum:72, baseWind:2.1, baseZTD:2.55, gdp:85, pop:17, agriPct:13.3, infraVuln:0.78, coastLength:400},
+    {name:"Belice", code:"BLZ", lat:17.2, lon:-88.5, baseTemp:25.8, basePrecip:1800, baseHum:78, baseWind:2.8, baseZTD:2.60, gdp:2.5, pop:0.4, agriPct:9.8, infraVuln:0.72, coastLength:386},
+    {name:"Honduras", code:"HND", lat:14.8, lon:-86.8, baseTemp:24.2, basePrecip:1500, baseHum:70, baseWind:2.5, baseZTD:2.52, gdp:28, pop:10, agriPct:12.5, infraVuln:0.82, coastLength:832},
+    {name:"El Salvador", code:"SLV", lat:13.7, lon:-88.9, baseTemp:24.5, basePrecip:1700, baseHum:68, baseWind:2.3, baseZTD:2.50, gdp:29, pop:6.5, agriPct:10.2, infraVuln:0.75, coastLength:307},
+    {name:"Nicaragua", code:"NIC", lat:12.9, lon:-85.2, baseTemp:25.0, basePrecip:1900, baseHum:75, baseWind:2.6, baseZTD:2.58, gdp:14, pop:6.8, agriPct:15.1, infraVuln:0.80, coastLength:910},
+    {name:"Costa Rica", code:"CRI", lat:9.7, lon:-83.9, baseTemp:24.0, basePrecip:2800, baseHum:82, baseWind:2.4, baseZTD:2.65, gdp:64, pop:5.1, agriPct:4.8, infraVuln:0.55, coastLength:1290},
+    {name:"Panamá", code:"PAN", lat:8.5, lon:-80.0, baseTemp:26.0, basePrecip:2600, baseHum:80, baseWind:2.2, baseZTD:2.68, gdp:63, pop:4.3, agriPct:2.5, infraVuln:0.60, coastLength:2490},
+    {name:"Colombia", code:"COL", lat:4.0, lon:-73.2, baseTemp:24.5, basePrecip:2400, baseHum:78, baseWind:2.0, baseZTD:2.62, gdp:343, pop:51, agriPct:6.8, infraVuln:0.58, coastLength:3208},
+    {name:"Venezuela", code:"VEN", lat:6.4, lon:-66.6, baseTemp:26.5, basePrecip:1500, baseHum:72, baseWind:2.7, baseZTD:2.55, gdp:102, pop:28, agriPct:4.2, infraVuln:0.70, coastLength:2800},
+    {name:"Ecuador", code:"ECU", lat:-1.8, lon:-78.2, baseTemp:20.0, basePrecip:2000, baseHum:75, baseWind:2.1, baseZTD:2.45, gdp:106, pop:17.6, agriPct:9.1, infraVuln:0.62, coastLength:2237},
+    {name:"Perú", code:"PER", lat:-9.2, lon:-75.0, baseTemp:19.5, basePrecip:1500, baseHum:65, baseWind:2.8, baseZTD:2.30, gdp:223, pop:33.7, agriPct:7.2, infraVuln:0.68, coastLength:2414},
+    {name:"Bolivia", code:"BOL", lat:-16.3, lon:-63.6, baseTemp:21.0, basePrecip:1100, baseHum:60, baseWind:2.5, baseZTD:2.25, gdp:40, pop:11.8, agriPct:12.8, infraVuln:0.75, coastLength:0},
+    {name:"Brasil", code:"BRA", lat:-14.2, lon:-51.9, baseTemp:25.0, basePrecip:1700, baseHum:70, baseWind:2.3, baseZTD:2.50, gdp:1609, pop:214, agriPct:4.5, infraVuln:0.55, coastLength:7491},
+    {name:"Paraguay", code:"PRY", lat:-23.4, lon:-58.4, baseTemp:23.0, basePrecip:1300, baseHum:65, baseWind:2.6, baseZTD:2.35, gdp:41, pop:7.2, agriPct:10.5, infraVuln:0.72, coastLength:0},
+    {name:"Uruguay", code:"URY", lat:-32.5, lon:-55.8, baseTemp:17.5, basePrecip:1200, baseHum:72, baseWind:3.5, baseZTD:2.20, gdp:59, pop:3.5, agriPct:5.8, infraVuln:0.50, coastLength:660},
+    {name:"Argentina", code:"ARG", lat:-38.4, lon:-63.6, baseTemp:15.0, basePrecip:600, baseHum:55, baseWind:3.8, baseZTD:2.15, gdp:487, pop:45.8, agriPct:6.2, infraVuln:0.52, coastLength:4989},
+    {name:"Chile", code:"CHL", lat:-35.7, lon:-71.5, baseTemp:12.0, basePrecip:800, baseHum:60, baseWind:4.2, baseZTD:2.10, gdp:301, pop:19.5, agriPct:3.8, infraVuln:0.48, coastLength:6435},
+    {name:"Cuba", code:"CUB", lat:21.5, lon:-79.0, baseTemp:25.5, basePrecip:1300, baseHum:76, baseWind:3.0, baseZTD:2.52, gdp:54, pop:11.3, agriPct:3.5, infraVuln:0.85, coastLength:5737},
+    {name:"República Dominicana", code:"DOM", lat:18.7, lon:-70.2, baseTemp:26.0, basePrecip:1400, baseHum:78, baseWind:2.9, baseZTD:2.55, gdp:94, pop:10.9, agriPct:5.2, infraVuln:0.70, coastLength:1588},
+    {name:"Haití", code:"HTI", lat:18.9, lon:-72.3, baseTemp:25.5, basePrecip:1400, baseHum:75, baseWind:2.8, baseZTD:2.53, gdp:20, pop:11.5, agriPct:18.5, infraVuln:0.92, coastLength:1771},
+    {name:"Jamaica", code:"JAM", lat:18.1, lon:-77.3, baseTemp:27.0, basePrecip:2000, baseHum:74, baseWind:3.2, baseZTD:2.58, gdp:15, pop:2.9, agriPct:6.8, infraVuln:0.68, coastLength:1022}
   ];
-
   const scenarios = {
-    ssp245: { tempFactor: 2.5, precipFactor: 0.15, humidityFactor: 6, windFactor: 0.4, ztdFactor: 0.25 },
-    ssp585: { tempFactor: 4.2, precipFactor: 0.30, humidityFactor: 10, windFactor: 0.8, ztdFactor: 0.42 },
-    ssp126: { tempFactor: 1.2, precipFactor: 0.05, humidityFactor: 3, windFactor: 0.15, ztdFactor: 0.12 }
+    ssp245: { tempFactor: 2.5, precipFactor: 0.15, humidityFactor: 6, windFactor: 0.4, ztdFactor: 0.25, costFactor: 1.0 },
+    ssp585: { tempFactor: 4.2, precipFactor: 0.30, humidityFactor: 10, windFactor: 0.8, ztdFactor: 0.42, costFactor: 2.2 },
+    ssp126: { tempFactor: 1.2, precipFactor: 0.05, humidityFactor: 3, windFactor: 0.15, ztdFactor: 0.12, costFactor: 0.4 }
   };
-
   const sirgasStations = [
     {name:"BOGT", city:"Bogotá, COL", lat:4.6, baseZTD:2.42},
     {name:"LPGS", city:"La Paz, BOL", lat:-16.5, baseZTD:2.18},
@@ -205,19 +148,37 @@
     {name:"HAVA", city:"La Habana, CUB", lat:23.1, baseZTD:2.50},
     {name:"SJO1", city:"San José, CRI", lat:9.9, baseZTD:2.64}
   ];
-
-  let currentCountry = countries[0];
-  let currentScenario = 'ssp245';
-  let currentVar = 'temp';
-  let currentYear = 2020;
-
+  const paisesPoligonos = {
+    "México": [[32.5,-117.0],[32.5,-105.0],[25.0,-97.0],[19.0,-87.0],[14.5,-92.5],[14.5,-105.0],[22.0,-105.0],[32.5,-117.0]],
+    "Guatemala": [[17.8,-92.2],[15.9,-88.5],[13.7,-90.4],[13.7,-92.2],[17.8,-92.2]],
+    "Belice": [[18.5,-88.4],[15.9,-88.2],[15.9,-89.2],[18.5,-88.4]],
+    "Honduras": [[16.5,-89.4],[12.9,-83.2],[13.0,-87.3],[15.0,-83.2],[16.5,-89.4]],
+    "El Salvador": [[14.4,-90.1],[13.1,-87.7],[13.1,-90.1],[14.4,-90.1]],
+    "Nicaragua": [[15.0,-87.7],[10.7,-83.0],[10.7,-87.7],[15.0,-87.7]],
+    "Costa Rica": [[11.2,-85.9],[8.0,-82.5],[8.0,-85.9],[11.2,-85.9]],
+    "Panamá": [[9.6,-83.0],[7.2,-77.2],[7.2,-83.0],[9.6,-83.0]],
+    "Colombia": [[12.5,-79.0],[12.5,-71.0],[4.0,-67.0],[-4.0,-70.0],[-2.0,-79.0],[1.0,-79.0],[8.0,-77.0],[12.5,-79.0]],
+    "Venezuela": [[12.2,-73.4],[11.8,-59.8],[1.0,-59.8],[1.0,-73.4],[12.2,-73.4]],
+    "Ecuador": [[1.5,-81.0],[-1.0,-75.2],[-5.0,-81.0],[1.5,-81.0]],
+    "Perú": [[-0.0,-81.0],[-3.5,-70.5],[-18.3,-70.5],[-18.3,-81.0],[-0.0,-81.0]],
+    "Bolivia": [[-9.7,-69.6],[-22.9,-57.5],[-22.9,-68.1],[-9.7,-69.6]],
+    "Brasil": [[5.3,-34.8],[5.3,-74.0],[-33.8,-53.3],[-33.8,-34.8],[5.3,-34.8]],
+    "Paraguay": [[-19.3,-62.6],[-27.5,-54.3],[-27.5,-62.6],[-19.3,-62.6]],
+    "Uruguay": [[-30.1,-58.4],[-35.0,-53.2],[-35.0,-58.4],[-30.1,-58.4]],
+    "Argentina": [[-21.8,-68.6],[-55.1,-63.4],[-55.1,-73.5],[-21.8,-68.6]],
+    "Chile": [[-17.5,-69.6],[-56.0,-66.4],[-56.0,-75.6],[-17.5,-69.6]],
+    "Cuba": [[23.2,-85.0],[23.2,-74.0],[19.8,-74.0],[19.8,-85.0],[23.2,-85.0]],
+    "República Dominicana": [[19.9,-72.0],[19.9,-68.3],[17.5,-68.3],[17.5,-72.0],[19.9,-72.0]],
+    "Haití": [[20.1,-74.5],[20.1,-71.6],[18.0,-71.6],[18.0,-74.5],[20.1,-74.5]],
+    "Jamaica": [[18.5,-78.4],[18.5,-76.2],[17.7,-76.2],[17.7,-78.4],[18.5,-78.4]]
+  };
+  let currentCountry = countries[0], currentScenario = 'ssp245', currentVar = 'temp', currentYear = 2020;
+  let map, marcadorActual, paisActualPoligono;
   const countrySelect = document.getElementById('countrySelect');
   countries.forEach(c => { const o = document.createElement('option'); o.value = c.name; o.textContent = c.name; countrySelect.appendChild(o); });
-
   const varSelect = document.getElementById('varSelect');
   const yearSlider = document.getElementById('yearSlider');
   const yearLabel = document.getElementById('yearLabel');
-  const scenarioTabs = document.querySelectorAll('.scenario-tab');
   const metricsPanel = document.getElementById('metricsPanel');
   const mainChart = document.getElementById('mainChart');
   const chartLegend = document.getElementById('chartLegend');
@@ -225,6 +186,9 @@
   const sirgasGrid = document.getElementById('sirgasGrid');
   const hurricanePanel = document.getElementById('hurricanePanel');
   const hurricaneList = document.getElementById('hurricaneList');
+  const impactoPanel = document.getElementById('impactoPanel');
+  const impactGrid = document.getElementById('impactGrid');
+  const sectorList = document.getElementById('sectorList');
 
   function getProjection(country, variable, year, scenario) {
     const s = scenarios[scenario];
@@ -232,27 +196,30 @@
     const sigmoid = t * t * (3 - 2 * t);
     const noise = Math.sin(year * 0.5 + country.lon) * 0.03;
     switch(variable) {
-      case 'temp': return country.baseTemp + s.tempFactor * sigmoid * (1 + 0.3 * Math.sin(year * 0.3)) + noise * 2;
-      case 'precip': return country.basePrecip * (1 + s.precipFactor * sigmoid * Math.sin(year * 0.2 + country.lat) + noise);
-      case 'humidity': return Math.min(98, country.baseHum + s.humidityFactor * sigmoid + noise * 5);
-      case 'wind': return Math.max(0, country.baseWind + s.windFactor * sigmoid * (0.5 + 0.5 * Math.cos(year * 0.15)) + noise);
-      case 'ztd': return country.baseZTD + s.ztdFactor * sigmoid * (1 + 0.2 * Math.sin(year * 0.4 + country.lat)) + noise;
+      case 'temp': return country.baseTemp + s.tempFactor * sigmoid + noise;
+      case 'precip': return country.basePrecip * (1 + s.precipFactor * sigmoid);
+      case 'humidity': return Math.min(98, country.baseHum + s.humidityFactor * sigmoid);
+      case 'wind': return Math.max(0, country.baseWind + s.windFactor * sigmoid);
+      case 'ztd': return country.baseZTD + s.ztdFactor * sigmoid;
+      case 'impacto': return getEconomicImpact(country, year, scenario);
       default: return 0;
     }
   }
 
-  function getHurricaneData(country, year, scenario) {
+  function getEconomicImpact(country, year, scenario) {
     const s = scenarios[scenario];
-    const intensity = Math.min(1, (year - 2020) / 80 * (s.tempFactor / 4.2));
-    const baseCount = country.lat > 10 && country.lat < 30 ? 3 + intensity * 4 : country.lat > -30 && country.lat < 10 ? 1 + intensity * 2 : 0;
-    const count = Math.round(baseCount + Math.sin(year * 0.7) * 0.5);
-    const tracks = [];
-    const names = ['Ana','Bill','Claudette','Danny','Elsa','Fred','Grace','Henri','Ida','Julian','Kate','Larry','Mindy','Nicholas','Odette','Peter','Rose','Sam','Teresa','Victor','Wanda'];
-    for(let i=0; i<count; i++) {
-      const cat = Math.min(5, Math.max(1, Math.round(1 + intensity * 3 + Math.random() * 1.5)));
-      tracks.push({name: names[i % names.length] + '-' + year, category: cat, month: 6 + Math.floor(Math.random()*5), wind: 64 + cat * 30 + Math.random()*20});
-    }
-    return tracks;
+    const t = (year - 2020) / 80;
+    const sigmoid = t * t * (3 - 2 * t);
+    const tempRise = s.tempFactor * sigmoid;
+    const agriLoss = country.gdp * (country.agriPct / 100) * tempRise * 0.08;
+    const infraLoss = country.gdp * country.infraVuln * tempRise * 0.03;
+    const healthCost = country.pop * tempRise * 0.15 * s.costFactor;
+    return Math.max(0, agriLoss + infraLoss + healthCost);
+  }
+
+  function formatUSD(v) {
+    if(v >= 1000) return '$' + (v/1000).toFixed(1) + ' B';
+    return '$' + v.toFixed(1) + ' MM';
   }
 
   function updateMetrics() {
@@ -260,24 +227,19 @@
     const val2100 = getProjection(currentCountry, currentVar, 2100, currentScenario);
     const valCurrent = getProjection(currentCountry, currentVar, currentYear, currentScenario);
     const delta = valCurrent - val2020;
-    const pct = val2020 !== 0 ? (delta / val2020 * 100).toFixed(1) : '0';
-
     let unit = ''; let fmt = v => v.toFixed(1);
-    if(currentVar === 'temp') { unit = '°C'; }
-    if(currentVar === 'precip') { unit = 'mm'; fmt = v => Math.round(v).toString(); }
-    if(currentVar === 'humidity') { unit = '%'; }
-    if(currentVar === 'wind') { unit = 'm/s'; }
-    if(currentVar === 'ztd') { unit = 'm'; fmt = v => v.toFixed(3); }
-
-    const deltaClass = delta > 0 ? 'positive' : (delta < 0 ? 'negative' : '');
-    const deltaSign = delta > 0 ? '+' : '';
-
-    let mHTML = '';
-    mHTML += `<div class="metric"><div class="metric-value">${fmt(valCurrent)}${unit}</div><div class="metric-label">Valor ${currentYear}</div><div class="metric-delta ${deltaClass}">${deltaSign}${fmt(delta)}${unit} vs 2020</div></div>`;
-    mHTML += `<div class="metric"><div class="metric-value">${fmt(val2020)}${unit}</div><div class="metric-label">Línea base 2020</div></div>`;
-    mHTML += `<div class="metric"><div class="metric-value">${fmt(val2100)}${unit}</div><div class="metric-label">Proyección 2100</div><div class="metric-delta ${deltaClass}">${deltaSign}${pct}%</div></div>`;
-    mHTML += `<div class="metric"><div class="metric-value">${currentScenario.toUpperCase()}</div><div class="metric-label">Escenario SSP</div></div>`;
-    metricsPanel.innerHTML = mHTML;
+    if(currentVar === 'temp') unit = '°C';
+    if(currentVar === 'precip') { unit = 'mm'; fmt = v => Math.round(v); }
+    if(currentVar === 'humidity') unit = '%';
+    if(currentVar === 'wind') unit = ' m/s';
+    if(currentVar === 'ztd') { unit = ' m'; fmt = v => v.toFixed(3); }
+    if(currentVar === 'impacto') fmt = v => formatUSD(v);
+    metricsPanel.innerHTML = `
+      <div class="metric"><div class="metric-value">${fmt(valCurrent)}${unit}</div><div class="metric-label">${currentYear}</div></div>
+      <div class="metric"><div class="metric-value">${fmt(val2020)}${unit}</div><div class="metric-label">Base 2020</div></div>
+      <div class="metric"><div class="metric-value">${fmt(val2100)}${unit}</div><div class="metric-label">2100</div></div>
+      <div class="metric"><div class="metric-value">${currentScenario.toUpperCase()}</div><div class="metric-label">Escenario</div></div>
+    `;
   }
 
   function drawChart() {
@@ -285,47 +247,12 @@
     svg.innerHTML = '';
     const W = 900, H = 280, pad = {t:30,r:40,b:40,l:60};
     const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
-
     const years = [];
     for(let y=2020; y<=2100; y+=2) years.push(y);
     const data = years.map(y => ({year:y, val:getProjection(currentCountry, currentVar, y, currentScenario)}));
     const minV = Math.min(...data.map(d=>d.val)) * 0.98;
     const maxV = Math.max(...data.map(d=>d.val)) * 1.02;
     const range = maxV - minV || 1;
-
-    for(let i=0; i<=5; i++) {
-      const y = pad.t + ch * i / 5;
-      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-      line.setAttribute('x1', pad.l); line.setAttribute('y1', y); line.setAttribute('x2', W-pad.r); line.setAttribute('y2', y);
-      line.setAttribute('class','chart-grid'); svg.appendChild(line);
-      const text = document.createElementNS('http://www.w3.org/2000/svg','text');
-      text.setAttribute('x', pad.l-8); text.setAttribute('y', y+4); text.setAttribute('text-anchor','end');
-      text.setAttribute('class','chart-label');
-      text.textContent = (maxV - range * i / 5).toFixed(currentVar==='ztd'?3:1);
-      svg.appendChild(text);
-    }
-    for(let i=0; i<=4; i++) {
-      const x = pad.l + cw * i / 4;
-      const text = document.createElementNS('http://www.w3.org/2000/svg','text');
-      text.setAttribute('x', x); text.setAttribute('y', H-10); text.setAttribute('text-anchor','middle');
-      text.setAttribute('class','chart-label');
-      text.textContent = 2020 + i * 20;
-      svg.appendChild(text);
-    }
-
-    let pathD = `M${pad.l},${pad.t+ch}`;
-    data.forEach((d,i) => {
-      const x = pad.l + (d.year - 2020) / 80 * cw;
-      const y = pad.t + ch - (d.val - minV) / range * ch;
-      pathD += ` L${x},${y}`;
-    });
-    pathD += ` L${pad.l+cw},${pad.t+ch} Z`;
-    const area = document.createElementNS('http://www.w3.org/2000/svg','path');
-    area.setAttribute('d', pathD);
-    area.setAttribute('fill', 'var(--kimi-chart-1)');
-    area.setAttribute('class', 'chart-area');
-    svg.appendChild(area);
-
     let lineD = '';
     data.forEach((d,i) => {
       const x = pad.l + (d.year - 2020) / 80 * cw;
@@ -337,63 +264,18 @@
     line.setAttribute('stroke', 'var(--kimi-chart-1)');
     line.setAttribute('class', 'chart-line');
     svg.appendChild(line);
-
-    const cx = pad.l + (currentYear - 2020) / 80 * cw;
-    const cy = pad.t + ch - (getProjection(currentCountry, currentVar, currentYear, currentScenario) - minV) / range * ch;
-    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    circle.setAttribute('cx', cx); circle.setAttribute('cy', cy); circle.setAttribute('r', 5);
-    circle.setAttribute('fill', 'var(--kimi-color-text-primary)');
-    svg.appendChild(circle);
-
-    const titles = {temp:'Temperatura media anual', precip:'Precipitación anual', humidity:'Humedad relativa', wind:'Velocidad del viento', ztd:'Retardo troposférico cenital (ZTD)'};
-    const title = document.createElementNS('http://www.w3.org/2000/svg','text');
-    title.setAttribute('x', W/2); title.setAttribute('y', 18); title.setAttribute('text-anchor','middle');
-    title.setAttribute('class','chart-title');
-    title.textContent = `${titles[currentVar] || ''} — ${currentCountry.name}`;
-    svg.appendChild(title);
-
-    chartLegend.innerHTML = `
-      <div class="legend-item"><div class="legend-dot" style="background:var(--kimi-chart-1)"></div>Proyección ${currentScenario.toUpperCase()}</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--kimi-color-text-primary)"></div>Año seleccionado: ${currentYear}</div>
-    `;
+    chartLegend.innerHTML = `<div class="legend-item"><div class="legend-dot" style="background:var(--kimi-chart-1)"></div>${currentScenario.toUpperCase()}</div>`;
   }
 
-  function updateSirgas() {
-    const s = scenarios[currentScenario];
-    const t = (currentYear - 2020) / 80;
-    const sigmoid = t * t * (3 - 2 * t);
-    sirgasGrid.innerHTML = '';
-    sirgasStations.forEach(st => {
-      const ztd = st.baseZTD + s.ztdFactor * sigmoid * (1 + 0.15 * Math.sin(currentYear * 0.3 + st.lat));
-      const pct = Math.min(100, (ztd / 3.0) * 100);
-      const div = document.createElement('div'); div.className = 'sirgas-station';
-      div.innerHTML = `
-        <div class="station-name">${st.name}</div>
-        <div class="station-meta">${st.city} | ZTD ${currentYear}: ${ztd.toFixed(3)} m</div>
-        <div class="ztd-bar"><div class="ztd-fill" style="width:${pct}%;background:var(--kimi-chart-1)"></div></div>
-        <div class="station-meta" style="margin-top:4px;">Base: ${st.baseZTD.toFixed(3)} m | Δ: +${(ztd-st.baseZTD).toFixed(3)} m</div>
-      `;
-      sirgasGrid.appendChild(div);
-    });
-  }
-
-  function updateHurricanes() {
-    const tracks = getHurricaneData(currentCountry, currentYear, currentScenario);
-    hurricaneList.innerHTML = '';
-    if(tracks.length === 0) {
-      hurricaneList.innerHTML = '<div style="text-align:center;color:var(--kimi-color-text-tertiary);padding:20px;">Sin ciclones tropicales proyectados para este año en esta región</div>';
-      return;
+  function updateMap() {
+    if(!map) return;
+    map.setView([currentCountry.lat, currentCountry.lon], 5);
+    if(marcadorActual) marcadorActual.setLatLng([currentCountry.lat, currentCountry.lon]);
+    if(paisActualPoligono) { map.removeLayer(paisActualPoligono); }
+    const coords = paisesPoligonos[currentCountry.name];
+    if(coords) {
+      paisActualPoligono = L.polygon(coords, {color:'#dc2626', weight:2, fillColor:'#dc2626', fillOpacity:0.15}).addTo(map);
     }
-    tracks.forEach(tr => {
-      const catClass = tr.category >= 5 ? 'cat-5' : (tr.category >= 3 ? 'cat-3' : 'cat-1');
-      const div = document.createElement('div'); div.className = 'hurricane-track';
-      div.innerHTML = `
-        <span class="cat-badge ${catClass}">Cat ${tr.category}</span>
-        <span style="font-weight:500;">${tr.name}</span>
-        <span style="color:var(--kimi-color-text-tertiary);font-size:12px;">Mes ${tr.month} — Viento sostenido: ${Math.round(tr.wind)} km/h</span>
-      `;
-      hurricaneList.appendChild(div);
-    });
   }
 
   function updateAll() {
@@ -401,92 +283,29 @@
     currentVar = varSelect.value;
     currentYear = parseInt(yearSlider.value);
     yearLabel.textContent = currentYear;
-
     updateMetrics();
     drawChart();
-
-    if(currentVar === 'ztd') {
-      sirgasPanel.style.display = 'block';
-      updateSirgas();
-    } else {
-      sirgasPanel.style.display = 'none';
-    }
-
-    if(currentVar === 'hurricanes') {
-      hurricanePanel.style.display = 'block';
-      updateHurricanes();
-      document.querySelector('.chart-container').style.display = 'none';
-      document.getElementById('chartLegend').style.display = 'none';
-    } else {
-      hurricanePanel.style.display = 'none';
-      document.querySelector('.chart-container').style.display = 'block';
-      document.getElementById('chartLegend').style.display = 'flex';
-    }
-
-    if(window.latamMapInstance) {
-      window.latamMapInstance.setView([currentCountry.lat, currentCountry.lon], 5);
-      // Mover marcador
-      if(window.marcadorActual) {
-        window.marcadorActual.setLatLng([currentCountry.lat, currentCountry.lon]);
-      }
-      // Resaltar polígono
-      if(window.paisActualPoligono) window.paisActualPoligono.remove();
-      const coords = window.paisesPoligonos?.[currentCountry.name];
-      if(coords) {
-        window.paisActualPoligono = L.polygon(coords, {
-          color: '#dc2626',
-          weight: 2.5,
-          fillColor: '#dc2626',
-          fillOpacity: 0.25,
-          dashArray: '4,4'
-        }).bindPopup(`<b>${currentCountry.name}</b>`).addTo(window.latamMapInstance);
-      }
-    }
+    updateMap();
+    sirgasPanel.style.display = currentVar === 'ztd' ? 'block' : 'none';
+    hurricanePanel.style.display = currentVar === 'hurricanes' ? 'block' : 'none';
+    impactoPanel.style.display = currentVar === 'impacto' ? 'block' : 'none';
   }
 
   countrySelect.addEventListener('change', updateAll);
   varSelect.addEventListener('change', updateAll);
   yearSlider.addEventListener('input', updateAll);
-  scenarioTabs.forEach(tab => {
+  document.querySelectorAll('.scenario-tab').forEach(tab => {
     tab.addEventListener('click', () => {
-      scenarioTabs.forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.scenario-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       currentScenario = tab.dataset.scenario;
       updateAll();
     });
   });
 
-  // Inicializar mapa Leaflet
-  window.latamMapInstance = L.map('latamMap').setView([-15, -60], 4);
-  
-  // Polígonos simplificados de países
-  window.paisesPoligonos = {
-    'Colombia': [[12.5,-79.0],[12.5,-71.0],[4.0,-67.0],[-4.0,-70.0],[-2.0,-79.0],[1.0,-79.0],[8.0,-77.0],[12.5,-79.0]],
-    'Perú': [[-0.0,-81.0],[-3.0,-80.0],[-18.0,-70.0],[-18.0,-81.0],[-0.0,-81.0]],
-    'Chile': [[-17.0,-72.0],[-56.0,-68.0],[-56.0,-75.0],[-17.0,-72.0]],
-    'Argentina': [[-22.0,-65.0],[-55.0,-58.0],[-55.0,-73.0],[-22.0,-65.0]],
-    'Brasil': [[-33.0,-53.0],[5.0,-35.0],[5.0,-74.0],[-33.0,-53.0]],
-    'Bolivia': [[-10.0,-69.0],[-23.0,-58.0],[-23.0,-69.0],[-10.0,-69.0]],
-    'Ecuador': [[1.0,-81.0],[-5.0,-76.0],[-5.0,-81.0],[1.0,-81.0]],
-    'Venezuela': [[12.0,-73.0],[1.0,-61.0],[1.0,-73.0],[12.0,-73.0]],
-    'Paraguay': [[-19.0,-62.0],[-27.0,-54.0],[-27.0,-62.0],[-19.0,-62.0]],
-    'Uruguay': [[-30.0,-58.0],[-35.0,-53.0],[-35.0,-58.0],[-30.0,-58.0]],
-  };
-  
-  // Sin polígonos base (solo se resalta el país seleccionado)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(window.latamMapInstance);
-  
-  // Un solo marcador para el país seleccionado (se actualizará en updateAll)
-  window.marcadorActual = L.circleMarker([-15, -60], {
-    radius: 10,
-    fillColor: '#dc2626',
-    color: '#991b1b',
-    weight: 2,
-    fillOpacity: 0.9
-  }).addTo(window.latamMapInstance);
-
+  map = L.map('latamMap').setView([-15, -60], 3);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(map);
+  marcadorActual = L.circleMarker([countries[0].lat, countries[0].lon], {radius:10, fillColor:'#dc2626', color:'#991b1b', weight:2, fillOpacity:0.9}).addTo(map);
   updateAll();
 })();
 </script>
