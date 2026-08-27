@@ -1053,10 +1053,12 @@
         if (maxAbs === 0) return 'hsl(120, 60%, 50%)';
         const t = anomalia / maxAbs;
         if (t < 0) {
-            const hue = 120 + (Math.abs(t) * 100);
+            // Seco: verde (120) → rojo (0)
+            const hue = 120 - (Math.abs(t) * 120);
             return `hsl(${Math.round(hue)}, 80%, 42%)`;
         } else {
-            const hue = 120 - (t * 120);
+            // Húmedo: verde (120) → azul (220)
+            const hue = 120 + (t * 100);
             return `hsl(${Math.round(hue)}, 80%, 42%)`;
         }
     }
