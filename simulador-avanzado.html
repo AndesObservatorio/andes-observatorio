@@ -91,6 +91,7 @@
         <option value="hurricanes">Huracanes / Ciclones tropicales</option>
         <option value="ztd">Retardo troposférico cenital ZTD (m)</option>
         <option value="impacto">Impacto económico (USD miles de millones)</option>
+        <option value="impacto">Impacto económico (USD miles de millones)</option>
       </select>
     </div>
     <div class="control-group"><label>Año: <span id="yearLabel">2020</span></label><input type="range" id="yearSlider" min="2020" max="2100" value="2020" step="1"></div>
@@ -189,6 +190,9 @@
   const impactoPanel = document.getElementById('impactoPanel');
   const impactGrid = document.getElementById('impactGrid');
   const sectorList = document.getElementById('sectorList');
+  const impactoPanel = document.getElementById('impactoPanel');
+  const impactGrid = document.getElementById('impactGrid');
+  const sectorList = document.getElementById('sectorList');
 
   function getProjection(country, variable, year, scenario) {
     const s = scenarios[scenario];
@@ -220,6 +224,75 @@
   function formatUSD(v) {
     if(v >= 1000) return '$' + (v/1000).toFixed(1) + ' B';
     return '$' + v.toFixed(1) + ' MM';
+  }
+
+  function getEconomicImpact(country, year, scenario) {
+    const s = scenarios[scenario];
+    const t = (year - 2020) / 80;
+    const sigmoid = t * t * (3 - 2 * t);
+    const tempRise = s.tempFactor * sigmoid;
+    const hurricaneRisk = country.lat > 10 && country.lat < 30 ? 1.5 : (country.lat > -5 && country.lat < 15 ? 0.8 : 0.3);
+    const coastalRisk = country.coastLength > 0 ? country.coastLength / 5000 : 0;
+    const agriLoss = country.gdp * (country.agriPct / 100) * tempRise * 0.08;
+    const infraLoss = country.gdp * country.infraVuln * tempRise * 0.03;
+    const healthCost = country.pop * tempRise * 0.15 * s.costFactor;
+    const disasterCost = country.gdp * hurricaneRisk * tempRise * 0.02 * s.costFactor;
+    return Math.max(0, agriLoss + infraLoss + healthCost + disasterCost);
+  }
+
+  function getSectorBreakdown(country, year, scenario) {
+    const s = scenarios[scenario];
+    const t = (year - 2020) / 80;
+    const sigmoid = t * t * (3 - 2 * t);
+    const tempRise = s.tempFactor * sigmoid;
+    const hurricaneRisk = country.lat > 10 && country.lat < 30 ? 1.5 : (country.lat > -5 && country.lat < 15 ? 0.8 : 0.3);
+    const coastalRisk = country.coastLength > 0 ? country.coastLength / 5000 : 0;
+    return [
+      {name:'Agricultura y ganadería', cost: country.gdp * (country.agriPct / 100) * tempRise * 0.08},
+      {name:'Infraestructura', cost: country.gdp * country.infraVuln * tempRise * 0.03},
+      {name:'Salud pública', cost: country.pop * tempRise * 0.15 * s.costFactor},
+      {name:'Desastres naturales', cost: country.gdp * hurricaneRisk * tempRise * 0.02 * s.costFactor},
+      {name:'Turismo costero', cost: country.gdp * coastalRisk * tempRise * 0.015 * s.costFactor},
+      {name:'Energía y agua', cost: country.gdp * tempRise * 0.012}
+    ];
+  }
+
+  function updateImpacto() {
+    const impact = getEconomicImpact(currentCountry, currentYear, currentScenario);
+    const impact2100 = getEconomicImpact(currentCountry, 2100, currentScenario);
+    const impactPctGDP = (impact / currentCountry.gdp * 100).toFixed(1);
+    const perCapita = (impact * 1000 / currentCountry.pop).toFixed(0);
+    const totalAccum = impact * (currentYear - 2020);
+
+    impactGrid.innerHTML = '';
+    const cards = [
+      {title:'Costo anual', value:formatUSD(impact), sub:`${impactPctGDP}% del PIB`, color:'#dc2626', pct: Math.min(100, impactPctGDP * 3)},
+      {title:'Per cápita', value:'$' + perCapita, sub:'USD/hab/año', color:'#7c3aed', pct: Math.min(100, perCapita / 50)},
+      {title:'Acumulado', value:formatUSD(totalAccum), sub:'2020-' + currentYear, color:'#dc2626', pct: Math.min(100, totalAccum / 500)},
+      {title:'Proyección 2100', value:formatUSD(impact2100), sub:'Costo anual', color:'#2563eb', pct: Math.min(100, impact2100 / currentCountry.gdp * 100 * 3)}
+    ];
+    cards.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'impact-card';
+      div.innerHTML = `
+        <div style="font-size:13px;font-weight:500;">${c.title}</div>
+        <div style="font-size:22px;color:${c.color}">${c.value}</div>
+        <div style="font-size:11px;color:#888;">${c.sub}</div>
+      `;
+      impactGrid.appendChild(div);
+    });
+
+    const sectors = getSectorBreakdown(currentCountry, currentYear, currentScenario);
+    sectorList.innerHTML = '';
+    sectors.forEach(sec => {
+      const div = document.createElement('div');
+      div.className = 'sector-row';
+      div.innerHTML = `
+        <span>${sec.name}</span>
+        <span style="color:#dc2626;font-weight:500;">${formatUSD(sec.cost)}</span>
+      `;
+      sectorList.appendChild(div);
+    });
   }
 
   function updateMetrics() {
