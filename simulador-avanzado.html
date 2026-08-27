@@ -325,11 +325,16 @@
       .then(r => r.json())
       .then(geojson => {
         const layer = L.geoJSON(geojson, {
-          style: { color: '#2563eb', weight: 1, fillColor: '#2563eb', fillOpacity: 0.08 }
+          style: { color: 'transparent', weight: 0, fillColor: 'transparent', fillOpacity: 0 }
         }).bindPopup(nombre).addTo(map);
         layer.on('click', () => {
           countrySelect.value = nombre;
           updateAll();
+          // Resaltar el país seleccionado
+          Object.values(window.paisesGeoJSON).forEach(l => {
+            l.setStyle({ color: 'transparent', weight: 0, fillColor: 'transparent', fillOpacity: 0 });
+          });
+          layer.setStyle({ color: '#dc2626', weight: 3, fillColor: '#dc2626', fillOpacity: 0.25 });
         });
         window.paisesGeoJSON[nombre] = layer;
       })
