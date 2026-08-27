@@ -325,16 +325,23 @@
       .then(r => r.json())
       .then(geojson => {
         const layer = L.geoJSON(geojson, {
-          style: { color: 'transparent', weight: 0, fillColor: 'transparent', fillOpacity: 0 }
+          style: { color: '#2563eb', weight: 0.5, fillColor: '#2563eb', fillOpacity: 0.03 }
         }).bindPopup(nombre).addTo(map);
         layer.on('click', () => {
           countrySelect.value = nombre;
           updateAll();
-          // Resaltar el país seleccionado
           Object.values(window.paisesGeoJSON).forEach(l => {
-            l.setStyle({ color: 'transparent', weight: 0, fillColor: 'transparent', fillOpacity: 0 });
+            l.setStyle({ color: '#2563eb', weight: 0.5, fillColor: '#2563eb', fillOpacity: 0.03 });
           });
           layer.setStyle({ color: '#dc2626', weight: 3, fillColor: '#dc2626', fillOpacity: 0.25 });
+        });
+        layer.on('mouseover', () => {
+          layer.setStyle({ color: '#f59e0b', weight: 2, fillColor: '#f59e0b', fillOpacity: 0.15 });
+        });
+        layer.on('mouseout', () => {
+          if (currentCountry.name !== nombre) {
+            layer.setStyle({ color: '#2563eb', weight: 0.5, fillColor: '#2563eb', fillOpacity: 0.03 });
+          }
         });
         window.paisesGeoJSON[nombre] = layer;
       })
