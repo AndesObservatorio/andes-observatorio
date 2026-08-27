@@ -271,10 +271,12 @@
     if(!map) return;
     map.setView([currentCountry.lat, currentCountry.lon], 5);
     if(marcadorActual) marcadorActual.setLatLng([currentCountry.lat, currentCountry.lon]);
-    if(paisActualPoligono) { map.removeLayer(paisActualPoligono); }
-    const coords = paisesPoligonos[currentCountry.name];
-    if(coords) {
-      paisActualPoligono = L.polygon(coords, {color:'#dc2626', weight:2, fillColor:'#dc2626', fillOpacity:0.15}).addTo(map);
+    Object.values(window.paisesGeoJSON).forEach(layer => {
+      layer.setStyle({ color: '#2563eb', weight: 1, fillColor: '#2563eb', fillOpacity: 0.08 });
+    });
+    const layerActual = window.paisesGeoJSON[currentCountry.name];
+    if(layerActual) {
+      layerActual.setStyle({ color: '#dc2626', weight: 3, fillColor: '#dc2626', fillOpacity: 0.25 });
     }
   }
 
@@ -305,6 +307,35 @@
 
   map = L.map('latamMap').setView([-15, -60], 3);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(map);
+
+  const paisesArchivos = {
+    "México": "mexico", "Guatemala": "guatemala", "Belice": "belice",
+    "Honduras": "honduras", "El Salvador": "el_salvador", "Nicaragua": "nicaragua",
+    "Costa Rica": "costa_rica", "Panamá": "panama", "Colombia": "colombia",
+    "Venezuela": "venezuela", "Ecuador": "ecuador", "Perú": "peru",
+    "Bolivia": "bolivia", "Brasil": "brasil", "Paraguay": "paraguay",
+    "Uruguay": "uruguay", "Argentina": "argentina", "Chile": "chile",
+    "Cuba": "cuba", "República Dominicana": "republica_dominicana",
+    "Haití": "haiti", "Jamaica": "jamaica"
+  };
+
+  window.paisesGeoJSON = {};
+  Object.entries(paisesArchivos).forEach(([nombre, archivo]) => {
+    fetch(`assets/geojson/paises/${archivo}.json`)
+      .then(r => r.json())
+      .then(geojson => {
+        const layer = L.geoJSON(geojson, {
+          style: { color: '#2563eb', weight: 1, fillColor: '#2563eb', fillOpacity: 0.08 }
+        }).bindPopup(nombre).addTo(map);
+        layer.on('click', () => {
+          countrySelect.value = nombre;
+          updateAll();
+        });
+        window.paisesGeoJSON[nombre] = layer;
+      })
+      .catch(e => console.warn(`No se pudo cargar ${nombre}`, e));
+  });
+
   marcadorActual = L.circleMarker([countries[0].lat, countries[0].lon], {radius:10, fillColor:'#dc2626', color:'#991b1b', weight:2, fillOpacity:0.9}).addTo(map);
   updateAll();
 })();
