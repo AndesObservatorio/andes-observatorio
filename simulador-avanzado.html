@@ -264,6 +264,21 @@
     line.setAttribute('stroke', 'var(--kimi-chart-1)');
     line.setAttribute('class', 'chart-line');
     svg.appendChild(line);
+    // Etiquetas de ejes
+    const varNames = {temp:'Temperatura (°C)', precip:'Precipitación (mm)', humidity:'Humedad (%)', wind:'Viento (m/s)', ztd:'ZTD (m)', impacto:'Impacto (USD)'};
+    const xLabel = document.createElementNS('http://www.w3.org/2000/svg','text');
+    xLabel.setAttribute('x', 450); xLabel.setAttribute('y', 265); xLabel.setAttribute('text-anchor','middle');
+    xLabel.setAttribute('class','chart-label');
+    xLabel.textContent = 'Año (2020 - 2100)';
+    svg.appendChild(xLabel);
+    
+    const yLabel = document.createElementNS('http://www.w3.org/2000/svg','text');
+    yLabel.setAttribute('x', 15); yLabel.setAttribute('y', 140); yLabel.setAttribute('text-anchor','middle');
+    yLabel.setAttribute('transform', 'rotate(-90,15,140)');
+    yLabel.setAttribute('class','chart-label');
+    yLabel.textContent = varNames[currentVar] || '';
+    svg.appendChild(yLabel);
+
     chartLegend.innerHTML = `<div class="legend-item"><div class="legend-dot" style="background:var(--kimi-chart-1)"></div>${currentScenario.toUpperCase()}</div>`;
   }
 
