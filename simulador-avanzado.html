@@ -387,12 +387,12 @@
     svg.appendChild(xLabel);
     
     const yLabel = document.createElementNS('http://www.w3.org/2000/svg','text');
-    yLabel.setAttribute('x', 20);
-    yLabel.setAttribute('y', 140);
-    yLabel.setAttribute('text-anchor','middle');
-    yLabel.setAttribute('transform', 'rotate(-90,20,140)');
+    yLabel.setAttribute('x', 70);
+    yLabel.setAttribute('y', 18);
+    yLabel.setAttribute('text-anchor','start');
     yLabel.setAttribute('class','chart-label');
-    yLabel.textContent = varNames[currentVar] || '';
+    yLabel.setAttribute('style', 'font-weight:600; font-size:12px;');
+    yLabel.textContent = 'Y: ' + (varNames[currentVar] || '');
     svg.appendChild(yLabel);
 
     chartLegend.innerHTML = `<div class="legend-item"><div class="legend-dot" style="background:var(--kimi-chart-1)"></div>${currentScenario.toUpperCase()}</div>`;
