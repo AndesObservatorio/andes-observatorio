@@ -381,9 +381,9 @@
     // Etiquetas de ejes
     const varNames = {temp:'Temperatura (°C)', precip:'Precipitación (mm)', humidity:'Humedad (%)', wind:'Viento (m/s)', ztd:'ZTD (m)', impacto:'Impacto (USD)'};
     const xLabel = document.createElementNS('http://www.w3.org/2000/svg','text');
-    xLabel.setAttribute('x', 450); xLabel.setAttribute('y', 265); xLabel.setAttribute('text-anchor','middle');
+    xLabel.setAttribute('x', 450); xLabel.setAttribute('y', 278); xLabel.setAttribute('text-anchor','middle');
     xLabel.setAttribute('class','chart-label');
-    xLabel.textContent = 'Año (2020 - 2100)';
+    xLabel.textContent = 'X: Año (2020 - 2100)';
     svg.appendChild(xLabel);
     
     const yLabel = document.createElementNS('http://www.w3.org/2000/svg','text');
