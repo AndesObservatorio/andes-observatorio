@@ -553,6 +553,18 @@
         }
     }
 
+    function alertaPrecipitacion(ztdAnomalia, humedad) {
+        const umbralZTD = 10; // mm de anomalía
+        const umbralHum = 70;  // % humedad
+        if (ztdAnomalia > umbralZTD && humedad > umbralHum) {
+            return '🌧️ ALERTA: Alta probabilidad de precipitación (ZTD elevado + humedad alta)';
+        }
+        if (ztdAnomalia > umbralZTD || humedad > umbralHum) {
+            return '⚠️ Atención: Condiciones favorables para precipitación';
+        }
+        return '✅ Sin riesgo de precipitación inminente';
+    }
+
     function actualizarAlertas(clima) {
         const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
         const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
@@ -783,12 +795,12 @@
         actualizarLeyendaSIRGAS();
     }
 
-    const ESCALA_SIRGAS = 0.5;
+    const ESCALA_SIRGAS = 0.5; // Factor de visualización: 1 mm/año ≈ 0.5 km en mapa (NO es escala física)
     function colorSIRGAS(magnitud) {
-        if (magnitud <= 10)  return { color: '#27ae60', label: 'Lento (0–10)' };
-        if (magnitud <= 20)  return { color: '#f1c40f', label: 'Moderado (10–20)' };
-        if (magnitud <= 30)  return { color: '#e67e22', label: 'Rápido (20–30)' };
-        return { color: '#c0392b', label: 'Muy rápido (>30)' };
+        if (magnitud <= 5)   return { color: '#27ae60', label: 'Intraplaca estable (0–5)' };
+        if (magnitud <= 15)  return { color: '#f1c40f', label: 'Deformación media (5–15)' };
+        if (magnitud <= 25)  return { color: '#e67e22', label: 'Actividad tectónica (15–25)' };
+        return { color: '#c0392b', label: 'Borde de placa (>25)' };
     }
     function azimut(ve, vn) {
         let ang = Math.atan2(ve, vn) * (180 / Math.PI);
@@ -847,10 +859,10 @@
             div.style.cssText = 'background:rgba(255,255,255,0.95);padding:10px 14px;border-radius:10px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,0.15);border:1px solid #e0e0e0;max-width:200px;';
             div.innerHTML = `
                 <strong style="font-size:13px;color:#333;display:block;margin-bottom:6px;">🛰️ Velocidad tectónica</strong>
-                <div style="margin-bottom:4px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#27ae60;margin-right:6px;vertical-align:middle;"></span> Lento 0–10 mm/año</div>
-                <div style="margin-bottom:4px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#f1c40f;margin-right:6px;vertical-align:middle;"></span> Moderado 10–20</div>
-                <div style="margin-bottom:4px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#e67e22;margin-right:6px;vertical-align:middle;"></span> Rápido 20–30</div>
-                <div style="margin-bottom:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#c0392b;margin-right:6px;vertical-align:middle;"></span> Muy rápido >30</div>
+                <div style="margin-bottom:4px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#27ae60;margin-right:6px;vertical-align:middle;"></span> Intraplaca 0–5 mm/año</div>
+                <div style="margin-bottom:4px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#f1c40f;margin-right:6px;vertical-align:middle;"></span> Deformación 5–15</div>
+                <div style="margin-bottom:4px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#e67e22;margin-right:6px;vertical-align:middle;"></span> Actividad 15–25</div>
+                <div style="margin-bottom:6px;"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#c0392b;margin-right:6px;vertical-align:middle;"></span> Borde de placa >25</div>
                 <div style="border-top:1px solid #eee;padding-top:6px;font-size:11px;color:#666;">
                     📐 Escala: 10 mm/año ≈ 5 km en el mapa<br>🧭 Azimut: desde el Norte (0°), horario
                 </div>`;
