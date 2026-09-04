@@ -1210,7 +1210,7 @@
         for (const [id, ciudad] of Object.entries(ciudades)) {
             try {
                 const res = await fetch(`https://api.openaq.org/v2/latest?city=${ciudad}&limit=1&parameter=pm25`, {
-                    headers: {'X-API-Key': 'TU_OPENAQ_KEY'}
+                    headers: {'X-API-Key': '190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5'}
                 });
                 if (!res.ok) throw new Error('OpenAQ no disponible');
                 const data = await res.json();
