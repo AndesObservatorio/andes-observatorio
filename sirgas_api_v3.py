@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 import os
+import httpx
 from typing import Optional
 
 app = FastAPI(title="Andes Observatorio - API Geodésica")
@@ -29,6 +30,7 @@ def get_db_connection():
 @app.get("/api/config")
 def get_config():
     import os
+import httpx
     return {"openweather_api_key": os.environ.get("OPENWEATHER_API_KEY", "")}
 async def root():
     return {
@@ -147,6 +149,15 @@ async def get_serie_tropo(
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         conn.close()
+
+@app.get("/api/v1/ambiental/aqi/{ciudad}")
+def get_aqi(ciudad: str):
+    try:
+        url = f"https://api.openaq.org/v2/latest?city={ciudad}&limit=1&parameter=pm25"
+        r = httpx.get(url, headers={"X-API-Key": os.environ.get("OPENAQ_KEY", "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5")}, timeout=10)
+        return r.json()
+    except Exception as e:
+        return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
