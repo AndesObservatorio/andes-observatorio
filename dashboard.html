@@ -1205,12 +1205,29 @@
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
-        function cargarDatosAmbientales() {
-        // AQI simulado
-        document.getElementById('aqiBogota').innerText = Math.round(30 + Math.random() * 50) + ' AQI';
-        document.getElementById('aqiMedellin').innerText = Math.round(35 + Math.random() * 45) + ' AQI';
-        document.getElementById('aqiLima').innerText = Math.round(40 + Math.random() * 60) + ' AQI';
-        document.getElementById('aqiSantiago').innerText = Math.round(50 + Math.random() * 70) + ' AQI';
+        async function cargarAQI() {
+        const ciudades = {aqiBogota: 'Bogota', aqiMedellin: 'Medellin', aqiLima: 'Lima', aqiSantiago: 'Santiago'};
+        for (const [id, ciudad] of Object.entries(ciudades)) {
+            try {
+                const res = await fetch(`https://api.openaq.org/v2/latest?city=${ciudad}&limit=1&parameter=pm25`, {
+                    headers: {'X-API-Key': 'TU_OPENAQ_KEY'}
+                });
+                if (!res.ok) throw new Error('OpenAQ no disponible');
+                const data = await res.json();
+                const medicion = data.results?.[0]?.measurements?.find(m => m.parameter === 'pm25');
+                if (medicion) {
+                    document.getElementById(id).innerText = Math.round(medicion.value) + ' µg/m³';
+                } else {
+                    document.getElementById(id).innerText = '--';
+                }
+            } catch(e) {
+                document.getElementById(id).innerText = '--';
+            }
+        }
+    }
+
+    function cargarDatosAmbientales() {
+        cargarAQI();
         
         // Deforestación de referencia
         document.getElementById('defColombia').innerText = '180,000';
