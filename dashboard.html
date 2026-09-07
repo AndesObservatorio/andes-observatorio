@@ -117,21 +117,21 @@
                 <div class="fase-icon">🌡️</div>
                 <div class="fase-nombre">Fase 1: Clima</div>
                 <div class="fase-estado pendiente" id="estadoClima">⏳ Pendiente</div>
-                <div class="fase-detalles" id="detalleClima">Esperando datos de OpenWeatherMap…</div>
+                <div class="fase-detalles" id="detalleClima">Fuente: OpenWeatherMap · Actualización: cada 10 min · Resolución: ciudad</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraClima"></div></div>
             </div>
             <div class="fase-item pendiente" id="faseSirgas">
                 <div class="fase-icon">🛰️</div>
                 <div class="fase-nombre">Fase 2: SIRGAS</div>
                 <div class="fase-estado pendiente" id="estadoSirgas">⏳ Pendiente</div>
-                <div class="fase-detalles" id="detalleSirgas">Esperando datos geodésicos…</div>
+                <div class="fase-detalles" id="detalleSirgas">Fuente: SIRGAS-CON · Actualización: semanal · Resolución: mm/año</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraSirgas"></div></div>
             </div>
             <div class="fase-item pendiente" id="faseZTD">
                 <div class="fase-icon">💧</div>
                 <div class="fase-nombre">Fase 3: ZTD Atmosférico</div>
                 <div class="fase-estado pendiente" id="estadoZTD">⏳ Pendiente</div>
-                <div class="fase-detalles" id="detalleZTD">Esperando datos troposféricos…</div>
+                <div class="fase-detalles" id="detalleZTD">Fuente: SIRGAS-TRO · Actualización: semanal · Resolución: horaria</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraZTD"></div></div>
             </div>
         </div>
@@ -320,6 +320,17 @@
         <h3>📜 Normativas Ambientales por País</h3>
         <p id="normativasPlaceholder" class="placeholder">Selecciona un país para ver sus normativas.</p>
         <ul id="normativasLista"></ul>
+    </div>
+
+    <div class="metodologia-panel" style="background:#f8f5f0;padding:18px 24px;border-radius:18px;margin:14px 0;border:1px solid #ede8e0;">
+        <h3>📚 Metodología</h3>
+        <ul style="font-size:13px;color:#555;line-height:1.8;">
+            <li><strong>Anomalía ZTD:</strong> ZTD_actual − promedio histórico de la estación. El promedio se calcula sobre la serie disponible y se documenta su período.</li>
+            <li><strong>Escala SIRGAS:</strong> Factor de visualización 1 mm/año ≈ 0.5 km en mapa. NO es escala física.</li>
+            <li><strong>Clasificación tectónica:</strong> Intraplaca (0–5), Deformación media (5–15), Actividad (15–25), Borde de placa (>25) mm/año.</li>
+            <li><strong>Alertas:</strong> Umbrales basados en valores climatológicos y documentados en código abierto.</li>
+            <li><strong>Datos:</strong> OpenWeatherMap (10 min), SIRGAS (semanal), OpenAQ (PM2.5), SSP/IPCC AR6.</li>
+        </ul>
     </div>
 
     <footer>
