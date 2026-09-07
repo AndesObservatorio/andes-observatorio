@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 import os
+import requests
 
 from typing import Optional
 
@@ -30,6 +31,7 @@ def get_db_connection():
 @app.get("/api/config")
 def get_config():
     import os
+import requests
 
     return {"openweather_api_key": os.environ.get("OPENWEATHER_API_KEY", "")}
 async def root():
