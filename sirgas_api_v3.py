@@ -154,9 +154,22 @@ async def get_serie_tropo(
 @app.get("/api/v1/ambiental/aqi/{ciudad}")
 def get_aqi(ciudad: str):
     try:
-        url = f"https://api.openaq.org/v3/locations?city={ciudad}&limit=1&parameter=pm25"
+        # Coordenadas de ciudades andinas
+        coordenadas = {
+            "Bogota": (4.6097, -74.0817),
+            "Medellin": (6.2442, -75.5812),
+            "Lima": (-12.0464, -77.0428),
+            "Santiago": (-33.4489, -70.6693),
+        }
+        lat, lon = coordenadas.get(ciudad, (4.6097, -74.0817))
+        url = f"https://api.openaq.org/v3/locations?coordinates={lat},{lon}&radius=10000&limit=1&parameter=pm25"
         r = requests.get(url, headers={"X-API-Key": "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5"}, timeout=10)
-        return r.json()
+        data = r.json()
+        if data.get('results'):
+            for sensor in data['results'][0].get('sensors', []):
+                if sensor['parameter']['name'] == 'pm25':
+                    return {"valor": sensor['parameter'].get('displayName', 'PM2.5'), "unidad": "µg/m³"}
+        return {"valor": "Sin datos", "unidad": ""}
     except Exception as e:
         return {"error": str(e)}
 
