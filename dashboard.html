@@ -576,6 +576,18 @@
         return '✅ Sin riesgo de precipitación inminente';
     }
 
+    function alertaPrecipitacion(ztdAnomalia, humedad) {
+        const umbralZTD = 10;
+        const umbralHum = 70;
+        if (ztdAnomalia > umbralZTD && humedad > umbralHum) {
+            return '🌧️ ALERTA: Alta probabilidad de precipitación (ZTD elevado + humedad alta)';
+        }
+        if (ztdAnomalia > umbralZTD || humedad > umbralHum) {
+            return '⚠️ Atención: Condiciones favorables para precipitación';
+        }
+        return '✅ Sin riesgo de precipitación inminente';
+    }
+
     function actualizarAlertas(clima) {
         const umbralTemp = parseFloat(document.getElementById('umbralTemp').value) || 28;
         const umbralHum = parseFloat(document.getElementById('umbralHum').value) || 80;
