@@ -276,6 +276,7 @@
             <label>Desde: </label><input type="date" id="ztdDesde">
             <label>Hasta: </label><input type="date" id="ztdHasta">
             <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
+            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;">📥 Descargar CSV</button>
         </div>
         <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
         <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
@@ -1042,6 +1043,25 @@
         cargarCapaZTD();
     }
 
+    function descargarCSV_ZTD() {
+        const codigo = document.getElementById('estacionZTD').value;
+        if (!codigo || !ztdChart || !ztdChart.data.labels.length) {
+            alert('Selecciona una estación con datos primero');
+            return;
+        }
+        const labels = ztdChart.data.labels;
+        const datos = ztdChart.data.datasets[0].data;
+        let csv = 'Fecha,Valor\n';
+        labels.forEach((label, i) => {
+            csv += `${label},${datos[i]}\n`;
+        });
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `ZTD_${codigo}.csv`;
+        link.click();
+    }
+
     function descargarReporte() {
         const ahora = new Date();
         const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
@@ -1217,6 +1237,7 @@
     document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
+    document.getElementById('btnDescargarZTD').addEventListener('click', descargarCSV_ZTD);
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
         async function cargarAQI() {
