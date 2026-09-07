@@ -166,10 +166,19 @@ def get_aqi(ciudad: str):
         r = requests.get(url, headers={"X-API-Key": "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5"}, timeout=10)
         data = r.json()
         if data.get('results'):
-            for sensor in data['results'][0].get('sensors', []):
+            loc = data['results'][0]
+            for sensor in loc.get('sensors', []):
                 if sensor['parameter']['name'] == 'pm25':
-                    return {"valor": sensor['parameter'].get('displayName', 'PM2.5'), "unidad": "µg/m³"}
-        return {"valor": "Sin datos", "unidad": ""}
+                    # Obtener la última medición real
+                    sensor_id = sensor['id']
+                    url2 = f"https://api.openaq.org/v3/sensors/{sensor_id}/measurements?limit=1&parameter=pm25"
+                    r2 = requests.get(url2, headers={"X-API-Key": "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5"}, timeout=10)
+                    d2 = r2.json()
+                    if d2.get('results'):
+                        valor = d2['results'][0].get('value', '--')
+                        return {"ciudad": ciudad, "valor": valor, "unidad": "µg/m³"}
+            return {"ciudad": ciudad, "valor": "Ubicación sin PM2.5", "unidad": ""}
+        return {"ciudad": ciudad, "valor": "Sin datos", "unidad": ""}
     except Exception as e:
         return {"error": str(e)}
 
