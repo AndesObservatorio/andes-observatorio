@@ -186,6 +186,12 @@ def get_aqi(ciudad: str):
 def health_check():
     return {"status": "ok", "version": "3.0", "timestamp": __import__("datetime").datetime.now().isoformat()}
 
+@app.get("/health")
+def health_check():
+    import datetime
+    return {"status": "ok", "version": "3.0", "timestamp": datetime.datetime.now().isoformat()}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
