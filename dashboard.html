@@ -1212,9 +1212,8 @@
                 const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
                 if (!res.ok) throw new Error('OpenAQ no disponible');
                 const data = await res.json();
-                const medicion = data.results?.[0]?.measurements?.find(m => m.parameter === 'pm25');
-                if (medicion) {
-                    document.getElementById(id).innerText = Math.round(medicion.value) + ' µg/m³';
+                if (data.valor && data.valor !== 'Sin datos') {
+                    document.getElementById(id).innerText = data.valor + ' ' + (data.unidad || 'µg/m³');
                 } else {
                     document.getElementById(id).innerText = '--';
                 }
