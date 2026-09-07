@@ -182,6 +182,10 @@ def get_aqi(ciudad: str):
     except Exception as e:
         return {"error": str(e)}
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "version": "3.0", "timestamp": __import__("datetime").datetime.now().isoformat()}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
