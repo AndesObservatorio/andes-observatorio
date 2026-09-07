@@ -154,8 +154,8 @@ async def get_serie_tropo(
 @app.get("/api/v1/ambiental/aqi/{ciudad}")
 def get_aqi(ciudad: str):
     try:
-        url = f"https://api.openaq.org/v2/latest?city={ciudad}&limit=1&parameter=pm25"
-        r = requests.get(url, headers={"X-API-Key": os.environ.get("OPENAQ_KEY", "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5")}, timeout=10)
+        url = f"https://api.openaq.org/v3/locations?city={ciudad}&limit=1&parameter=pm25"
+        r = requests.get(url, headers={"X-API-Key": "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5"}, timeout=10)
         return r.json()
     except Exception as e:
         return {"error": str(e)}
