@@ -112,6 +112,7 @@ async def get_estaciones_tropo():
     finally:
         conn.close()
 
+@app.get("/api/v1/geodesia/tropo/{codigo}/serie")
 async def get_serie_tropo(
     codigo: str,
     desde: Optional[str] = Query(None, description="Fecha inicio (YYYY-MM-DD)"),
