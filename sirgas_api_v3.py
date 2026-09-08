@@ -113,6 +113,19 @@ async def get_estaciones_tropo():
         conn.close()
 
 @app.get("/api/v1/geodesia/tropo/{codigo}/serie")
+def get_serie_tropo(codigo: str, limite: int = 500, pagina: int = 1):
+    conn = get_db_connection()
+    if not conn:
+        raise HTTPException(503, "Base de datos no disponible")
+    offset = (pagina - 1) * limite
+    cursor = conn.execute(
+        "SELECT fecha, valor FROM tropo_observations WHERE codigo = ? ORDER BY fecha DESC LIMIT ? OFFSET ?",
+        (codigo, limite, offset)
+    )
+    datos = [{"fecha": r["fecha"], "valor": r["valor"]} for r in cursor.fetchall()]
+    total = conn.execute("SELECT COUNT(*) FROM tropo_observations WHERE codigo = ?", (codigo,)).fetchone()[0]
+    conn.close()
+    return {"estacion": codigo, "total": total, "pagina": pagina, "limite": limite, "datos": datos}
 async def get_serie_tropo(
     codigo: str,
     desde: Optional[str] = Query(None, description="Fecha inicio (YYYY-MM-DD)"),
