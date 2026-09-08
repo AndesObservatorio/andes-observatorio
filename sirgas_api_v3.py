@@ -8,6 +8,25 @@ from typing import Optional
 
 app = FastAPI(title="Andes Observatorio - API Geodésica")
 
+# Rate limiting simple
+from collections import defaultdict
+import time
+rate_limit = defaultdict(list)
+RATE_LIMIT = 60  # solicitudes
+RATE_WINDOW = 60  # segundos
+
+@app.middleware("http")
+async def rate_limiter(request, call_next):
+    client = request.client.host if request.client else "unknown"
+    now = time.time()
+    rate_limit[client] = [t for t in rate_limit[client] if now - t < RATE_WINDOW]
+    if len(rate_limit[client]) >= RATE_LIMIT:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=429, content={"error": "Too many requests"})
+    rate_limit[client].append(now)
+    response = await call_next(request)
+    return response
+
 # Configurar CORS para permitir solicitudes desde el dashboard
 app.add_middleware(
     CORSMiddleware,
