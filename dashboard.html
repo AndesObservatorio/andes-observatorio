@@ -276,8 +276,7 @@
             <label>Desde: </label><input type="date" id="ztdDesde">
             <label>Hasta: </label><input type="date" id="ztdHasta">
             <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
-            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;">📥 CSV</button>
-            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;">📥 Descargar CSV</button>
+            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;">📥 Descargar CSV</button>
         </div>
         <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
         <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
@@ -1251,7 +1250,6 @@
     document.getElementById('estacionHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
-    document.getElementById('btnDescargarZTD').addEventListener('click', descargarCSV_ZTD);
     document.getElementById('btnDescargarZTD').addEventListener('click', descargarCSV_ZTD);
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
