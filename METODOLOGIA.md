@@ -93,7 +93,55 @@
 
 ---
 
-## 6. Citación
+## 6. Referencias Bibliográficas (APA 7ª edición)
+
+### Datos Geodésicos
+
+Mackern, M. V., Mateo, M. L., Camisay, M. F., & Rosell, P. A. (2020). *Tropospheric products from SIRGAS-CON: Methodology and applications*. Journal of Geodesy, 94(8), 1-15. https://doi.org/10.1007/s00190-020-01411-4
+
+SIRGAS. (2026). *Sistema de Referencia Geocéntrico para las Américas*. https://sirgas.ipgh.org/
+
+### Datos Meteorológicos
+
+OpenWeatherMap. (2026). *Current weather and forecast API documentation*. https://openweathermap.org/api
+
+IDEAM. (2026). *Instituto de Hidrología, Meteorología y Estudios Ambientales de Colombia*. http://www.ideam.gov.co/
+
+SENAMHI. (2026). *Servicio Nacional de Meteorología e Hidrología del Perú*. https://www.senamhi.gob.pe/
+
+### Calidad del Aire
+
+OpenAQ. (2026). *Open air quality data platform*. https://openaq.org/
+
+### Escenarios Climáticos
+
+IPCC. (2023). *Climate change 2023: Synthesis report. Contribution of Working Groups I, II and III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change*. (H. Lee & J. Romero, Eds.). IPCC. https://doi.org/10.59327/IPCC/AR6-9789291691647
+
+O'Neill, B. C., Tebaldi, C., van Vuuren, D. P., Eyring, V., Friedlingstein, P., Hurtt, G., Knutti, R., Kriegler, E., Lamarque, J.-F., Lowe, J., Meehl, G. A., Moss, R., Riahi, K., & Sanderson, B. M. (2016). The Scenario Model Intercomparison Project (ScenarioMIP) for CMIP6. *Geoscientific Model Development*, 9(9), 3461-3482. https://doi.org/10.5194/gmd-9-3461-2016
+
+### Deforestación
+
+Global Forest Watch. (2026). *Deforestación y pérdida de cobertura arbórea en América Latina*. World Resources Institute. https://www.globalforestwatch.org/
+
+### Acuerdo de Escazú
+
+CEPAL. (2018). *Acuerdo Regional sobre el Acceso a la Información, la Participación Pública y el Acceso a la Justicia en Asuntos Ambientales en América Latina y el Caribe* (Acuerdo de Escazú). Naciones Unidas. https://www.cepal.org/es/acuerdodeescazu
+
+### Herramientas
+
+Leaflet. (2026). *Leaflet: An open-source JavaScript library for interactive maps*. https://leafletjs.com/
+
+Chart.js. (2026). *Chart.js: Simple yet flexible JavaScript charting*. https://www.chartjs.org/
+
+FastAPI. (2026). *FastAPI: Modern web framework for building APIs with Python*. https://fastapi.tiangolo.com/
+
+---
+
+## 7. Citación
+
+Si usa estos datos, cite:
+
+Sierra Bernal, M. J. (2026). *Andes Observatorio: Plataforma de monitoreo geodésico y ambiental para la región andina* [Aplicación web]. https://andesobservatorio.github.io/andes-observatorio/
 
 Si usa estos datos, cite:
 
