@@ -10,12 +10,12 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f5f0; padding: 20px; }
-        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 24px; padding: 24px 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); border: 1px solid #f0ebe4; }
+        .container { max-width: 100%; margin: 0; padding: 16px 20px; background: white; border-radius: 0; box-shadow: none; border: none; }
         h1 { color: #5a7a5a; text-align: center; font-size: 2rem; }
         .subtitle { text-align: center; color: #8aa08a; margin-bottom: 18px; border-bottom: 2px solid #f0ebe4; padding-bottom: 12px; }
         .selector { text-align: center; margin: 10px 0 18px; }
         select { padding: 12px 20px; font-size: 16px; border-radius: 40px; border: 1.5px solid #d6cfc4; background: white; min-width: 220px; width: 90%; max-width: 480px; }
-        .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin: 16px 0; }
+        .stats { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; margin: 10px 0; }
         .card { background: #fcfaf7; padding: 16px; border-radius: 18px; text-align: center; border: 1px solid #ede8e0; }
         .card h3 { color: #5a7a5a; font-size: 0.95rem; }
         .value { font-size: 32px; font-weight: 700; color: #d4a017; }
@@ -25,7 +25,7 @@
         .layer-control label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
         .update-badge { background: #8aaa8a; color: white; padding: 4px 16px; border-radius: 30px; font-size: 13px; margin-left: auto; }
         .btn-reporte { background: #d4a017; color: white; border: none; padding: 6px 18px; border-radius: 30px; font-size: 13px; cursor: pointer; }
-        #map { height: 400px; width: 100%; border-radius: 18px; margin: 12px 0; border: 1px solid #ede8e0; }
+        #map { height: 60vh; min-height: 350px; width: 100%; border-radius: 12px; margin: 10px 0; border: 1px solid #ede8e0; }
         .alertas-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
         .alertas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; }
         .alerta-item { background: white; padding: 12px 16px; border-radius: 12px; border: 1px solid #ede8e0; }
@@ -37,7 +37,7 @@
         .estado-alerta.alerta { background: #ffe6cc; color: #b85a00; }
         .estado-alerta.critico { background: #ffcccc; color: #b30000; }
         .btn-alerta { background: #8aaa8a; color: white; border: none; padding: 4px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; margin-top: 4px; }
-        .charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin: 18px 0; }
+        .charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 12px 0; }
         .chart-card { background: #fcfaf7; padding: 16px; border-radius: 18px; border: 1px solid #ede8e0; }
         .chart-card h3 { text-align: center; color: #5a7a5a; font-size: 0.95rem; margin-bottom: 8px; }
         canvas { max-height: 190px; width: 100% !important; }
