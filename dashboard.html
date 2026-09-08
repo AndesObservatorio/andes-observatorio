@@ -1058,17 +1058,6 @@
         link.click();
     }
 
-        const labels = ztdChart.data.labels;
-        const datos = ztdChart.data.datasets[0].data;
-        let csv = 'Fecha,Valor\n';
-        labels.forEach((label, i) => { csv += `${label},${datos[i]}\n`; });
-        const blob = new Blob([csv], {type: 'text/csv'});
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `ZTD_${codigo}.csv`;
-        link.click();
-    }
-
     function descargarReporte() {
         const ahora = new Date();
         const ciudad = document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text;
