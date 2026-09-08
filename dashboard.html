@@ -1058,12 +1058,6 @@
         link.click();
     }
 
-    function descargarCSV_ZTD() {
-        const codigo = document.getElementById('estacionZTD').value;
-        if (!codigo || !ztdChart.data.labels.length) {
-            alert('Selecciona estación con datos primero');
-            return;
-        }
         const labels = ztdChart.data.labels;
         const datos = ztdChart.data.datasets[0].data;
         let csv = 'Fecha,Valor\n';
