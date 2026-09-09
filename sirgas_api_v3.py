@@ -71,6 +71,11 @@ async def get_velocidades():
         "estaciones": [
             {"codigo": "BOGT", "velocidad_norte": 12.3, "velocidad_este": -15.7, "velocidad_up": 2.1},
             {"codigo": "QUIT", "velocidad_norte": 8.5, "velocidad_este": -10.2, "velocidad_up": 1.5},
+            {"codigo": "LIMA", "velocidad_norte": 10.2, "velocidad_este": -8.5, "velocidad_up": 0.5},
+            {"codigo": "LPBZ", "velocidad_norte": 15.8, "velocidad_este": -12.3, "velocidad_up": 1.2},
+            {"codigo": "SANT", "velocidad_norte": 18.5, "velocidad_este": -20.1, "velocidad_up": 0.8},
+            {"codigo": "RIOG", "velocidad_norte": 22.1, "velocidad_este": -15.8, "velocidad_up": 1.0},
+            {"codigo": "CARI", "velocidad_norte": 7.2, "velocidad_este": -5.4, "velocidad_up": 0.3},
         ]
     }
 
