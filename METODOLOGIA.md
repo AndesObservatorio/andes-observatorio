@@ -143,6 +143,4 @@ Si usa estos datos, cite:
 
 Sierra Bernal, M. J. (2026). *Andes Observatorio: Plataforma de monitoreo geodésico y ambiental para la región andina* [Aplicación web]. https://andesobservatorio.github.io/andes-observatorio/
 
-Si usa estos datos, cite:
 
-> Sierra Bernal, M.J. (2026). Andes Observatorio: Plataforma de monitoreo geodésico y ambiental para la región andina. https://andesobservatorio.github.io/andes-observatorio/
