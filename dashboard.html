@@ -284,6 +284,7 @@
 
     <div class="oficiales-panel">
         <h3>🌫️ Calidad del Aire (AQI) - Tiempo real</h3>
+        <button class="btn-reporte" id="btnVerMapaAQI" style="background:#2980b9;">🗺️ Ver Mapa</button>
         <div class="oficiales-grid">
             <div class="oficial-item"><span class="fuente-oficial">Bogotá</span><div class="dato" id="aqiBogota">--</div><div class="label">AQI · PM2.5</div></div>
             <div class="oficial-item"><span class="fuente-oficial">Medellín</span><div class="dato" id="aqiMedellin">--</div><div class="label">AQI · PM2.5</div></div>
@@ -1252,6 +1253,32 @@
                 document.getElementById(id).innerText = '--';
             }
         }
+    }
+
+    let mapaAQI = null;
+
+    function crearMapaAQI(datosAQI) {
+        const div = document.getElementById('map-aqi');
+        div.style.display = 'block';
+        if (!mapaAQI) {
+            mapaAQI = L.map('map-aqi').setView([-10, -65], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapaAQI);
+        }
+        // Limpiar marcadores anteriores
+        mapaAQI.eachLayer(layer => {
+            if (layer instanceof L.CircleMarker) mapaAQI.removeLayer(layer);
+        });
+        // Colores por nivel AQI
+        Object.entries(datosAQI).forEach(([nombre, valor]) => {
+            const color = valor < 50 ? '#27ae60' : valor < 100 ? '#f1c40f' : valor < 150 ? '#e67e22' : '#e74c3c';
+            L.circleMarker([datosAQI[nombre + '_lat'], datosAQI[nombre + '_lon']], {
+                radius: 20,
+                fillColor: color,
+                color: color,
+                fillOpacity: 0.6,
+                weight: 2
+            }).bindPopup(`<b>${nombre}</b><br>AQI: ${valor} µg/m³`).addTo(mapaAQI);
+        });
     }
 
     function cargarDatosAmbientales() {
