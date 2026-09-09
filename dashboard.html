@@ -425,6 +425,15 @@
     let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
     const ztdSerieCache = {};
+    const coordenadasAQI = {
+        'Bogota': {lat: 4.6097, lon: -74.0817},
+        'Medellin': {lat: 6.2442, lon: -75.5812},
+        'Lima': {lat: -12.0464, lon: -77.0428},
+        'Santiago': {lat: -33.4489, lon: -70.6693},
+        'Quito': {lat: -0.1807, lon: -78.4678},
+        'Caracas': {lat: 10.4806, lon: -66.9036},
+    };
+
     const coordenadasZTD = {
         'BOGT': [4.6400, -74.0800],
         'CALI': [3.4500, -76.5300],
@@ -1235,6 +1244,26 @@
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
     document.getElementById('btnDescargarZTD').addEventListener('click', descargarCSV_ZTD);
+
+    document.getElementById('btnVerMapaAQI').addEventListener('click', async () => {
+        const ciudades = ['Bogota', 'Medellin', 'Lima', 'Santiago', 'Quito', 'Caracas'];
+        const datosAQI = {};
+        for (const ciudad of ciudades) {
+            try {
+                const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.valor && data.valor !== 'Sin datos') {
+                        datosAQI[ciudad] = data.valor;
+                        datosAQI[ciudad + '_lat'] = coordenadasAQI[ciudad].lat;
+                        datosAQI[ciudad + '_lon'] = coordenadasAQI[ciudad].lon;
+                    }
+                }
+            } catch(e) {}
+        }
+        crearMapaAQI(datosAQI);
+        document.getElementById('map-aqi').scrollIntoView({behavior: 'smooth'});
+    });
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
         async function cargarAQI() {
