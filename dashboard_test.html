@@ -170,6 +170,7 @@
     <div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
         <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
         <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
+        <button id="tabClima" class="map-tab">🌧️ Mapa Clima</button>
     </div>
 
     <div id="controlesSirgas" class="layer-control">
@@ -196,8 +197,14 @@
         </span>
     </div>
 
+    <div id="controlesClima" class="layer-control" style="display:none;">
+        <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
+        <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
+    </div>
+
     <div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
     <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
+    <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
     <p id="notaZTD" style="display:none;font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
         <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
@@ -276,7 +283,7 @@
             <label>Desde: </label><input type="date" id="ztdDesde">
             <label>Hasta: </label><input type="date" id="ztdHasta">
             <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
-            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;">📥 Descargar CSV</button>
+            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;">📥 Descargar CSV</button>
         </div>
         <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
         <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
@@ -284,13 +291,14 @@
 
     <div class="oficiales-panel">
         <h3>🌫️ Calidad del Aire (AQI) - Tiempo real</h3>
+        <button class="btn-reporte" id="btnVerMapaAQI" style="background:#2980b9;">🗺️ Ver Mapa</button>
         <div class="oficiales-grid">
             <div class="oficial-item"><span class="fuente-oficial">Bogotá</span><div class="dato" id="aqiBogota">--</div><div class="label">AQI · PM2.5</div></div>
             <div class="oficial-item"><span class="fuente-oficial">Medellín</span><div class="dato" id="aqiMedellin">--</div><div class="label">AQI · PM2.5</div></div>
             <div class="oficial-item"><span class="fuente-oficial">Lima</span><div class="dato" id="aqiLima">--</div><div class="label">AQI · PM2.5</div></div>
             <div class="oficial-item"><span class="fuente-oficial">Santiago</span><div class="dato" id="aqiSantiago">--</div><div class="label">AQI · PM2.5</div></div>
         </div>
-        <p style="font-size:12px;color:#8aa08a;margin-top:10px;">Datos simulados mientras se integra la API de OpenAQ.</p>
+        <p style="font-size:12px;color:#8aa08a;margin-top:10px;">Datos en tiempo real de OpenAQ (PM2.5). Fuente: api.openaq.org</p>
     </div>
 
     <div class="oficiales-panel">
@@ -424,6 +432,15 @@
     let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
     const ztdSerieCache = {};
+    const coordenadasAQI = {
+        'Bogota': {lat: 4.6097, lon: -74.0817},
+        'Medellin': {lat: 6.2442, lon: -75.5812},
+        'Lima': {lat: -12.0464, lon: -77.0428},
+        'Santiago': {lat: -33.4489, lon: -70.6693},
+        'Quito': {lat: -0.1807, lon: -78.4678},
+        'Caracas': {lat: 10.4806, lon: -66.9036},
+    };
+
     const coordenadasZTD = {
         'BOGT': [4.6400, -74.0800],
         'CALI': [3.4500, -76.5300],
@@ -775,7 +792,10 @@
             "QUIT": [-0.1807, -78.4678],
             "LIMA": [-12.0464, -77.0428],
             "LPBZ": [-16.5000, -68.1500],
-            "SANT": [-33.4489, -70.6693]
+            "SANT": [-33.4489, -70.6693],
+            "RIOG": [-53.7900, -67.7500],
+            "CARI": [10.4806, -66.9036],
+            "MEND": [-32.8900, -68.8300]
         };
         if (capaSIRGAS) mapSirgas.removeLayer(capaSIRGAS);
         if (capaEstaciones) mapSirgas.removeLayer(capaEstaciones);
@@ -1090,6 +1110,7 @@
     });
     document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
     document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
+    document.getElementById('tabClima').addEventListener('click', function() { mostrarMapa('clima'); });
 
     function colorZTDAnomalia(anomalia, maxAbs) {
         if (maxAbs === 0) return 'hsl(120, 60%, 50%)';
@@ -1234,6 +1255,26 @@
     document.getElementById('variableHistorica').addEventListener('change', actualizarSirgasHistorico);
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
     document.getElementById('btnDescargarZTD').addEventListener('click', descargarCSV_ZTD);
+
+    document.getElementById('btnVerMapaAQI').addEventListener('click', async () => {
+        const ciudades = ['Bogota', 'Medellin', 'Lima', 'Santiago', 'Quito', 'Caracas'];
+        const datosAQI = {};
+        for (const ciudad of ciudades) {
+            try {
+                const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.valor && data.valor !== 'Sin datos') {
+                        datosAQI[ciudad] = data.valor;
+                        datosAQI[ciudad + '_lat'] = coordenadasAQI[ciudad].lat;
+                        datosAQI[ciudad + '_lon'] = coordenadasAQI[ciudad].lon;
+                    }
+                }
+            } catch(e) {}
+        }
+        crearMapaAQI(datosAQI);
+        document.getElementById('map-aqi').scrollIntoView({behavior: 'smooth'});
+    });
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
         async function cargarAQI() {
@@ -1252,6 +1293,32 @@
                 document.getElementById(id).innerText = '--';
             }
         }
+    }
+
+    let mapaAQI = null;
+
+    function crearMapaAQI(datosAQI) {
+        const div = document.getElementById('map-aqi');
+        div.style.display = 'block';
+        if (!mapaAQI) {
+            mapaAQI = L.map('map-aqi').setView([-10, -65], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapaAQI);
+        }
+        // Limpiar marcadores anteriores
+        mapaAQI.eachLayer(layer => {
+            if (layer instanceof L.CircleMarker) mapaAQI.removeLayer(layer);
+        });
+        // Colores por nivel AQI
+        Object.entries(datosAQI).forEach(([nombre, valor]) => {
+            const color = valor < 50 ? '#27ae60' : valor < 100 ? '#f1c40f' : valor < 150 ? '#e67e22' : '#e74c3c';
+            L.circleMarker([datosAQI[nombre + '_lat'], datosAQI[nombre + '_lon']], {
+                radius: 20,
+                fillColor: color,
+                color: color,
+                fillOpacity: 0.6,
+                weight: 2
+            }).bindPopup(`<b>${nombre}</b><br>AQI: ${valor} µg/m³`).addTo(mapaAQI);
+        });
     }
 
     function cargarDatosAmbientales() {
