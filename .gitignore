@@ -1,28 +1,22 @@
-# Archivos temporales
-*.bak
-*.log
-*.pyc
+# Python
 __pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+venv_api/
+venv_*/
+.pytest_cache/
 
-# Archivos de base de datos
-*.db
-*.sqlite3
-
-# Archivos de scripts temporales
-fix_*.sh
-fix_*.py
-init_*.py
-insert_*.py
-start_*.sh
-*_test.py
+# Datos pesados
+data/chirps/
+data/era5/
+data/*.db
+*.nc
 
 # Logs
+logs/
 *.log
-ingesta.log
 
-# Entorno virtual
-venv/
-.env
-
-# Datos temporales
-data/tropo_raw/
+# Sistema
+.DS_Store
+*.bak
