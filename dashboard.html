@@ -897,6 +897,49 @@
         legend.addTo(mapSirgas);
     }
 
+    let mapClima, capaChirps;
+
+    function getColorPrecip(v) {
+        return v > 100 ? '#08519c' :
+               v > 50  ? '#3182bd' :
+               v > 25  ? '#6baed6' :
+               v > 10  ? '#9ecae1' :
+                         '#c6dbef';
+    }
+
+    function initMapClima() {
+        if (mapClima) return;
+        mapClima = L.map('map-clima').setView([-15, -65], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(mapClima);
+        cargarCapasClima();
+    }
+
+    async function cargarCapasClima() {
+        const badge = document.getElementById('climaBadge');
+        badge.innerText = '🔄 Cargando CHIRPS...';
+        try {
+            const res = await fetch('assets/geojson/chirps_julio2026.geojson');
+            const gj = await res.json();
+            capaChirps = L.geoJSON(gj, {
+                pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+                    radius: 5,
+                    fillColor: getColorPrecip(f.properties.precip_mm),
+                    color: 'transparent',
+                    fillOpacity: 0.7
+                }),
+                onEachFeature: (f, layer) => {
+                    layer.bindPopup(`<b>Precipitación:</b> ${f.properties.precip_mm} mm/mes`);
+                }
+            }).addTo(mapClima);
+            badge.innerText = `🌧️ CHIRPS: ${gj.features.length} puntos`;
+        } catch(e) {
+            badge.innerText = '⚠️ Error CHIRPS';
+            console.error(e);
+        }
+    }
+
     function mostrarMapa(tipo) {
         const tabSirgas = document.getElementById('tabSirgas');
         const tabZTD = document.getElementById('tabZTD');
