@@ -1100,16 +1100,18 @@
     document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
 
     function colorZTDAnomalia(anomalia, maxAbs) {
-        if (maxAbs === 0) return 'hsl(120, 60%, 50%)';
+        if (maxAbs === 0) return 'hsl(120, 70%, 50%)';
         const t = anomalia / maxAbs;
         if (t < 0) {
             // Seco: verde (120) → rojo (0)
             const hue = 120 - (Math.abs(t) * 120);
-            return `hsl(${Math.round(hue)}, 80%, 42%)`;
+            const light = 50 + (Math.abs(t) * 10);
+            return `hsl(${Math.round(hue)}, 85%, ${light}%)`;
         } else {
             // Húmedo: verde (120) → azul (220)
             const hue = 120 + (t * 100);
-            return `hsl(${Math.round(hue)}, 80%, 42%)`;
+            const light = 50 - (t * 5);
+            return `hsl(${Math.round(hue)}, 85%, ${Math.max(35, light)}%)`;
         }
     }
 
