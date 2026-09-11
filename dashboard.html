@@ -170,6 +170,7 @@
     <div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
         <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
         <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
+        <button id="tabClima" class="map-tab">🌧️ Mapa Clima</button>
     </div>
 
     <div id="controlesSirgas" class="layer-control">
@@ -198,6 +199,12 @@
 
     <div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
     <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
+    <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
+
+    <div id="controlesClima" class="layer-control" style="display:none;">
+        <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
+        <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
+    </div>
 
     <p id="notaZTD" style="display:none;font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
         <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
@@ -1098,6 +1105,7 @@
     });
     document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
     document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
+    document.getElementById('tabClima').addEventListener('click', function() { mostrarMapa('clima'); });
 
     function colorZTDAnomalia(anomalia, maxAbs) {
         if (maxAbs === 0) return 'hsl(120, 70%, 50%)';
