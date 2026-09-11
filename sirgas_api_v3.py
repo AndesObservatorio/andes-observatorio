@@ -102,12 +102,14 @@ async def get_estaciones_tropo():
         cursor = conn.execute("""
             SELECT
                 s.code AS codigo,
+                s.lat AS lat,
+                s.lon AS lon,
                 COUNT(*) AS total_registros,
                 MIN(t.epoch) AS primera_fecha,
                 MAX(t.epoch) AS ultima_fecha
             FROM tropo_observations t
             JOIN stations s ON s.id = t.station_id
-            GROUP BY s.code
+            GROUP BY s.code, s.lat, s.lon
             ORDER BY s.code
         """)
         rows = cursor.fetchall()
