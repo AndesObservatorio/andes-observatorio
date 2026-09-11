@@ -941,35 +941,44 @@
     }
 
     function mostrarMapa(tipo) {
-        const tabSirgas = document.getElementById('tabSirgas');
-        const tabZTD = document.getElementById('tabZTD');
-        const divSirgas = document.getElementById('map-sirgas');
-        const divZTD = document.getElementById('map-ztd');
-        const ctrlSirgas = document.getElementById('controlesSirgas');
-        const ctrlZTD = document.getElementById('controlesZTD');
+        const tabs = {
+            sirgas: document.getElementById('tabSirgas'),
+            ztd: document.getElementById('tabZTD'),
+            clima: document.getElementById('tabClima')
+        };
+        const divs = {
+            sirgas: document.getElementById('map-sirgas'),
+            ztd: document.getElementById('map-ztd'),
+            clima: document.getElementById('map-clima')
+        };
+        const ctrls = {
+            sirgas: document.getElementById('controlesSirgas'),
+            ztd: document.getElementById('controlesZTD'),
+            clima: document.getElementById('controlesClima')
+        };
         const notaZTD = document.getElementById('notaZTD');
-        if (tipo === 'sirgas') {
-            tabSirgas.classList.add('active');
-            tabZTD.classList.remove('active');
-            divSirgas.style.display = 'block';
-            divZTD.style.display = 'none';
-            ctrlSirgas.style.display = 'flex';
-            ctrlZTD.style.display = 'none';
-            notaZTD.style.display = 'none';
-            if (mapSirgas) mapSirgas.invalidateSize();
-        } else {
-            tabSirgas.classList.remove('active');
-            tabZTD.classList.add('active');
-            divSirgas.style.display = 'none';
-            divZTD.style.display = 'block';
-            ctrlSirgas.style.display = 'none';
-            ctrlZTD.style.display = 'flex';
-            notaZTD.style.display = 'block';
-            if (!mapZTD) {
-                initMapZTD();
+
+        Object.keys(tabs).forEach(k => {
+            if (k === tipo) {
+                tabs[k].classList.add('active');
+                divs[k].style.display = 'block';
+                ctrls[k].style.display = 'flex';
             } else {
-                setTimeout(() => mapZTD.invalidateSize(), 100);
+                tabs[k].classList.remove('active');
+                divs[k].style.display = 'none';
+                ctrls[k].style.display = 'none';
             }
+        });
+        notaZTD.style.display = tipo === 'ztd' ? 'block' : 'none';
+
+        if (tipo === 'sirgas') {
+            if (mapSirgas) mapSirgas.invalidateSize();
+        } else if (tipo === 'ztd') {
+            if (!mapZTD) initMapZTD();
+            else setTimeout(() => mapZTD.invalidateSize(), 100);
+        } else if (tipo === 'clima') {
+            if (!mapClima) initMapClima();
+            else setTimeout(() => mapClima.invalidateSize(), 100);
         }
     }
 
