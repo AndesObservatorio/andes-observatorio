@@ -434,13 +434,8 @@
         'Caracas': {lat: 10.4806, lon: -66.9036},
     };
 
-    const coordenadasZTD = {
-        'BOGT': [4.6400, -74.0800],
-        'CALI': [3.4500, -76.5300],
-        'AREQ': [-16.4000, -71.5300],
-        'ANTC': [-23.7800, -70.5500],
-        'SANT': [-33.4500, -70.6600],
-    };
+    // Coordenadas se cargan dinámicamente desde la API
+    let coordenadasZTD = {};
     let estacionesSIRGAS = [];
 
     // ============================================================
@@ -1122,6 +1117,21 @@
         const badge = document.getElementById('ztdMapBadge');
         if (capaZTD) mapZTD.removeLayer(capaZTD);
         capaZTD = L.layerGroup();
+        
+        // Cargar lista de estaciones desde la API
+        try {
+            const resEst = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
+            const dataEst = await resEst.json();
+            coordenadasZTD = {};
+            (dataEst.estaciones || []).forEach(e => {
+                if (e.lat && e.lon) {
+                    coordenadasZTD[e.codigo] = [e.lat, e.lon];
+                }
+            });
+        } catch(e) {
+            console.warn('No se pudo cargar lista de estaciones', e);
+        }
+        
         const codigos = Object.keys(coordenadasZTD);
         const ultimos = {};
         const promedios = {};
@@ -1166,7 +1176,10 @@
             const puntos = ztdSerieCache[codigo] || [];
             const simbolo = anomalia > 5 ? '🔴 +' : anomalia < -5 ? '🔵 ' : '🟢 ';
             const signo = anomalia >= 0 ? '+' : '';
-            const cityNames = {AREQ: "arequipa", BOGT: "bogota", CALI: "cali", ANTC: "antofagasta", SANT: "santiago"};
+            const cityNames = {
+                AREQ: "arequipa", BOGT: "bogota", CALI: "cali", 
+                ANTC: "antofagasta", SANT: "santiago"
+            };
             const cityFile = cityNames[codigo];
             if (cityFile) {
                 fetch(`assets/geojson/${cityFile}.json`)
