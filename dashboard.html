@@ -1176,33 +1176,18 @@
             const puntos = ztdSerieCache[codigo] || [];
             const simbolo = anomalia > 5 ? '🔴 +' : anomalia < -5 ? '🔵 ' : '🟢 ';
             const signo = anomalia >= 0 ? '+' : '';
-            const cityNames = {
-                AREQ: "arequipa", BOGT: "bogota", CALI: "cali", 
-                ANTC: "antofagasta", SANT: "santiago"
-            };
-            const cityFile = cityNames[codigo];
-            if (cityFile) {
-                fetch(`assets/geojson/${cityFile}.json`)
-                    .then(r => r.json())
-                    .then(geojson => {
-                        const polygon = L.geoJSON(geojson, {
-                            style: { color: color, weight: 2, fillColor: color, fillOpacity: 0.25 }
-                        }).addTo(capaZTD);
-                        polygon.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía | ${geojson.properties.name}`, { direction: 'top' });
-                        polygon.bindPopup(construirPopupZTD(codigo, puntos, promedios[codigo], anomalia));
-                    })
-                    .catch(() => {
-                        const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2, fillColor: color, fillOpacity: 0.2 });
-                        fallback.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía`, { direction: 'top' });
-                        fallback.bindPopup(construirPopupZTD(codigo, puntos, promedios[codigo], anomalia));
-                        fallback.addTo(capaZTD);
-                    });
-            } else {
-                const fallback = L.circle([lat, lon], { radius: 30000, color: color, weight: 2.5, fillColor: color, fillOpacity: 0.25 });
-                fallback.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm anomalía`, { direction: 'top' });
-                fallback.bindPopup(construirPopupZTD(codigo, puntos, promedios[codigo], anomalia));
-                fallback.addTo(capaZTD);
-            }
+            // Todas las estaciones como círculos de color ZTD
+            const marker = L.circleMarker([lat, lon], {
+                radius: 15,
+                color: color,
+                weight: 3,
+                fillColor: color,
+                fillOpacity: 0.6,
+                stationCode: codigo
+            });
+            marker.bindTooltip(`${simbolo}${codigo}: ${signo}${anomalia.toFixed(1)} mm`, { direction: 'top', offset: [0, -10] });
+            marker.bindPopup(construirPopupZTD(codigo, puntos, promedios[codigo], anomalia));
+            marker.addTo(capaZTD);
         });
 
         badge.innerText = `💧 ZTD: ${valoresAnom.length} estaciones | Anomalía ±${maxAbs.toFixed(0)} mm`;
