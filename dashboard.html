@@ -6,6 +6,7 @@
     <title>Dashboard | Andes Observatorio</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -922,18 +923,30 @@
         try {
             const res = await fetch('assets/geojson/chirps_julio2026.geojson');
             const gj = await res.json();
-            capaChirps = L.geoJSON(gj, {
-                pointToLayer: (f, latlng) => L.circleMarker(latlng, {
-                    radius: 5,
-                    fillColor: getColorPrecip(f.properties.precip_mm),
-                    color: 'transparent',
-                    fillOpacity: 0.7
-                }),
-                onEachFeature: (f, layer) => {
-                    layer.bindPopup(`<b>Precipitación:</b> ${f.properties.precip_mm} mm/mes`);
+            
+            // Heatmap con Leaflet.heat
+            const puntos = gj.features.map(f => [
+                f.geometry.coordinates[1],
+                f.geometry.coordinates[0],
+                f.properties.precip_mm / 100  // Normalizar intensidad (0-1)
+            ]);
+            
+            capaChirps = L.heatLayer(puntos, {
+                radius: 25,
+                blur: 35,
+                maxZoom: 8,
+                max: 1.0,
+                gradient: {
+                    0.0: '#c6dbef',
+                    0.3: '#9ecae1',
+                    0.5: '#6baed6',
+                    0.7: '#3182bd',
+                    0.9: '#08519c',
+                    1.0: '#08306b'
                 }
             }).addTo(mapClima);
-            badge.innerText = `🌧️ CHIRPS: ${gj.features.length} puntos`;
+            
+            badge.innerText = `🌧️ CHIRPS: ${gj.features.length} puntos (heatmap)`;
         } catch(e) {
             badge.innerText = '⚠️ Error CHIRPS';
             console.error(e);
