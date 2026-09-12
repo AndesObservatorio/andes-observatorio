@@ -1609,7 +1609,7 @@
                     const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
                     if (res.ok) {
                         const data = await res.json();
-                        if (data.valor && data.valor !== 'Sin datos') {
+                        if (data.valor && data.valor !== 'Sin datos' && !isNaN(data.valor)) {
                             valores.push(data.valor);
                             labels.push(ciudad);
                         }
@@ -1619,12 +1619,18 @@
             
             if (valores.length === 0) return;
             
-            analisisAQIData = { labels, valores };
+            // Filtrar valores válidos
+            const valoresValidos = valores.filter(v => !isNaN(v) && v !== null && v !== undefined);
             
-            document.getElementById('aqiPromedio').textContent = (valores.reduce((a,b) => a+b, 0) / valores.length).toFixed(1);
-            document.getElementById('aqiMax').textContent = Math.max(...valores);
-            document.getElementById('aqiMin').textContent = Math.min(...valores);
-            document.getElementById('aqiCiudades').textContent = valores.length;
+            if (valoresValidos.length === 0) return;
+            
+            analisisAQIData = { labels, valores: valoresValidos };
+            
+            const promedio = valoresValidos.reduce((a,b) => a+b, 0) / valoresValidos.length;
+            document.getElementById('aqiPromedio').textContent = promedio.toFixed(1);
+            document.getElementById('aqiMax').textContent = Math.max(...valoresValidos);
+            document.getElementById('aqiMin').textContent = Math.min(...valoresValidos);
+            document.getElementById('aqiCiudades').textContent = valoresValidos.length;
             
             const ctx = document.getElementById('chartAQI').getContext('2d');
             const colores = valores.map(v => v < 50 ? '#27ae60' : v < 100 ? '#f1c40f' : v < 150 ? '#e67e22' : '#e74c3c');
