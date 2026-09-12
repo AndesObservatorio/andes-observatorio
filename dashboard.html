@@ -1236,7 +1236,7 @@
             setTimeout(() => {
                 if (!mapClima) initMapClima();
                 else mapClima.invalidateSize();
-                if (capaChirps) capaChirps.redraw();
+                if (capaChirps && typeof capaChirps.bringToFront === 'function') capaChirps.bringToFront();
             }, 200);
         } else if (tipo === 'aqi') {
             document.getElementById('analisisSIRGAS').style.display = 'none';
