@@ -150,7 +150,6 @@
 
     <div id="controlesSirgas" class="layer-control">
         <label><input type="checkbox" id="toggleTopografia"> 🛰️ Vista satélite</label>
-        <label><input type="checkbox" id="toggleCiudades" checked> 🟢 Ciudades</label>
         <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
         <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
         <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
@@ -172,6 +171,18 @@
         </span>
     </div>
 
+    <div class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+        <label for="selectorSirgas" style="font-weight:600;color:#5a7a5a;margin:0;">📍 Ir a estación GNSS:</label>
+        <select id="selectorSirgas" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
+            <option value="">-- Selecciona --</option>
+            <option value="4.7110,-74.0721,9">BOGT (Bogotá)</option>
+            <option value="-0.1807,-78.4678,9">QUIT (Quito)</option>
+            <option value="-12.0464,-77.0428,9">LIMA (Lima)</option>
+            <option value="-16.5000,-68.1500,9">LPBZ (La Paz)</option>
+            <option value="-33.4489,-70.6693,9">SANT (Santiago)</option>
+            <option value="-16.4090,-71.5375,9">AREQ (Arequipa)</option>
+        </select>
+    </div>
     <div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
 
     <!-- Análisis SIRGAS -->
@@ -200,6 +211,18 @@
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: SIRGAS-CON. Clasificación: intraplaca (0-5), deformación (5-15), actividad (15-25), borde de placa (>25) mm/año.
         </p>
+    </div>
+    <div class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+        <label for="selectorZTD" style="font-weight:600;color:#2c5f8a;margin:0;">💧 Ir a estación ZTD:</label>
+        <select id="selectorZTD" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
+            <option value="">-- Selecciona --</option>
+            <option value="4.7110,-74.0721,9">BOGT (Bogotá)</option>
+            <option value="3.4516,-76.5320,9">CALI (Cali)</option>
+            <option value="-33.4489,-70.6693,9">SANT (Santiago)</option>
+            <option value="-12.0464,-77.0428,9">LIMA (Lima)</option>
+            <option value="-0.1807,-78.4678,9">QUIT (Quito)</option>
+            <option value="-16.5000,-68.1500,9">LPBZ (La Paz)</option>
+        </select>
     </div>
     <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
     <!-- ═══ CONTENIDO EXTRA DEL TAB CLIMA (movido desde SIRGAS) ═══ -->
@@ -265,6 +288,18 @@
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
     <!-- MAPA AQI -->
+    <div class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+        <label for="selectorAQI" style="font-weight:600;color:#8e44ad;margin:0;">🌫️ Ir a ciudad:</label>
+        <select id="selectorAQI" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
+            <option value="">-- Selecciona --</option>
+            <option value="4.6097,-74.0817,9">Bogotá</option>
+            <option value="6.2442,-75.5812,9">Medellín</option>
+            <option value="-12.0464,-77.0428,9">Lima</option>
+            <option value="-33.4489,-70.6693,9">Santiago</option>
+            <option value="-0.1807,-78.4678,9">Quito</option>
+            <option value="10.4806,-66.9036,9">Caracas</option>
+        </select>
+    </div>
     <div id="map-aqi" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
     <!-- Controles AQI -->
@@ -303,6 +338,12 @@
     </div>
 
     <!-- MAPA DEFORESTACIÓN -->
+    <div class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+        <label for="selectorDeforestacion" style="font-weight:600;color:#c0392b;margin:0;">🌳 Ir a zona crítica:</label>
+        <select id="selectorDeforestacion" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:240px;">
+            <option value="">-- Selecciona una zona --</option>
+        </select>
+    </div>
     <div id="map-deforestacion" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
     <!-- Controles Deforestación -->
@@ -1334,9 +1375,6 @@
                 .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`).addTo(capaCiudades);
         });
         capaCiudades.addTo(mapSirgas);
-        document.getElementById('toggleCiudades').addEventListener('change', function() {
-            this.checked ? capaCiudades.addTo(mapSirgas) : mapSirgas.removeLayer(capaCiudades);
-        });
         document.getElementById('toggleSIRGAS').addEventListener('change', function() {
             if (this.checked && capaSIRGAS) capaSIRGAS.addTo(mapSirgas);
             else if (capaSIRGAS) mapSirgas.removeLayer(capaSIRGAS);
@@ -1831,6 +1869,56 @@
         setInterval(actualizarCiudad, 300000);
         setInterval(cargarSIRGAS, 600000);
     };
+
+    // ═══════════════════════════════════════════════════════════
+    // SELECTORES POR MAPA — flyTo al seleccionar (zoom + pan)
+    // ═══════════════════════════════════════════════════════════
+    function conectarSelector(idSelect, getMap, zoomDefault) {
+        const sel = document.getElementById(idSelect);
+        if (!sel) return;
+        sel.addEventListener('change', function() {
+            const v = this.value;
+            if (!v) return;
+            const partes = v.split(',').map(Number);
+            const lat = partes[0], lon = partes[1], zoom = partes[2] || zoomDefault || 8;
+            if (isNaN(lat) || isNaN(lon)) return;
+            const map = getMap();
+            if (!map) return;
+            try {
+                const size = map.getSize();
+                if (!size || !size.x || !size.y) {
+                    setTimeout(() => {
+                        try { map.flyTo([lat, lon], zoom, { duration: 1.5 }); } catch(e){}
+                    }, 300);
+                    return;
+                }
+                map.flyTo([lat, lon], zoom, { duration: 1.5 });
+            } catch(e) { console.warn('flyTo omitido:', e.message); }
+        });
+    }
+    conectarSelector('selectorSirgas', () => mapSirgas, 9);
+    conectarSelector('selectorZTD', () => mapZTD, 9);
+    conectarSelector('selectorAQI', () => mapaAQI, 9);
+    conectarSelector('selectorDeforestacion', () => mapaDeforestacion, 7);
+
+    // Cargar zonas críticas de deforestación dinámicamente
+    (function cargarZonasSelector() {
+        fetch('assets/geojson/analisis_deforestacion.json')
+            .then(r => r.json())
+            .then(data => {
+                const sel = document.getElementById('selectorDeforestacion');
+                if (!sel || !data.zonas_criticas) return;
+                data.zonas_criticas.forEach(z => {
+                    const opt = document.createElement('option');
+                    opt.value = `${z.lat},${z.lon},7`;
+                    opt.textContent = `${z.nombre} (${z.pais})`;
+                    sel.appendChild(opt);
+                });
+                console.log('✅ Zonas de deforestación cargadas en selector:', data.zonas_criticas.length);
+            })
+            .catch(e => console.warn('No se pudieron cargar zonas de deforestación', e));
+    })();
+
 </script>
 </body>
 </html>
