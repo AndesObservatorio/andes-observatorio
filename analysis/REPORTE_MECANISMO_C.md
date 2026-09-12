@@ -72,3 +72,27 @@ Se evaluó la correlación cruzada para lags de -5 a +5 días:
 Chi-cuadrado: 0.001, p = 0.9787 → **Sin capacidad predictiva con 1 día de antelación**
 
 **Implicación:** El ZTD no es un predictor de precipitación a corto plazo (1 día), pero sí es un **indicador simultáneo** del contenido de vapor de agua atmosférico.
+
+---
+
+## Análisis Multi-Estación (13 estaciones)
+
+### Resultados por estación
+
+| Estación | N obs | Spearman r | Valor p | Significativa |
+|----------|-------|------------|---------|---------------|
+| ANTC | - | -0.044 | 0.599 | ❌ |
+| AREQ | - | 0.363 | <0.0001 | ✅ |
+| BOGT | 138 | 0.397 | <0.0001 | ✅ |
+| CALI | - | **0.507** | <0.0001 | ✅ |
+| SANT | - | 0.326 | <0.0001 | ✅ |
+
+**4 de 5 estaciones muestran correlación significativa.**
+
+### Interpretación
+La correlación positiva entre anomalía ZTD y precipitación diaria se replica en estaciones distribuidas a lo largo de los Andes (Perú, Colombia y Chile). Cali muestra la correlación más fuerte (r = 0.507), probablemente por su régimen climático con mayor humedad atmosférica.
+
+### Próximos pasos
+- Replicar en las 8 estaciones restantes
+- Añadir análisis de estacionalidad
+- Publicar como reporte técnico
