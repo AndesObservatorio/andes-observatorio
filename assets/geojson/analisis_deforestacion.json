@@ -1,0 +1,102 @@
+{
+  "total_paises": 6,
+  "perdida_total_ha": 1976785,
+  "periodo": "2024",
+  "fuente": "Global Forest Watch",
+  "umbral_cobertura": "30%",
+  "paises": [
+    {
+      "pais": "Brasil",
+      "perdida_ha": 1245000,
+      "perdida_km2": 12450.0,
+      "porcentaje": 0.1462,
+      "periodo": "2024"
+    },
+    {
+      "pais": "Bolivia",
+      "perdida_ha": 298000,
+      "perdida_km2": 2980.0,
+      "porcentaje": 0.2713,
+      "periodo": "2024"
+    },
+    {
+      "pais": "Colombia",
+      "perdida_ha": 174103,
+      "perdida_km2": 1741.03,
+      "porcentaje": 0.1525,
+      "periodo": "2024"
+    },
+    {
+      "pais": "Perú",
+      "perdida_ha": 144682,
+      "perdida_km2": 1446.82,
+      "porcentaje": 0.1126,
+      "periodo": "2024"
+    },
+    {
+      "pais": "Venezuela",
+      "perdida_ha": 89000,
+      "perdida_km2": 890.0,
+      "porcentaje": 0.0971,
+      "periodo": "2024"
+    },
+    {
+      "pais": "Ecuador",
+      "perdida_ha": 26000,
+      "perdida_km2": 260.0,
+      "porcentaje": 0.1014,
+      "periodo": "2024"
+    }
+  ],
+  "zonas_criticas": [
+    {
+      "nombre": "Amazonía Brasil",
+      "lat": -3.5,
+      "lon": -62.0,
+      "intensidad": "alta",
+      "pais": "Brasil"
+    },
+    {
+      "nombre": "Caquetá Colombia",
+      "lat": 1.0,
+      "lon": -75.0,
+      "intensidad": "alta",
+      "pais": "Colombia"
+    },
+    {
+      "nombre": "Guaviare Colombia",
+      "lat": 2.5,
+      "lon": -72.5,
+      "intensidad": "alta",
+      "pais": "Colombia"
+    },
+    {
+      "nombre": "Madre de Dios Perú",
+      "lat": -12.5,
+      "lon": -70.0,
+      "intensidad": "alta",
+      "pais": "Perú"
+    },
+    {
+      "nombre": "Santa Cruz Bolivia",
+      "lat": -17.0,
+      "lon": -63.0,
+      "intensidad": "alta",
+      "pais": "Bolivia"
+    },
+    {
+      "nombre": "Amazonía Ecuador",
+      "lat": -1.5,
+      "lon": -76.0,
+      "intensidad": "media",
+      "pais": "Ecuador"
+    },
+    {
+      "nombre": "Llanos Venezuela",
+      "lat": 7.5,
+      "lon": -68.0,
+      "intensidad": "media",
+      "pais": "Venezuela"
+    }
+  ]
+}

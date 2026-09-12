@@ -250,6 +250,43 @@
                 <div id="aqiPromedio" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
                 <div style="font-size:11px;color:#888;">Promedio µg/m³</div>
             </div>
+
+    <!-- MAPA DEFORESTACIÓN -->
+    <div id="map-deforestacion" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
+
+    <!-- Controles Deforestación -->
+    <div id="controlesDeforestacion" class="layer-control" style="display:none;">
+        <label><input type="checkbox" id="toggleDeforestacion" checked> 🌳 Zonas críticas</label>
+        <span class="update-badge" id="deforBadge">🌳 Cargando datos GFW…</span>
+    </div>
+
+    <!-- Análisis Deforestación -->
+    <div id="analisisDeforestacion" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
+        <h4 style="color:#2d4a2d;">📊 Análisis Científico: Deforestación Andina</h4>
+        <p style="color:#666;font-size:14px;">Pérdida de cobertura arbórea en países andinos (Global Forest Watch 2024).</p>
+        <div id="estadisticasDefor" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="deforTotal" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
+                <div style="font-size:11px;color:#888;">Pérdida total (ha)</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="deforPaises" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Países</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="deforMax" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
+                <div style="font-size:11px;color:#888;">País más afectado</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="deforZonas" style="font-size:24px;font-weight:700;color:#2980b9;">--</div>
+                <div style="font-size:11px;color:#888;">Zonas críticas</div>
+            </div>
+        </div>
+        <canvas id="chartDeforestacion" style="max-height:250px;"></canvas>
+        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
+            Fuente: Global Forest Watch (2024). Umbral de cobertura: 30%.
+        </p>
+    </div>
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
                 <div id="aqiMax" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
                 <div style="font-size:11px;color:#888;">Máximo</div>
@@ -1144,19 +1181,22 @@
             sirgas: document.getElementById('tabSirgas'),
             ztd: document.getElementById('tabZTD'),
             clima: document.getElementById('tabClima'),
-            aqi: document.getElementById('tabAQI')
+            aqi: document.getElementById('tabAQI'),
+            deforestacion: document.getElementById('tabDeforestacion')
         };
         const divs = {
             sirgas: document.getElementById('map-sirgas'),
             ztd: document.getElementById('map-ztd'),
             clima: document.getElementById('map-clima'),
-            aqi: document.getElementById('map-aqi')
+            aqi: document.getElementById('map-aqi'),
+            deforestacion: document.getElementById('map-deforestacion')
         };
         const ctrls = {
             sirgas: document.getElementById('controlesSirgas'),
             ztd: document.getElementById('controlesZTD'),
             clima: document.getElementById('controlesClima'),
-            aqi: document.getElementById('controlesAQI')
+            aqi: document.getElementById('controlesAQI'),
+            deforestacion: document.getElementById('controlesDeforestacion')
         };
         const notaZTD = document.getElementById('notaZTD');
 
@@ -1174,12 +1214,14 @@
         notaZTD.style.display = tipo === 'ztd' ? 'block' : 'none';
 
         if (tipo === 'sirgas') {
+            document.getElementById('analisisDeforestacion').style.display = 'none';
             if (mapSirgas) mapSirgas.invalidateSize();
             document.getElementById('analisisZTD').style.display = 'none';
             document.getElementById('analisisSIRGAS').style.display = 'block';
             document.getElementById('analisisAQI').style.display = 'none';
             if (!analisisSIRGASData) cargarAnalisisSIRGAS();
         } else if (tipo === 'ztd') {
+            document.getElementById('analisisDeforestacion').style.display = 'none';
             document.getElementById('analisisSIRGAS').style.display = 'none';
             document.getElementById('analisisAQI').style.display = 'none';
             if (!mapZTD) initMapZTD();
@@ -1187,6 +1229,7 @@
             document.getElementById('analisisZTD').style.display = 'block';
             if (!analisisZTDData) cargarAnalisisZTD();
         } else if (tipo === 'clima') {
+            document.getElementById('analisisDeforestacion').style.display = 'none';
             document.getElementById('analisisSIRGAS').style.display = 'none';
             document.getElementById('analisisZTD').style.display = 'none';
             document.getElementById('analisisAQI').style.display = 'none';
@@ -1199,11 +1242,22 @@
             document.getElementById('analisisSIRGAS').style.display = 'none';
             document.getElementById('analisisZTD').style.display = 'none';
             document.getElementById('analisisAQI').style.display = 'block';
+            document.getElementById('analisisDeforestacion').style.display = 'none';
             setTimeout(() => {
                 if (!mapaAQI) initMapaAQI();
                 else mapaAQI.invalidateSize();
             }, 200);
             if (!analisisAQIData) cargarAnalisisAQI();
+        } else if (tipo === 'deforestacion') {
+            document.getElementById('analisisSIRGAS').style.display = 'none';
+            document.getElementById('analisisZTD').style.display = 'none';
+            document.getElementById('analisisAQI').style.display = 'none';
+            document.getElementById('analisisDeforestacion').style.display = 'block';
+            setTimeout(() => {
+                if (!mapaDeforestacion) initMapaDeforestacion();
+                else mapaDeforestacion.invalidateSize();
+            }, 200);
+            if (!analisisDeforestacionData) cargarAnalisisDeforestacion();
         }
     }
 
@@ -1384,6 +1438,7 @@
     document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
     document.getElementById('tabClima').addEventListener('click', function() { mostrarMapa('clima'); });
     document.getElementById('tabAQI').addEventListener('click', function() { mostrarMapa('aqi'); });
+    document.getElementById('tabDeforestacion').addEventListener('click', function() { mostrarMapa('deforestacion'); });
 
     function colorZTDAnomalia(anomalia, maxAbs) {
         if (maxAbs === 0) return 'hsl(120, 70%, 50%)';
@@ -1556,6 +1611,72 @@
     }
 
     let mapaAQI = null;
+    let mapaDeforestacion = null;
+    let analisisDeforestacionData = null;
+
+    async function initMapaDeforestacion() {
+        mapaDeforestacion = L.map('map-deforestacion').setView([-15, -60], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapaDeforestacion);
+        
+        try {
+            const res = await fetch('assets/geojson/analisis_deforestacion.json');
+            analisisDeforestacionData = await res.json();
+            
+            // Agregar zonas críticas al mapa
+            analisisDeforestacionData.zonas_criticas.forEach(zona => {
+                const color = zona.intensidad === 'alta' ? '#c0392b' : '#e67e22';
+                L.circleMarker([zona.lat, zona.lon], {
+                    radius: 20,
+                    fillColor: color,
+                    color: color,
+                    fillOpacity: 0.5,
+                    weight: 2
+                }).bindPopup(`<b>${zona.nombre}</b><br>País: ${zona.pais}<br>Intensidad: ${zona.intensidad}`).addTo(mapaDeforestacion);
+            });
+            
+            document.getElementById('deforBadge').innerText = `🌳 ${analisisDeforestacionData.zonas_criticas.length} zonas críticas`;
+        } catch(e) {
+            console.warn('Error cargando deforestación', e);
+        }
+    }
+
+    async function cargarAnalisisDeforestacion() {
+        try {
+            const res = await fetch('assets/geojson/analisis_deforestacion.json');
+            const data = await res.json();
+            analisisDeforestacionData = data;
+            
+            document.getElementById('deforTotal').textContent = (data.perdida_total_ha / 1000).toFixed(0) + 'K';
+            document.getElementById('deforPaises').textContent = data.total_paises;
+            document.getElementById('deforMax').textContent = data.paises[0].pais;
+            document.getElementById('deforZonas').textContent = data.zonas_criticas.length;
+            
+            const ctx = document.getElementById('chartDeforestacion').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.paises.map(p => p.pais),
+                    datasets: [{
+                        label: 'Pérdida de cobertura arbórea (ha)',
+                        data: data.paises.map(p => p.perdida_ha),
+                        backgroundColor: '#c0392b',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'Pérdida de cobertura arbórea por país (2024)' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Hectáreas' } }
+                    }
+                }
+            });
+        } catch(e) {
+            console.warn('Error en análisis deforestación', e);
+        }
+    }
     let analisisAQIData = null;
 
     async function initMapaAQI() {
