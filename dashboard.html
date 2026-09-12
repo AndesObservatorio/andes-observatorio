@@ -978,7 +978,7 @@
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: analisisSIRGASData.estaciones.map(e => e.codigo),
+                    labels: analisisSIRGASData.estaciones.map(e => `${e.codigo} - ${e.ciudad}, ${e.pais}`),
                     datasets: [{
                         label: 'Velocidad horizontal (mm/año)',
                         data: analisisSIRGASData.estaciones.map(e => e.magnitud_horizontal),
@@ -994,7 +994,7 @@
                             callbacks: {
                                 afterLabel: function(context) {
                                     const est = analisisSIRGASData.estaciones[context.dataIndex];
-                                    return `${est.clasificacion} | Azimut: ${est.azimut}°`;
+                                    return [`${est.ciudad}, ${est.pais}`, est.clasificacion, `Azimut: ${est.azimut}°`];
                                 }
                             }
                         }

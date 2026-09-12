@@ -38,8 +38,11 @@ def analizar_sirgas():
         if azimut < 0:
             azimut += 360
         
+        info = INFO_ESTACIONES.get(est['codigo'], {'ciudad': est['codigo'], 'pais': 'SIRGAS'})
         resultados.append({
             'codigo': est['codigo'],
+            'ciudad': info['ciudad'],
+            'pais': info['pais'],
             'velocidad_norte': round(vn, 2),
             'velocidad_este': round(ve, 2),
             'velocidad_up': round(vu, 2),
