@@ -991,8 +991,12 @@
             if (!mapZTD) initMapZTD();
             else setTimeout(() => mapZTD.invalidateSize(), 100);
         } else if (tipo === 'clima') {
-            if (!mapClima) initMapClima();
-            else setTimeout(() => mapClima.invalidateSize(), 100);
+            setTimeout(() => {
+                if (!mapClima) initMapClima();
+                else mapClima.invalidateSize();
+                // Forzar redibujado del heatmap
+                if (capaChirps) capaChirps.redraw();
+            }, 200);
         }
     }
 
