@@ -1188,12 +1188,22 @@
             if (!analisisZTDData) cargarAnalisisZTD();
         } else if (tipo === 'clima') {
             document.getElementById('analisisSIRGAS').style.display = 'none';
+            document.getElementById('analisisZTD').style.display = 'none';
+            document.getElementById('analisisAQI').style.display = 'none';
             setTimeout(() => {
                 if (!mapClima) initMapClima();
                 else mapClima.invalidateSize();
                 if (capaChirps) capaChirps.redraw();
             }, 200);
+        } else if (tipo === 'aqi') {
+            document.getElementById('analisisSIRGAS').style.display = 'none';
             document.getElementById('analisisZTD').style.display = 'none';
+            document.getElementById('analisisAQI').style.display = 'block';
+            setTimeout(() => {
+                if (!mapaAQI) initMapaAQI();
+                else mapaAQI.invalidateSize();
+            }, 200);
+            if (!analisisAQIData) cargarAnalisisAQI();
         }
     }
 
