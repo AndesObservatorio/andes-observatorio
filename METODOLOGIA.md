@@ -144,3 +144,54 @@ Si usa estos datos, cite:
 Sierra Bernal, M. J. (2026). *Andes Observatorio: Plataforma de monitoreo geodésico y ambiental para la región andina* [Aplicación web]. https://andesobservatorio.github.io/andes-observatorio/
 
 
+
+---
+
+## 8. Módulos de Análisis Científico
+
+### 8.1 Mecanismo C: Correlación ZTD vs Precipitación
+
+**Objetivo:** Verificar si la anomalía de ZTD predice eventos de precipitación en la región andina.
+
+**Datos:**
+- **ZTD:** SIRGAS-CON (soluciones horarias, latencia ~30 días)
+- **Precipitación:** Open-Meteo Historical API (datos diarios desde 1940)
+
+**Metodología:**
+1. Promedio diario del ZTD horario
+2. Anomalía ZTD = ZTD_diario − media móvil 30 días
+3. Correlación de Spearman (no paramétrica)
+4. Nivel de significancia: α = 0.05
+
+**Resultados:**
+Ver `analysis/REPORTE_MECANISMO_C.md` para el análisis detallado de la estación BOGT.
+
+**Interpretación:**
+La correlación positiva entre anomalía ZTD y precipitación diaria confirma que el vapor de agua atmosférico medido por GNSS es un indicador útil para el monitoreo de precipitación. Sin embargo, el ZTD no muestra capacidad predictiva con 1 día de antelación (p = 0.98), lo que indica que ambos fenómenos son sincrónicos en la escala diaria.
+
+### 8.2 Mecanismo A: Desplazamiento Vertical GNSS vs Pérdida Glaciar (En desarrollo)
+
+**Objetivo:** Verificar si la pérdida de masa glaciar genera levantamiento elástico cortical medible con GNSS.
+
+**Datos:**
+- **GNSS vertical:** SIRGAS-CON (componente U)
+- **Balance de masa glaciar:** WGMS, IDEAM, estudios académicos
+
+**Estado:** Pendiente de implementación
+
+### 8.3 Mecanismo B: Carga Hidrológica vs Microsismicidad (En desarrollo)
+
+**Objetivo:** Explorar si los cambios de carga hidrológica modulan la microsismicidad regional.
+
+**Datos:**
+- **GNSS vertical:** SIRGAS-CON
+- **Sismicidad:** SGC Colombia, IGP Perú
+- **Carga hidrológica:** GRACE, CHIRPS
+
+**Estado:** Pendiente de implementación
+
+---
+
+## 9. Declaración de Integridad Científica
+
+Los datos SIRGAS en esta plataforma se utilizan para verificar exploratoriamente hipótesis de acoplamiento clima-Tierra sólida (Mecanismos A, B y C). Todos los análisis de correlación muestran resultados de pruebas estadísticas (valor p, intervalos de confianza). La separación de componentes no tectónicas en señales de desplazamiento vertical tiene incertidumbre. Los datos de esta plataforma no sustituyen las publicaciones oficiales de cada institución, ni se utilizan para decisiones de alerta temprana.

@@ -173,3 +173,52 @@ Este proyecto es de código abierto y está disponible para fines educativos y d
 
 *Datos actualizados en tiempo real desde OpenWeatherMap*
 
+
+---
+
+## 📊 Módulos de Análisis Científico
+
+Andes Observatorio integra módulos de análisis científico bajo cada mapa:
+
+### 🛰️ Mapa SIRGAS
+- Análisis de velocidades tectónicas
+- Distribución geográfica de estaciones
+
+### 💧 Mapa ZTD
+- **Mecanismo C:** Correlación ZTD vs Precipitación (datos reales)
+- 13 estaciones SIRGAS-CON
+- Análisis estadístico con Spearman
+
+### 🌧️ Mapa Clima (CHIRPS)
+- Precipitación mensual
+- 5,551 puntos regionales
+
+### 🌡️ Mapa Clima (OpenWeatherMap)
+- Temperatura en 18 ciudades
+- Humedad y sensación térmica
+
+### 🌫️ Mapa AQI
+- Calidad del aire (PM2.5)
+- 6 ciudades andinas
+
+### 🌳 Mapa Deforestación
+- Pérdida de cobertura arbórea
+- 4 países (GFW 2024)
+
+---
+
+## 🔬 Metodología Científica
+
+Ver [METODOLOGIA.md](METODOLOGIA.md) para:
+- Fuentes de datos
+- Anomalía ZTD
+- Velocidades tectónicas
+- Alertas
+- Módulos de análisis
+- Referencias APA 7
+
+---
+
+## 📖 Reportes de Análisis
+
+- [Mecanismo C: ZTD vs Precipitación](analysis/REPORTE_MECANISMO_C.md)
