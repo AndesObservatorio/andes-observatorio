@@ -7,6 +7,8 @@
   "estaciones": [
     {
       "codigo": "BOGT",
+      "ciudad": "Bogot\u00e1",
+      "pais": "Colombia",
       "velocidad_norte": 12.3,
       "velocidad_este": -15.7,
       "velocidad_up": 2.1,
@@ -16,6 +18,8 @@
     },
     {
       "codigo": "QUIT",
+      "ciudad": "Quito",
+      "pais": "Ecuador",
       "velocidad_norte": 8.5,
       "velocidad_este": -10.2,
       "velocidad_up": 1.5,
@@ -25,6 +29,8 @@
     },
     {
       "codigo": "LIMA",
+      "ciudad": "Lima",
+      "pais": "Per\u00fa",
       "velocidad_norte": 10.2,
       "velocidad_este": -8.5,
       "velocidad_up": 0.5,
@@ -34,6 +40,8 @@
     },
     {
       "codigo": "LPBZ",
+      "ciudad": "La Paz",
+      "pais": "Bolivia",
       "velocidad_norte": 15.8,
       "velocidad_este": -12.3,
       "velocidad_up": 1.2,
@@ -43,6 +51,8 @@
     },
     {
       "codigo": "SANT",
+      "ciudad": "Santiago",
+      "pais": "Chile",
       "velocidad_norte": 18.5,
       "velocidad_este": -20.1,
       "velocidad_up": 0.8,
@@ -52,6 +62,8 @@
     },
     {
       "codigo": "RIOG",
+      "ciudad": "R\u00edo Grande",
+      "pais": "Argentina",
       "velocidad_norte": 22.1,
       "velocidad_este": -15.8,
       "velocidad_up": 1.0,
@@ -61,6 +73,8 @@
     },
     {
       "codigo": "CARI",
+      "ciudad": "Caracas",
+      "pais": "Venezuela",
       "velocidad_norte": 7.2,
       "velocidad_este": -5.4,
       "velocidad_up": 0.3,

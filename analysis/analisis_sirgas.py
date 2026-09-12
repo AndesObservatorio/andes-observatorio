@@ -9,6 +9,17 @@ import numpy as np
 
 API_BASE = "https://andes-observatorio.onrender.com"
 
+# Información de ciudades y países
+INFO_ESTACIONES = {
+    'BOGT': {'ciudad': 'Bogotá', 'pais': 'Colombia'},
+    'QUIT': {'ciudad': 'Quito', 'pais': 'Ecuador'},
+    'LIMA': {'ciudad': 'Lima', 'pais': 'Perú'},
+    'LPBZ': {'ciudad': 'La Paz', 'pais': 'Bolivia'},
+    'SANT': {'ciudad': 'Santiago', 'pais': 'Chile'},
+    'RIOG': {'ciudad': 'Río Grande', 'pais': 'Argentina'},
+    'CARI': {'ciudad': 'Caracas', 'pais': 'Venezuela'},
+}
+
 def clasificar_velocidad(magnitud):
     """Clasificación geodésica según magnitud."""
     if magnitud <= 5:
