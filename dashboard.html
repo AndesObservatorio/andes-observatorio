@@ -1052,21 +1052,19 @@
 
         if (tipo === 'sirgas') {
             if (mapSirgas) mapSirgas.invalidateSize();
+            document.getElementById('analisisZTD').style.display = 'none';
         } else if (tipo === 'ztd') {
             if (!mapZTD) initMapZTD();
             else setTimeout(() => mapZTD.invalidateSize(), 100);
             document.getElementById('analisisZTD').style.display = 'block';
             if (!analisisZTDData) cargarAnalisisZTD();
-        } else if (tipo !== 'ztd') {
-            document.getElementById('analisisZTD').style.display = 'none';
-        }
         } else if (tipo === 'clima') {
             setTimeout(() => {
                 if (!mapClima) initMapClima();
                 else mapClima.invalidateSize();
-                // Forzar redibujado del heatmap
                 if (capaChirps) capaChirps.redraw();
             }, 200);
+            document.getElementById('analisisZTD').style.display = 'none';
         }
     }
 
