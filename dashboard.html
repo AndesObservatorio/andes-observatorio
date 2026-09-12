@@ -251,6 +251,25 @@
                 <div style="font-size:11px;color:#888;">Promedio µg/m³</div>
             </div>
 
+    <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="aqiMax" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
+                <div style="font-size:11px;color:#888;">Máximo</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="aqiMin" style="font-size:24px;font-weight:700;color:#27ae60;">--</div>
+                <div style="font-size:11px;color:#888;">Mínimo</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="aqiCiudades" style="font-size:24px;font-weight:700;color:#2980b9;">--</div>
+                <div style="font-size:11px;color:#888;">Ciudades</div>
+            </div>
+        </div>
+        <canvas id="chartAQI" style="max-height:250px;"></canvas>
+        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
+            Fuente: OpenAQ API v3. Estándar OMS 2021: 15 µg/m³ (24h). Clasificación: bueno (<50), moderado (50-100), malo (100-150), muy malo (>150).
+        </p>
+    </div>
+
     <!-- MAPA DEFORESTACIÓN -->
     <div id="map-deforestacion" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
@@ -285,24 +304,6 @@
         <canvas id="chartDeforestacion" style="max-height:250px;"></canvas>
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: Global Forest Watch (2024). Umbral de cobertura: 30%.
-        </p>
-    </div>
-            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
-                <div id="aqiMax" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
-                <div style="font-size:11px;color:#888;">Máximo</div>
-            </div>
-            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
-                <div id="aqiMin" style="font-size:24px;font-weight:700;color:#27ae60;">--</div>
-                <div style="font-size:11px;color:#888;">Mínimo</div>
-            </div>
-            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
-                <div id="aqiCiudades" style="font-size:24px;font-weight:700;color:#2980b9;">--</div>
-                <div style="font-size:11px;color:#888;">Ciudades</div>
-            </div>
-        </div>
-        <canvas id="chartAQI" style="max-height:250px;"></canvas>
-        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
-            Fuente: OpenAQ API v3. Estándar OMS 2021: 15 µg/m³ (24h). Clasificación: bueno (<50), moderado (50-100), malo (100-150), muy malo (>150).
         </p>
     </div>
 
