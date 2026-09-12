@@ -1524,25 +1524,7 @@
     document.getElementById('btnActualizarZTD').addEventListener('click', actualizarGraficoZTD);
     document.getElementById('btnDescargarZTD').addEventListener('click', descargarCSV_ZTD);
 
-    document.getElementById('btnVerMapaAQI').addEventListener('click', async () => {
-        const ciudades = ['Bogota', 'Medellin', 'Lima', 'Santiago', 'Quito', 'Caracas'];
-        const datosAQI = {};
-        for (const ciudad of ciudades) {
-            try {
-                const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.valor && data.valor !== 'Sin datos') {
-                        datosAQI[ciudad] = data.valor;
-                        datosAQI[ciudad + '_lat'] = coordenadasAQI[ciudad].lat;
-                        datosAQI[ciudad + '_lon'] = coordenadasAQI[ciudad].lon;
-                    }
-                }
-            } catch(e) {}
-        }
-        crearMapaAQI(datosAQI);
-        document.getElementById('map-aqi').scrollIntoView({behavior: 'smooth'});
-    });
+    
     document.getElementById('estacionZTD').addEventListener('change', actualizarGraficoZTD);
 
         async function cargarAQI() {
