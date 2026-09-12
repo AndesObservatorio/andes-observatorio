@@ -172,6 +172,8 @@
         <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
         <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
         <button id="tabClima" class="map-tab">🌧️ Mapa Clima</button>
+        <button id="tabAQI" class="map-tab">🌫️ Mapa AQI</button>
+        <button id="tabDeforestacion" class="map-tab">🌳 Deforestación</button>
     </div>
 
     <div id="controlesSirgas" class="layer-control">
@@ -229,6 +231,43 @@
     </div>
     <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
+
+    <!-- MAPA AQI -->
+    <div id="map-aqi" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
+
+    <!-- Controles AQI -->
+    <div id="controlesAQI" class="layer-control" style="display:none;">
+        <label><input type="checkbox" id="toggleAQI" checked> 🌫️ Mostrar ciudades</label>
+        <span class="update-badge" id="aqiBadge">🌫️ Cargando AQI…</span>
+    </div>
+
+    <!-- Análisis AQI -->
+    <div id="analisisAQI" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
+        <h4 style="color:#2d4a2d;">📊 Análisis Científico: Calidad del Aire</h4>
+        <p style="color:#666;font-size:14px;">Niveles de PM2.5 en 6 ciudades andinas según estándares OMS.</p>
+        <div id="estadisticasAQI" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="aqiPromedio" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Promedio µg/m³</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="aqiMax" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
+                <div style="font-size:11px;color:#888;">Máximo</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="aqiMin" style="font-size:24px;font-weight:700;color:#27ae60;">--</div>
+                <div style="font-size:11px;color:#888;">Mínimo</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="aqiCiudades" style="font-size:24px;font-weight:700;color:#2980b9;">--</div>
+                <div style="font-size:11px;color:#888;">Ciudades</div>
+            </div>
+        </div>
+        <canvas id="chartAQI" style="max-height:250px;"></canvas>
+        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
+            Fuente: OpenAQ API v3. Estándar OMS 2021: 15 µg/m³ (24h). Clasificación: bueno (<50), moderado (50-100), malo (100-150), muy malo (>150).
+        </p>
+    </div>
 
     <!-- Análisis ZTD vs Precipitación -->
     <div id="analisisZTD" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
@@ -1104,17 +1143,20 @@
         const tabs = {
             sirgas: document.getElementById('tabSirgas'),
             ztd: document.getElementById('tabZTD'),
-            clima: document.getElementById('tabClima')
+            clima: document.getElementById('tabClima'),
+            aqi: document.getElementById('tabAQI')
         };
         const divs = {
             sirgas: document.getElementById('map-sirgas'),
             ztd: document.getElementById('map-ztd'),
-            clima: document.getElementById('map-clima')
+            clima: document.getElementById('map-clima'),
+            aqi: document.getElementById('map-aqi')
         };
         const ctrls = {
             sirgas: document.getElementById('controlesSirgas'),
             ztd: document.getElementById('controlesZTD'),
-            clima: document.getElementById('controlesClima')
+            clima: document.getElementById('controlesClima'),
+            aqi: document.getElementById('controlesAQI')
         };
         const notaZTD = document.getElementById('notaZTD');
 
@@ -1329,6 +1371,7 @@
     document.getElementById('tabSirgas').addEventListener('click', function() { mostrarMapa('sirgas'); });
     document.getElementById('tabZTD').addEventListener('click', function() { mostrarMapa('ztd'); });
     document.getElementById('tabClima').addEventListener('click', function() { mostrarMapa('clima'); });
+    document.getElementById('tabAQI').addEventListener('click', function() { mostrarMapa('aqi'); });
 
     function colorZTDAnomalia(anomalia, maxAbs) {
         if (maxAbs === 0) return 'hsl(120, 70%, 50%)';
@@ -1519,6 +1562,104 @@
     }
 
     let mapaAQI = null;
+    let analisisAQIData = null;
+
+    async function initMapaAQI() {
+        mapaAQI = L.map('map-aqi').setView([-15, -65], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapaAQI);
+        
+        // Cargar AQI de cada ciudad
+        const ciudades = ['Bogota', 'Medellin', 'Lima', 'Santiago', 'Quito', 'Caracas'];
+        const coords = {
+            'Bogota': [4.6097, -74.0817],
+            'Medellin': [6.2442, -75.5812],
+            'Lima': [-12.0464, -77.0428],
+            'Santiago': [-33.4489, -70.6693],
+            'Quito': [-0.1807, -78.4678],
+            'Caracas': [10.4806, -66.9036]
+        };
+        
+        const datos = {};
+        for (const ciudad of ciudades) {
+            try {
+                const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.valor && data.valor !== 'Sin datos') {
+                        datos[ciudad] = { valor: data.valor, lat: coords[ciudad][0], lon: coords[ciudad][1] };
+                        const color = data.valor < 50 ? '#27ae60' : data.valor < 100 ? '#f1c40f' : data.valor < 150 ? '#e67e22' : '#e74c3c';
+                        L.circleMarker(coords[ciudad], {
+                            radius: 18,
+                            fillColor: color,
+                            color: color,
+                            fillOpacity: 0.6,
+                            weight: 2
+                        }).bindPopup(`<b>${ciudad}</b><br>PM2.5: ${data.valor} µg/m³`).addTo(mapaAQI);
+                    }
+                }
+            } catch(e) {}
+        }
+        
+        document.getElementById('aqiBadge').innerText = `🌫️ AQI: ${Object.keys(datos).length} ciudades`;
+        return datos;
+    }
+
+    async function cargarAnalisisAQI() {
+        try {
+            const ciudades = ['Bogota', 'Medellin', 'Lima', 'Santiago', 'Quito', 'Caracas'];
+            const valores = [];
+            const labels = [];
+            
+            for (const ciudad of ciudades) {
+                try {
+                    const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.valor && data.valor !== 'Sin datos') {
+                            valores.push(data.valor);
+                            labels.push(ciudad);
+                        }
+                    }
+                } catch(e) {}
+            }
+            
+            if (valores.length === 0) return;
+            
+            analisisAQIData = { labels, valores };
+            
+            document.getElementById('aqiPromedio').textContent = (valores.reduce((a,b) => a+b, 0) / valores.length).toFixed(1);
+            document.getElementById('aqiMax').textContent = Math.max(...valores);
+            document.getElementById('aqiMin').textContent = Math.min(...valores);
+            document.getElementById('aqiCiudades').textContent = valores.length;
+            
+            const ctx = document.getElementById('chartAQI').getContext('2d');
+            const colores = valores.map(v => v < 50 ? '#27ae60' : v < 100 ? '#f1c40f' : v < 150 ? '#e67e22' : '#e74c3c');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'PM2.5 (µg/m³)',
+                        data: valores,
+                        backgroundColor: colores,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'PM2.5 por ciudad' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'µg/m³' } }
+                    }
+                }
+            });
+        } catch(e) {
+            console.warn('No se pudo cargar análisis AQI', e);
+        }
+    }
 
     function crearMapaAQI(datosAQI) {
         const div = document.getElementById('map-aqi');
