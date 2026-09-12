@@ -138,35 +138,7 @@
         </div>
     </div>
 
-    <div class="selector">
-        <label for="citySelect">📍 Selecciona una ciudad: </label>
-        <select id="citySelect">
-            <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
-            <option value="Medellin,CO,6.2442,-75.5812">Medellín, Colombia</option>
-            <option value="Cali,CO,3.4516,-76.5320">Cali, Colombia</option>
-            <option value="Quito,EC,-0.1807,-78.4678">Quito, Ecuador</option>
-            <option value="Guayaquil,EC,-2.1704,-79.9224">Guayaquil, Ecuador</option>
-            <option value="Cuenca,EC,-2.9006,-79.0045">Cuenca, Ecuador</option>
-            <option value="Lima,PE,-12.0464,-77.0428">Lima, Perú</option>
-            <option value="Cusco,PE,-13.5319,-71.9675">Cusco, Perú</option>
-            <option value="La Paz,BO,-16.5000,-68.1500">La Paz, Bolivia</option>
-            <option value="Sucre,BO,-19.0194,-65.2596">Sucre, Bolivia</option>
-            <option value="Santiago,CL,-33.4489,-70.6693">Santiago, Chile</option>
-            <option value="Buenos Aires,AR,-34.6037,-58.3816">Buenos Aires, Argentina</option>
-            <option value="Mendoza,AR,-32.8908,-68.8272">Mendoza, Argentina</option>
-            <option value="Asuncion,PY,-25.2637,-57.5759">Asunción, Paraguay</option>
-            <option value="Montevideo,UY,-34.9011,-56.1645">Montevideo, Uruguay</option>
-            <option value="Brasilia,BR,-15.8267,-47.9218">Brasilia, Brasil</option>
-            <option value="Caracas,VE,10.4806,-66.9036">Caracas, Venezuela</option>
-            <option value="Panama City,PA,8.9824,-79.5199">Panamá, Panamá</option>
-        </select>
-    </div>
 
-    <div class="stats">
-        <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
-        <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--<small>%</small></div><div class="fuente">OpenWeatherMap</div></div>
-        <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
-    </div>
 
     <div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
         <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
@@ -230,6 +202,66 @@
         </p>
     </div>
     <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
+    <!-- ═══ CONTENIDO EXTRA DEL TAB CLIMA (movido desde SIRGAS) ═══ -->
+    <div id="climaExtra" style="display:none;">
+        <div class="selector">
+            <label for="citySelect">📍 Selecciona una ciudad: </label>
+            <select id="citySelect">
+                <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
+                <option value="Medellin,CO,6.2442,-75.5812">Medellín, Colombia</option>
+                <option value="Cali,CO,3.4516,-76.5320">Cali, Colombia</option>
+                <option value="Quito,EC,-0.1807,-78.4678">Quito, Ecuador</option>
+                <option value="Guayaquil,EC,-2.1704,-79.9224">Guayaquil, Ecuador</option>
+                <option value="Cuenca,EC,-2.9006,-79.0045">Cuenca, Ecuador</option>
+                <option value="Lima,PE,-12.0464,-77.0428">Lima, Perú</option>
+                <option value="Cusco,PE,-13.5319,-71.9675">Cusco, Perú</option>
+                <option value="La Paz,BO,-16.5000,-68.1500">La Paz, Bolivia</option>
+                <option value="Sucre,BO,-19.0194,-65.2596">Sucre, Bolivia</option>
+                <option value="Santiago,CL,-33.4489,-70.6693">Santiago, Chile</option>
+                <option value="Buenos Aires,AR,-34.6037,-58.3816">Buenos Aires, Argentina</option>
+                <option value="Mendoza,AR,-32.8908,-68.8272">Mendoza, Argentina</option>
+                <option value="Asuncion,PY,-25.2637,-57.5759">Asunción, Paraguay</option>
+                <option value="Montevideo,UY,-34.9011,-56.1645">Montevideo, Uruguay</option>
+                <option value="Brasilia,BR,-15.8267,-47.9218">Brasilia, Brasil</option>
+                <option value="Caracas,VE,10.4806,-66.9036">Caracas, Venezuela</option>
+                <option value="Panama City,PA,8.9824,-79.5199">Panamá, Panamá</option>
+            </select>
+        </div>
+
+        <div class="stats">
+            <div class="card"><h3>🌡️ Temperatura</h3><div class="value" id="temp">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
+            <div class="card"><h3>💧 Humedad</h3><div class="value" id="hum">--<small>%</small></div><div class="fuente">OpenWeatherMap</div></div>
+            <div class="card"><h3>🌡️ Sensación</h3><div class="value" id="feels">--<small>°C</small></div><div class="fuente">OpenWeatherMap</div></div>
+        </div>
+
+        <div class="alertas-panel">
+            <h3>⚡ Panel de Alertas Personalizables</h3>
+            <div class="alertas-grid">
+                <div class="alerta-item">
+                    <label>🌡️ Temperatura (ºC)</label>
+                    <input type="number" id="umbralTemp" value="28" step="0.5">
+                    <span class="valor-actual">Actual: <span id="tempActual">--</span> ºC</span>
+                    <span class="estado-alerta ok" id="estadoTemp">✅ Normal</span>
+                    <button class="btn-alerta" data-umbral="temp">Aplicar</button>
+                </div>
+                <div class="alerta-item">
+                    <label>💧 Humedad (%)</label>
+                    <input type="number" id="umbralHum" value="80" step="1">
+                    <span class="valor-actual">Actual: <span id="humActual">--</span> %</span>
+                    <span class="estado-alerta ok" id="estadoHum">✅ Normal</span>
+                    <button class="btn-alerta" data-umbral="hum">Aplicar</button>
+                </div>
+                <div class="alerta-item">
+                    <label>🌡️ Sensación (ºC)</label>
+                    <input type="number" id="umbralFeels" value="30" step="0.5">
+                    <span class="valor-actual">Actual: <span id="feelsActual">--</span> ºC</span>
+                    <span class="estado-alerta ok" id="estadoFeels">✅ Normal</span>
+                    <button class="btn-alerta" data-umbral="feels">Aplicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
     <!-- MAPA AQI -->
@@ -347,32 +379,6 @@
         atmosféricas entre estaciones. <strong>🔵 Azul = más húmedo de lo normal | 🟢 Verde = normal | 🔴 Rojo = más seco de lo normal.</strong>
     </p>
 
-    <div class="alertas-panel">
-        <h3>⚡ Panel de Alertas Personalizables</h3>
-        <div class="alertas-grid">
-            <div class="alerta-item">
-                <label>🌡️ Temperatura (ºC)</label>
-                <input type="number" id="umbralTemp" value="28" step="0.5">
-                <span class="valor-actual">Actual: <span id="tempActual">--</span> ºC</span>
-                <span class="estado-alerta ok" id="estadoTemp">✅ Normal</span>
-                <button class="btn-alerta" data-umbral="temp">Aplicar</button>
-            </div>
-            <div class="alerta-item">
-                <label>💧 Humedad (%)</label>
-                <input type="number" id="umbralHum" value="80" step="1">
-                <span class="valor-actual">Actual: <span id="humActual">--</span> %</span>
-                <span class="estado-alerta ok" id="estadoHum">✅ Normal</span>
-                <button class="btn-alerta" data-umbral="hum">Aplicar</button>
-            </div>
-            <div class="alerta-item">
-                <label>🌡️ Sensación (ºC)</label>
-                <input type="number" id="umbralFeels" value="30" step="0.5">
-                <span class="valor-actual">Actual: <span id="feelsActual">--</span> ºC</span>
-                <span class="estado-alerta ok" id="estadoFeels">✅ Normal</span>
-                <button class="btn-alerta" data-umbral="feels">Aplicar</button>
-            </div>
-        </div>
-    </div>
 
     <div class="charts">
         <div class="chart-card"><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
@@ -1201,6 +1207,12 @@
         };
         const notaZTD = document.getElementById('notaZTD');
 
+        // Ocultar siempre el contenido extra del clima (se muestra solo en tab clima)
+        const climaExtra = document.getElementById('climaExtra');
+        const controlesClima = document.getElementById('controlesClima');
+        if (climaExtra) climaExtra.style.display = 'none';
+        if (controlesClima) controlesClima.style.display = 'none';
+
         Object.keys(tabs).forEach(k => {
             if (k === tipo) {
                 tabs[k].classList.add('active');
@@ -1230,6 +1242,8 @@
             document.getElementById('analisisZTD').style.display = 'block';
             if (!analisisZTDData) cargarAnalisisZTD();
         } else if (tipo === 'clima') {
+            document.getElementById('climaExtra').style.display = 'block';
+            document.getElementById('controlesClima').style.display = 'flex';
             document.getElementById('analisisDeforestacion').style.display = 'none';
             document.getElementById('analisisSIRGAS').style.display = 'none';
             document.getElementById('analisisZTD').style.display = 'none';
