@@ -923,31 +923,18 @@
         try {
             const res = await fetch('assets/geojson/chirps_julio2026.geojson');
             const gj = await res.json();
-            
-            // Heatmap con Leaflet.heat
-            const puntos = gj.features.map(f => [
-                f.geometry.coordinates[1],
-                f.geometry.coordinates[0],
-                Math.min(1, Math.max(0.15, f.properties.precip_mm / 15))  // Intensidad ajustada
-            ]);
-            
-            capaChirps = L.heatLayer(puntos, {
-                radius: 25,
-                blur: 35,
-                maxZoom: 8,
-                max: 0.3,
-                minOpacity: 0.3,
-                gradient: {
-                    0.0: '#c6dbef',
-                    0.3: '#9ecae1',
-                    0.5: '#6baed6',
-                    0.7: '#3182bd',
-                    0.9: '#08519c',
-                    1.0: '#08306b'
+            capaChirps = L.geoJSON(gj, {
+                pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+                    radius: 5,
+                    fillColor: getColorPrecip(f.properties.precip_mm),
+                    color: 'transparent',
+                    fillOpacity: 0.7
+                }),
+                onEachFeature: (f, layer) => {
+                    layer.bindPopup(`<b>Precipitación:</b> ${f.properties.precip_mm} mm/mes`);
                 }
             }).addTo(mapClima);
-            
-            badge.innerText = `🌧️ CHIRPS: ${gj.features.length} puntos (heatmap)`;
+            badge.innerText = `🌧️ CHIRPS: ${gj.features.length} puntos`;
         } catch(e) {
             badge.innerText = '⚠️ Error CHIRPS';
             console.error(e);
