@@ -199,6 +199,34 @@
     </div>
 
     <div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
+
+    <!-- Análisis SIRGAS -->
+    <div id="analisisSIRGAS" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
+        <h4 style="color:#2d4a2d;">📊 Análisis Científico: Velocidades Tectónicas</h4>
+        <p style="color:#666;font-size:14px;">Clasificación geodésica de las estaciones SIRGAS-CON según su magnitud de velocidad horizontal.</p>
+        <div id="estadisticasSIRGAS" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="sirgasTotal" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Estaciones</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="sirgasMedia" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Media (mm/año)</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="sirgasMax" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
+                <div style="font-size:11px;color:#888;">Máxima (mm/año)</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="sirgasStd" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Desv. estándar</div>
+            </div>
+        </div>
+        <canvas id="chartSIRGAS" style="max-height:250px;"></canvas>
+        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
+            Fuente: SIRGAS-CON. Clasificación: intraplaca (0-5), deformación (5-15), actividad (15-25), borde de placa (>25) mm/año.
+        </p>
+    </div>
     <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
@@ -927,6 +955,59 @@
     }
 
     let mapClima, capaChirps;
+    let analisisSIRGASData = null;
+
+    async function cargarAnalisisSIRGAS() {
+        try {
+            const res = await fetch('assets/geojson/analisis_sirgas.json');
+            analisisSIRGASData = await res.json();
+            
+            document.getElementById('sirgasTotal').textContent = analisisSIRGASData.total_estaciones;
+            document.getElementById('sirgasMedia').textContent = analisisSIRGASData.magnitud_media;
+            document.getElementById('sirgasMax').textContent = analisisSIRGASData.magnitud_max;
+            document.getElementById('sirgasStd').textContent = analisisSIRGASData.std;
+            
+            const ctx = document.getElementById('chartSIRGAS').getContext('2d');
+            const colores = analisisSIRGASData.estaciones.map(e => {
+                if (e.magnitud_horizontal <= 5) return '#27ae60';
+                if (e.magnitud_horizontal <= 15) return '#f1c40f';
+                if (e.magnitud_horizontal <= 25) return '#e67e22';
+                return '#c0392b';
+            });
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: analisisSIRGASData.estaciones.map(e => e.codigo),
+                    datasets: [{
+                        label: 'Velocidad horizontal (mm/año)',
+                        data: analisisSIRGASData.estaciones.map(e => e.magnitud_horizontal),
+                        backgroundColor: colores,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'Magnitud de velocidad por estación' },
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const est = analisisSIRGASData.estaciones[context.dataIndex];
+                                    return `${est.clasificacion} | Azimut: ${est.azimut}°`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'mm/año' } }
+                    }
+                }
+            });
+        } catch(e) {
+            console.warn('No se pudo cargar análisis SIRGAS', e);
+        }
+    }
     let analisisZTDData = null;
 
     async function cargarAnalisisZTD() {
@@ -1053,12 +1134,16 @@
         if (tipo === 'sirgas') {
             if (mapSirgas) mapSirgas.invalidateSize();
             document.getElementById('analisisZTD').style.display = 'none';
+            document.getElementById('analisisSIRGAS').style.display = 'block';
+            if (!analisisSIRGASData) cargarAnalisisSIRGAS();
         } else if (tipo === 'ztd') {
+            document.getElementById('analisisSIRGAS').style.display = 'none';
             if (!mapZTD) initMapZTD();
             else setTimeout(() => mapZTD.invalidateSize(), 100);
             document.getElementById('analisisZTD').style.display = 'block';
             if (!analisisZTDData) cargarAnalisisZTD();
         } else if (tipo === 'clima') {
+            document.getElementById('analisisSIRGAS').style.display = 'none';
             setTimeout(() => {
                 if (!mapClima) initMapClima();
                 else mapClima.invalidateSize();

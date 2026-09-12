@@ -1,0 +1,72 @@
+{
+  "total_estaciones": 7,
+  "magnitud_media": 18.57,
+  "magnitud_min": 9.0,
+  "magnitud_max": 27.32,
+  "std": 6.57,
+  "estaciones": [
+    {
+      "codigo": "BOGT",
+      "velocidad_norte": 12.3,
+      "velocidad_este": -15.7,
+      "velocidad_up": 2.1,
+      "magnitud_horizontal": 19.94,
+      "azimut": 308.1,
+      "clasificacion": "Actividad tect\u00f3nica"
+    },
+    {
+      "codigo": "QUIT",
+      "velocidad_norte": 8.5,
+      "velocidad_este": -10.2,
+      "velocidad_up": 1.5,
+      "magnitud_horizontal": 13.28,
+      "azimut": 309.8,
+      "clasificacion": "Deformaci\u00f3n media"
+    },
+    {
+      "codigo": "LIMA",
+      "velocidad_norte": 10.2,
+      "velocidad_este": -8.5,
+      "velocidad_up": 0.5,
+      "magnitud_horizontal": 13.28,
+      "azimut": 320.2,
+      "clasificacion": "Deformaci\u00f3n media"
+    },
+    {
+      "codigo": "LPBZ",
+      "velocidad_norte": 15.8,
+      "velocidad_este": -12.3,
+      "velocidad_up": 1.2,
+      "magnitud_horizontal": 20.02,
+      "azimut": 322.1,
+      "clasificacion": "Actividad tect\u00f3nica"
+    },
+    {
+      "codigo": "SANT",
+      "velocidad_norte": 18.5,
+      "velocidad_este": -20.1,
+      "velocidad_up": 0.8,
+      "magnitud_horizontal": 27.32,
+      "azimut": 312.6,
+      "clasificacion": "Borde de placa"
+    },
+    {
+      "codigo": "RIOG",
+      "velocidad_norte": 22.1,
+      "velocidad_este": -15.8,
+      "velocidad_up": 1.0,
+      "magnitud_horizontal": 27.17,
+      "azimut": 324.4,
+      "clasificacion": "Borde de placa"
+    },
+    {
+      "codigo": "CARI",
+      "velocidad_norte": 7.2,
+      "velocidad_este": -5.4,
+      "velocidad_up": 0.3,
+      "magnitud_horizontal": 9.0,
+      "azimut": 323.1,
+      "clasificacion": "Deformaci\u00f3n media"
+    }
+  ]
+}
