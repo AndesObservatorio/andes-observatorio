@@ -1,0 +1,51 @@
+{
+  "total_estaciones": 5,
+  "estaciones_significativas": 4,
+  "resultados": [
+    {
+      "codigo": "ANTC",
+      "lat": -23.65,
+      "lon": -70.4,
+      "n_obs": 145,
+      "spearman_r": -0.044,
+      "p_value": 0.599373,
+      "significativa": false
+    },
+    {
+      "codigo": "AREQ",
+      "lat": -16.47,
+      "lon": -71.49,
+      "n_obs": 145,
+      "spearman_r": 0.363,
+      "p_value": 7e-06,
+      "significativa": true
+    },
+    {
+      "codigo": "BOGT",
+      "lat": 4.64,
+      "lon": -74.08,
+      "n_obs": 138,
+      "spearman_r": 0.397,
+      "p_value": 1e-06,
+      "significativa": true
+    },
+    {
+      "codigo": "CALI",
+      "lat": 3.45,
+      "lon": -76.53,
+      "n_obs": 138,
+      "spearman_r": 0.507,
+      "p_value": 0.0,
+      "significativa": true
+    },
+    {
+      "codigo": "SANT",
+      "lat": -33.44,
+      "lon": -70.66,
+      "n_obs": 145,
+      "spearman_r": 0.326,
+      "p_value": 6.1e-05,
+      "significativa": true
+    }
+  ]
+}
