@@ -562,7 +562,7 @@
         'Perú':17.5,'Uruguay':4.5,'Venezuela':35.2
     };
 
-    let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart;
+    let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart, chartDefor;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
     const ztdSerieCache = {};
     const coordenadasAQI = {
@@ -1258,6 +1258,7 @@
                 else mapaDeforestacion.invalidateSize();
             }, 200);
             if (!analisisDeforestacionData) cargarAnalisisDeforestacion();
+            if (chartDefor) setTimeout(() => chartDefor.resize(), 100);
         }
     }
 
@@ -1652,7 +1653,8 @@
             document.getElementById('deforZonas').textContent = data.zonas_criticas.length;
             
             const ctx = document.getElementById('chartDeforestacion').getContext('2d');
-            new Chart(ctx, {
+            if (chartDefor) { chartDefor.destroy(); chartDefor = null; }
+            chartDefor = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: data.paises.map(p => p.pais),
