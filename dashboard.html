@@ -202,6 +202,34 @@
     <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
+    <!-- Análisis ZTD vs Precipitación -->
+    <div id="analisisZTD" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
+        <h4 style="color:#2d4a2d;">📊 Análisis Científico: ZTD vs Precipitación</h4>
+        <p style="color:#666;font-size:14px;">Correlación entre anomalía de ZTD y precipitación diaria en Bogotá (estación BOGT).</p>
+        <div id="estadisticasZTD" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="statN" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Observaciones</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="statR" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Correlación Spearman (r)</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="statP" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Valor p</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="statSig" style="font-size:24px;font-weight:700;">--</div>
+                <div style="font-size:11px;color:#888;">Significancia</div>
+            </div>
+        </div>
+        <canvas id="chartZTDPrecip" style="max-height:250px;"></canvas>
+        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
+            Fuente: SIRGAS-CON (ZTD) + Open-Meteo (precipitación). Período: 2025-12-15 a 2026-06-06. Método: Spearman.
+        </p>
+    </div>
+
     <div id="controlesClima" class="layer-control" style="display:none;">
         <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
         <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
@@ -899,6 +927,56 @@
     }
 
     let mapClima, capaChirps;
+    let analisisZTDData = null;
+
+    async function cargarAnalisisZTD() {
+        try {
+            const res = await fetch('assets/geojson/analisis_ztd_precip.json');
+            analisisZTDData = await res.json();
+            
+            // Actualizar estadísticas
+            document.getElementById('statN').textContent = analisisZTDData.n_observaciones;
+            document.getElementById('statR').textContent = analisisZTDData.correlacion.spearman_r.toFixed(3);
+            document.getElementById('statP').textContent = analisisZTDData.correlacion.p_value < 0.0001 ? '<0.0001' : analisisZTDData.correlacion.p_value.toFixed(4);
+            
+            const sigEl = document.getElementById('statSig');
+            if (analisisZTDData.correlacion.significativa) {
+                sigEl.textContent = '✅ Sí';
+                sigEl.style.color = '#2D6A4F';
+            } else {
+                sigEl.textContent = '❌ No';
+                sigEl.style.color = '#e74c3c';
+            }
+            
+            // Gráfico scatter
+            const puntos = analisisZTDData.datos.filter(d => d.ztd_anomaly !== null);
+            const ctx = document.getElementById('chartZTDPrecip').getContext('2d');
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'ZTD vs Precipitación',
+                        data: puntos.map(d => ({x: d.ztd_anomaly, y: d.precip})),
+                        backgroundColor: 'rgba(45, 106, 79, 0.5)',
+                        borderColor: '#2D6A4F',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'Anomalía ZTD (mm) vs Precipitación (mm)' }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Anomalía ZTD (mm)' } },
+                        y: { title: { display: true, text: 'Precipitación (mm)' }, beginAtZero: true }
+                    }
+                }
+            });
+        } catch(e) {
+            console.warn('No se pudo cargar análisis ZTD', e);
+        }
+    }
 
     function getColorPrecip(v) {
         return v > 100 ? '#08519c' :
@@ -977,6 +1055,11 @@
         } else if (tipo === 'ztd') {
             if (!mapZTD) initMapZTD();
             else setTimeout(() => mapZTD.invalidateSize(), 100);
+            document.getElementById('analisisZTD').style.display = 'block';
+            if (!analisisZTDData) cargarAnalisisZTD();
+        } else if (tipo !== 'ztd') {
+            document.getElementById('analisisZTD').style.display = 'none';
+        }
         } else if (tipo === 'clima') {
             setTimeout(() => {
                 if (!mapClima) initMapClima();

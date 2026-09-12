@@ -1,0 +1,850 @@
+{
+  "estacion": "BOGT",
+  "periodo": {
+    "inicio": "2025-12-15",
+    "fin": "2026-06-06"
+  },
+  "n_observaciones": 138,
+  "correlacion": {
+    "spearman_r": 0.3968,
+    "p_value": 1e-06,
+    "significativa": true
+  },
+  "datos": [
+    {
+      "fecha": "2025-12-15",
+      "ztd_anomaly": null,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2025-12-16",
+      "ztd_anomaly": null,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2025-12-17",
+      "ztd_anomaly": null,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2025-12-18",
+      "ztd_anomaly": null,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2025-12-19",
+      "ztd_anomaly": null,
+      "precip": 2.1
+    },
+    {
+      "fecha": "2025-12-20",
+      "ztd_anomaly": null,
+      "precip": 2.4
+    },
+    {
+      "fecha": "2025-12-21",
+      "ztd_anomaly": null,
+      "precip": 0.6
+    },
+    {
+      "fecha": "2025-12-22",
+      "ztd_anomaly": null,
+      "precip": 3.8
+    },
+    {
+      "fecha": "2025-12-23",
+      "ztd_anomaly": null,
+      "precip": 4.0
+    },
+    {
+      "fecha": "2025-12-24",
+      "ztd_anomaly": null,
+      "precip": 6.6
+    },
+    {
+      "fecha": "2025-12-25",
+      "ztd_anomaly": null,
+      "precip": 0.9
+    },
+    {
+      "fecha": "2025-12-26",
+      "ztd_anomaly": null,
+      "precip": 2.1
+    },
+    {
+      "fecha": "2025-12-27",
+      "ztd_anomaly": null,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-01-04",
+      "ztd_anomaly": null,
+      "precip": 1.7
+    },
+    {
+      "fecha": "2026-01-05",
+      "ztd_anomaly": null,
+      "precip": 6.9
+    },
+    {
+      "fecha": "2026-01-06",
+      "ztd_anomaly": 36.93,
+      "precip": 15.8
+    },
+    {
+      "fecha": "2026-01-07",
+      "ztd_anomaly": 17.08,
+      "precip": 1.0
+    },
+    {
+      "fecha": "2026-01-08",
+      "ztd_anomaly": 6.76,
+      "precip": 0.2
+    },
+    {
+      "fecha": "2026-01-09",
+      "ztd_anomaly": -0.27,
+      "precip": 2.6
+    },
+    {
+      "fecha": "2026-01-10",
+      "ztd_anomaly": 12.01,
+      "precip": 0.5
+    },
+    {
+      "fecha": "2026-01-11",
+      "ztd_anomaly": 16.36,
+      "precip": 2.0
+    },
+    {
+      "fecha": "2026-01-12",
+      "ztd_anomaly": 25.14,
+      "precip": 1.8
+    },
+    {
+      "fecha": "2026-01-13",
+      "ztd_anomaly": 23.94,
+      "precip": 1.1
+    },
+    {
+      "fecha": "2026-01-14",
+      "ztd_anomaly": 14.08,
+      "precip": 0.8
+    },
+    {
+      "fecha": "2026-01-15",
+      "ztd_anomaly": 7.84,
+      "precip": 0.5
+    },
+    {
+      "fecha": "2026-01-16",
+      "ztd_anomaly": 0.33,
+      "precip": 1.3
+    },
+    {
+      "fecha": "2026-01-17",
+      "ztd_anomaly": -15.29,
+      "precip": 1.1
+    },
+    {
+      "fecha": "2026-01-18",
+      "ztd_anomaly": -35.73,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-01-19",
+      "ztd_anomaly": -43.08,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-01-20",
+      "ztd_anomaly": -21.93,
+      "precip": 2.9
+    },
+    {
+      "fecha": "2026-01-21",
+      "ztd_anomaly": -10.9,
+      "precip": 5.0
+    },
+    {
+      "fecha": "2026-01-22",
+      "ztd_anomaly": -8.24,
+      "precip": 2.5
+    },
+    {
+      "fecha": "2026-01-23",
+      "ztd_anomaly": -33.22,
+      "precip": 2.3
+    },
+    {
+      "fecha": "2026-01-24",
+      "ztd_anomaly": -6.59,
+      "precip": 3.1
+    },
+    {
+      "fecha": "2026-01-25",
+      "ztd_anomaly": -2.48,
+      "precip": 2.2
+    },
+    {
+      "fecha": "2026-01-26",
+      "ztd_anomaly": 8.68,
+      "precip": 2.5
+    },
+    {
+      "fecha": "2026-01-27",
+      "ztd_anomaly": 17.88,
+      "precip": 19.6
+    },
+    {
+      "fecha": "2026-01-28",
+      "ztd_anomaly": 27.23,
+      "precip": 11.2
+    },
+    {
+      "fecha": "2026-01-29",
+      "ztd_anomaly": 27.94,
+      "precip": 5.7
+    },
+    {
+      "fecha": "2026-01-30",
+      "ztd_anomaly": 18.65,
+      "precip": 0.9
+    },
+    {
+      "fecha": "2026-01-31",
+      "ztd_anomaly": 26.57,
+      "precip": 0.5
+    },
+    {
+      "fecha": "2026-02-01",
+      "ztd_anomaly": 29.32,
+      "precip": 1.6
+    },
+    {
+      "fecha": "2026-02-02",
+      "ztd_anomaly": 24.04,
+      "precip": 3.1
+    },
+    {
+      "fecha": "2026-02-03",
+      "ztd_anomaly": -11.09,
+      "precip": 0.2
+    },
+    {
+      "fecha": "2026-02-04",
+      "ztd_anomaly": -43.74,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-02-05",
+      "ztd_anomaly": -27.26,
+      "precip": 0.2
+    },
+    {
+      "fecha": "2026-02-06",
+      "ztd_anomaly": -2.91,
+      "precip": 19.3
+    },
+    {
+      "fecha": "2026-02-07",
+      "ztd_anomaly": 18.29,
+      "precip": 5.3
+    },
+    {
+      "fecha": "2026-02-08",
+      "ztd_anomaly": -4.86,
+      "precip": 0.7
+    },
+    {
+      "fecha": "2026-02-09",
+      "ztd_anomaly": -14.15,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-02-10",
+      "ztd_anomaly": -32.06,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-02-11",
+      "ztd_anomaly": -19.68,
+      "precip": 0.9
+    },
+    {
+      "fecha": "2026-02-12",
+      "ztd_anomaly": -18.33,
+      "precip": 2.2
+    },
+    {
+      "fecha": "2026-02-13",
+      "ztd_anomaly": 14.12,
+      "precip": 1.7
+    },
+    {
+      "fecha": "2026-02-14",
+      "ztd_anomaly": -4.91,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-02-15",
+      "ztd_anomaly": -2.7,
+      "precip": 1.3
+    },
+    {
+      "fecha": "2026-02-16",
+      "ztd_anomaly": 23.74,
+      "precip": 0.7
+    },
+    {
+      "fecha": "2026-02-17",
+      "ztd_anomaly": 13.69,
+      "precip": 1.5
+    },
+    {
+      "fecha": "2026-02-18",
+      "ztd_anomaly": 22.6,
+      "precip": 0.4
+    },
+    {
+      "fecha": "2026-02-19",
+      "ztd_anomaly": 17.06,
+      "precip": 0.8
+    },
+    {
+      "fecha": "2026-02-20",
+      "ztd_anomaly": 11.75,
+      "precip": 0.2
+    },
+    {
+      "fecha": "2026-02-21",
+      "ztd_anomaly": -2.15,
+      "precip": 0.8
+    },
+    {
+      "fecha": "2026-02-22",
+      "ztd_anomaly": -3.1,
+      "precip": 3.9
+    },
+    {
+      "fecha": "2026-02-23",
+      "ztd_anomaly": 23.8,
+      "precip": 2.5
+    },
+    {
+      "fecha": "2026-02-24",
+      "ztd_anomaly": 24.01,
+      "precip": 7.5
+    },
+    {
+      "fecha": "2026-02-25",
+      "ztd_anomaly": 3.92,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-02-26",
+      "ztd_anomaly": -20.5,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-02-27",
+      "ztd_anomaly": -27.12,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2026-02-28",
+      "ztd_anomaly": -20.21,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2026-03-01",
+      "ztd_anomaly": -19.52,
+      "precip": 0.2
+    },
+    {
+      "fecha": "2026-03-02",
+      "ztd_anomaly": -12.38,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-03-03",
+      "ztd_anomaly": -24.39,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-03-04",
+      "ztd_anomaly": -16.17,
+      "precip": 1.6
+    },
+    {
+      "fecha": "2026-03-05",
+      "ztd_anomaly": 5.89,
+      "precip": 0.9
+    },
+    {
+      "fecha": "2026-03-06",
+      "ztd_anomaly": 13.93,
+      "precip": 0.7
+    },
+    {
+      "fecha": "2026-03-07",
+      "ztd_anomaly": 6.72,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2026-03-08",
+      "ztd_anomaly": 8.28,
+      "precip": 0.5
+    },
+    {
+      "fecha": "2026-03-09",
+      "ztd_anomaly": 22.42,
+      "precip": 2.6
+    },
+    {
+      "fecha": "2026-03-10",
+      "ztd_anomaly": 27.61,
+      "precip": 1.4
+    },
+    {
+      "fecha": "2026-03-11",
+      "ztd_anomaly": 29.21,
+      "precip": 1.5
+    },
+    {
+      "fecha": "2026-03-12",
+      "ztd_anomaly": 23.07,
+      "precip": 3.8
+    },
+    {
+      "fecha": "2026-03-13",
+      "ztd_anomaly": 0.11,
+      "precip": 6.0
+    },
+    {
+      "fecha": "2026-03-14",
+      "ztd_anomaly": -22.76,
+      "precip": 2.8
+    },
+    {
+      "fecha": "2026-03-15",
+      "ztd_anomaly": -18.11,
+      "precip": 2.4
+    },
+    {
+      "fecha": "2026-03-16",
+      "ztd_anomaly": -8.25,
+      "precip": 2.2
+    },
+    {
+      "fecha": "2026-03-17",
+      "ztd_anomaly": -7.53,
+      "precip": 3.4
+    },
+    {
+      "fecha": "2026-03-18",
+      "ztd_anomaly": 16.05,
+      "precip": 16.3
+    },
+    {
+      "fecha": "2026-03-19",
+      "ztd_anomaly": -10.67,
+      "precip": 1.1
+    },
+    {
+      "fecha": "2026-03-20",
+      "ztd_anomaly": -35.68,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2026-03-21",
+      "ztd_anomaly": -32.43,
+      "precip": 1.7
+    },
+    {
+      "fecha": "2026-03-22",
+      "ztd_anomaly": 6.09,
+      "precip": 8.0
+    },
+    {
+      "fecha": "2026-03-23",
+      "ztd_anomaly": -2.81,
+      "precip": 2.1
+    },
+    {
+      "fecha": "2026-03-24",
+      "ztd_anomaly": -11.31,
+      "precip": 10.0
+    },
+    {
+      "fecha": "2026-03-25",
+      "ztd_anomaly": -2.45,
+      "precip": 1.2
+    },
+    {
+      "fecha": "2026-03-26",
+      "ztd_anomaly": -5.28,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-03-27",
+      "ztd_anomaly": 8.52,
+      "precip": 5.9
+    },
+    {
+      "fecha": "2026-03-28",
+      "ztd_anomaly": 15.07,
+      "precip": 4.9
+    },
+    {
+      "fecha": "2026-03-29",
+      "ztd_anomaly": 11.41,
+      "precip": 2.8
+    },
+    {
+      "fecha": "2026-03-30",
+      "ztd_anomaly": 16.36,
+      "precip": 9.1
+    },
+    {
+      "fecha": "2026-03-31",
+      "ztd_anomaly": 4.28,
+      "precip": 7.2
+    },
+    {
+      "fecha": "2026-04-01",
+      "ztd_anomaly": -11.69,
+      "precip": 0.9
+    },
+    {
+      "fecha": "2026-04-02",
+      "ztd_anomaly": -4.03,
+      "precip": 5.2
+    },
+    {
+      "fecha": "2026-04-03",
+      "ztd_anomaly": -9.07,
+      "precip": 1.5
+    },
+    {
+      "fecha": "2026-04-04",
+      "ztd_anomaly": 1.77,
+      "precip": 1.9
+    },
+    {
+      "fecha": "2026-04-05",
+      "ztd_anomaly": 12.47,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-04-06",
+      "ztd_anomaly": -1.93,
+      "precip": 0.8
+    },
+    {
+      "fecha": "2026-04-07",
+      "ztd_anomaly": -2.32,
+      "precip": 1.4
+    },
+    {
+      "fecha": "2026-04-08",
+      "ztd_anomaly": 8.02,
+      "precip": 0.2
+    },
+    {
+      "fecha": "2026-04-09",
+      "ztd_anomaly": 1.61,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-04-10",
+      "ztd_anomaly": -3.19,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-04-11",
+      "ztd_anomaly": -2.84,
+      "precip": 0.2
+    },
+    {
+      "fecha": "2026-04-12",
+      "ztd_anomaly": -11.76,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2026-04-13",
+      "ztd_anomaly": 4.87,
+      "precip": 1.7
+    },
+    {
+      "fecha": "2026-04-14",
+      "ztd_anomaly": 13.01,
+      "precip": 4.9
+    },
+    {
+      "fecha": "2026-04-15",
+      "ztd_anomaly": 24.25,
+      "precip": 10.0
+    },
+    {
+      "fecha": "2026-04-16",
+      "ztd_anomaly": 17.62,
+      "precip": 2.4
+    },
+    {
+      "fecha": "2026-04-17",
+      "ztd_anomaly": 25.72,
+      "precip": 15.1
+    },
+    {
+      "fecha": "2026-04-18",
+      "ztd_anomaly": -6.12,
+      "precip": 2.3
+    },
+    {
+      "fecha": "2026-04-19",
+      "ztd_anomaly": -22.96,
+      "precip": 2.7
+    },
+    {
+      "fecha": "2026-04-20",
+      "ztd_anomaly": -4.96,
+      "precip": 2.0
+    },
+    {
+      "fecha": "2026-04-21",
+      "ztd_anomaly": -0.97,
+      "precip": 5.0
+    },
+    {
+      "fecha": "2026-04-22",
+      "ztd_anomaly": -13.27,
+      "precip": 1.1
+    },
+    {
+      "fecha": "2026-04-23",
+      "ztd_anomaly": -3.93,
+      "precip": 5.5
+    },
+    {
+      "fecha": "2026-04-24",
+      "ztd_anomaly": -0.71,
+      "precip": 1.7
+    },
+    {
+      "fecha": "2026-04-25",
+      "ztd_anomaly": -0.82,
+      "precip": 2.2
+    },
+    {
+      "fecha": "2026-04-26",
+      "ztd_anomaly": 5.22,
+      "precip": 8.7
+    },
+    {
+      "fecha": "2026-04-27",
+      "ztd_anomaly": 11.37,
+      "precip": 13.7
+    },
+    {
+      "fecha": "2026-04-28",
+      "ztd_anomaly": 10.83,
+      "precip": 1.0
+    },
+    {
+      "fecha": "2026-04-29",
+      "ztd_anomaly": 6.73,
+      "precip": 6.4
+    },
+    {
+      "fecha": "2026-04-30",
+      "ztd_anomaly": -28.09,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-05-01",
+      "ztd_anomaly": -14.61,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-05-02",
+      "ztd_anomaly": 17.88,
+      "precip": 1.4
+    },
+    {
+      "fecha": "2026-05-03",
+      "ztd_anomaly": 13.02,
+      "precip": 0.8
+    },
+    {
+      "fecha": "2026-05-04",
+      "ztd_anomaly": 23.87,
+      "precip": 1.7
+    },
+    {
+      "fecha": "2026-05-05",
+      "ztd_anomaly": 4.3,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-05-06",
+      "ztd_anomaly": -11.04,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2026-05-07",
+      "ztd_anomaly": -9.0,
+      "precip": 0.3
+    },
+    {
+      "fecha": "2026-05-08",
+      "ztd_anomaly": -12.63,
+      "precip": 0.2
+    },
+    {
+      "fecha": "2026-05-09",
+      "ztd_anomaly": -45.61,
+      "precip": 0.0
+    },
+    {
+      "fecha": "2026-05-10",
+      "ztd_anomaly": -24.13,
+      "precip": 0.1
+    },
+    {
+      "fecha": "2026-05-11",
+      "ztd_anomaly": -4.39,
+      "precip": 0.5
+    },
+    {
+      "fecha": "2026-05-12",
+      "ztd_anomaly": 11.14,
+      "precip": 1.2
+    },
+    {
+      "fecha": "2026-05-13",
+      "ztd_anomaly": 7.63,
+      "precip": 1.4
+    },
+    {
+      "fecha": "2026-05-14",
+      "ztd_anomaly": 9.81,
+      "precip": 1.0
+    },
+    {
+      "fecha": "2026-05-15",
+      "ztd_anomaly": -0.57,
+      "precip": 1.1
+    },
+    {
+      "fecha": "2026-05-16",
+      "ztd_anomaly": 0.43,
+      "precip": 1.8
+    },
+    {
+      "fecha": "2026-05-17",
+      "ztd_anomaly": 3.4,
+      "precip": 2.1
+    },
+    {
+      "fecha": "2026-05-18",
+      "ztd_anomaly": 2.12,
+      "precip": 2.6
+    },
+    {
+      "fecha": "2026-05-19",
+      "ztd_anomaly": 11.16,
+      "precip": 0.4
+    },
+    {
+      "fecha": "2026-05-20",
+      "ztd_anomaly": -3.95,
+      "precip": 0.5
+    },
+    {
+      "fecha": "2026-05-21",
+      "ztd_anomaly": 4.15,
+      "precip": 8.2
+    },
+    {
+      "fecha": "2026-05-22",
+      "ztd_anomaly": 11.47,
+      "precip": 6.5
+    },
+    {
+      "fecha": "2026-05-23",
+      "ztd_anomaly": 5.23,
+      "precip": 1.8
+    },
+    {
+      "fecha": "2026-05-24",
+      "ztd_anomaly": null,
+      "precip": 2.4
+    },
+    {
+      "fecha": "2026-05-25",
+      "ztd_anomaly": null,
+      "precip": 1.1
+    },
+    {
+      "fecha": "2026-05-26",
+      "ztd_anomaly": null,
+      "precip": 4.0
+    },
+    {
+      "fecha": "2026-05-27",
+      "ztd_anomaly": null,
+      "precip": 2.9
+    },
+    {
+      "fecha": "2026-05-28",
+      "ztd_anomaly": null,
+      "precip": 7.8
+    },
+    {
+      "fecha": "2026-05-29",
+      "ztd_anomaly": null,
+      "precip": 1.3
+    },
+    {
+      "fecha": "2026-05-30",
+      "ztd_anomaly": null,
+      "precip": 1.1
+    },
+    {
+      "fecha": "2026-05-31",
+      "ztd_anomaly": null,
+      "precip": 3.1
+    },
+    {
+      "fecha": "2026-06-01",
+      "ztd_anomaly": null,
+      "precip": 0.5
+    },
+    {
+      "fecha": "2026-06-02",
+      "ztd_anomaly": null,
+      "precip": 0.8
+    },
+    {
+      "fecha": "2026-06-03",
+      "ztd_anomaly": null,
+      "precip": 0.7
+    },
+    {
+      "fecha": "2026-06-04",
+      "ztd_anomaly": null,
+      "precip": 0.5
+    },
+    {
+      "fecha": "2026-06-05",
+      "ztd_anomaly": null,
+      "precip": 1.2
+    },
+    {
+      "fecha": "2026-06-06",
+      "ztd_anomaly": null,
+      "precip": 1.4
+    }
+  ]
+}
