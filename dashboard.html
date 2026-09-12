@@ -632,6 +632,7 @@
 
     async function actualizarCiudad() {
         const select = document.getElementById('citySelect');
+        if (!select || !select.value) return;
         const partes = select.value.split(',');
         const query = partes[0] + ',' + partes[1];
         const lat = parseFloat(partes[2]);
@@ -653,10 +654,20 @@
         const codigoEstacion = estacionInfo ? estacionInfo.codigo : null;
 
         const coordsValidas = !isNaN(lat) && !isNaN(lon) && isFinite(lat) && isFinite(lon);
+        function safeFlyTo(map, la, lo, zoom, dur) {
+            if (!map) return;
+            try {
+                const size = map.getSize();
+                if (!size || !size.x || !size.y) return;
+                map.flyTo([la, lo], zoom, { duration: dur });
+            } catch(err) {
+                console.warn('flyTo omitido:', err.message);
+            }
+        }
         if (coordsValidas) {
-            if (mapSirgas) mapSirgas.flyTo([lat, lon], 8, { duration: 1.5 });
-            if (mapZTD) mapZTD.flyTo([lat, lon], 8, { duration: 1.5 });
-            if (mapClima) mapClima.flyTo([lat, lon], 6, { duration: 1.5 });
+            safeFlyTo(mapSirgas, lat, lon, 8, 1.5);
+            safeFlyTo(mapZTD, lat, lon, 8, 1.5);
+            safeFlyTo(mapClima, lat, lon, 6, 1.5);
         }
 
         const clima = await getClima(query);
