@@ -399,6 +399,28 @@
         </p>
     </div>
 
+    <div class="sirgas-historico ztd-historico" id="ztdPanel">
+        <h3>💧 Retardo Troposférico Cenital (ZTD) - Datos reales SIRGAS</h3>
+        <details style="margin-bottom:12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;">ℹ️ ¿Qué es el ZTD y por qué importa?</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                <p>Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco. Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>. Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el <strong>vapor de agua</strong> en el aire, muy variable).</p>
+                <p>La parte húmeda es la que interesa para el clima: cuando el vapor de agua se acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma perceptible horas antes de que empiece a llover. Por eso las redes GNSS como SIRGAS también se usan como una fuente adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y el <strong>monitoreo de eventos climáticos extremos</strong>.</p>
+                <p style="margin-bottom:0;"><strong>Marco institucional:</strong> cada país andino tiene su propia autoridad de monitoreo hidrometeorológico y gestión del riesgo. Estos datos de ZTD pueden servir como una capa adicional de información para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).</p>
+            </div>
+        </details>
+        <div>
+            <label>Estación: </label>
+            <select id="estacionZTD"><option value="">Cargando estaciones…</option></select>
+            <label>Desde: </label><input type="date" id="ztdDesde">
+            <label>Hasta: </label><input type="date" id="ztdHasta">
+            <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
+            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;">📥 Descargar CSV</button>
+        </div>
+        <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
+        <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
+    </div>
+
     <div id="controlesClima" class="layer-control" style="display:none;">
         <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
         <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
@@ -439,27 +461,6 @@
         <canvas id="sirgasHistoryChart" style="max-height:220px;margin-top:10px;"></canvas>
     </div>
 
-    <div class="sirgas-historico" id="ztdPanel">
-        <h3>💧 Retardo Troposférico Cenital (ZTD) - Datos reales SIRGAS</h3>
-        <details style="margin-bottom:12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
-            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;">ℹ️ ¿Qué es el ZTD y por qué importa?</summary>
-            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
-                <p>Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco. Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>. Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el <strong>vapor de agua</strong> en el aire, muy variable).</p>
-                <p>La parte húmeda es la que interesa para el clima: cuando el vapor de agua se acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma perceptible horas antes de que empiece a llover. Por eso las redes GNSS como SIRGAS también se usan como una fuente adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y el <strong>monitoreo de eventos climáticos extremos</strong>.</p>
-                <p style="margin-bottom:0;"><strong>Marco institucional:</strong> cada país andino tiene su propia autoridad de monitoreo hidrometeorológico y gestión del riesgo. Estos datos de ZTD pueden servir como una capa adicional de información para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).</p>
-            </div>
-        </details>
-        <div>
-            <label>Estación: </label>
-            <select id="estacionZTD"><option value="">Cargando estaciones…</option></select>
-            <label>Desde: </label><input type="date" id="ztdDesde">
-            <label>Hasta: </label><input type="date" id="ztdHasta">
-            <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
-            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;">📥 Descargar CSV</button>
-        </div>
-        <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
-        <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
-    </div>
 
     <div class="oficiales-panel">
         <h3>🌫️ Calidad del Aire (AQI) - Tiempo real</h3>
