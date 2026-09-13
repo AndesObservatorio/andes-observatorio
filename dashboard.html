@@ -171,7 +171,7 @@
         </span>
     </div>
 
-    <div class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+    <div id="selectorSirgasWrapper" class="map-selector" style="display:none;margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
         <label for="selectorSirgas" style="font-weight:600;color:#5a7a5a;margin:0;">📍 Ir a estación GNSS:</label>
         <select id="selectorSirgas" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
@@ -212,7 +212,7 @@
             Fuente: SIRGAS-CON. Clasificación: intraplaca (0-5), deformación (5-15), actividad (15-25), borde de placa (>25) mm/año.
         </p>
     </div>
-    <div class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+    <div id="selectorZTDWrapper" class="map-selector" style="display:none;margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
         <label for="selectorZTD" style="font-weight:600;color:#2c5f8a;margin:0;">💧 Ir a estación ZTD:</label>
         <select id="selectorZTD" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
@@ -288,7 +288,7 @@
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
     <!-- MAPA AQI -->
-    <div class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+    <div id="selectorAQIWrapper" class="map-selector" style="display:none;margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
         <label for="selectorAQI" style="font-weight:600;color:#8e44ad;margin:0;">🌫️ Ir a ciudad:</label>
         <select id="selectorAQI" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
@@ -338,7 +338,7 @@
     </div>
 
     <!-- MAPA DEFORESTACIÓN -->
-    <div class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+    <div id="selectorDeforestacionWrapper" class="map-selector" style="display:none;margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
         <label for="selectorDeforestacion" style="font-weight:600;color:#c0392b;margin:0;">🌳 Ir a zona crítica:</label>
         <select id="selectorDeforestacion" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:240px;">
             <option value="">-- Selecciona una zona --</option>
@@ -1265,6 +1265,12 @@
         if (climaExtra) climaExtra.style.display = 'none';
         if (controlesClima) controlesClima.style.display = 'none';
 
+        // Ocultar selectores por mapa (se muestran según tab)
+        ['selectorSirgasWrapper','selectorZTDWrapper','selectorAQIWrapper','selectorDeforestacionWrapper'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+
         Object.keys(tabs).forEach(k => {
             if (k === tipo) {
                 tabs[k].classList.add('active');
@@ -1279,6 +1285,8 @@
         notaZTD.style.display = tipo === 'ztd' ? 'block' : 'none';
 
         if (tipo === 'sirgas') {
+            const elsirgas = document.getElementById('selectorSirgasWrapper');
+            if (elsirgas) elsirgas.style.display = 'flex';
             document.getElementById('analisisDeforestacion').style.display = 'none';
             if (mapSirgas) mapSirgas.invalidateSize();
             document.getElementById('analisisZTD').style.display = 'none';
@@ -1286,6 +1294,8 @@
             document.getElementById('analisisAQI').style.display = 'none';
             if (!analisisSIRGASData) cargarAnalisisSIRGAS();
         } else if (tipo === 'ztd') {
+            const elselectorZTDWrapper = document.getElementById('selectorZTDWrapper');
+            if (elselectorZTDWrapper) elselectorZTDWrapper.style.display = 'flex';
             document.getElementById('analisisDeforestacion').style.display = 'none';
             document.getElementById('analisisSIRGAS').style.display = 'none';
             document.getElementById('analisisAQI').style.display = 'none';
@@ -1306,6 +1316,8 @@
                 if (capaChirps && typeof capaChirps.bringToFront === 'function') capaChirps.bringToFront();
             }, 200);
         } else if (tipo === 'aqi') {
+            const elselectorAQIWrapper = document.getElementById('selectorAQIWrapper');
+            if (elselectorAQIWrapper) elselectorAQIWrapper.style.display = 'flex';
             document.getElementById('analisisSIRGAS').style.display = 'none';
             document.getElementById('analisisZTD').style.display = 'none';
             document.getElementById('analisisAQI').style.display = 'block';
@@ -1316,6 +1328,8 @@
             }, 200);
             if (!analisisAQIData) cargarAnalisisAQI();
         } else if (tipo === 'deforestacion') {
+            const elselectorDeforestacionWrapper = document.getElementById('selectorDeforestacionWrapper');
+            if (elselectorDeforestacionWrapper) elselectorDeforestacionWrapper.style.display = 'flex';
             document.getElementById('analisisSIRGAS').style.display = 'none';
             document.getElementById('analisisZTD').style.display = 'none';
             document.getElementById('analisisAQI').style.display = 'none';
