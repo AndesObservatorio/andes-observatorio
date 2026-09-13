@@ -601,7 +601,7 @@
         'Perú':17.5,'Uruguay':4.5,'Venezuela':35.2
     };
 
-    let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart, chartDefor;
+    let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart, chartDefor, chartSIRGAS;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
     const ztdSerieCache = {};
     const coordenadasAQI = {
@@ -1082,8 +1082,11 @@
 
     let mapClima, capaChirps;
     let analisisSIRGASData = null;
+    let cargandoSIRGAS = false;
 
     async function cargarAnalisisSIRGAS() {
+        if (cargandoSIRGAS) return;
+        cargandoSIRGAS = true;
         try {
             const res = await fetch('assets/geojson/analisis_sirgas.json');
             analisisSIRGASData = await res.json();
@@ -1108,6 +1111,7 @@
             document.getElementById('sirgasStd').textContent = analisisSIRGASData.std;
             
             const ctx = document.getElementById('chartSIRGAS').getContext('2d');
+            if (chartSIRGAS) { chartSIRGAS.destroy(); chartSIRGAS = null; }
             const colores = analisisSIRGASData.estaciones.map(e => {
                 if (e.magnitud_horizontal <= 5) return '#27ae60';
                 if (e.magnitud_horizontal <= 15) return '#f1c40f';
@@ -1115,7 +1119,7 @@
                 return '#c0392b';
             });
             
-            new Chart(ctx, {
+            chartSIRGAS = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: analisisSIRGASData.estaciones.map(e => `${e.codigo} - ${e.ciudad}, ${e.pais}`),
@@ -1146,6 +1150,8 @@
             });
         } catch(e) {
             console.warn('No se pudo cargar análisis SIRGAS', e);
+        } finally {
+            cargandoSIRGAS = false;
         }
     }
     let analisisZTDData = null;
