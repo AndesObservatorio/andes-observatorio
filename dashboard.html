@@ -345,7 +345,20 @@
                 </div>
             </div>
         </div>
-    </div><div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div><div class="chart-card" id="tempPorPaisWrapper" style=""><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div><div class="chart-card" id="tendenciaWrapper" style=""><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div><div class="oficiales-panel">
+    </div><div id="controlesClima" class="layer-control">
+        <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
+        <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
+    </div>
+    <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0">
+    </div>
+
+    <div class="chart-card" id="tempPorPaisWrapper" style=""><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas>
+    </div>
+
+    <div class="chart-card" id="tendenciaWrapper" style=""><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas>
+        </div>
+
+    <div class="oficiales-panel">
         <h3>🏛️ Datos oficiales en integración (IDEAM / SENAMHI)</h3>
         <div class="oficiales-grid">
             <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamTemp">16.5 °C</div><div class="label">Temperatura promedio</div></div>
@@ -358,10 +371,7 @@
         </div>
     </div>
 
-<div id="controlesClima" class="layer-control">
-        <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
-        <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
-    </div>
+
 </div>
 
 <!-- ═══ TAB AQI ═══ -->
@@ -728,8 +738,9 @@
                     color: '#5a4a1a',
                     weight: 3,
                     fillOpacity: 0.9
-                }).bindPopup(`<b>📍 ${nombreCiudad}</b><br>Lat: ${lat.toFixed(3)} | Lon: ${lon.toFixed(3)}`).addTo(mapClima);
+                }).bindPopup(`<b>📍 ${nombreCiudad}</b><br><small>Cargando clima...</small>`).addTo(mapClima);
                 marcadorCiudadClima.openPopup();
+                window.nombreCiudadActual = nombreCiudad;
             }
         }
 
@@ -739,6 +750,20 @@
             document.getElementById('hum').innerHTML = clima.hum + '<small>%</small>';
             document.getElementById('feels').innerHTML = clima.feels.toFixed(1) + '<small>°C</small>';
             actualizarAlertas(clima);
+
+            // 🎯 Actualizar popup del marcador con datos reales de clima
+            if (marcadorCiudadClima) {
+                const nombre = window.nombreCiudadActual || 'Ciudad';
+                marcadorCiudadClima.setPopupContent(
+                    `<b>📍 ${nombre}</b><br>` +
+                    `🌡️ ${clima.temp.toFixed(1)}°C<br>` +
+                    `💧 ${clima.hum}%<br>` +
+                    `🌡️ Sensación: ${clima.feels.toFixed(1)}°C`
+                );
+                if (marcadorCiudadClima.isPopupOpen()) {
+                    marcadorCiudadClima.openPopup();
+                }
+            }
         }
 
         const lista = document.getElementById('normativasLista');
@@ -1251,6 +1276,23 @@
             attribution: '© OpenStreetMap'
         }).addTo(mapClima);
         cargarCapasClima();
+
+        // Listener del checkbox para mostrar/ocultar Precipitación CHIRPS
+        const toggleChirps = document.getElementById('toggleChirps');
+        if (toggleChirps && !toggleChirps.dataset.listenerAttached) {
+            toggleChirps.dataset.listenerAttached = 'true';
+            toggleChirps.addEventListener('change', function() {
+                if (this.checked) {
+                    if (capaChirps && mapClima && !mapClima.hasLayer(capaChirps)) {
+                        capaChirps.addTo(mapClima);
+                    }
+                } else {
+                    if (capaChirps && mapClima && mapClima.hasLayer(capaChirps)) {
+                        mapClima.removeLayer(capaChirps);
+                    }
+                }
+            });
+        }
     }
 
     async function cargarCapasClima() {
@@ -1269,7 +1311,12 @@
                 onEachFeature: (f, layer) => {
                     layer.bindPopup(`<b>Precipitación:</b> ${f.properties.precip_mm} mm/mes`);
                 }
-            }).addTo(mapClima);
+            });
+            // Solo agregar al mapa si el checkbox está activo
+            const toggleChk = document.getElementById('toggleChirps');
+            if (!toggleChk || toggleChk.checked) {
+                capaChirps.addTo(mapClima);
+            }
             badge.innerText = `🌧️ CHIRPS: ${gj.features.length} puntos`;
         } catch(e) {
             badge.innerText = '⚠️ Error CHIRPS';
