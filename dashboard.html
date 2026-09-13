@@ -150,9 +150,6 @@
 
     <div id="controlesSirgas" class="layer-control">
         <label><input type="checkbox" id="toggleTopografia"> 🛰️ Vista satélite</label>
-        <label><input type="checkbox" id="toggleSIRGAS" checked> 🔴 Vectores tectónicos</label>
-        <label><input type="checkbox" id="toggleEstaciones" checked> 🟠 Estaciones SIRGAS</label>
-        <label><input type="checkbox" id="toggleInfluencia" checked> 🔵 Áreas de influencia</label>
         <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
         <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
     </div>
@@ -1397,18 +1394,6 @@
                 .bindPopup(`<b>${c.nombre}, ${c.pais}</b>`).addTo(capaCiudades);
         });
         capaCiudades.addTo(mapSirgas);
-        document.getElementById('toggleSIRGAS').addEventListener('change', function() {
-            if (this.checked && capaSIRGAS) capaSIRGAS.addTo(mapSirgas);
-            else if (capaSIRGAS) mapSirgas.removeLayer(capaSIRGAS);
-        });
-        document.getElementById('toggleEstaciones').addEventListener('change', function() {
-            if (this.checked && capaEstaciones) capaEstaciones.addTo(mapSirgas);
-            else if (capaEstaciones) mapSirgas.removeLayer(capaEstaciones);
-        });
-        document.getElementById('toggleInfluencia').addEventListener('change', function() {
-            if (this.checked && capaInfluencia) capaInfluencia.addTo(mapSirgas);
-            else if (capaInfluencia) mapSirgas.removeLayer(capaInfluencia);
-        });
         const toggleTopografia = document.getElementById('toggleTopografia');
         if (toggleTopografia) {
             toggleTopografia.addEventListener('change', function() {
@@ -1883,6 +1868,9 @@
 
     window.onload = function() {
         initMapSirgas();
+        // Poblar el selector SIRGAS al inicio (no esperar a que el usuario haga clic en el tab)
+        cargarAnalisisSIRGAS();
+        cargarSIRGAS();
         initCharts();
         setTimeout(() => actualizarCiudad(), 500);
         actualizarSirgasHistorico();
