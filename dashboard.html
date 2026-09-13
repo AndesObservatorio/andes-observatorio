@@ -175,12 +175,6 @@
         <label for="selectorSirgas" style="font-weight:600;color:#5a7a5a;margin:0;">📍 Ir a estación GNSS:</label>
         <select id="selectorSirgas" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
-            <option value="4.7110,-74.0721,9">BOGT (Bogotá)</option>
-            <option value="-0.1807,-78.4678,9">QUIT (Quito)</option>
-            <option value="-12.0464,-77.0428,9">LIMA (Lima)</option>
-            <option value="-16.5000,-68.1500,9">LPBZ (La Paz)</option>
-            <option value="-33.4489,-70.6693,9">SANT (Santiago)</option>
-            <option value="-16.4090,-71.5375,9">AREQ (Arequipa)</option>
         </select>
     </div>
     <div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
@@ -1097,6 +1091,20 @@
             const res = await fetch('assets/geojson/analisis_sirgas.json');
             analisisSIRGASData = await res.json();
             
+            // Poblar selector de estaciones SIRGAS dinámicamente
+            const selSirgas = document.getElementById('selectorSirgas');
+            if (selSirgas) {
+                selSirgas.innerHTML = '<option value="">-- Selecciona --</option>';
+                analisisSIRGASData.estaciones.forEach(e => {
+                    if (e.lat && e.lon) {
+                        const opt = document.createElement('option');
+                        opt.value = `${e.lat},${e.lon},9`;
+                        opt.textContent = `${e.codigo} (${e.ciudad})`;
+                        selSirgas.appendChild(opt);
+                    }
+                });
+            }
+
             document.getElementById('sirgasTotal').textContent = analisisSIRGASData.total_estaciones;
             document.getElementById('sirgasMedia').textContent = analisisSIRGASData.magnitud_media;
             document.getElementById('sirgasMax').textContent = analisisSIRGASData.magnitud_max;
