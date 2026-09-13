@@ -399,7 +399,7 @@
         </p>
     </div>
 
-    <div class="sirgas-historico ztd-historico" id="ztdPanel">
+    <div class="sirgas-historico ztd-historico" id="ztdPanel" style="display:none;">
         <h3>💧 Retardo Troposférico Cenital (ZTD) - Datos reales SIRGAS</h3>
         <details style="margin-bottom:12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
             <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;">ℹ️ ¿Qué es el ZTD y por qué importa?</summary>
@@ -1276,6 +1276,8 @@
         const controlesClima = document.getElementById('controlesClima');
         if (climaExtra) climaExtra.style.display = 'none';
         if (controlesClima) controlesClima.style.display = 'none';
+        const ztdPanel = document.getElementById('ztdPanel');
+        if (ztdPanel) ztdPanel.style.display = 'none';
 
         // Ocultar selectores por mapa (se muestran según tab)
         ['selectorSirgasWrapper','selectorZTDWrapper','selectorAQIWrapper','selectorDeforestacionWrapper'].forEach(id => {
@@ -1306,6 +1308,8 @@
             document.getElementById('analisisAQI').style.display = 'none';
             if (!analisisSIRGASData) cargarAnalisisSIRGAS();
         } else if (tipo === 'ztd') {
+            const ztdPanelShow = document.getElementById('ztdPanel');
+            if (ztdPanelShow) ztdPanelShow.style.display = 'block';
             const elselectorZTDWrapper = document.getElementById('selectorZTDWrapper');
             if (elselectorZTDWrapper) elselectorZTDWrapper.style.display = 'flex';
             document.getElementById('analisisDeforestacion').style.display = 'none';
