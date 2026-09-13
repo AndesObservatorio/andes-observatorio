@@ -12,6 +12,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f5f0; padding: 20px; }
         .container { max-width: 100%; margin: 0; padding: 16px 20px; background: white; border-radius: 0; box-shadow: none; border: none; }
+        .tab-content { display: block; }
         h1 { color: #5a7a5a; text-align: center; font-size: 2rem; }
         .subtitle { text-align: center; color: #8aa08a; margin-bottom: 18px; border-bottom: 2px solid #f0ebe4; padding-bottom: 12px; }
         .selector { text-align: center; margin: 10px 0 18px; }
@@ -105,6 +106,7 @@
     </style>
 <base target="_blank">
 </head>
+
 <body>
 <div class="container">
     <h1>🏔️ Andes Observatorio</h1>
@@ -138,9 +140,7 @@
         </div>
     </div>
 
-
-
-    <div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
+<div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
         <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
         <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
         <button id="tabClima" class="map-tab">🌧️ Mapa Clima</button>
@@ -148,36 +148,18 @@
         <button id="tabDeforestacion" class="map-tab">🌳 Deforestación</button>
     </div>
 
-    <div id="controlesSirgas" class="layer-control">
+<!-- ═══ TAB SIRGAS ═══ -->
+<div id="tabContent-sirgas" class="tab-content">
+<div id="controlesSirgas" class="layer-control">
         <label><input type="checkbox" id="toggleTopografia"> 🛰️ Vista satélite</label>
         <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
         <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
-    </div>
-
-    <div id="controlesZTD" class="layer-control" style="display:none;">
-        <label><input type="checkbox" id="toggleTopografiaZTD"> 🛰️ Vista satélite</label>
-        <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
-        <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
-        <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;flex-wrap:wrap;">
-            <span title="Anomalía = ZTD actual − promedio histórico de la estación. Elimina el sesgo altitudinal.">📊 Anomalía ZTD:</span>
-            <span style="background:linear-gradient(to right,#c0392b,#d4a017,#2c5f2c,#4a9,#2c5f8a);width:140px;height:10px;border-radius:4px;display:inline-block;" title="Azul=húmedo | Verde=normal | Rojo=seco"></span>
-            <span id="ztdLeyendaMin">--</span>
-            <span style="color:#aaa;">normal</span>
-            <span id="ztdLeyendaMax">--</span>
-            <span style="color:#aaa;" title="Valores en mm de desviación respecto al promedio de cada estación">ⓘ</span>
-        </span>
-    </div>
-
-    <div id="selectorSirgasWrapper" class="map-selector" style="display:none;margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+    </div><div id="selectorSirgasWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
         <label for="selectorSirgas" style="font-weight:600;color:#5a7a5a;margin:0;">📍 Ir a estación GNSS:</label>
         <select id="selectorSirgas" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
         </select>
-    </div>
-    <div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;"></div>
-
-    <!-- Análisis SIRGAS -->
-    <div id="analisisSIRGAS" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
+    </div><div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div><div id="analisisSIRGAS" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
         <h4 style="color:#2d4a2d;">📊 Análisis Científico: Velocidades Tectónicas</h4>
         <p style="color:#666;font-size:14px;">Clasificación geodésica de las estaciones SIRGAS-CON según su magnitud de velocidad horizontal.</p>
         <div id="estadisticasSIRGAS" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
@@ -202,20 +184,7 @@
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: SIRGAS-CON. Clasificación: intraplaca (0-5), deformación (5-15), actividad (15-25), borde de placa (>25) mm/año.
         </p>
-    </div>
-    <div id="selectorZTDWrapper" class="map-selector" style="display:none;margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
-        <label for="selectorZTD" style="font-weight:600;color:#2c5f8a;margin:0;">💧 Ir a estación ZTD:</label>
-        <select id="selectorZTD" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
-            <option value="">-- Selecciona --</option>
-            <option value="4.7110,-74.0721,9">BOGT (Bogotá)</option>
-            <option value="3.4516,-76.5320,9">CALI (Cali)</option>
-            <option value="-33.4489,-70.6693,9">SANT (Santiago)</option>
-            <option value="-12.0464,-77.0428,9">LIMA (Lima)</option>
-            <option value="-0.1807,-78.4678,9">QUIT (Quito)</option>
-            <option value="-16.5000,-68.1500,9">LPBZ (La Paz)</option>
-        </select>
-    </div>
-    <div class="sirgas-historico" id="historicoSirgasWrapper" style="display:none;">
+    </div><div class="sirgas-historico" id="historicoSirgasWrapper" style="">
         <h3>🛰️ Datos históricos de SIRGAS</h3>
         <div>
             <label>Estación: </label>
@@ -235,17 +204,91 @@
         </div>
         <canvas id="sirgasHistoryChart" style="max-height:220px;margin-top:10px;"></canvas>
     </div>
+</div>
 
+<!-- ═══ TAB ZTD ═══ -->
+<div id="tabContent-ztd" class="tab-content" style="display:none;">
+<div id="selectorZTDWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
+        <label for="selectorZTD" style="font-weight:600;color:#2c5f8a;margin:0;">💧 Ir a estación ZTD:</label>
+        <select id="selectorZTD" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
+            <option value="">-- Selecciona --</option>
+            <option value="4.7110,-74.0721,9">BOGT (Bogotá)</option>
+            <option value="3.4516,-76.5320,9">CALI (Cali)</option>
+            <option value="-33.4489,-70.6693,9">SANT (Santiago)</option>
+            <option value="-12.0464,-77.0428,9">LIMA (Lima)</option>
+            <option value="-0.1807,-78.4678,9">QUIT (Quito)</option>
+            <option value="-16.5000,-68.1500,9">LPBZ (La Paz)</option>
+        </select>
+    </div><div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div>
+    <div id="controlesZTD" class="layer-control" style="">
+        <label><input type="checkbox" id="toggleTopografiaZTD"> 🛰️ Vista satélite</label>
+        <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
+        <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;flex-wrap:wrap;">
+            <span title="Anomalía = ZTD actual − promedio histórico de la estación. Elimina el sesgo altitudinal.">📊 Anomalía ZTD:</span>
+            <span style="background:linear-gradient(to right,#c0392b,#d4a017,#2c5f2c,#4a9,#2c5f8a);width:140px;height:10px;border-radius:4px;display:inline-block;" title="Azul=húmedo | Verde=normal | Rojo=seco"></span>
+            <span id="ztdLeyendaMin">--</span>
+            <span style="color:#aaa;">normal</span>
+            <span id="ztdLeyendaMax">--</span>
+            <span style="color:#aaa;" title="Valores en mm de desviación respecto al promedio de cada estación">ⓘ</span>
+        </span>
+    </div>
+<div id="analisisZTD" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
+        <h4 style="color:#2d4a2d;">📊 Análisis Científico: ZTD vs Precipitación</h4>
+        <p style="color:#666;font-size:14px;">Correlación entre anomalía de ZTD y precipitación diaria en Bogotá (estación BOGT).</p>
+        <div id="estadisticasZTD" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="statN" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Observaciones</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="statR" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Correlación Spearman (r)</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="statP" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
+                <div style="font-size:11px;color:#888;">Valor p</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="statSig" style="font-size:24px;font-weight:700;">--</div>
+                <div style="font-size:11px;color:#888;">Significancia</div>
+            </div>
+        </div>
+        <canvas id="chartZTDPrecip" style="max-height:250px;"></canvas>
+        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
+            Fuente: SIRGAS-CON (ZTD) + Open-Meteo (precipitación). Período: 2025-12-15 a 2026-06-06. Método: Spearman.
+        </p>
+    </div><div class="sirgas-historico ztd-historico" id="ztdPanel" style="">
+        <h3>💧 Retardo Troposférico Cenital (ZTD) - Datos reales SIRGAS</h3>
+        <details style="margin-bottom:12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;">ℹ️ ¿Qué es el ZTD y por qué importa?</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                <p>Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco. Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>. Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el <strong>vapor de agua</strong> en el aire, muy variable).</p>
+                <p>La parte húmeda es la que interesa para el clima: cuando el vapor de agua se acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma perceptible horas antes de que empiece a llover. Por eso las redes GNSS como SIRGAS también se usan como una fuente adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y el <strong>monitoreo de eventos climáticos extremos</strong>.</p>
+                <p style="margin-bottom:0;"><strong>Marco institucional:</strong> cada país andino tiene su propia autoridad de monitoreo hidrometeorológico y gestión del riesgo. Estos datos de ZTD pueden servir como una capa adicional de información para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).</p>
+            </div>
+        </details>
+        <div>
+            <label>Estación: </label>
+            <select id="estacionZTD"><option value="">Cargando estaciones…</option></select>
+            <label>Desde: </label><input type="date" id="ztdDesde">
+            <label>Hasta: </label><input type="date" id="ztdHasta">
+            <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
+            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;">📥 Descargar CSV</button>
+        </div>
+        <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
+        <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
+    </div><p id="notaZTD" style="font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
+        <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
+        (Bogotá a 2600 m siempre tiene menos ZTD que Cali a 1000 m). Ahora mostramos la <strong>ANOMALÍA</strong>: cuánto se desvía 
+        el valor actual del promedio histórico de CADA estación. Esto elimina el sesgo altitudinal y permite comparar condiciones 
+        atmosféricas entre estaciones. <strong>🔵 Azul = más húmedo de lo normal | 🟢 Verde = normal | 🔴 Rojo = más seco de lo normal.</strong>
+    </p>
+</div>
 
-    <div class="oficiales-panel">
-        <h3>🌫️ Calidad del Aire (AQI) - Tiempo real</h3>
-        
-        <div class="oficiales-grid">
-            <div class="oficial-item"><span class="fuente-oficial">Bogotá</span><div class="dato" id="aqiBogota">--</div><div class="label">AQI · PM2.5</div></div>
-
-    <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
-    <!-- ═══ CONTENIDO EXTRA DEL TAB CLIMA (movido desde SIRGAS) ═══ -->
-    <div id="climaExtra" style="display:none;">
+<!-- ═══ TAB CLIMA ═══ -->
+<div id="tabContent-clima" class="tab-content" style="display:none;">
+<div id="climaExtra" style="">
         <div class="selector">
             <label for="citySelect">📍 Selecciona una ciudad: </label>
             <select id="citySelect">
@@ -302,16 +345,28 @@
                 </div>
             </div>
         </div>
+    </div><div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div><div class="chart-card" id="tempPorPaisWrapper" style=""><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div><div class="chart-card" id="tendenciaWrapper" style=""><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div><div class="oficiales-panel">
+        <h3>🏛️ Datos oficiales en integración (IDEAM / SENAMHI)</h3>
+        <div class="oficiales-grid">
+            <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamTemp">16.5 °C</div><div class="label">Temperatura promedio</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamHum">72 %</div><div class="label">Humedad promedio</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiTemp">18.2 °C</div><div class="label">Temperatura promedio</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiPrecip">12.5 mm</div><div class="label">Precipitación promedio</div></div>
+        </div>
+        <div style="background:#f0f5f0;padding:12px 16px;border-radius:12px;margin-top:12px;border-left:4px solid #8aaa8a;">
+            <p style="font-size:13px;color:#4a6a4a;margin:0;"><strong>📌 Nota:</strong> Datos actualizados automáticamente desde fuentes oficiales</p>
+        </div>
     </div>
 
-    <div class="chart-card" id="tempPorPaisWrapper" style="display:none;"><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
+<div id="controlesClima" class="layer-control">
+        <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
+        <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
+    </div>
+</div>
 
-    <div class="chart-card" id="tendenciaWrapper" style="display:none;"><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div>
-
-    <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
-
-    <!-- MAPA AQI -->
-    <div id="selectorAQIWrapper" class="map-selector" style="display:none;margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+<!-- ═══ TAB AQI ═══ -->
+<div id="tabContent-aqi" class="tab-content" style="display:none;">
+<div id="selectorAQIWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
         <label for="selectorAQI" style="font-weight:600;color:#8e44ad;margin:0;">🌫️ Ir a ciudad:</label>
         <select id="selectorAQI" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
@@ -322,17 +377,10 @@
             <option value="-0.1807,-78.4678,9">Quito</option>
             <option value="10.4806,-66.9036,9">Caracas</option>
         </select>
-    </div>
-    <div id="map-aqi" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
-
-    <!-- Controles AQI -->
-    <div id="controlesAQI" class="layer-control" style="display:none;">
+    </div><div id="map-aqi" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div><div id="controlesAQI" class="layer-control" style="">
         <label><input type="checkbox" id="toggleAQI" checked> 🌫️ Mostrar ciudades</label>
         <span class="update-badge" id="aqiBadge">🌫️ Cargando AQI…</span>
-    </div>
-
-    <!-- Análisis AQI -->
-    <div id="analisisAQI" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
+    </div><div id="analisisAQI" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
         <h4 style="color:#2d4a2d;">📊 Análisis Científico: Calidad del Aire</h4>
         <p style="color:#666;font-size:14px;">Niveles de PM2.5 en 6 ciudades andinas según estándares OMS.</p>
         <div id="estadisticasAQI" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
@@ -358,25 +406,72 @@
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: OpenAQ API v3. Estándar OMS 2021: 15 µg/m³ (24h). Clasificación: bueno (<50), moderado (50-100), malo (100-150), muy malo (>150).
         </p>
-    </div>
+    </div><div class="oficiales-panel">
+        <h3>🌫️ Calidad del Aire (AQI) - Tiempo real</h3>
+        
+        <div class="oficiales-grid">
+            <div class="oficial-item"><span class="fuente-oficial">Bogotá</span><div class="dato" id="aqiBogota">--</div><div class="label">AQI · PM2.5</div></div>
+
+    
+    <!-- ═══ CONTENIDO EXTRA DEL TAB CLIMA (movido desde SIRGAS) ═══ -->
+    
+
+    
+
+    
+
+    
+
+    <!-- MAPA AQI -->
+    
+    
+
+    <!-- Controles AQI -->
+    
+
+    <!-- Análisis AQI -->
+    
 
     <!-- MAPA DEFORESTACIÓN -->
-    <div id="selectorDeforestacionWrapper" class="map-selector" style="display:none;margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0;">
+    
+    
+
+    <!-- Controles Deforestación -->
+    
+
+    <!-- Análisis Deforestación -->
+    
+
+    <!-- Análisis ZTD vs Precipitación -->
+    
+
+    
+
+    
+
+    
+
+
+
+            <div class="oficial-item"><span class="fuente-oficial">Medellín</span><div class="dato" id="aqiMedellin">--</div><div class="label">AQI · PM2.5</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">Lima</span><div class="dato" id="aqiLima">--</div><div class="label">AQI · PM2.5</div></div>
+            <div class="oficial-item"><span class="fuente-oficial">Santiago</span><div class="dato" id="aqiSantiago">--</div><div class="label">AQI · PM2.5</div></div>
+        </div>
+        <p style="font-size:12px;color:#8aa08a;margin-top:10px;">Datos en tiempo real de OpenAQ (PM2.5). Fuente: api.openaq.org</p>
+    </div>
+</div>
+
+<!-- ═══ TAB DEFORESTACIÓN ═══ -->
+<div id="tabContent-deforestacion" class="tab-content" style="display:none;">
+<div id="selectorDeforestacionWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
         <label for="selectorDeforestacion" style="font-weight:600;color:#c0392b;margin:0;">🌳 Ir a zona crítica:</label>
         <select id="selectorDeforestacion" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:240px;">
             <option value="">-- Selecciona una zona --</option>
         </select>
-    </div>
-    <div id="map-deforestacion" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
-
-    <!-- Controles Deforestación -->
-    <div id="controlesDeforestacion" class="layer-control" style="display:none;">
+    </div><div id="map-deforestacion" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div><div id="controlesDeforestacion" class="layer-control" style="">
         <label><input type="checkbox" id="toggleDeforestacion" checked> 🌳 Zonas críticas</label>
         <span class="update-badge" id="deforBadge">🌳 Cargando datos GFW…</span>
-    </div>
-
-    <!-- Análisis Deforestación -->
-    <div id="analisisDeforestacion" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
+    </div><div id="analisisDeforestacion" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
         <h4 style="color:#2d4a2d;">📊 Análisis Científico: Deforestación Andina</h4>
         <p style="color:#666;font-size:14px;">Pérdida de cobertura arbórea en países andinos (Global Forest Watch 2024).</p>
         <div id="estadisticasDefor" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
@@ -401,83 +496,7 @@
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: Global Forest Watch (2024). Umbral de cobertura: 30%.
         </p>
-    </div>
-
-    <!-- Análisis ZTD vs Precipitación -->
-    <div id="analisisZTD" style="display:none;background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0;">
-        <h4 style="color:#2d4a2d;">📊 Análisis Científico: ZTD vs Precipitación</h4>
-        <p style="color:#666;font-size:14px;">Correlación entre anomalía de ZTD y precipitación diaria en Bogotá (estación BOGT).</p>
-        <div id="estadisticasZTD" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
-            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
-                <div id="statN" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
-                <div style="font-size:11px;color:#888;">Observaciones</div>
-            </div>
-            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
-                <div id="statR" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
-                <div style="font-size:11px;color:#888;">Correlación Spearman (r)</div>
-            </div>
-            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
-                <div id="statP" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
-                <div style="font-size:11px;color:#888;">Valor p</div>
-            </div>
-            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
-                <div id="statSig" style="font-size:24px;font-weight:700;">--</div>
-                <div style="font-size:11px;color:#888;">Significancia</div>
-            </div>
-        </div>
-        <canvas id="chartZTDPrecip" style="max-height:250px;"></canvas>
-        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
-            Fuente: SIRGAS-CON (ZTD) + Open-Meteo (precipitación). Período: 2025-12-15 a 2026-06-06. Método: Spearman.
-        </p>
-    </div>
-
-    <div class="sirgas-historico ztd-historico" id="ztdPanel" style="display:none;">
-        <h3>💧 Retardo Troposférico Cenital (ZTD) - Datos reales SIRGAS</h3>
-        <details style="margin-bottom:12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
-            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;">ℹ️ ¿Qué es el ZTD y por qué importa?</summary>
-            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
-                <p>Cuando una señal de un satélite GNSS atraviesa la atmósfera, se retrasa un poco. Ese retraso, medido en la dirección vertical (cenital), es el <strong>ZTD</strong>. Se compone de dos partes: una <strong>seca</strong> (relacionada con la presión atmosférica, bastante estable) y una <strong>húmeda</strong> (relacionada con el <strong>vapor de agua</strong> en el aire, muy variable).</p>
-                <p>La parte húmeda es la que interesa para el clima: cuando el vapor de agua se acumula en la atmósfera antes de una lluvia fuerte, el ZTD sube de forma perceptible horas antes de que empiece a llover. Por eso las redes GNSS como SIRGAS también se usan como una fuente adicional de datos para el <strong>pronóstico de lluvia a corto plazo</strong> y el <strong>monitoreo de eventos climáticos extremos</strong>.</p>
-                <p style="margin-bottom:0;"><strong>Marco institucional:</strong> cada país andino tiene su propia autoridad de monitoreo hidrometeorológico y gestión del riesgo. Estos datos de ZTD pueden servir como una capa adicional de información para esos sistemas, pero <strong>no reemplazan ni certifican</strong> los datos oficiales de cada agencia nacional (IDEAM, INAMHI, SENAMHI, DMC, SMN, entre otras).</p>
-            </div>
-        </details>
-        <div>
-            <label>Estación: </label>
-            <select id="estacionZTD"><option value="">Cargando estaciones…</option></select>
-            <label>Desde: </label><input type="date" id="ztdDesde">
-            <label>Hasta: </label><input type="date" id="ztdHasta">
-            <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
-            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;">📥 Descargar CSV</button>
-        </div>
-        <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
-        <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
-    </div>
-
-    <div id="controlesClima" class="layer-control" style="display:none;">
-        <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
-        <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
-    </div>
-
-    <p id="notaZTD" style="display:none;font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
-        <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
-        (Bogotá a 2600 m siempre tiene menos ZTD que Cali a 1000 m). Ahora mostramos la <strong>ANOMALÍA</strong>: cuánto se desvía 
-        el valor actual del promedio histórico de CADA estación. Esto elimina el sesgo altitudinal y permite comparar condiciones 
-        atmosféricas entre estaciones. <strong>🔵 Azul = más húmedo de lo normal | 🟢 Verde = normal | 🔴 Rojo = más seco de lo normal.</strong>
-    </p>
-
-
-    <div class="charts">
-        <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
-    </div>
-
-            <div class="oficial-item"><span class="fuente-oficial">Medellín</span><div class="dato" id="aqiMedellin">--</div><div class="label">AQI · PM2.5</div></div>
-            <div class="oficial-item"><span class="fuente-oficial">Lima</span><div class="dato" id="aqiLima">--</div><div class="label">AQI · PM2.5</div></div>
-            <div class="oficial-item"><span class="fuente-oficial">Santiago</span><div class="dato" id="aqiSantiago">--</div><div class="label">AQI · PM2.5</div></div>
-        </div>
-        <p style="font-size:12px;color:#8aa08a;margin-top:10px;">Datos en tiempo real de OpenAQ (PM2.5). Fuente: api.openaq.org</p>
-    </div>
-
-    <div class="oficiales-panel">
+    </div><div class="oficiales-panel">
         <h3>🌳 Deforestación por País (hectáreas/año)</h3>
         <div class="oficiales-grid">
             <div class="oficial-item"><span class="fuente-oficial">🇨🇴 Colombia</span><div class="dato" id="defColombia">--</div><div class="label">ha/año</div></div>
@@ -488,26 +507,16 @@
         <p style="font-size:12px;color:#8aa08a;margin-top:10px;">Fuente: Global Forest Watch (datos de referencia 2025).</p>
     </div>
 
-    <div class="oficiales-panel">
-        <h3>🏛️ Datos oficiales en integración (IDEAM / SENAMHI)</h3>
-        <div class="oficiales-grid">
-            <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamTemp">16.5 °C</div><div class="label">Temperatura promedio</div></div>
-            <div class="oficial-item"><span class="fuente-oficial">IDEAM</span><div class="dato" id="ideamHum">72 %</div><div class="label">Humedad promedio</div></div>
-            <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiTemp">18.2 °C</div><div class="label">Temperatura promedio</div></div>
-            <div class="oficial-item"><span class="fuente-oficial">SENAMHI</span><div class="dato" id="senamhiPrecip">12.5 mm</div><div class="label">Precipitación promedio</div></div>
-        </div>
-        <div style="background:#f0f5f0;padding:12px 16px;border-radius:12px;margin-top:12px;border-left:4px solid #8aaa8a;">
-            <p style="font-size:13px;color:#4a6a4a;margin:0;"><strong>📌 Nota:</strong> Datos actualizados automáticamente desde fuentes oficiales</p>
-        </div>
+    <div class="charts">
+        <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
     </div>
+</div>
 
-    <div class="normativas-panel">
+<div class="normativas-panel">
         <h3>📜 Normativas Ambientales por País</h3>
         <p id="normativasPlaceholder" class="placeholder">Selecciona un país para ver sus normativas.</p>
         <ul id="normativasLista"></ul>
-    </div>
-
-    <div class="metodologia-panel" style="background:#f8f5f0;padding:18px 24px;border-radius:18px;margin:14px 0;border:1px solid #ede8e0;">
+    </div><div class="metodologia-panel" style="background:#f8f5f0;padding:18px 24px;border-radius:18px;margin:14px 0;border:1px solid #ede8e0;">
         <h3>📚 Metodología</h3>
         <ul style="font-size:13px;color:#555;line-height:1.8;">
             <li><strong>Anomalía ZTD:</strong> ZTD_actual − promedio histórico de la estación. El promedio se calcula sobre la serie disponible y se documenta su período.</li>
@@ -523,6 +532,7 @@
         <p>📧 andesobservatorio@gmail.com · 📞 +57 3337211047</p>
     </footer>
 </div>
+
 <script>
     const API_KEY = "70232a5a2fff0ed9923878e1a513d00e";
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
@@ -606,6 +616,7 @@
     };
 
     let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart, chartDefor, chartSIRGAS;
+    let marcadorCiudadClima = null;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
     const ztdSerieCache = {};
     const coordenadasAQI = {
@@ -704,6 +715,22 @@
             safeFlyTo(mapSirgas, lat, lon, 8, 1.5);
             safeFlyTo(mapZTD, lat, lon, 8, 1.5);
             safeFlyTo(mapClima, lat, lon, 6, 1.5);
+
+            // 🎯 Resaltar la ciudad seleccionada en el mapa Clima
+            if (mapClima) {
+                if (marcadorCiudadClima) {
+                    mapClima.removeLayer(marcadorCiudadClima);
+                }
+                const nombreCiudad = select.options[select.selectedIndex]?.text || query;
+                marcadorCiudadClima = L.circleMarker([lat, lon], {
+                    radius: 14,
+                    fillColor: '#d4a017',
+                    color: '#5a4a1a',
+                    weight: 3,
+                    fillOpacity: 0.9
+                }).bindPopup(`<b>📍 ${nombreCiudad}</b><br>Lat: ${lat.toFixed(3)} | Lon: ${lon.toFixed(3)}`).addTo(mapClima);
+                marcadorCiudadClima.openPopup();
+            }
         }
 
         const clima = await getClima(query);
@@ -1251,125 +1278,52 @@
     }
 
     function mostrarMapa(tipo) {
-        const tabs = {
-            sirgas: document.getElementById('tabSirgas'),
-            ztd: document.getElementById('tabZTD'),
-            clima: document.getElementById('tabClima'),
-            aqi: document.getElementById('tabAQI'),
-            deforestacion: document.getElementById('tabDeforestacion')
+        // 1. Activar el botón del tab
+        document.querySelectorAll('.map-tab').forEach(t => t.classList.remove('active'));
+        const tabIdMap = {
+            'sirgas': 'tabSirgas',
+            'ztd': 'tabZTD',
+            'clima': 'tabClima',
+            'aqi': 'tabAQI',
+            'deforestacion': 'tabDeforestacion'
         };
-        const divs = {
-            sirgas: document.getElementById('map-sirgas'),
-            ztd: document.getElementById('map-ztd'),
-            clima: document.getElementById('map-clima'),
-            aqi: document.getElementById('map-aqi'),
-            deforestacion: document.getElementById('map-deforestacion')
-        };
-        const ctrls = {
-            sirgas: document.getElementById('controlesSirgas'),
-            ztd: document.getElementById('controlesZTD'),
-            clima: document.getElementById('controlesClima'),
-            aqi: document.getElementById('controlesAQI'),
-            deforestacion: document.getElementById('controlesDeforestacion')
-        };
+        const tabBtn = document.getElementById(tabIdMap[tipo] || 'tabSirgas');
+        if (tabBtn) tabBtn.classList.add('active');
+
+        // 2. Ocultar todos los contenidos de tabs
+        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+
+        // 3. Mostrar solo el que corresponde
+        const activo = document.getElementById('tabContent-' + tipo);
+        if (activo) activo.style.display = 'block';
+
+        // 4. Nota ZTD (visualización especial)
         const notaZTD = document.getElementById('notaZTD');
+        if (notaZTD) notaZTD.style.display = tipo === 'ztd' ? 'block' : 'none';
 
-        // Ocultar siempre el contenido extra del clima (se muestra solo en tab clima)
-        const climaExtra = document.getElementById('climaExtra');
-        const controlesClima = document.getElementById('controlesClima');
-        if (climaExtra) climaExtra.style.display = 'none';
-        if (controlesClima) controlesClima.style.display = 'none';
-        const ztdPanel = document.getElementById('ztdPanel');
-        ['historicoSirgasWrapper','tempPorPaisWrapper','tendenciaWrapper'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = 'none';
-        });
-        if (ztdPanel) ztdPanel.style.display = 'none';
-
-        // Ocultar selectores por mapa (se muestran según tab)
-        ['selectorSirgasWrapper','selectorZTDWrapper','selectorAQIWrapper','selectorDeforestacionWrapper'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = 'none';
-        });
-
-        Object.keys(tabs).forEach(k => {
-            if (k === tipo) {
-                tabs[k].classList.add('active');
-                divs[k].style.display = 'block';
-                ctrls[k].style.display = 'flex';
-            } else {
-                tabs[k].classList.remove('active');
-                divs[k].style.display = 'none';
-                ctrls[k].style.display = 'none';
-            }
-        });
-        notaZTD.style.display = tipo === 'ztd' ? 'block' : 'none';
-
-        if (tipo === 'sirgas') {
-            const histSirgas = document.getElementById('historicoSirgasWrapper');
-            if (histSirgas) histSirgas.style.display = 'block';
-            const elsirgas = document.getElementById('selectorSirgasWrapper');
-            if (elsirgas) elsirgas.style.display = 'flex';
-            document.getElementById('analisisDeforestacion').style.display = 'none';
-            if (mapSirgas) mapSirgas.invalidateSize();
-            document.getElementById('analisisZTD').style.display = 'none';
-            document.getElementById('analisisSIRGAS').style.display = 'block';
-            document.getElementById('analisisAQI').style.display = 'none';
-            if (!analisisSIRGASData) cargarAnalisisSIRGAS();
-        } else if (tipo === 'ztd') {
-            const ztdPanelShow = document.getElementById('ztdPanel');
-            if (ztdPanelShow) ztdPanelShow.style.display = 'block';
-            const elselectorZTDWrapper = document.getElementById('selectorZTDWrapper');
-            if (elselectorZTDWrapper) elselectorZTDWrapper.style.display = 'flex';
-            document.getElementById('analisisDeforestacion').style.display = 'none';
-            document.getElementById('analisisSIRGAS').style.display = 'none';
-            document.getElementById('analisisAQI').style.display = 'none';
-            if (!mapZTD) initMapZTD();
-            else setTimeout(() => mapZTD.invalidateSize(), 100);
-            document.getElementById('analisisZTD').style.display = 'block';
-            if (!analisisZTDData) cargarAnalisisZTD();
-        } else if (tipo === 'clima') {
-            const tempPP = document.getElementById('tempPorPaisWrapper');
-            if (tempPP) tempPP.style.display = 'block';
-            const tend = document.getElementById('tendenciaWrapper');
-            if (tend) tend.style.display = 'block';
-            document.getElementById('climaExtra').style.display = 'block';
-            document.getElementById('controlesClima').style.display = 'flex';
-            document.getElementById('analisisDeforestacion').style.display = 'none';
-            document.getElementById('analisisSIRGAS').style.display = 'none';
-            document.getElementById('analisisZTD').style.display = 'none';
-            document.getElementById('analisisAQI').style.display = 'none';
-            setTimeout(() => {
+        // 5. Invalidar tamaño de mapas + cargar análisis si no están cargados
+        setTimeout(() => {
+            if (tipo === 'sirgas') {
+                if (mapSirgas) mapSirgas.invalidateSize();
+                if (!analisisSIRGASData) cargarAnalisisSIRGAS();
+            } else if (tipo === 'ztd') {
+                if (!mapZTD) initMapZTD();
+                else mapZTD.invalidateSize();
+                if (!analisisZTDData) cargarAnalisisZTD();
+            } else if (tipo === 'clima') {
                 if (!mapClima) initMapClima();
                 else mapClima.invalidateSize();
                 if (capaChirps && typeof capaChirps.bringToFront === 'function') capaChirps.bringToFront();
-            }, 200);
-        } else if (tipo === 'aqi') {
-            const elselectorAQIWrapper = document.getElementById('selectorAQIWrapper');
-            if (elselectorAQIWrapper) elselectorAQIWrapper.style.display = 'flex';
-            document.getElementById('analisisSIRGAS').style.display = 'none';
-            document.getElementById('analisisZTD').style.display = 'none';
-            document.getElementById('analisisAQI').style.display = 'block';
-            document.getElementById('analisisDeforestacion').style.display = 'none';
-            setTimeout(() => {
+            } else if (tipo === 'aqi') {
                 if (!mapaAQI) initMapaAQI();
                 else mapaAQI.invalidateSize();
-            }, 200);
-            if (!analisisAQIData) cargarAnalisisAQI();
-        } else if (tipo === 'deforestacion') {
-            const elselectorDeforestacionWrapper = document.getElementById('selectorDeforestacionWrapper');
-            if (elselectorDeforestacionWrapper) elselectorDeforestacionWrapper.style.display = 'flex';
-            document.getElementById('analisisSIRGAS').style.display = 'none';
-            document.getElementById('analisisZTD').style.display = 'none';
-            document.getElementById('analisisAQI').style.display = 'none';
-            document.getElementById('analisisDeforestacion').style.display = 'block';
-            setTimeout(() => {
+                if (!analisisAQIData) cargarAnalisisAQI();
+            } else if (tipo === 'deforestacion') {
                 if (!mapaDeforestacion) initMapaDeforestacion();
                 else mapaDeforestacion.invalidateSize();
-            }, 200);
-            if (!analisisDeforestacionData) cargarAnalisisDeforestacion();
-            if (chartDefor) setTimeout(() => chartDefor.resize(), 100);
-        }
+                if (!analisisDeforestacionData) cargarAnalisisDeforestacion();
+            }
+        }, 200);
     }
 
     let sincronizando = false;
@@ -1958,4 +1912,3 @@
 </script>
 </body>
 </html>
-// force refresh
