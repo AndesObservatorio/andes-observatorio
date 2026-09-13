@@ -1871,6 +1871,8 @@
         // Poblar el selector SIRGAS al inicio (no esperar a que el usuario haga clic en el tab)
         cargarAnalisisSIRGAS();
         cargarSIRGAS();
+        // Ocultar selectores que no corresponden al tab inicial (SIRGAS)
+        setTimeout(() => mostrarMapa('sirgas'), 100);
         initCharts();
         setTimeout(() => actualizarCiudad(), 500);
         actualizarSirgasHistorico();
