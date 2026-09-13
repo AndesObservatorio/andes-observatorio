@@ -215,6 +215,34 @@
             <option value="-16.5000,-68.1500,9">LPBZ (La Paz)</option>
         </select>
     </div>
+    <div class="sirgas-historico" id="historicoSirgasWrapper" style="display:none;">
+        <h3>🛰️ Datos históricos de SIRGAS</h3>
+        <div>
+            <label>Estación: </label>
+            <select id="estacionHistorica">
+                <option value="BOGT">BOGT (Bogotá)</option>
+                <option value="QUIT">QUIT (Quito)</option>
+                <option value="LIMA">LIMA (Lima)</option>
+                <option value="LPBZ">LPBZ (La Paz)</option>
+                <option value="SANT">SANT (Santiago)</option>
+            </select>
+            <label>Variable: </label>
+            <select id="variableHistorica">
+                <option value="N">Norte (mm)</option>
+                <option value="E" selected>Este (mm)</option>
+                <option value="U">Up (mm)</option>
+            </select>
+        </div>
+        <canvas id="sirgasHistoryChart" style="max-height:220px;margin-top:10px;"></canvas>
+    </div>
+
+
+    <div class="oficiales-panel">
+        <h3>🌫️ Calidad del Aire (AQI) - Tiempo real</h3>
+        
+        <div class="oficiales-grid">
+            <div class="oficial-item"><span class="fuente-oficial">Bogotá</span><div class="dato" id="aqiBogota">--</div><div class="label">AQI · PM2.5</div></div>
+
     <div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
     <!-- ═══ CONTENIDO EXTRA DEL TAB CLIMA (movido desde SIRGAS) ═══ -->
     <div id="climaExtra" style="display:none;">
@@ -275,6 +303,10 @@
             </div>
         </div>
     </div>
+
+    <div class="chart-card" id="tempPorPaisWrapper" style="display:none;"><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
+
+    <div class="chart-card" id="tendenciaWrapper" style="display:none;"><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div>
 
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0;display:none;"></div>
 
@@ -435,38 +467,9 @@
 
 
     <div class="charts">
-        <div class="chart-card"><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas></div>
         <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
-        <div class="chart-card"><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas></div>
     </div>
 
-    <div class="sirgas-historico">
-        <h3>🛰️ Datos históricos de SIRGAS</h3>
-        <div>
-            <label>Estación: </label>
-            <select id="estacionHistorica">
-                <option value="BOGT">BOGT (Bogotá)</option>
-                <option value="QUIT">QUIT (Quito)</option>
-                <option value="LIMA">LIMA (Lima)</option>
-                <option value="LPBZ">LPBZ (La Paz)</option>
-                <option value="SANT">SANT (Santiago)</option>
-            </select>
-            <label>Variable: </label>
-            <select id="variableHistorica">
-                <option value="N">Norte (mm)</option>
-                <option value="E" selected>Este (mm)</option>
-                <option value="U">Up (mm)</option>
-            </select>
-        </div>
-        <canvas id="sirgasHistoryChart" style="max-height:220px;margin-top:10px;"></canvas>
-    </div>
-
-
-    <div class="oficiales-panel">
-        <h3>🌫️ Calidad del Aire (AQI) - Tiempo real</h3>
-        
-        <div class="oficiales-grid">
-            <div class="oficial-item"><span class="fuente-oficial">Bogotá</span><div class="dato" id="aqiBogota">--</div><div class="label">AQI · PM2.5</div></div>
             <div class="oficial-item"><span class="fuente-oficial">Medellín</span><div class="dato" id="aqiMedellin">--</div><div class="label">AQI · PM2.5</div></div>
             <div class="oficial-item"><span class="fuente-oficial">Lima</span><div class="dato" id="aqiLima">--</div><div class="label">AQI · PM2.5</div></div>
             <div class="oficial-item"><span class="fuente-oficial">Santiago</span><div class="dato" id="aqiSantiago">--</div><div class="label">AQI · PM2.5</div></div>
@@ -1277,6 +1280,10 @@
         if (climaExtra) climaExtra.style.display = 'none';
         if (controlesClima) controlesClima.style.display = 'none';
         const ztdPanel = document.getElementById('ztdPanel');
+        ['historicoSirgasWrapper','tempPorPaisWrapper','tendenciaWrapper'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
         if (ztdPanel) ztdPanel.style.display = 'none';
 
         // Ocultar selectores por mapa (se muestran según tab)
@@ -1299,6 +1306,8 @@
         notaZTD.style.display = tipo === 'ztd' ? 'block' : 'none';
 
         if (tipo === 'sirgas') {
+            const histSirgas = document.getElementById('historicoSirgasWrapper');
+            if (histSirgas) histSirgas.style.display = 'block';
             const elsirgas = document.getElementById('selectorSirgasWrapper');
             if (elsirgas) elsirgas.style.display = 'flex';
             document.getElementById('analisisDeforestacion').style.display = 'none';
@@ -1320,6 +1329,10 @@
             document.getElementById('analisisZTD').style.display = 'block';
             if (!analisisZTDData) cargarAnalisisZTD();
         } else if (tipo === 'clima') {
+            const tempPP = document.getElementById('tempPorPaisWrapper');
+            if (tempPP) tempPP.style.display = 'block';
+            const tend = document.getElementById('tendenciaWrapper');
+            if (tend) tend.style.display = 'block';
             document.getElementById('climaExtra').style.display = 'block';
             document.getElementById('controlesClima').style.display = 'flex';
             document.getElementById('analisisDeforestacion').style.display = 'none';
