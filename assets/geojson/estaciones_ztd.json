@@ -1,0 +1,190 @@
+{
+  "fuente": "SIRGAS-TRO",
+  "generado": "2026-09-14",
+  "descripcion": "Resumen de estaciones con datos ZTD procesados",
+  "total_estaciones": 13,
+  "estaciones": [
+    {
+      "codigo": "AN02",
+      "domes": "42231M001",
+      "lat": -12.05,
+      "lon": -77.04,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2549.3,
+      "ztd_min_mm": 2503.2,
+      "ztd_max_mm": 2585.1
+    },
+    {
+      "codigo": "ANTC",
+      "domes": "41713S001",
+      "lat": -23.65,
+      "lon": -70.4,
+      "n_obs": 4166,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2212.4,
+      "ztd_min_mm": 2142.0,
+      "ztd_max_mm": 2369.6
+    },
+    {
+      "codigo": "AP01",
+      "domes": "42226M001",
+      "lat": -16.4,
+      "lon": -71.53,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1885.0,
+      "ztd_min_mm": 1854.3,
+      "ztd_max_mm": 1910.6
+    },
+    {
+      "codigo": "AREQ",
+      "domes": "42202M005",
+      "lat": -16.47,
+      "lon": -71.49,
+      "n_obs": 4173,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1848.8,
+      "ztd_min_mm": 1752.3,
+      "ztd_max_mm": 1938.2
+    },
+    {
+      "codigo": "BOGT",
+      "domes": "41901M001",
+      "lat": 4.64,
+      "lon": -74.08,
+      "n_obs": 4008,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1853.5,
+      "ztd_min_mm": 1770.3,
+      "ztd_max_mm": 1905.2
+    },
+    {
+      "codigo": "CALI",
+      "domes": "41903S001",
+      "lat": 3.45,
+      "lon": -76.53,
+      "n_obs": 3917,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2314.4,
+      "ztd_min_mm": 2175.2,
+      "ztd_max_mm": 2390.2
+    },
+    {
+      "codigo": "CS01",
+      "domes": "42235M001",
+      "lat": -13.53,
+      "lon": -71.97,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1639.1,
+      "ztd_min_mm": 1614.3,
+      "ztd_max_mm": 1661.8
+    },
+    {
+      "codigo": "GLPS",
+      "domes": "42005M002",
+      "lat": -0.74,
+      "lon": -90.3,
+      "n_obs": 119,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2601.1,
+      "ztd_min_mm": 2559.1,
+      "ztd_max_mm": 2643.2
+    },
+    {
+      "codigo": "IQQE",
+      "domes": "41708S002",
+      "lat": -20.27,
+      "lon": -69.86,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2431.3,
+      "ztd_min_mm": 2406.6,
+      "ztd_max_mm": 2455.9
+    },
+    {
+      "codigo": "LPGS",
+      "domes": "41510M001",
+      "lat": -34.9,
+      "lon": -57.93,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2493.5,
+      "ztd_min_mm": 2454.9,
+      "ztd_max_mm": 2548.6
+    },
+    {
+      "codigo": "QUI3",
+      "domes": "42003S004",
+      "lat": -0.18,
+      "lon": -78.47,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1776.5,
+      "ztd_min_mm": 1750.4,
+      "ztd_max_mm": 1796.9
+    },
+    {
+      "codigo": "RDSD",
+      "domes": "40805M001",
+      "lat": 18.48,
+      "lon": -69.91,
+      "n_obs": 111,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2565.2,
+      "ztd_min_mm": 2494.3,
+      "ztd_max_mm": 2655.7
+    },
+    {
+      "codigo": "SANT",
+      "domes": "41705M003",
+      "lat": -33.44,
+      "lon": -70.66,
+      "n_obs": 4176,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2221.2,
+      "ztd_min_mm": 2141.8,
+      "ztd_max_mm": 2350.8
+    }
+  ]
+}

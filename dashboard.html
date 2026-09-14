@@ -621,10 +621,18 @@
     const API_BASE = "https://andes-observatorio.onrender.com";
 
     const DEMO_ZTD_STATIONS = [
+        { codigo: "AN02", nombre: "Ancón", pais: "Perú" },
+        { codigo: "ANTC", nombre: "Antofagasta", pais: "Chile" },
+        { codigo: "AP01", nombre: "Arequipa Norte", pais: "Perú" },
+        { codigo: "AREQ", nombre: "Arequipa", pais: "Perú" },
         { codigo: "BOGT", nombre: "Bogotá", pais: "Colombia" },
         { codigo: "CALI", nombre: "Cali", pais: "Colombia" },
-        { codigo: "AREQ", nombre: "Arequipa", pais: "Perú" },
-        { codigo: "ANTC", nombre: "Antofagasta", pais: "Chile" },
+        { codigo: "CS01", nombre: "Cusco", pais: "Perú" },
+        { codigo: "GLPS", nombre: "Galápagos", pais: "Ecuador" },
+        { codigo: "IQQE", nombre: "Iquique", pais: "Chile" },
+        { codigo: "LPGS", nombre: "La Plata", pais: "Argentina" },
+        { codigo: "QUI3", nombre: "Quito", pais: "Ecuador" },
+        { codigo: "RDSD", nombre: "Santo Domingo", pais: "Rep. Dominicana" },
         { codigo: "SANT", nombre: "Santiago", pais: "Chile" }
     ];
 
@@ -1015,7 +1023,29 @@
 
     async function cargarEstacionesZTD() {
         const select = document.getElementById('estacionZTD');
-        select.innerHTML = '<option value="">🌍 Buscando estaciones...</option>';
+        select.innerHTML = '<option value="">🌍 Cargando estaciones...</option>';
+        
+        // 1. PRIMERO: leer JSON local (fuente de verdad)
+        try {
+            const resLocal = await fetch('assets/geojson/estaciones_ztd.json');
+            const dataLocal = await resLocal.json();
+            const estaciones = dataLocal.estaciones || [];
+            if (estaciones.length > 0) {
+                select.innerHTML = '<option value="">📍 Seleccionar estación</option>';
+                estaciones.forEach(est => {
+                    const info = DEMO_ZTD_STATIONS.find(e => e.codigo === est.codigo);
+                    const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : est.codigo;
+                    select.innerHTML += `<option value="${est.codigo}">📍 ${est.codigo} - ${nombreMostrar} (${est.n_obs} reg.)</option>`;
+                });
+                console.log(`✅ Dropdown Retardo ZTD poblado con ${estaciones.length} estaciones desde JSON local`);
+                actualizarGraficoZTD();
+                return;
+            }
+        } catch (e) {
+            console.warn('No se pudo leer JSON local, probando API', e);
+        }
+
+        // 2. FALLBACK: usar API
         try {
             const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
             if (!res.ok) throw new Error("API no disponible");
@@ -1554,6 +1584,34 @@
         cargarCapaZTD();
     }
 
+    async function poblarSelectorZTD() {
+        try {
+            const res = await fetch('assets/geojson/estaciones_ztd.json');
+            const data = await res.json();
+            const sel = document.getElementById('selectorZTD');
+            if (!sel) return;
+            sel.innerHTML = '<option value="">-- Selecciona --</option>';
+            let n = 0;
+            (data.estaciones || []).forEach(e => {
+                if (e.lat && e.lon) {
+                    const info = DEMO_ZTD_STATIONS.find(d => d.codigo === e.codigo);
+                    const nombreMostrar = info ? `${info.nombre}, ${info.pais}` : e.codigo;
+                    const opt = document.createElement('option');
+                    opt.value = `${e.lat},${e.lon},9`;
+                    opt.textContent = `${e.codigo} - ${nombreMostrar} (${e.n_obs} obs)`;
+                    sel.appendChild(opt);
+                    n++;
+                }
+            });
+            console.log(`✅ Selector ZTD poblado con ${n} estaciones`);
+            // Actualizar badge principal si existe
+            const badgeMain = document.getElementById('ztdBadge');
+            if (badgeMain) badgeMain.innerText = `💧 ZTD: ${n} estaciones`;
+        } catch(e) {
+            console.warn('No se pudo poblar el selector ZTD', e);
+        }
+    }
+
     function descargarCSV_ZTD() {
         const codigo = document.getElementById('estacionZTD').value;
         if (!codigo || !ztdChart || !ztdChart.data.labels.length) {
@@ -1630,18 +1688,34 @@
         if (capaZTD) mapZTD.removeLayer(capaZTD);
         capaZTD = L.layerGroup();
         
-        // Cargar lista de estaciones desde la API
+        // 1. PRIMERO: leer JSON local (fuente de verdad)
+        coordenadasZTD = {};
         try {
-            const resEst = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
-            const dataEst = await resEst.json();
-            coordenadasZTD = {};
-            (dataEst.estaciones || []).forEach(e => {
+            const resLocal = await fetch('assets/geojson/estaciones_ztd.json');
+            const dataLocal = await resLocal.json();
+            (dataLocal.estaciones || []).forEach(e => {
                 if (e.lat && e.lon) {
                     coordenadasZTD[e.codigo] = [e.lat, e.lon];
                 }
             });
+            console.log('✅ Estaciones ZTD desde JSON local:', Object.keys(coordenadasZTD).length);
         } catch(e) {
-            console.warn('No se pudo cargar lista de estaciones', e);
+            console.warn('No se pudo leer JSON local, probando API', e);
+        }
+
+        // 2. FALLBACK: si JSON local falló o vino vacío, usar API
+        if (Object.keys(coordenadasZTD).length === 0) {
+            try {
+                const resEst = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
+                const dataEst = await resEst.json();
+                (dataEst.estaciones || []).forEach(e => {
+                    if (e.lat && e.lon) {
+                        coordenadasZTD[e.codigo] = [e.lat, e.lon];
+                    }
+                });
+            } catch(e) {
+                console.warn('No se pudo cargar lista de estaciones desde API', e);
+            }
         }
         
         const codigos = Object.keys(coordenadasZTD);
@@ -1968,6 +2042,7 @@
         // Poblar el selector SIRGAS al inicio (no esperar a que el usuario haga clic en el tab)
         cargarAnalisisSIRGAS();
         cargarSIRGAS();
+        poblarSelectorZTD();
         // Ocultar selectores que no corresponden al tab inicial (SIRGAS)
         setTimeout(() => mostrarMapa('sirgas'), 100);
         initCharts();
