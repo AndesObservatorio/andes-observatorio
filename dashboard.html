@@ -203,7 +203,26 @@
             </select>
         </div>
         <canvas id="sirgasHistoryChart" style="max-height:220px;margin-top:10px;"></canvas>
-    </div>
+    
+    <details style="margin:20px 0;background:#f0f5f0;border-radius:12px;padding:14px 20px;border-left:4px solid #8aaa8a;">
+        <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:15px;">📚 Metodología — Mapa SIRGAS</summary>
+        <div style="font-size:13px;color:#4a5a4a;margin-top:12px;line-height:1.7;">
+            
+<p>Las velocidades tectónicas se calcularon a partir de <strong>soluciones semanales SIRGAS-CON</strong> (Sistema de Referencia Geocéntrico para las Américas), en el marco de referencia <strong>ITRF2014</strong>, época 2010.0. Se aplicaron correcciones por saltos instrumentales, cambios de antena y efectos estacionales (anuales y semianuales).</p>
+<p><strong>Clasificación tectónica</strong> según umbrales propuestos por el proyecto SIRGAS para la región andina:</p>
+<ul style="margin-left:20px;">
+    <li>Intraplaca (0–5 mm/año)</li>
+    <li>Deformación media (5–15 mm/año)</li>
+    <li>Actividad tectónica (15–25 mm/año)</li>
+    <li>Borde de placa (&gt;25 mm/año)</li>
+</ul>
+<p><strong>Escala visual</strong>: 10 mm/año ≈ 5 km en el mapa. <strong>No representa escala física</strong>, es un factor de amplificación para visualización.</p>
+<p><strong>Fuente</strong>: SIRGAS-CON</p>
+
+        </div>
+    </details>
+
+</div>
 </div>
 
 <!-- ═══ TAB ZTD ═══ -->
@@ -278,7 +297,25 @@
         </div>
         <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
         <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
-    </div><p id="notaZTD" style="font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
+    
+    <details style="margin:20px 0;background:#f0f5f0;border-radius:12px;padding:14px 20px;border-left:4px solid #8aaa8a;">
+        <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:15px;">📚 Metodología — Mapa ZTD</summary>
+        <div style="font-size:13px;color:#4a5a4a;margin-top:12px;line-height:1.7;">
+            
+<p>El <strong>ZTD</strong> (Retardo Troposférico Cenital) es el retraso que sufre una señal GNSS al atravesar la atmósfera, medido en la vertical. Se compone de una parte <strong>seca</strong> (estable, ligada a la presión) y una parte <strong>húmeda</strong> (variable, ligada al vapor de agua).</p>
+<p><strong>Anomalía ZTD</strong> = ZTD_actual − promedio histórico de la estación. Elimina el sesgo altitudinal (Bogotá a 2600 m tiene menos ZTD que Cali a 1000 m) y permite comparar condiciones atmosféricas entre estaciones.</p>
+<p><strong>Escala de colores</strong>:</p>
+<ul style="margin-left:20px;">
+    <li>🔵 Azul = más húmedo de lo normal</li>
+    <li>🟢 Verde = normal</li>
+    <li>🔴 Rojo = más seco de lo normal</li>
+</ul>
+<p><strong>Fuente</strong>: SIRGAS-TRO · Resolución horaria · Actualización semanal</p>
+
+        </div>
+    </details>
+
+</div><p id="notaZTD" style="font-size:11px;color:#5a7a5a;padding:6px 12px 0;margin:0;line-height:1.5;">
         <strong>🎓 ¿Por qué los colores cambiaron?</strong> Antes mostrábamos el ZTD absoluto, que depende fuertemente de la altitud 
         (Bogotá a 2600 m siempre tiene menos ZTD que Cali a 1000 m). Ahora mostramos la <strong>ANOMALÍA</strong>: cuánto se desvía 
         el valor actual del promedio histórico de CADA estación. Esto elimina el sesgo altitudinal y permite comparar condiciones 
@@ -371,6 +408,19 @@
         </div>
     </div>
 
+
+
+    <details style="margin:20px 0;background:#f0f5f0;border-radius:12px;padding:14px 20px;border-left:4px solid #8aaa8a;">
+        <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:15px;">📚 Metodología — Mapa Clima</summary>
+        <div style="font-size:13px;color:#4a5a4a;margin-top:12px;line-height:1.7;">
+            
+<p><strong>Precipitación CHIRPS</strong>: Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) v2.0, resolución 0.05° (~5 km), combinación de satélite IR + estaciones meteorológicas. Período: julio 2026.</p>
+<p><strong>Datos meteorológicos en tiempo real</strong>: OpenWeatherMap, actualización cada 10 minutos. Variables: temperatura, humedad, sensación térmica.</p>
+<p><strong>Panel de alertas personalizables</strong>: umbrales configurables por el usuario para temperatura, humedad y sensación térmica. Los umbrales por defecto están basados en valores climatológicos documentados en código abierto.</p>
+<p><strong>Fuentes</strong>: CHIRPS v2.0 (precipitación) · OpenWeatherMap (tiempo real)</p>
+
+        </div>
+    </details>
 
 </div>
 
@@ -469,6 +519,24 @@
         </div>
         <p style="font-size:12px;color:#8aa08a;margin-top:10px;">Datos en tiempo real de OpenAQ (PM2.5). Fuente: api.openaq.org</p>
     </div>
+
+    <details style="margin:20px 0;background:#f0f5f0;border-radius:12px;padding:14px 20px;border-left:4px solid #8aaa8a;">
+        <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:15px;">📚 Metodología — Mapa AQI</summary>
+        <div style="font-size:13px;color:#4a5a4a;margin-top:12px;line-height:1.7;">
+            
+<p>Los datos de <strong>PM2.5</strong> (material particulado fino, diámetro &lt; 2.5 µm) provienen de <strong>OpenAQ API v3</strong>, que agrega datos de estaciones oficiales de monitoreo en ciudades andinas.</p>
+<p><strong>Clasificación según estándar OMS 2021</strong> (media 24 horas):</p>
+<ul style="margin-left:20px;">
+    <li>🟢 Bueno (&lt; 50 µg/m³)</li>
+    <li>🟡 Moderado (50–100 µg/m³)</li>
+    <li>🟠 Malo (100–150 µg/m³)</li>
+    <li>🔴 Muy malo (&gt; 150 µg/m³)</li>
+</ul>
+<p><strong>Fuente</strong>: OpenAQ API v3 · Estándar OMS 2021 · Actualización en tiempo real</p>
+
+        </div>
+    </details>
+
 </div>
 
 <!-- ═══ TAB DEFORESTACIÓN ═══ -->
@@ -520,21 +588,25 @@
     <div class="charts">
         <div class="chart-card"><h3>🌿 Áreas Protegidas (%)</h3><canvas id="protectedChart"></canvas></div>
     </div>
+
+    <details style="margin:20px 0;background:#f0f5f0;border-radius:12px;padding:14px 20px;border-left:4px solid #8aaa8a;">
+        <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:15px;">📚 Metodología — Mapa Deforestación</summary>
+        <div style="font-size:13px;color:#4a5a4a;margin-top:12px;line-height:1.7;">
+            
+<p><strong>Pérdida de cobertura arbórea</strong>: datos de Global Forest Watch (GFW), basados en análisis satelital Landsat con resolución 30 m. Se considera "bosque" según umbral de cobertura ≥ 30%. Período: 2024.</p>
+<p><strong>Áreas críticas</strong>: zonas identificadas por GFW con pérdida significativa de cobertura arbórea. Intensidad según hectáreas afectadas por año.</p>
+<p><strong>Áreas protegidas</strong>: porcentaje de territorio nacional bajo protección oficial (parques nacionales, reservas, etc.). Fuente: WDPA (World Database on Protected Areas).</p>
+<p><strong>Fuente</strong>: Global Forest Watch (2024) · Umbral de cobertura: 30%</p>
+
+        </div>
+    </details>
+
 </div>
 
 <div class="normativas-panel">
         <h3>📜 Normativas Ambientales por País</h3>
         <p id="normativasPlaceholder" class="placeholder">Selecciona un país para ver sus normativas.</p>
         <ul id="normativasLista"></ul>
-    </div><div class="metodologia-panel" style="background:#f8f5f0;padding:18px 24px;border-radius:18px;margin:14px 0;border:1px solid #ede8e0;">
-        <h3>📚 Metodología</h3>
-        <ul style="font-size:13px;color:#555;line-height:1.8;">
-            <li><strong>Anomalía ZTD:</strong> ZTD_actual − promedio histórico de la estación. El promedio se calcula sobre la serie disponible y se documenta su período.</li>
-            <li><strong>Escala SIRGAS:</strong> Factor de visualización 1 mm/año ≈ 0.5 km en mapa. NO es escala física.</li>
-            <li><strong>Clasificación tectónica:</strong> Intraplaca (0–5), Deformación media (5–15), Actividad (15–25), Borde de placa (>25) mm/año.</li>
-            <li><strong>Alertas:</strong> Umbrales basados en valores climatológicos y documentados en código abierto.</li>
-            <li><strong>Datos:</strong> OpenWeatherMap (10 min), SIRGAS (semanal), OpenAQ (PM2.5), SSP/IPCC AR6.</li>
-        </ul>
     </div>
 
     <footer>
