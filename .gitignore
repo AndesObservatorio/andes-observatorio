@@ -20,3 +20,17 @@ logs/
 # Sistema
 .DS_Store
 *.bak
+
+# Backups personales
+*.bak-*
+*.backup-*
+
+# Archivos temporales de reconstrucción
+body_new.html
+body_old.html
+head.html
+script.js
+
+# Base de datos local
+*.db
+data/tropo_raw/
