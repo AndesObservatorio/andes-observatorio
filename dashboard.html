@@ -705,7 +705,7 @@
         'Perú':17.5,'Uruguay':4.5,'Venezuela':35.2
     };
 
-    let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart, chartDefor, chartSIRGAS;
+    let mapSirgas, mapZTD, tempChart, protectedChart, trendChart, sirgasHistoryChart, ztdChart, chartDefor, chartSIRGAS, chartAQI;
     let marcadorCiudadClima = null;
     let capaCiudades, capaSIRGAS, capaEstaciones, capaInfluencia, capaZTD;
     const ztdSerieCache = {};
@@ -1467,6 +1467,8 @@
                 if (!mapaAQI) initMapaAQI();
                 else mapaAQI.invalidateSize();
                 if (!analisisAQIData) cargarAnalisisAQI();
+                // Reajustar el tamaño del gráfico AQI
+                if (chartAQI) setTimeout(() => chartAQI.resize(), 100);
             } else if (tipo === 'deforestacion') {
                 if (!mapaDeforestacion) initMapaDeforestacion();
                 else mapaDeforestacion.invalidateSize();
@@ -1970,16 +1972,22 @@
             const labels = [];
             
             for (const ciudad of ciudades) {
+                labels.push(ciudad);  // Siempre incluir la ciudad
                 try {
                     const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
                     if (res.ok) {
                         const data = await res.json();
                         if (data.valor && data.valor !== 'Sin datos' && !isNaN(data.valor)) {
                             valores.push(data.valor);
-                            labels.push(ciudad);
+                        } else {
+                            valores.push(null);
                         }
+                    } else {
+                        valores.push(null);
                     }
-                } catch(e) {}
+                } catch(e) {
+                    valores.push(null);
+                }
             }
             
             if (valores.length === 0) return;
@@ -1998,9 +2006,30 @@
             document.getElementById('aqiCiudades').textContent = valoresValidos.length;
             
             const ctx = document.getElementById('chartAQI').getContext('2d');
-            const colores = valores.map(v => v < 50 ? '#27ae60' : v < 100 ? '#f1c40f' : v < 150 ? '#e67e22' : '#e74c3c');
+
             
-            new Chart(ctx, {
+            if (chartAQI && typeof chartAQI.destroy === 'function') { chartAQI.destroy(); chartAQI = null; }
+
+            
+            const colores = valores.map(v => 
+
+            
+                v === null ? '#cccccc' :
+
+            
+                v < 50 ? '#27ae60' : 
+
+            
+                v < 100 ? '#f1c40f' : 
+
+            
+                v < 150 ? '#e67e22' : '#e74c3c'
+
+            
+            );
+
+            
+            chartAQI = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
@@ -2014,7 +2043,7 @@
                 options: {
                     responsive: true,
                     plugins: {
-                        title: { display: true, text: 'PM2.5 por ciudad' }
+                        title: { display: true, text: `PM2.5 por ciudad (${valoresValidos.length}/${ciudades.length} con datos)` }
                     },
                     scales: {
                         y: { beginAtZero: true, title: { display: true, text: 'µg/m³' } }
