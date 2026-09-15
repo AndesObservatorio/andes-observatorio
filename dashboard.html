@@ -897,30 +897,146 @@
         <table style="width:100%;border-collapse:collapse;font-size:13px;">
             <thead>
                 <tr style="background:#2d4a2d;color:white;">
-                    <th style="padding:8px;text-align:left;" data-i18n="mec.tabla.mecanismo">Mecanismo</th>
-                    <th style="padding:8px;text-align:left;" data-i18n="mec.tabla.origen">Esfera origen</th>
-                    <th style="padding:8px;text-align:left;" data-i18n="mec.tabla.destino">Esfera destino</th>
-                    <th style="padding:8px;text-align:left;" data-i18n="mec.tabla.tipo">Tipo de acoplamiento</th>
+                    <th style="padding:8px;text-align:left;width:8%;" data-i18n="mec.tabla.mecanismo">Mecanismo</th>
+                    <th style="padding:8px;text-align:left;width:15%;" data-i18n="mec.tabla.origen">Esfera origen</th>
+                    <th style="padding:8px;text-align:left;width:15%;" data-i18n="mec.tabla.destino">Esfera destino</th>
+                    <th style="padding:8px;text-align:left;width:22%;" data-i18n="mec.tabla.tipo">Tipo de acoplamiento</th>
+                    <th style="padding:8px;text-align:center;width:40%;" data-i18n="mec.tabla.mapa">Mapa visual</th>
                 </tr>
             </thead>
             <tbody style="background:white;">
+                <!-- Fila A -->
                 <tr>
                     <td style="padding:8px;border-bottom:1px solid #ede8e0;"><strong>A</strong></td>
-                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.criosfera">Criosfera</td>
-                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.litosfera">Litosfera</td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;color:#2980b9;" data-i18n="mec.tabla.criosfera">Criosfera</td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;color:#8b4513;" data-i18n="mec.tabla.litosfera">Litosfera</td>
                     <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.mecanico1">Mecánico (carga/descompresión)</td>
+                    <td style="padding:4px;border-bottom:1px solid #ede8e0;text-align:center;">
+                        <details style="display:inline-block;">
+                            <summary style="cursor:pointer;font-size:20px;list-style:none;user-select:none;">🏔️→🌋</summary>
+                            <div style="position:absolute;z-index:1000;background:white;border:2px solid #2d4a2d;border-radius:12px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);margin-top:8px;left:50%;transform:translateX(-50%);">
+                                <svg width="500" height="220" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Fondo -->
+                                    <rect width="500" height="220" fill="#f8f5f0" rx="8"/>
+                                    
+                                    <!-- Criosfera (izquierda) -->
+                                    <rect x="20" y="30" width="180" height="160" fill="#e3f2fd" stroke="#2980b9" stroke-width="2" rx="8"/>
+                                    <text x="110" y="55" text-anchor="middle" font-size="24">🏔️</text>
+                                    <text x="110" y="80" text-anchor="middle" font-size="13" font-weight="bold" fill="#2980b9" data-i18n="mec.svg.a.glaciar">GLACIAR</text>
+                                    <text x="110" y="100" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.a.criosfera">(Criosfera)</text>
+                                    <text x="110" y="130" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.a.retroceso">Retroceso</text>
+                                    <text x="110" y="148" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.a.perdida">Pérdida de masa</text>
+                                    <text x="110" y="175" text-anchor="middle" font-size="18">❄️❄️❄️</text>
+
+                                    <!-- Flecha central -->
+                                    <defs>
+                                        <marker id="arrowA" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                                            <polygon points="0 0, 10 3, 0 6" fill="#2d4a2d"/>
+                                        </marker>
+                                    </defs>
+                                    <line x1="210" y1="110" x2="280" y2="110" stroke="#2d4a2d" stroke-width="3" marker-end="url(#arrowA)"/>
+                                    <text x="245" y="100" text-anchor="middle" font-size="10" fill="#2d4a2d" font-weight="bold" data-i18n="mec.svg.a.descompresion">Descompresión</text>
+                                    <text x="245" y="130" text-anchor="middle" font-size="9" fill="#4a5a4a" data-i18n="mec.svg.a.rebote">rebote elástico</text>
+
+                                    <!-- Litosfera (derecha) -->
+                                    <rect x="300" y="30" width="180" height="160" fill="#f5e6d3" stroke="#8b4513" stroke-width="2" rx="8"/>
+                                    <text x="390" y="55" text-anchor="middle" font-size="24">🌋</text>
+                                    <text x="390" y="80" text-anchor="middle" font-size="13" font-weight="bold" fill="#8b4513" data-i18n="mec.svg.a.volcan">VOLCÁN</text>
+                                    <text x="390" y="100" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.a.litosfera">(Litosfera)</text>
+                                    <text x="390" y="130" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.a.magma">Expansión de</text>
+                                    <text x="390" y="148" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.a.erupcion">magma y erupción</text>
+                                    <text x="390" y="175" text-anchor="middle" font-size="18">🔥🔥🔥</text>
+                                </svg>
+                            </div>
+                        </details>
+                    </td>
                 </tr>
+                <!-- Fila B -->
                 <tr>
                     <td style="padding:8px;border-bottom:1px solid #ede8e0;"><strong>B</strong></td>
-                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.hidrosfera">Hidrosfera</td>
-                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.litosfera">Litosfera</td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;color:#17a2b8;" data-i18n="mec.tabla.hidrosfera">Hidrosfera</td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;color:#8b4513;" data-i18n="mec.tabla.litosfera">Litosfera</td>
                     <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.mecanico2">Mecánico (carga/esfuerzo)</td>
+                    <td style="padding:4px;border-bottom:1px solid #ede8e0;text-align:center;">
+                        <details style="display:inline-block;">
+                            <summary style="cursor:pointer;font-size:20px;list-style:none;user-select:none;">💧→🌊</summary>
+                            <div style="position:absolute;z-index:1000;background:white;border:2px solid #2d4a2d;border-radius:12px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);margin-top:8px;left:50%;transform:translateX(-50%);">
+                                <svg width="500" height="220" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="500" height="220" fill="#f8f5f0" rx="8"/>
+                                    
+                                    <!-- Hidrosfera -->
+                                    <rect x="20" y="30" width="180" height="160" fill="#e0f7fa" stroke="#17a2b8" stroke-width="2" rx="8"/>
+                                    <text x="110" y="55" text-anchor="middle" font-size="24">💧</text>
+                                    <text x="110" y="80" text-anchor="middle" font-size="13" font-weight="bold" fill="#17a2b8" data-i18n="mec.svg.b.agua">AGUA</text>
+                                    <text x="110" y="100" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.b.hidrosfera">(Hidrosfera)</text>
+                                    <text x="110" y="130" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.b.precipitacion">Precipitación</text>
+                                    <text x="110" y="148" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.b.elnino">El Niño / GRACE</text>
+                                    <text x="110" y="175" text-anchor="middle" font-size="18">☁️☔💧</text>
+
+                                    <!-- Flecha -->
+                                    <defs>
+                                        <marker id="arrowB" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                                            <polygon points="0 0, 10 3, 0 6" fill="#2d4a2d"/>
+                                        </marker>
+                                    </defs>
+                                    <line x1="200" y1="115" x2="290" y2="115" stroke="#2d4a2d" stroke-width="3" marker-end="url(#arrowB)"/>
+                                    <!-- Litosfera -->
+                                    <rect x="300" y="30" width="180" height="160" fill="#f5e6d3" stroke="#8b4513" stroke-width="2" rx="8"/>
+                                    <text x="390" y="55" text-anchor="middle" font-size="24">🌊</text>
+                                    <text x="390" y="80" text-anchor="middle" font-size="13" font-weight="bold" fill="#8b4513" data-i18n="mec.svg.b.falla">FALLA</text>
+                                    <text x="390" y="100" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.b.litosfera">(Litosfera)</text>
+                                    <text x="390" y="130" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.b.sismos">Sismos</text>
+                                    <text x="390" y="148" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.b.microsis">Microsismicidad</text>
+                                    <text x="390" y="175" text-anchor="middle" font-size="18">⚡⚡⚡</text>
+                                </svg>
+                            </div>
+                        </details>
+                    </td>
                 </tr>
+                <!-- Fila C -->
                 <tr>
                     <td style="padding:8px;"><strong>C</strong></td>
-                    <td style="padding:8px;" data-i18n="mec.tabla.atmosfera">Atmósfera</td>
-                    <td style="padding:8px;" data-i18n="mec.tabla.atmosferaHidrosfera">Hidrosfera/Atmósfera</td>
+                    <td style="padding:8px;color:#e67e22;" data-i18n="mec.tabla.atmosfera">Atmósfera</td>
+                    <td style="padding:8px;color:#17a2b8;" data-i18n="mec.tabla.atmosferaHidrosfera">Hidrosfera/Atmósfera</td>
                     <td style="padding:8px;" data-i18n="mec.tabla.termodinamico">Termodinámico (calor/vapor)</td>
+                    <td style="padding:4px;text-align:center;">
+                        <details style="display:inline-block;">
+                            <summary style="cursor:pointer;font-size:20px;list-style:none;user-select:none;">🌡️→🌧️</summary>
+                            <div style="position:absolute;z-index:1000;background:white;border:2px solid #2d4a2d;border-radius:12px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);margin-top:8px;left:50%;transform:translateX(-50%);">
+                                <svg width="500" height="220" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="500" height="220" fill="#f8f5f0" rx="8"/>
+                                    
+                                    <!-- Atmósfera -->
+                                    <rect x="20" y="30" width="180" height="160" fill="#fef3e2" stroke="#e67e22" stroke-width="2" rx="8"/>
+                                    <text x="110" y="55" text-anchor="middle" font-size="24">🌡️</text>
+                                    <text x="110" y="80" text-anchor="middle" font-size="13" font-weight="bold" fill="#e67e22" data-i18n="mec.svg.c.calor">CALOR</text>
+                                    <text x="110" y="100" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.c.atmosfera">(Atmósfera)</text>
+                                    <text x="110" y="130" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.c.evapo">Evapotranspiración</text>
+                                    <text x="110" y="148" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.c.ztd">ZTD / Vapor</text>
+                                    <text x="110" y="175" text-anchor="middle" font-size="18">☀️🔥🌡️</text>
+
+                                    <!-- Flecha -->
+                                    <defs>
+                                        <marker id="arrowC" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                                            <polygon points="0 0, 10 3, 0 6" fill="#2d4a2d"/>
+                                        </marker>
+                                    </defs>
+                                    <line x1="210" y1="110" x2="280" y2="110" stroke="#2d4a2d" stroke-width="3" marker-end="url(#arrowC)"/>
+                                    <text x="245" y="100" text-anchor="middle" font-size="10" fill="#2d4a2d" font-weight="bold" data-i18n="mec.svg.c.conveccion">Convección</text>
+                                    <text x="245" y="130" text-anchor="middle" font-size="9" fill="#4a5a4a" data-i18n="mec.svg.c.clausius">+7% vapor/°C</text>
+
+                                    <!-- Hidrosfera -->
+                                    <rect x="300" y="30" width="180" height="160" fill="#e0f7fa" stroke="#17a2b8" stroke-width="2" rx="8"/>
+                                    <text x="390" y="55" text-anchor="middle" font-size="24">🌧️</text>
+                                    <text x="390" y="80" text-anchor="middle" font-size="13" font-weight="bold" fill="#17a2b8" data-i18n="mec.svg.c.lluvia">LLUVIA</text>
+                                    <text x="390" y="100" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.c.hidrosfera">(Hidrosfera)</text>
+                                    <text x="390" y="130" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.c.precip">Precipitación</text>
+                                    <text x="390" y="148" text-anchor="middle" font-size="11" fill="#4a5a4a" data-i18n="mec.svg.c.extremos">Eventos extremos</text>
+                                    <text x="390" y="175" text-anchor="middle" font-size="18">☁️🌧️💧</text>
+                                </svg>
+                            </div>
+                        </details>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -2872,6 +2988,40 @@ const TRADUCCIONES = {
         // Integridad
         'mec.integridad.titulo': '📜 Declaración de Integridad Científica',
         'mec.integridad.texto': 'Los datos SIRGAS en este dashboard se utilizan para verificar exploratoriamente hipótesis de acoplamiento clima-Tierra sólida (Mecanismos A y B). Todos los análisis de correlación muestran resultados de pruebas estadísticas (valor p, intervalos de confianza). La separación de componentes no tectónicas en señales de desplazamiento vertical tiene incertidumbre. Los datos de esta plataforma no sustituyen las publicaciones oficiales de cada institución, ni se utilizan para decisiones de alerta temprana.',
+        // ═══ Claves SVG para mapas de integración ═══
+        'mec.tabla.mapa': 'Mapa visual',
+        // Mapa A
+        'mec.svg.a.glaciar': 'GLACIAR',
+        'mec.svg.a.criosfera': '(Criosfera)',
+        'mec.svg.a.retroceso': 'Retroceso',
+        'mec.svg.a.perdida': 'Pérdida de masa',
+        'mec.svg.a.descompresion': 'Descompresión',
+        'mec.svg.a.rebote': 'rebote elástico',
+        'mec.svg.a.volcan': 'VOLCÁN',
+        'mec.svg.a.litosfera': '(Litosfera)',
+        'mec.svg.a.magma': 'Expansión de',
+        'mec.svg.a.erupcion': 'magma y erupción',
+        // Mapa B
+        'mec.svg.b.agua': 'AGUA',
+        'mec.svg.b.hidrosfera': '(Hidrosfera)',
+        'mec.svg.b.precipitacion': 'Precipitación',
+        'mec.svg.b.elnino': 'El Niño / GRACE',
+        'mec.svg.b.coulomb': 'Esfuerzo de Coulomb',
+        'mec.svg.b.falla': 'FALLA',
+        'mec.svg.b.litosfera': '(Litosfera)',
+        'mec.svg.b.sismos': 'Sismos',
+        'mec.svg.b.microsis': 'Microsismicidad',
+        // Mapa C
+        'mec.svg.c.calor': 'CALOR',
+        'mec.svg.c.atmosfera': '(Atmósfera)',
+        'mec.svg.c.evapo': 'Evapotranspiración',
+        'mec.svg.c.ztd': 'ZTD / Vapor',
+        'mec.svg.c.conveccion': 'Convección',
+        'mec.svg.c.clausius': '+7% vapor/°C',
+        'mec.svg.c.lluvia': 'LLUVIA',
+        'mec.svg.c.hidrosfera': '(Hidrosfera)',
+        'mec.svg.c.precip': 'Precipitación',
+        'mec.svg.c.extremos': 'Eventos extremos',
     },
     en: {
         // Header
@@ -2992,7 +3142,7 @@ const TRADUCCIONES = {
         'mec.b.cadena.p1': 'Climate events (El Niño/La Niña) alter precipitation patterns.',
         'mec.b.cadena.p2': 'The spatial and temporal distribution of water stored on the surface and underground changes.',
         'mec.b.cadena.p3': 'The crust deforms elastically (measurable with GNSS).',
-        'mec.b.cadena.p4': 'Coulomb stress changes on nearby faults can promote or inhibit ruptures.',
+        'mec.b.cadena.p4': 'Coulomb changes on nearby faults can promote or inhibit ruptures.',
         'mec.b.cadena.p5': 'Variations in regional microseismicity are observed.',
         'mec.b.evidencia.titulo': 'Scientific evidence:',
         'mec.b.evidencia.p1': 'During El Niño 2015-2016, water storage variations of up to 60 cm were detected in northern Brazil and 40 cm in the south, with corresponding GNSS deformations.',
@@ -3049,6 +3199,40 @@ const TRADUCCIONES = {
         'mec.metodos.c.texto': 'Correlation by lags (0-72h) + ROC-AUC curves for predictive capacity of intense precipitation. Criterion: AUC > 0.7.',
         'mec.integridad.titulo': '📜 Scientific Integrity Statement',
         'mec.integridad.texto': 'SIRGAS data in this dashboard are used to exploratorily verify climate-solid Earth coupling hypotheses (Mechanisms A and B). All correlation analyses show statistical test results (p-value, confidence intervals). Separating non-tectonic components in vertical displacement signals has uncertainty. The data on this platform do not replace the official publications of each institution, nor are they used for early warning decisions.',
+        // ═══ SVG keys ═══
+        'mec.tabla.mapa': 'Visual map',
+        // Map A
+        'mec.svg.a.glaciar': 'GLACIER',
+        'mec.svg.a.criosfera': '(Cryosphere)',
+        'mec.svg.a.retroceso': 'Retreat',
+        'mec.svg.a.perdida': 'Mass loss',
+        'mec.svg.a.descompresion': 'Decompression',
+        'mec.svg.a.rebote': 'elastic rebound',
+        'mec.svg.a.volcan': 'VOLCANO',
+        'mec.svg.a.litosfera': '(Lithosphere)',
+        'mec.svg.a.magma': 'Expansion of',
+        'mec.svg.a.erupcion': 'magma and eruption',
+        // Map B
+        'mec.svg.b.agua': 'WATER',
+        'mec.svg.b.hidrosfera': '(Hydrosphere)',
+        'mec.svg.b.precipitacion': 'Precipitation',
+        'mec.svg.b.elnino': 'El Niño / GRACE',
+        'mec.svg.b.coulomb': 'Coulomb stress',
+        'mec.svg.b.falla': 'FAULT',
+        'mec.svg.b.litosfera': '(Lithosphere)',
+        'mec.svg.b.sismos': 'Earthquakes',
+        'mec.svg.b.microsis': 'Microseismicity',
+        // Map C
+        'mec.svg.c.calor': 'HEAT',
+        'mec.svg.c.atmosfera': '(Atmosphere)',
+        'mec.svg.c.evapo': 'Evapotranspiration',
+        'mec.svg.c.ztd': 'ZTD / Vapor',
+        'mec.svg.c.conveccion': 'Convection',
+        'mec.svg.c.clausius': '+7% vapor/°C',
+        'mec.svg.c.lluvia': 'RAIN',
+        'mec.svg.c.hidrosfera': '(Hydrosphere)',
+        'mec.svg.c.precip': 'Precipitation',
+        'mec.svg.c.extremos': 'Extreme events',
     },
     pt: {
         // Header
@@ -3226,6 +3410,41 @@ const TRADUCCIONES = {
         'mec.metodos.c.texto': 'Correlação por atrasos (0-72h) + curvas ROC-AUC para capacidade preditiva de precipitação intensa. Critério: AUC > 0,7.',
         'mec.integridad.titulo': '📜 Declaração de Integridade Científica',
         'mec.integridad.texto': 'Os dados SIRGAS neste painel são usados para verificar exploratoriamente hipóteses de acoplamento clima-Terra sólida (Mecanismos A e B). Todas as análises de correlação mostram resultados de testes estatísticos (valor p, intervalos de confiança). A separação de componentes não tectônicas em sinais de deslocamento vertical tem incerteza. Os dados desta plataforma não substituem as publicações oficiais de cada instituição, nem são usados para decisões de alerta precoce.',
+        // ═══ SVG keys ═══
+        'mec.tabla.mapa': 'Mapa visual',
+        // Mapa A
+        'mec.svg.a.glaciar': 'GELEIRA',
+        'mec.svg.a.criosfera': '(Criosfera)',
+        'mec.svg.a.retroceso': 'Recuo',
+        'mec.svg.a.retroceso': 'Recuo',
+        'mec.svg.a.perdida': 'Perda de massa',
+        'mec.svg.a.descompresion': 'Descompressão',
+        'mec.svg.a.rebote': 'rebote elástico',
+        'mec.svg.a.volcan': 'VULCÃO',
+        'mec.svg.a.litosfera': '(Litosfera)',
+        'mec.svg.a.magma': 'Expansão de',
+        'mec.svg.a.erupcion': 'magma e erupção',
+        // Mapa B
+        'mec.svg.b.agua': 'ÁGUA',
+        'mec.svg.b.hidrosfera': '(Hidrosfera)',
+        'mec.svg.b.precipitacion': 'Precipitação',
+        'mec.svg.b.elnino': 'El Niño / GRACE',
+        'mec.svg.b.coulomb': 'Coulomb',
+        'mec.svg.b.falla': 'FALHA',
+        'mec.svg.b.litosfera': '(Litosfera)',
+        'mec.svg.b.sismos': 'Sismos',
+        'mec.svg.b.microsis': 'Microsismicidade',
+        // Mapa C
+        'mec.svg.c.calor': 'CALOR',
+        'mec.svg.c.atmosfera': '(Atmosfera)',
+        'mec.svg.c.evapo': 'Evapotranspiração',
+        'mec.svg.c.ztd': 'ZTD / Vapor',
+        'mec.svg.c.conveccion': 'Convecção',
+        'mec.svg.c.clausius': '+7% vapor/°C',
+        'mec.svg.c.lluvia': 'CHUVA',
+        'mec.svg.c.hidrosfera': '(Hidrosfera)',
+        'mec.svg.c.precip': 'Precipitação',
+        'mec.svg.c.extremos': 'Eventos extremos',
     }
 };
 
