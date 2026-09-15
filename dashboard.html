@@ -183,6 +183,7 @@
         <button id="tabAQI" class="map-tab" data-i18n="tab.aqi">🌫️ Mapa AQI</button>
         <button id="tabDeforestacion" class="map-tab" data-i18n="tab.deforestacion">🌳 Deforestación</button>
         <button id="tabAreasprotegidas" class="map-tab" data-i18n="tab.areas">🌿 Áreas Protegidas</button>
+        <button id="tabAcoplamiento" class="map-tab" data-i18n="tab.acoplamiento">🌍 Acoplamiento Tierra-Clima</button>
     </div>
 
 <!-- ═══ TAB SIRGAS ═══ -->
@@ -774,6 +775,181 @@
             <p><strong>Fuente</strong>: WDPA (UNEP-WCMC &amp; IUCN) · Categorías IUCN I-VI</p>
         </div>
     </details>
+</div>
+
+
+
+<!-- ═══ TAB ACOPLAMIENTO TIERRA-CLIMA ═══ -->
+<div id="tabContent-acoplamiento" class="tab-content" style="display:none;padding:20px 0;">
+
+    <!-- Introducción -->
+    <div style="background:#f8f5f0;padding:24px 28px;border-radius:16px;margin:16px 0;border-left:4px solid #2d4a2d;">
+        <h3 style="color:#2d4a2d;margin:0 0 12px;" data-i18n="mec.intro.titulo">🌍 El Sistema Tierra como Sistema Acoplado</h3>
+        <p style="color:#4a5a4a;line-height:1.7;margin:0;" data-i18n="mec.intro.parrafo">La Tierra no es un conjunto de esferas independientes. La atmósfera, la hidrosfera, la criosfera y la litosfera intercambian masa, energía y momento de forma continua. El calentamiento global antropogénico está alterando estos intercambios, y la región andina —por su alta sismicidad, vulcanismo activo, glaciares tropicales en retroceso y marcada variabilidad hidroclimática— constituye un laboratorio natural para estudiar estos acoplamientos.</p>
+        <p style="color:#4a5a4a;line-height:1.7;margin:12px 0 0;" data-i18n="mec.intro.parrafo2">Este portal se sustenta en tres mecanismos físicos verificables que describen cómo los cambios superficiales (clima, agua, hielo) pueden influir en procesos profundos (tectónica, vulcanismo), y cómo los procesos atmosféricos se relacionan con el ciclo hidrológico.</p>
+    </div>
+
+    <!-- Mecanismo A -->
+    <details open style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
+        <summary style="cursor:pointer;font-weight:700;color:#c0392b;font-size:16px;" data-i18n="mec.a.titulo">🌋 Mecanismo A: Descompresión por Pérdida de Masa Superficial</summary>
+        <div style="font-size:14px;color:#4a5a4a;margin-top:14px;line-height:1.7;">
+            <p><strong data-i18n="mec.a.fundamento.titulo">Fundamento físico:</strong> <span data-i18n="mec.a.fundamento.texto">La corteza terrestre responde elásticamente a cambios de carga superficial. Cuando una masa (hielo, agua, sedimento) se deposita o se retira, la superficie se hunde o se levanta en un proceso conocido como ajuste isostático o rebote elástico.</span></p>
+            
+            <p><strong data-i18n="mec.a.cadena.titulo">Cadena causal:</strong></p>
+            <ol style="margin-left:22px;">
+                <li data-i18n="mec.a.cadena.p1">El calentamiento global acelera el retroceso de los glaciares andinos.</li>
+                <li data-i18n="mec.a.cadena.p2">La pérdida de masa glaciar reduce la carga vertical sobre la corteza.</li>
+                <li data-i18n="mec.a.cadena.p3">La corteza experimenta descompresión y levantamiento elástico (medible con GNSS).</li>
+                <li data-i18n="mec.a.cadena.p4">En zonas volcánicas, la reducción de presión de confinamiento permite la expansión de magmas y gases disueltos.</li>
+                <li data-i18n="mec.a.cadena.p5">Esto puede incrementar la frecuencia y explosividad de erupciones.</li>
+            </ol>
+            
+            <p><strong data-i18n="mec.a.evidencia.titulo">Evidencia científica:</strong></p>
+            <ul style="margin-left:22px;">
+                <li data-i18n="mec.a.evidencia.p1">Estudios en Islandia y Chile han documentado correlaciones entre retroceso glaciar y actividad volcánica.</li>
+                <li data-i18n="mec.a.evidencia.p2">Investigaciones con fechado por argón en volcanes del sur de Chile demuestran que los períodos de deshielo coinciden con erupciones explosivas de magmas ricos en sílice.</li>
+                <li data-i18n="mec.a.evidencia.p3">Las tasas de rebote elástico por descarga glaciar son del orden de mm/año a cm/año.</li>
+            </ul>
+            
+            <p><strong data-i18n="mec.a.indicadores.titulo">Indicadores monitoreables en este portal:</strong></p>
+            <ul style="margin-left:22px;list-style:none;">
+                <li>☑️ <span data-i18n="mec.a.ind.p1">Desplazamiento vertical residual GNSS (SIRGAS) en estaciones cercanas a glaciares.</span></li>
+                <li>☑️ <span data-i18n="mec.a.ind.p2">Balance de masa glaciar (fuentes: IDEAM, WGMS, estudios académicos).</span></li>
+                <li>☑️ <span data-i18n="mec.a.ind.p3">Índices de actividad volcánica (SO₂, sismicidad volcánica, deformación volcánica).</span></li>
+            </ul>
+        </div>
+    </details>
+
+    <!-- Mecanismo B -->
+    <details style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
+        <summary style="cursor:pointer;font-weight:700;color:#2980b9;font-size:16px;" data-i18n="mec.b.titulo">💧 Mecanismo B: Transferencia de Esfuerzos por Carga Hidrológica</summary>
+        <div style="font-size:14px;color:#4a5a4a;margin-top:14px;line-height:1.7;">
+            <p><strong data-i18n="mec.b.fundamento.titulo">Fundamento físico:</strong> <span data-i18n="mec.b.fundamento.texto">Las variaciones en el almacenamiento de agua (precipitación, humedad del suelo, aguas subterráneas, embalses) modifican la carga sobre la corteza. Estos cambios de carga generan deformación elástica y modifican el estado de esfuerzos en fallas someras, pudiendo modular la sismicidad regional.</span></p>
+            
+            <p><strong data-i18n="mec.b.cadena.titulo">Cadena causal:</strong></p>
+            <ol style="margin-left:22px;">
+                <li data-i18n="mec.b.cadena.p1">Eventos climáticos (El Niño/La Niña) alteran los patrones de precipitación.</li>
+                <li data-i18n="mec.b.cadena.p2">Cambia la distribución espacial y temporal del agua almacenada en superficie y subsuelo.</li>
+                <li data-i18n="mec.b.cadena.p3">La corteza se deforma elásticamente (medible con GNSS).</li>
+                <li data-i18n="mec.b.cadena.p4">Los cambios de esfuerzo de Coulomb en fallas cercanas pueden promover o inhibir rupturas.</li>
+                <li data-i18n="mec.b.cadena.p5">Se observan variaciones en la microsismicidad regional.</li>
+            </ol>
+            
+            <p><strong data-i18n="mec.b.evidencia.titulo">Evidencia científica:</strong></p>
+            <ul style="margin-left:22px;">
+                <li data-i18n="mec.b.evidencia.p1">Durante El Niño 2015-2016, se detectaron variaciones de almacenamiento de agua de hasta 60 cm en el norte de Brasil y 40 cm en el sur, con deformaciones correspondientes en GNSS.</li>
+                <li data-i18n="mec.b.evidencia.p2">Se ha documentado correlación entre ciclos hidrológicos y microsismicidad en varias regiones del mundo (ej. California, Himalaya).</li>
+                <li data-i18n="mec.b.evidencia.p3">En los Andes, el nido sísmico de Bucaramanga (Colombia) es un candidato para estudios de modulación por carga.</li>
+            </ul>
+            
+            <p><strong data-i18n="mec.b.indicadores.titulo">Indicadores monitoreables en este portal:</strong></p>
+            <ul style="margin-left:22px;list-style:none;">
+                <li>☑️ <span data-i18n="mec.b.ind.p1">Desplazamiento vertical GNSS (componente estacional e interanual).</span></li>
+                <li>☑️ <span data-i18n="mec.b.ind.p2">Precipitación y almacenamiento de agua (CHIRPS, GRACE, redes nacionales).</span></li>
+                <li>☑️ <span data-i18n="mec.b.ind.p3">Catálogos de sismicidad regional (SGC Colombia, IGP Perú, etc.).</span></li>
+            </ul>
+            
+            <p style="background:#fff3cd;padding:10px 14px;border-radius:8px;margin-top:12px;font-size:13px;">
+                <strong data-i18n="mec.b.limitacion.titulo">Limitación:</strong> <span data-i18n="mec.b.limitacion.texto">La señal de modulación sísmica por carga es pequeña y requiere alta precisión. Este módulo se presenta como exploratorio.</span>
+            </p>
+        </div>
+    </details>
+
+    <!-- Mecanismo C -->
+    <details style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
+        <summary style="cursor:pointer;font-weight:700;color:#27ae60;font-size:16px;" data-i18n="mec.c.titulo">🌧️ Mecanismo C: Convección Atmosférica y el Ciclo Hidrológico</summary>
+        <div style="font-size:14px;color:#4a5a4a;margin-top:14px;line-height:1.7;">
+            <p><strong data-i18n="mec.c.fundamento.titulo">Fundamento físico:</strong> <span data-i18n="mec.c.fundamento.texto">El calentamiento superficial intensifica la convección atmosférica, aumenta la capacidad de retención de vapor de agua de la atmósfera (ley de Clausius-Clapeyron) y altera la circulación atmosférica a gran escala. Este mecanismo opera exclusivamente en la atmósfera y la hidrosfera, sin acoplamiento directo con la litosfera.</span></p>
+            
+            <p><strong data-i18n="mec.c.cadena.titulo">Cadena causal:</strong></p>
+            <ol style="margin-left:22px;">
+                <li data-i18n="mec.c.cadena.p1">El calentamiento global aumenta la temperatura superficial y la evapotranspiración.</li>
+                <li data-i18n="mec.c.cadena.p2">La atmósfera retiene más vapor de agua (≈7% por cada °C de calentamiento).</li>
+                <li data-i18n="mec.c.cadena.p3">La convección se intensifica, liberando calor latente y generando precipitaciones más intensas.</li>
+                <li data-i18n="mec.c.cadena.p4">La circulación atmosférica se reorganiza (expansión de la célula de Hadley, desplazamiento de corrientes en chorro).</li>
+                <li data-i18n="mec.c.cadena.p5">Aumenta la frecuencia de eventos extremos (sequías, inundaciones).</li>
+            </ol>
+            
+            <p><strong data-i18n="mec.c.evidencia.titulo">Evidencia científica:</strong></p>
+            <ul style="margin-left:22px;">
+                <li data-i18n="mec.c.evidencia.p1">El IPCC documenta un debilitamiento y expansión de la célula de Hadley.</li>
+                <li data-i18n="mec.c.evidencia.p2">Las corrientes en chorro subtropicales se han desplazado hacia los polos (~0.38°/década).</li>
+                <li data-i18n="mec.c.evidencia.p3">Los glaciares tropicales andinos han retrocedido a niveles no vistos en 11,700 años.</li>
+            </ul>
+            
+            <p><strong data-i18n="mec.c.indicadores.titulo">Indicadores monitoreables en este portal:</strong></p>
+            <ul style="margin-left:22px;list-style:none;">
+                <li>☑️ <span data-i18n="mec.c.ind.p1">ZTD (SIRGAS) como proxy de vapor de agua atmosférico.</span></li>
+                <li>☑️ <span data-i18n="mec.c.ind.p2">Temperatura, humedad, precipitación (estaciones meteorológicas nacionales).</span></li>
+                <li>☑️ <span data-i18n="mec.c.ind.p3">Índices de eventos extremos (SPI, índices de sequía).</span></li>
+            </ul>
+            
+            <p style="background:#fff3cd;padding:10px 14px;border-radius:8px;margin-top:12px;font-size:13px;">
+                <strong data-i18n="mec.c.nota.titulo">Nota importante:</strong> <span data-i18n="mec.c.nota.texto">Este mecanismo no debe confundirse con los Mecanismos A y B. El calor atmosférico no "penetra" en la litosfera ni "atrae" el calor interno terrestre.</span>
+            </p>
+        </div>
+    </details>
+
+    <!-- Integración -->
+    <div style="background:#f0f5f0;padding:22px 26px;border-radius:14px;margin:16px 0;border-left:4px solid #8aaa8a;">
+        <h4 style="color:#2d4a2d;margin:0 0 12px;" data-i18n="mec.integracion.titulo">🔗 Integración: El Enfoque Sistémico de Andes Observatorio</h4>
+        <p style="color:#4a5a4a;line-height:1.7;margin:0 0 12px;" data-i18n="mec.integracion.parrafo">Los tres mecanismos describen diferentes vías de acoplamiento:</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead>
+                <tr style="background:#2d4a2d;color:white;">
+                    <th style="padding:8px;text-align:left;" data-i18n="mec.tabla.mecanismo">Mecanismo</th>
+                    <th style="padding:8px;text-align:left;" data-i18n="mec.tabla.origen">Esfera origen</th>
+                    <th style="padding:8px;text-align:left;" data-i18n="mec.tabla.destino">Esfera destino</th>
+                    <th style="padding:8px;text-align:left;" data-i18n="mec.tabla.tipo">Tipo de acoplamiento</th>
+                </tr>
+            </thead>
+            <tbody style="background:white;">
+                <tr>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;"><strong>A</strong></td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.criosfera">Criosfera</td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.litosfera">Litosfera</td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.mecanico1">Mecánico (carga/descompresión)</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;"><strong>B</strong></td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.hidrosfera">Hidrosfera</td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.litosfera">Litosfera</td>
+                    <td style="padding:8px;border-bottom:1px solid #ede8e0;" data-i18n="mec.tabla.mecanico2">Mecánico (carga/esfuerzo)</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px;"><strong>C</strong></td>
+                    <td style="padding:8px;" data-i18n="mec.tabla.atmosfera">Atmósfera</td>
+                    <td style="padding:8px;" data-i18n="mec.tabla.atmosferaHidrosfera">Hidrosfera/Atmósfera</td>
+                    <td style="padding:8px;" data-i18n="mec.tabla.termodinamico">Termodinámico (calor/vapor)</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p style="color:#4a5a4a;line-height:1.7;margin:16px 0 0;font-style:italic;" data-i18n="mec.integracion.pregunta"><strong>Pregunta de investigación central:</strong> "¿Existe una correlación estadísticamente significativa entre los cambios en la carga superficial (hielo, agua) y los cambios en la actividad tectónica/volcánica en los Andes, en las escalas temporales de décadas a milenios?"</p>
+    </div>
+
+    <!-- Advertencia epistemológica -->
+    <div style="background:#fff3cd;padding:18px 22px;border-radius:12px;margin:16px 0;border-left:4px solid #d4a017;">
+        <h4 style="color:#856404;margin:0 0 8px;" data-i18n="mec.advertencia.titulo">⚠️ Advertencia Epistemológica</h4>
+        <p style="color:#856404;line-height:1.7;margin:0;" data-i18n="mec.advertencia.texto">Este portal no busca confirmar una hipótesis preestablecida, sino explorar correlaciones y cuantificar incertidumbres. La ciencia avanza formulando hipótesis nulas y tratando de refutarlas. Todos los análisis se presentan con sus intervalos de confianza y valores p.</p>
+    </div>
+
+    <!-- Métodos estadísticos resumidos -->
+    <details style="margin:16px 0;background:#f4f8f4;border-radius:12px;padding:14px 20px;border-left:4px solid #2c5f2c;">
+        <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:15px;" data-i18n="mec.metodos.titulo">🔬 Métodos estadísticos utilizados</summary>
+        <div style="font-size:13px;color:#4a5a4a;margin-top:12px;line-height:1.7;">
+            <p><strong data-i18n="mec.metodos.a.titulo">Mecanismo A — Correlación GNSS vs glaciar:</strong> <span data-i18n="mec.metodos.a.texto">Correlación de Spearman (no paramétrica) + regresión lineal. Criterio: r > 0.5 con p < 0.05.</span></p>
+            <p><strong data-i18n="mec.metodos.b.titulo">Mecanismo B — Carga hidrológica vs microsismos:</strong> <span data-i18n="mec.metodos.b.texto">Correlación cruzada con retardos de -12 a +12 meses + prueba de significancia por permutación (1000 iteraciones). Criterio: p < 0.05 con lag coherente.</span></p>
+            <p><strong data-i18n="mec.metodos.c.titulo">Mecanismo C — ZTD vs precipitación:</strong> <span data-i18n="mec.metodos.c.texto">Correlación por retardos (0-72h) + curvas ROC-AUC para capacidad predictiva de precipitación intensa. Criterio: AUC > 0.7.</span></p>
+        </div>
+    </details>
+
+    <!-- Declaración de integridad -->
+    <div style="background:#f8f5f0;padding:22px 26px;border-radius:14px;margin:16px 0;border:2px solid #2d4a2d;">
+        <h4 style="color:#2d4a2d;margin:0 0 12px;" data-i18n="mec.integridad.titulo">📜 Declaración de Integridad Científica</h4>
+        <p style="color:#4a5a4a;line-height:1.7;margin:0;font-size:13px;" data-i18n="mec.integridad.texto">Los datos SIRGAS en este dashboard se utilizan para verificar exploratoriamente hipótesis de acoplamiento clima-Tierra sólida (Mecanismos A y B). Todos los análisis de correlación muestran resultados de pruebas estadísticas (valor p, intervalos de confianza). La separación de componentes no tectónicas en señales de desplazamiento vertical tiene incertidumbre. Los datos de esta plataforma no sustituyen las publicaciones oficiales de cada institución, ni se utilizan para decisiones de alerta temprana.</p>
+    </div>
+
 </div>
 
 <div class="normativas-panel">
@@ -1626,7 +1802,8 @@
             'clima': 'tabClima',
             'aqi': 'tabAQI',
             'deforestacion': 'tabDeforestacion',
-            'areasprotegidas': 'tabAreasprotegidas'
+            'areasprotegidas': 'tabAreasprotegidas',
+            'acoplamiento': 'tabAcoplamiento'
         };
         const tabBtn = document.getElementById(tabIdMap[tipo] || 'tabSirgas');
         if (tabBtn) tabBtn.classList.add('active');
@@ -1674,6 +1851,9 @@
                     mapaAreas.invalidateSize();
                     if (chartAreas) setTimeout(() => chartAreas.resize(), 100);
                 }
+            } else if (tipo === 'acoplamiento') {
+                // Tab estático: solo mostrar contenido, sin mapa
+                console.log('🌍 Tab Acoplamiento Tierra-Clima activado');
             }
         }, 200);
     }
@@ -2038,6 +2218,7 @@
     document.getElementById('tabAQI').addEventListener('click', function() { mostrarMapa('aqi'); });
     document.getElementById('tabDeforestacion').addEventListener('click', function() { mostrarMapa('deforestacion'); });
     document.getElementById('tabAreasprotegidas').addEventListener('click', function() { mostrarMapa('areasprotegidas'); });
+    document.getElementById('tabAcoplamiento').addEventListener('click', function() { mostrarMapa('acoplamiento'); });
 
     function colorZTDAnomalia(anomalia, maxAbs) {
         if (maxAbs === 0) return 'hsl(120, 70%, 50%)';
@@ -2598,6 +2779,99 @@ const TRADUCCIONES = {
         'alertas.hum': '💧 Humedad (%)',
         'alertas.feels': '🌡️ Sensación (ºC)',
         'alertas.actual': 'Actual',
+        // Tab Acoplamiento
+        'tab.acoplamiento': '🌍 Acoplamiento Tierra-Clima',
+        'mec.intro.titulo': '🌍 El Sistema Tierra como Sistema Acoplado',
+        'mec.intro.parrafo': 'La Tierra no es un conjunto de esferas independientes. La atmósfera, la hidrosfera, la criosfera y la litosfera intercambian masa, energía y momento de forma continua. El calentamiento global antropogénico está alterando estos intercambios, y la región andina —por su alta sismicidad, vulcanismo activo, glaciares tropicales en retroceso y marcada variabilidad hidroclimática— constituye un laboratorio natural para estudiar estos acoplamientos.',
+        'mec.intro.parrafo2': 'Este portal se sustenta en tres mecanismos físicos verificables que describen cómo los cambios superficiales (clima, agua, hielo) pueden influir en procesos profundos (tectónica, vulcanismo), y cómo los procesos atmosféricos se relacionan con el ciclo hidrológico.',
+        // Mecanismo A
+        'mec.a.titulo': '🌋 Mecanismo A: Descompresión por Pérdida de Masa Superficial',
+        'mec.a.fundamento.titulo': 'Fundamento físico:',
+        'mec.a.fundamento.texto': 'La corteza terrestre responde elásticamente a cambios de carga superficial. Cuando una masa (hielo, agua, sedimento) se deposita o se retira, la superficie se hunde o se levanta en un proceso conocido como ajuste isostático o rebote elástico.',
+        'mec.a.cadena.titulo': 'Cadena causal:',
+        'mec.a.cadena.p1': 'El calentamiento global acelera el retroceso de los glaciares andinos.',
+        'mec.a.cadena.p2': 'La pérdida de masa glaciar reduce la carga vertical sobre la corteza.',
+        'mec.a.cadena.p3': 'La corteza experimenta descompresión y levantamiento elástico (medible con GNSS).',
+        'mec.a.cadena.p4': 'En zonas volcánicas, la reducción de presión de confinamiento permite la expansión de magmas y gases disueltos.',
+        'mec.a.cadena.p5': 'Esto puede incrementar la frecuencia y explosividad de erupciones.',
+        'mec.a.evidencia.titulo': 'Evidencia científica:',
+        'mec.a.evidencia.p1': 'Estudios en Islandia y Chile han documentado correlaciones entre retroceso glaciar y actividad volcánica.',
+        'mec.a.evidencia.p2': 'Investigaciones con fechado por argón en volcanes del sur de Chile demuestran que los períodos de deshielo coinciden con erupciones explosivas de magmas ricos en sílice.',
+        'mec.a.evidencia.p3': 'Las tasas de rebote elástico por descarga glaciar son del orden de mm/año a cm/año.',
+        'mec.a.indicadores.titulo': 'Indicadores monitoreables en este portal:',
+        'mec.a.ind.p1': 'Desplazamiento vertical residual GNSS (SIRGAS) en estaciones cercanas a glaciares.',
+        'mec.a.ind.p2': 'Balance de masa glaciar (fuentes: IDEAM, WGMS, estudios académicos).',
+        'mec.a.ind.p3': 'Índices de actividad volcánica (SO₂, sismicidad volcánica, deformación volcánica).',
+        // Mecanismo B
+        'mec.b.titulo': '💧 Mecanismo B: Transferencia de Esfuerzos por Carga Hidrológica',
+        'mec.b.fundamento.titulo': 'Fundamento físico:',
+        'mec.b.fundamento.texto': 'Las variaciones en el almacenamiento de agua (precipitación, humedad del suelo, aguas subterráneas, embalses) modifican la carga sobre la corteza. Estos cambios de carga generan deformación elástica y modifican el estado de esfuerzos en fallas someras, pudiendo modular la sismicidad regional.',
+        'mec.b.cadena.titulo': 'Cadena causal:',
+        'mec.b.cadena.p1': 'Eventos climáticos (El Niño/La Niña) alteran los patrones de precipitación.',
+        'mec.b.cadena.p2': 'Cambia la distribución espacial y temporal del agua almacenada en superficie y subsuelo.',
+        'mec.b.cadena.p3': 'La corteza se deforma elásticamente (medible con GNSS).',
+        'mec.b.cadena.p4': 'Los cambios de esfuerzo de Coulomb en fallas cercanas pueden promover o inhibir rupturas.',
+        'mec.b.cadena.p5': 'Se observan variaciones en la microsismicidad regional.',
+        'mec.b.evidencia.titulo': 'Evidencia científica:',
+        'mec.b.evidencia.p1': 'Durante El Niño 2015-2016, se detectaron variaciones de almacenamiento de agua de hasta 60 cm en el norte de Brasil y 40 cm en el sur, con deformaciones correspondientes en GNSS.',
+        'mec.b.evidencia.p2': 'Se ha documentado correlación entre ciclos hidrológicos y microsismicidad en varias regiones del mundo (ej. California, Himalaya).',
+        'mec.b.evidencia.p3': 'En los Andes, el nido sísmico de Bucaramanga (Colombia) es un candidato para estudios de modulación por carga.',
+        'mec.b.indicadores.titulo': 'Indicadores monitoreables en este portal:',
+        'mec.b.ind.p1': 'Desplazamiento vertical GNSS (componente estacional e interanual).',
+        'mec.b.ind.p2': 'Precipitación y almacenamiento de agua (CHIRPS, GRACE, redes nacionales).',
+        'mec.b.ind.p3': 'Catálogos de sismicidad regional (SGC Colombia, IGP Perú, etc.).',
+        'mec.b.limitacion.titulo': 'Limitación:',
+        'mec.b.limitacion.texto': 'La señal de modulación sísmica por carga es pequeña y requiere alta precisión. Este módulo se presenta como exploratorio.',
+        // Mecanismo C
+        'mec.c.titulo': '🌧️ Mecanismo C: Convección Atmosférica y el Ciclo Hidrológico',
+        'mec.c.fundamento.titulo': 'Fundamento físico:',
+        'mec.c.fundamento.texto': 'El calentamiento superficial intensifica la convección atmosférica, aumenta la capacidad de retención de vapor de agua de la atmósfera (ley de Clausius-Clapeyron) y altera la circulación atmosférica a gran escala. Este mecanismo opera exclusivamente en la atmósfera y la hidrosfera, sin acoplamiento directo con la litosfera.',
+        'mec.c.cadena.titulo': 'Cadena causal:',
+        'mec.c.cadena.p1': 'El calentamiento global aumenta la temperatura superficial y la evapotranspiración.',
+        'mec.c.cadena.p2': 'La atmósfera retiene más vapor de agua (≈7% por cada °C de calentamiento).',
+        'mec.c.cadena.p3': 'La convección se intensifica, liberando calor latente y generando precipitaciones más intensas.',
+        'mec.c.cadena.p4': 'La circulación atmosférica se reorganiza (expansión de la célula de Hadley, desplazamiento de corrientes en chorro).',
+        'mec.c.cadena.p5': 'Aumenta la frecuencia de eventos extremos (sequías, inundaciones).',
+        'mec.c.evidencia.titulo': 'Evidencia científica:',
+        'mec.c.evidencia.p1': 'El IPCC documenta un debilitamiento y expansión de la célula de Hadley.',
+        'mec.c.evidencia.p2': 'Las corrientes en chorro subtropicales se han desplazado hacia los polos (~0.38°/década).',
+        'mec.c.evidencia.p3': 'Los glaciares tropicales andinos han retrocedido a niveles no vistos en 11,700 años.',
+        'mec.c.indicadores.titulo': 'Indicadores monitoreables en este portal:',
+        'mec.c.ind.p1': 'ZTD (SIRGAS) como proxy de vapor de agua atmosférico.',
+        'mec.c.ind.p2': 'Temperatura, humedad, precipitación (estaciones meteorológicas nacionales).',
+        'mec.c.ind.p3': 'Índices de eventos extremos (SPI, índices de sequía).',
+        'mec.c.nota.titulo': 'Nota importante:',
+        'mec.c.nota.texto': 'Este mecanismo no debe confundirse con los Mecanismos A y B. El calor atmosférico no "penetra" en la litosfera ni "atrae" el calor interno terrestre.',
+        // Integración
+        'mec.integracion.titulo': '🔗 Integración: El Enfoque Sistémico de Andes Observatorio',
+        'mec.integracion.parrafo': 'Los tres mecanismos describen diferentes vías de acoplamiento:',
+        'mec.tabla.mecanismo': 'Mecanismo',
+        'mec.tabla.origen': 'Esfera origen',
+        'mec.tabla.destino': 'Esfera destino',
+        'mec.tabla.tipo': 'Tipo de acoplamiento',
+        'mec.tabla.criosfera': 'Criosfera',
+        'mec.tabla.litosfera': 'Litosfera',
+        'mec.tabla.hidrosfera': 'Hidrosfera',
+        'mec.tabla.atmosfera': 'Atmósfera',
+        'mec.tabla.atmosferaHidrosfera': 'Hidrosfera/Atmósfera',
+        'mec.tabla.mecanico1': 'Mecánico (carga/descompresión)',
+        'mec.tabla.mecanico2': 'Mecánico (carga/esfuerzo)',
+        'mec.tabla.termodinamico': 'Termodinámico (calor/vapor)',
+        'mec.integracion.pregunta': '¿Existe una correlación estadísticamente significativa entre los cambios en la carga superficial (hielo, agua) y los cambios en la actividad tectónica/volcánica en los Andes, en las escalas temporales de décadas a milenios?',
+        // Advertencia
+        'mec.advertencia.titulo': '⚠️ Advertencia Epistemológica',
+        'mec.advertencia.texto': 'Este portal no busca confirmar una hipótesis preestablecida, sino explorar correlaciones y cuantificar incertidumbres. La ciencia avanza formulando hipótesis nulas y tratando de refutarlas. Todos los análisis se presentan con sus intervalos de confianza y valores p.',
+        // Métodos
+        'mec.metodos.titulo': '🔬 Métodos estadísticos utilizados',
+        'mec.metodos.a.titulo': 'Mecanismo A — Correlación GNSS vs glaciar:',
+        'mec.metodos.a.texto': 'Correlación de Spearman (no paramétrica) + regresión lineal. Criterio: r > 0.5 con p < 0.05.',
+        'mec.metodos.b.titulo': 'Mecanismo B — Carga hidrológica vs microsismos:',
+        'mec.metodos.b.texto': 'Correlación cruzada con retardos de -12 a +12 meses + prueba de significancia por permutación (1000 iteraciones). Criterio: p < 0.05 con lag coherente.',
+        'mec.metodos.c.titulo': 'Mecanismo C — ZTD vs precipitación:',
+        'mec.metodos.c.texto': 'Correlación por retardos (0-72h) + curvas ROC-AUC para capacidad predictiva de precipitación intensa. Criterio: AUC > 0.7.',
+        // Integridad
+        'mec.integridad.titulo': '📜 Declaración de Integridad Científica',
+        'mec.integridad.texto': 'Los datos SIRGAS en este dashboard se utilizan para verificar exploratoriamente hipótesis de acoplamiento clima-Tierra sólida (Mecanismos A y B). Todos los análisis de correlación muestran resultados de pruebas estadísticas (valor p, intervalos de confianza). La separación de componentes no tectónicas en señales de desplazamiento vertical tiene incertidumbre. Los datos de esta plataforma no sustituyen las publicaciones oficiales de cada institución, ni se utilizan para decisiones de alerta temprana.',
     },
     en: {
         // Header
@@ -2689,6 +2963,92 @@ const TRADUCCIONES = {
         'alertas.hum': '💧 Humidity (%)',
         'alertas.feels': '🌡️ Feels like (ºC)',
         'alertas.actual': 'Current',
+        // Acoplamiento tab
+        'tab.acoplamiento': '🌍 Earth-Climate Coupling',
+        'mec.intro.titulo': '🌍 The Earth System as a Coupled System',
+        'mec.intro.parrafo': 'The Earth is not a set of independent spheres. The atmosphere, hydrosphere, cryosphere, and lithosphere continuously exchange mass, energy, and momentum. Anthropogenic global warming is altering these exchanges, and the Andean region —due to its high seismicity, active volcanism, retreating tropical glaciers, and marked hydroclimatic variability— constitutes a natural laboratory to study these couplings.',
+        'mec.intro.parrafo2': 'This portal is based on three verifiable physical mechanisms that describe how surface changes (climate, water, ice) can influence deep processes (tectonics, volcanism), and how atmospheric processes relate to the hydrological cycle.',
+        'mec.a.titulo': '🌋 Mechanism A: Decompression by Surface Mass Loss',
+        'mec.a.fundamento.titulo': 'Physical basis:',
+        'mec.a.fundamento.texto': 'The Earth\'s crust responds elastically to surface load changes. When a mass (ice, water, sediment) is deposited or removed, the surface sinks or rises in a process known as isostatic adjustment or elastic rebound.',
+        'mec.a.cadena.titulo': 'Causal chain:',
+        'mec.a.cadena.p1': 'Global warming accelerates the retreat of Andean glaciers.',
+        'mec.a.cadena.p2': 'Glacier mass loss reduces the vertical load on the crust.',
+        'mec.a.cadena.p3': 'The crust experiences decompression and elastic uplift (measurable with GNSS).',
+        'mec.a.cadena.p4': 'In volcanic zones, reduced confining pressure allows the expansion of magmas and dissolved gases.',
+        'mec.a.cadena.p5': 'This can increase the frequency and explosiveness of eruptions.',
+        'mec.a.evidencia.titulo': 'Scientific evidence:',
+        'mec.a.evidencia.p1': 'Studies in Iceland and Chile have documented correlations between glacier retreat and volcanic activity.',
+        'mec.a.evidencia.p2': 'Argon dating research on volcanoes in southern Chile shows that deglaciation periods coincide with explosive eruptions of silica-rich magmas.',
+        'mec.a.evidencia.p3': 'Elastic rebound rates from glacier unloading are on the order of mm/year to cm/year.',
+        'mec.a.indicadores.titulo': 'Monitored indicators in this portal:',
+        'mec.a.ind.p1': 'Residual vertical GNSS displacement (SIRGAS) at stations near glaciers.',
+        'mec.a.ind.p2': 'Glacier mass balance (sources: IDEAM, WGMS, academic studies).',
+        'mec.a.ind.p3': 'Volcanic activity indices (SO₂, volcanic seismicity, volcanic deformation).',
+        'mec.b.titulo': '💧 Mechanism B: Stress Transfer by Hydrological Load',
+        'mec.b.fundamento.titulo': 'Physical basis:',
+        'mec.b.fundamento.texto': 'Variations in water storage (precipitation, soil moisture, groundwater, reservoirs) modify the load on the crust. These load changes generate elastic deformation and modify the stress state on shallow faults, potentially modulating regional seismicity.',
+        'mec.b.cadena.titulo': 'Causal chain:',
+        'mec.b.cadena.p1': 'Climate events (El Niño/La Niña) alter precipitation patterns.',
+        'mec.b.cadena.p2': 'The spatial and temporal distribution of water stored on the surface and underground changes.',
+        'mec.b.cadena.p3': 'The crust deforms elastically (measurable with GNSS).',
+        'mec.b.cadena.p4': 'Coulomb stress changes on nearby faults can promote or inhibit ruptures.',
+        'mec.b.cadena.p5': 'Variations in regional microseismicity are observed.',
+        'mec.b.evidencia.titulo': 'Scientific evidence:',
+        'mec.b.evidencia.p1': 'During El Niño 2015-2016, water storage variations of up to 60 cm were detected in northern Brazil and 40 cm in the south, with corresponding GNSS deformations.',
+        'mec.b.evidencia.p2': 'Correlation between hydrological cycles and microseismicity has been documented in several regions of the world (e.g., California, Himalaya).',
+        'mec.b.evidencia.p3': 'In the Andes, the Bucaramanga seismic nest (Colombia) is a candidate for load modulation studies.',
+        'mec.b.indicadores.titulo': 'Monitored indicators in this portal:',
+        'mec.b.ind.p1': 'Vertical GNSS displacement (seasonal and interannual component).',
+        'mec.b.ind.p2': 'Precipitation and water storage (CHIRPS, GRACE, national networks).',
+        'mec.b.ind.p3': 'Regional seismicity catalogs (SGC Colombia, IGP Peru, etc.).',
+        'mec.b.limitacion.titulo': 'Limitation:',
+        'mec.b.limitacion.texto': 'The seismic modulation signal from load is small and requires high precision. This module is presented as exploratory.',
+        'mec.c.titulo': '🌧️ Mechanism C: Atmospheric Convection and the Hydrological Cycle',
+        'mec.c.fundamento.titulo': 'Physical basis:',
+        'mec.c.fundamento.texto': 'Surface warming intensifies atmospheric convection, increases the atmosphere\'s water vapor retention capacity (Clausius-Clapeyron law), and alters large-scale atmospheric circulation. This mechanism operates exclusively in the atmosphere and hydrosphere, without direct coupling to the lithosphere.',
+        'mec.c.cadena.titulo': 'Causal chain:',
+        'mec.c.cadena.p1': 'Global warming increases surface temperature and evapotranspiration.',
+        'mec.c.cadena.p2': 'The atmosphere retains more water vapor (≈7% per °C of warming).',
+        'mec.c.cadena.p3': 'Convection intensifies, releasing latent heat and generating more intense precipitation.',
+        'mec.c.cadena.p4': 'Atmospheric circulation reorganizes (Hadley cell expansion, jet stream displacement).',
+        'mec.c.cadena.p5': 'The frequency of extreme events (droughts, floods) increases.',
+        'mec.c.evidencia.titulo': 'Scientific evidence:',
+        'mec.c.evidencia.p1': 'The IPCC documents a weakening and expansion of the Hadley cell.',
+        'mec.c.evidencia.p2': 'Subtropical jet streams have shifted poleward (~0.38°/decade).',
+        'mec.c.evidencia.p3': 'Tropical Andean glaciers have retreated to levels not seen in 11,700 years.',
+        'mec.c.indicadores.titulo': 'Monitored indicators in this portal:',
+        'mec.c.ind.p1': 'ZTD (SIRGAS) as a proxy for atmospheric water vapor.',
+        'mec.c.ind.p2': 'Temperature, humidity, precipitation (national meteorological stations).',
+        'mec.c.ind.p3': 'Extreme event indices (SPI, drought indices).',
+        'mec.c.nota.titulo': 'Important note:',
+        'mec.c.nota.texto': 'This mechanism should not be confused with Mechanisms A and B. Atmospheric heat does not "penetrate" the lithosphere nor "attract" Earth\'s internal heat.',
+        'mec.integracion.titulo': '🔗 Integration: The Systemic Approach of Andes Observatory',
+        'mec.integracion.parrafo': 'The three mechanisms describe different coupling pathways:',
+        'mec.tabla.mecanismo': 'Mechanism',
+        'mec.tabla.origen': 'Origin sphere',
+        'mec.tabla.destino': 'Destination sphere',
+        'mec.tabla.tipo': 'Coupling type',
+        'mec.tabla.criosfera': 'Cryosphere',
+        'mec.tabla.litosfera': 'Lithosphere',
+        'mec.tabla.hidrosfera': 'Hydrosphere',
+        'mec.tabla.atmosfera': 'Atmosphere',
+        'mec.tabla.atmosferaHidrosfera': 'Hydrosphere/Atmosphere',
+        'mec.tabla.mecanico1': 'Mechanical (load/decompression)',
+        'mec.tabla.mecanico2': 'Mechanical (load/stress)',
+        'mec.tabla.termodinamico': 'Thermodynamic (heat/vapor)',
+        'mec.integracion.pregunta': 'Is there a statistically significant correlation between changes in surface load (ice, water) and changes in tectonic/volcanic activity in the Andes, at timescales of decades to millennia?',
+        'mec.advertencia.titulo': '⚠️ Epistemological Warning',
+        'mec.advertencia.texto': 'This portal does not seek to confirm a pre-established hypothesis, but to explore correlations and quantify uncertainties. Science advances by formulating null hypotheses and trying to refute them. All analyses are presented with their confidence intervals and p-values.',
+        'mec.metodos.titulo': '🔬 Statistical methods used',
+        'mec.metodos.a.titulo': 'Mechanism A — GNSS vs glacier correlation:',
+        'mec.metodos.a.texto': 'Spearman correlation (non-parametric) + linear regression. Criterion: r > 0.5 with p < 0.05.',
+        'mec.metodos.b.titulo': 'Mechanism B — Hydrological load vs microseisms:',
+        'mec.metodos.b.texto': 'Cross-correlation with lags from -12 to +12 months + permutation significance test (1000 iterations). Criterion: p < 0.05 with coherent lag.',
+        'mec.metodos.c.titulo': 'Mechanism C — ZTD vs precipitation:',
+        'mec.metodos.c.texto': 'Correlation by lags (0-72h) + ROC-AUC curves for predictive capacity of intense precipitation. Criterion: AUC > 0.7.',
+        'mec.integridad.titulo': '📜 Scientific Integrity Statement',
+        'mec.integridad.texto': 'SIRGAS data in this dashboard are used to exploratorily verify climate-solid Earth coupling hypotheses (Mechanisms A and B). All correlation analyses show statistical test results (p-value, confidence intervals). Separating non-tectonic components in vertical displacement signals has uncertainty. The data on this platform do not replace the official publications of each institution, nor are they used for early warning decisions.',
     },
     pt: {
         // Header
@@ -2780,6 +3140,92 @@ const TRADUCCIONES = {
         'alertas.hum': '💧 Umidade (%)',
         'alertas.feels': '🌡️ Sensação (ºC)',
         'alertas.actual': 'Atual',
+        // Acoplamiento tab
+        'tab.acoplamiento': '🌍 Acoplamento Terra-Clima',
+        'mec.intro.titulo': '🌍 O Sistema Terra como Sistema Acoplado',
+        'mec.intro.parrafo': 'A Terra não é um conjunto de esferas independentes. A atmosfera, a hidrosfera, a criosfera e a litosfera trocam massa, energia e momento de forma contínua. O aquecimento global antropogênico está alterando essas trocas, e a região andina —por sua alta sismicidade, vulcanismo ativo, geleiras tropicais em recuo e marcada variabilidade hidroclimática— constitui um laboratório natural para estudar esses acoplamentos.',
+        'mec.intro.parrafo2': 'Este portal baseia-se em três mecanismos físicos verificáveis que descrevem como mudanças superficiais (clima, água, gelo) podem influenciar processos profundos (tectônica, vulcanismo), e como os processos atmosféricos se relacionam com o ciclo hidrológico.',
+        'mec.a.titulo': '🌋 Mecanismo A: Descompressão por Perda de Massa Superficial',
+        'mec.a.fundamento.titulo': 'Fundamento físico:',
+        'mec.a.fundamento.texto': 'A crosta terrestre responde elasticamente às mudanças de carga superficial. Quando uma massa (gelo, água, sedimento) é depositada ou removida, a superfície afunda ou se eleva em um processo conhecido como ajuste isostático ou rebote elástico.',
+        'mec.a.cadena.titulo': 'Cadeia causal:',
+        'mec.a.cadena.p1': 'O aquecimento global acelera o recuo das geleiras andinas.',
+        'mec.a.cadena.p2': 'A perda de massa glacial reduz a carga vertical sobre a crosta.',
+        'mec.a.cadena.p3': 'A crosta experimenta descompressão e levantamento elástico (mensurável com GNSS).',
+        'mec.a.cadena.p4': 'Em zonas vulcânicas, a redução da pressão de confinamento permite a expansão de magmas e gases dissolvidos.',
+        'mec.a.cadena.p5': 'Isso pode aumentar a frequência e a explosividade das erupções.',
+        'mec.a.evidencia.titulo': 'Evidência científica:',
+        'mec.a.evidencia.p1': 'Estudos na Islândia e no Chile documentaram correlações entre recuo glacial e atividade vulcânica.',
+        'mec.a.evidencia.p2': 'Pesquisas com datação por argônio em vulcões do sul do Chile mostram que os períodos de degelo coincidem com erupções explosivas de magmas ricos em sílica.',
+        'mec.a.evidencia.p3': 'As taxas de rebote elástico por descarga glacial são da ordem de mm/ano a cm/ano.',
+        'mec.a.indicadores.titulo': 'Indicadores monitoráveis neste portal:',
+        'mec.a.ind.p1': 'Deslocamento vertical residual GNSS (SIRGAS) em estações próximas a geleiras.',
+        'mec.a.ind.p2': 'Balanço de massa glacial (fontes: IDEAM, WGMS, estudos acadêmicos).',
+        'mec.a.ind.p3': 'Índices de atividade vulcânica (SO₂, sismicidade vulcânica, deformação vulcânica).',
+        'mec.b.titulo': '💧 Mecanismo B: Transferência de Esforços por Carga Hidrológica',
+        'mec.b.fundamento.titulo': 'Fundamento físico:',
+        'mec.b.fundamento.texto': 'As variações no armazenamento de água (precipitação, umidade do solo, águas subterrâneas, reservatórios) modificam a carga sobre a crosta. Essas mudanças de carga geram deformação elástica e modificam o estado de esforços em falhas rasas, podendo modular a sismicidade regional.',
+        'mec.b.cadena.titulo': 'Cadeia causal:',
+        'mec.b.cadena.p1': 'Eventos climáticos (El Niño/La Niña) alteram os padrões de precipitação.',
+        'mec.b.cadena.p2': 'A distribuição espacial e temporal da água armazenada na superfície e no subsolo muda.',
+        'mec.b.cadena.p3': 'A crosta se deforma elasticamente (mensurável com GNSS).',
+        'mec.b.cadena.p4': 'As mudanças de esforço de Coulomb em falhas próximas podem promover ou inibir rupturas.',
+        'mec.b.cadena.p5': 'Observam-se variações na microsismicidade regional.',
+        'mec.b.evidencia.titulo': 'Evidência científica:',
+        'mec.b.evidencia.p1': 'Durante o El Niño 2015-2016, foram detectadas variações de armazenamento de água de até 60 cm no norte do Brasil e 40 cm no sul, com deformações correspondentes no GNSS.',
+        'mec.b.evidencia.p2': 'A correlação entre ciclos hidrológicos e microsismicidade foi documentada em várias regiões do mundo (ex. Califórnia, Himalaia).',
+        'mec.b.evidencia.p3': 'Nos Andes, o ninho sísmico de Bucaramanga (Colômbia) é um candidato para estudos de modulação por carga.',
+        'mec.b.indicadores.titulo': 'Indicadores monitoráveis neste portal:',
+        'mec.b.ind.p1': 'Deslocamento vertical GNSS (componente sazonal e interanual).',
+        'mec.b.ind.p2': 'Precipitação e armazenamento de água (CHIRPS, GRACE, redes nacionais).',
+        'mec.b.ind.p3': 'Catálogos de sismicidade regional (SGC Colômbia, IGP Peru, etc.).',
+        'mec.b.limitacion.titulo': 'Limitação:',
+        'mec.b.limitacion.texto': 'O sinal de modulação sísmica por carga é pequeno e requer alta precisão. Este módulo é apresentado como exploratório.',
+        'mec.c.titulo': '🌧️ Mecanismo C: Convecção Atmosférica e o Ciclo Hidrológico',
+        'mec.c.fundamento.titulo': 'Fundamento físico:',
+        'mec.c.fundamento.texto': 'O aquecimento superficial intensifica a convecção atmosférica, aumenta a capacidade de retenção de vapor de água da atmosfera (lei de Clausius-Clapeyron) e altera a circulação atmosférica em grande escala. Este mecanismo opera exclusivamente na atmosfera e na hidrosfera, sem acoplamento direto com a litosfera.',
+        'mec.c.cadena.titulo': 'Cadeia causal:',
+        'mec.c.cadena.p1': 'O aquecimento global aumenta a temperatura superficial e a evapotranspiração.',
+        'mec.c.cadena.p2': 'A atmosfera retém mais vapor de água (≈7% por cada °C de aquecimento).',
+        'mec.c.cadena.p3': 'A convecção se intensifica, liberando calor latente e gerando precipitações mais intensas.',
+        'mec.c.cadena.p4': 'A circulação atmosférica se reorganiza (expansão da célula de Hadley, deslocamento das correntes de jato).',
+        'mec.c.cadena.p5': 'A frequência de eventos extremos (secas, inundações) aumenta.',
+        'mec.c.evidencia.titulo': 'Evidência científica:',
+        'mec.c.evidencia.p1': 'O IPCC documenta um enfraquecimento e expansão da célula de Hadley.',
+        'mec.c.evidencia.p2': 'As correntes de jato subtropicais se deslocaram para os polos (~0,38°/década).',
+        'mec.c.evidencia.p3': 'As geleiras tropicais andinas recuaram a níveis não vistos em 11.700 anos.',
+        'mec.c.indicadores.titulo': 'Indicadores monitoráveis neste portal:',
+        'mec.c.ind.p1': 'ZTD (SIRGAS) como proxy de vapor de água atmosférico.',
+        'mec.c.ind.p2': 'Temperatura, umidade, precipitação (estações meteorológicas nacionais).',
+        'mec.c.ind.p3': 'Índices de eventos extremos (SPI, índices de seca).',
+        'mec.c.nota.titulo': 'Nota importante:',
+        'mec.c.nota.texto': 'Este mecanismo não deve ser confundido com os Mecanismos A e B. O calor atmosférico não "penetra" na litosfera nem "atrai" o calor interno da Terra.',
+        'mec.integracion.titulo': '🔗 Integração: A Abordagem Sistêmica do Observatório Andes',
+        'mec.integracion.parrafo': 'Os três mecanismos descrevem diferentes vias de acoplamento:',
+        'mec.tabla.mecanismo': 'Mecanismo',
+        'mec.tabla.origen': 'Esfera origem',
+        'mec.tabla.destino': 'Esfera destino',
+        'mec.tabla.tipo': 'Tipo de acoplamento',
+        'mec.tabla.criosfera': 'Criosfera',
+        'mec.tabla.litosfera': 'Litosfera',
+        'mec.tabla.hidrosfera': 'Hidrosfera',
+        'mec.tabla.atmosfera': 'Atmosfera',
+        'mec.tabla.atmosferaHidrosfera': 'Hidrosfera/Atmosfera',
+        'mec.tabla.mecanico1': 'Mecânico (carga/descompressão)',
+        'mec.tabla.mecanico2': 'Mecânico (carga/esforço)',
+        'mec.tabla.termodinamico': 'Termodinâmico (calor/vapor)',
+        'mec.integracion.pregunta': 'Existe uma correlação estatisticamente significativa entre as mudanças na carga superficial (gelo, água) e as mudanças na atividade tectônica/vulcânica nos Andes, nas escalas temporais de décadas a milênios?',
+        'mec.advertencia.titulo': '⚠️ Advertência Epistemológica',
+        'mec.advertencia.texto': 'Este portal não busca confirmar uma hipótese preestabelecida, mas explorar correlações e quantificar incertezas. A ciência avança formulando hipóteses nulas e tentando refutá-las. Todas as análises são apresentadas com seus intervalos de confiança e valores p.',
+        'mec.metodos.titulo': '🔬 Métodos estatísticos utilizados',
+        'mec.metodos.a.titulo': 'Mecanismo A — Correlação GNSS vs geleira:',
+        'mec.metodos.a.texto': 'Correlação de Spearman (não paramétrica) + regressão linear. Critério: r > 0,5 com p < 0,05.',
+        'mec.metodos.b.titulo': 'Mecanismo B — Carga hidrológica vs microsismos:',
+        'mec.metodos.b.texto': 'Correlação cruzada com atrasos de -12 a +12 meses + teste de significância por permutação (1000 iterações). Critério: p < 0,05 com lag coerente.',
+        'mec.metodos.c.titulo': 'Mecanismo C — ZTD vs precipitação:',
+        'mec.metodos.c.texto': 'Correlação por atrasos (0-72h) + curvas ROC-AUC para capacidade preditiva de precipitação intensa. Critério: AUC > 0,7.',
+        'mec.integridad.titulo': '📜 Declaração de Integridade Científica',
+        'mec.integridad.texto': 'Os dados SIRGAS neste painel são usados para verificar exploratoriamente hipóteses de acoplamento clima-Terra sólida (Mecanismos A e B). Todas as análises de correlação mostram resultados de testes estatísticos (valor p, intervalos de confiança). A separação de componentes não tectônicas em sinais de deslocamento vertical tem incerteza. Os dados desta plataforma não substituem as publicações oficiais de cada instituição, nem são usados para decisões de alerta precoce.',
     }
 };
 
