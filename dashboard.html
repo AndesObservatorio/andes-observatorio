@@ -13,6 +13,35 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f5f0; padding: 20px; }
         .container { max-width: 100%; margin: 0; padding: 16px 20px; background: white; border-radius: 0; box-shadow: none; border: none; }
         .tab-content { display: block; }
+
+        /* ═══ SELECTOR DE IDIOMA ═══ */
+        .lang-selector {
+            position: fixed;
+            top: 12px;
+            right: 20px;
+            display: flex;
+            gap: 4px;
+            background: white;
+            padding: 5px;
+            border-radius: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            z-index: 9999;
+            border: 1px solid #e0e6d8;
+        }
+        .lang-btn {
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: none;
+            background: transparent;
+            color: #5a7a5a;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .lang-btn.active { background: #2d4a2d; color: white; }
+        .lang-btn:hover:not(.active) { background: #f0f5f0; }
         h1 { color: #5a7a5a; text-align: center; font-size: 2rem; }
         .subtitle { text-align: center; color: #8aa08a; margin-bottom: 18px; border-bottom: 2px solid #f0ebe4; padding-bottom: 12px; }
         .selector { text-align: center; margin: 10px 0 18px; }
@@ -108,77 +137,84 @@
 </head>
 
 <body>
+<!-- ═══ SELECTOR DE IDIOMA ═══ -->
+<div class="lang-selector">
+    <button class="lang-btn active" data-lang="es">Español</button>
+    <button class="lang-btn" data-lang="en">English</button>
+    <button class="lang-btn" data-lang="pt">Português</button>
+</div>
+
 <div class="container">
-    <h1>🏔️ Andes Observatorio</h1>
-    <div class="subtitle">Monitoreo ambiental en tiempo real · Región Andina</div>
+    <h1 data-i18n="app.title">🏔️ Andes Observatorio</h1>
+    <div class="subtitle" data-i18n="app.subtitle">Monitoreo ambiental en tiempo real · Región Andina</div>
 
     <!-- ========== 3 FASES DEL MONITOREO ========== -->
     <div class="fases-panel">
-        <h3>🔄 Fases del Monitoreo — Estado del Sistema</h3>
+        <h3 data-i18n="fases.titulo">🔄 Fases del Monitoreo — Estado del Sistema</h3>
         <div class="fases-grid">
             <div class="fase-item pendiente" id="faseClima">
                 <div class="fase-icon">🌡️</div>
-                <div class="fase-nombre">Fase 1: Clima</div>
+                <div class="fase-nombre" data-i18n="fase1.nombre">Fase 1: Clima</div>
                 <div class="fase-estado pendiente" id="estadoClima">⏳ Pendiente</div>
-                <div class="fase-detalles" id="detalleClima">Fuente: OpenWeatherMap · Actualización: cada 10 min · Resolución: ciudad</div>
+                <div class="fase-detalles" id="detalleClima" data-i18n="fase.clima.detalle">Fuente: OpenWeatherMap · Actualización: cada 10 min · Resolución: ciudad</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraClima"></div></div>
             </div>
             <div class="fase-item pendiente" id="faseSirgas">
                 <div class="fase-icon">🛰️</div>
-                <div class="fase-nombre">Fase 2: SIRGAS</div>
+                <div class="fase-nombre" data-i18n="fase2.nombre">Fase 2: SIRGAS</div>
                 <div class="fase-estado pendiente" id="estadoSirgas">⏳ Pendiente</div>
-                <div class="fase-detalles" id="detalleSirgas">Fuente: SIRGAS-CON · Actualización: semanal · Resolución: mm/año</div>
+                <div class="fase-detalles" id="detalleSirgas" data-i18n="fase.sirgas.detalle">Fuente: SIRGAS-CON · Actualización: semanal · Resolución: mm/año</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraSirgas"></div></div>
             </div>
             <div class="fase-item pendiente" id="faseZTD">
                 <div class="fase-icon">💧</div>
-                <div class="fase-nombre">Fase 3: ZTD Atmosférico</div>
+                <div class="fase-nombre" data-i18n="fase3.nombre">Fase 3: ZTD Atmosférico</div>
                 <div class="fase-estado pendiente" id="estadoZTD">⏳ Pendiente</div>
-                <div class="fase-detalles" id="detalleZTD">Fuente: SIRGAS-TRO · Actualización: semanal · Resolución: horaria</div>
+                <div class="fase-detalles" id="detalleZTD" data-i18n="fase.ztd.detalle">Fuente: SIRGAS-TRO · Actualización: semanal · Resolución: horaria</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraZTD"></div></div>
             </div>
         </div>
     </div>
 
 <div style="display:flex;gap:8px;margin:14px 0;justify-content:center;">
-        <button id="tabSirgas" class="map-tab active">🛰️ Mapa SIRGAS</button>
-        <button id="tabZTD" class="map-tab">💧 Mapa ZTD</button>
-        <button id="tabClima" class="map-tab">🌧️ Mapa Clima</button>
-        <button id="tabAQI" class="map-tab">🌫️ Mapa AQI</button>
-        <button id="tabDeforestacion" class="map-tab">🌳 Deforestación</button>
-        <button id="tabAreasprotegidas" class="map-tab">🌿 Áreas Protegidas</button>
+        <button id="tabSirgas" class="map-tab active" data-i18n="tab.sirgas">🛰️ Mapa SIRGAS</button>
+        <button id="tabZTD" class="map-tab" data-i18n="tab.ztd">💧 Mapa ZTD</button>
+        <button id="tabClima" class="map-tab" data-i18n="tab.clima">🌧️ Mapa Clima</button>
+        <button id="tabAQI" class="map-tab" data-i18n="tab.aqi">🌫️ Mapa AQI</button>
+        <button id="tabDeforestacion" class="map-tab" data-i18n="tab.deforestacion">🌳 Deforestación</button>
+        <button id="tabAreasprotegidas" class="map-tab" data-i18n="tab.areas">🌿 Áreas Protegidas</button>
     </div>
 
 <!-- ═══ TAB SIRGAS ═══ -->
 <div id="tabContent-sirgas" class="tab-content">
 <div id="controlesSirgas" class="layer-control">
-        <label><input type="checkbox" id="toggleTopografia"> 🛰️ Vista satélite</label>
+        <label><input type="checkbox" id="toggleTopografia"> <span data-i18n="ctrl.vistaSatelite">🛰️ Vista satélite</span></label>
         <span class="update-badge" id="sirgasBadge">📡 Cargando SIRGAS…</span>
-        <button class="btn-reporte" id="btnReporte">📄 Descargar reporte</button>
+        <button class="btn-reporte" id="btnReporte" data-i18n="btn.descargarReporte">📄 Descargar reporte</button>
     </div><div id="selectorSirgasWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
-        <label for="selectorSirgas" style="font-weight:600;color:#5a7a5a;margin:0;">📍 Ir a estación GNSS:</label>
+        <label for="selectorSirgas" style="font-weight:600;color:#5a7a5a;margin:0;" data-i18n="sel.sirgas">📍 Ir a estación GNSS:</label>
         <select id="selectorSirgas" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
         </select>
     </div><div id="map-sirgas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div><div id="analisisSIRGAS" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
-        <h4 style="color:#2d4a2d;">📊 Análisis Científico: Velocidades Tectónicas</h4>
-        <p style="color:#666;font-size:14px;">Clasificación geodésica de las estaciones SIRGAS-CON según su magnitud de velocidad horizontal.</p>
+        <h4 style="color:#2d4a2d;" data-i18n="analisis.sirgas">📊 Análisis Científico: Velocidades Tectónicas</h4>
+        <p style="color:#666;font-size:14px;" data-i18n="analisis.sirgas.desc">Clasificación geodésica de las estaciones SIRGAS-CON según su magnitud de velocidad horizontal.</p>
         <div id="estadisticasSIRGAS" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
                 <div id="sirgasTotal" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
-                <div style="font-size:11px;color:#888;">Estaciones</div>
+                <div style="font-size:11px;color:#888;" data-i18n="stat.estaciones">Estaciones</div>
             </div>
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
                 <div id="sirgasMedia" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
-                <div style="font-size:11px;color:#888;">Media (mm/año)</div>
+                <div style="font-size:11px;color:#888;" data-i18n="stat.media">Media (mm/año)</div>
             </div>
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
                 <div id="sirgasMax" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
-                <div style="font-size:11px;color:#888;">Máxima (mm/año)</div>
+                <div style="font-size:11px;color:#888;" data-i18n="stat.maxima">Máxima (mm/año)</div>
             </div>
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
                 <div id="sirgasStd" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
-                <div style="font-size:11px;color:#888;">Desv. estándar</div>
+                <div style="font-size:11px;color:#888;" data-i18n="stat.std">Desv. estándar</div>
             </div>
         </div>
         <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
@@ -240,7 +276,7 @@
 <!-- ═══ TAB ZTD ═══ -->
 <div id="tabContent-ztd" class="tab-content" style="display:none;">
 <div id="selectorZTDWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
-        <label for="selectorZTD" style="font-weight:600;color:#2c5f8a;margin:0;">💧 Ir a estación ZTD:</label>
+        <label for="selectorZTD" style="font-weight:600;color:#2c5f8a;margin:0;" data-i18n="sel.ztd">💧 Ir a estación ZTD:</label>
         <select id="selectorZTD" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
             <option value="4.7110,-74.0721,9">BOGT (Bogotá)</option>
@@ -252,8 +288,8 @@
         </select>
     </div><div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div>
     <div id="controlesZTD" class="layer-control" style="">
-        <label><input type="checkbox" id="toggleTopografiaZTD"> 🛰️ Vista satélite</label>
-        <label><input type="checkbox" id="toggleZTD" checked> 💧 Mostrar ZTD</label>
+        <label><input type="checkbox" id="toggleTopografiaZTD"> <span data-i18n="ctrl.vistaSatelite">🛰️ Vista satélite</span></label>
+        <label><input type="checkbox" id="toggleZTD" checked> <span data-i18n="ctrl.mostrarZTD">💧 Mostrar ZTD</span></label>
         <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
         <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;flex-wrap:wrap;">
             <span title="Anomalía = ZTD actual − promedio histórico de la estación. Elimina el sesgo altitudinal.">📊 Anomalía ZTD:</span>
@@ -265,7 +301,7 @@
         </span>
     </div>
 <div id="analisisZTD" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
-        <h4 style="color:#2d4a2d;">📊 Análisis Científico: ZTD vs Precipitación</h4>
+        <h4 style="color:#2d4a2d;" data-i18n="analisis.ztd">📊 Análisis Científico: ZTD vs Precipitación</h4>
         <p style="color:#666;font-size:14px;">Correlación entre anomalía de ZTD y precipitación diaria en Bogotá (estación BOGT).</p>
         <div id="estadisticasZTD" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
@@ -315,8 +351,8 @@
             <select id="estacionZTD"><option value="">Cargando estaciones…</option></select>
             <label>Desde: </label><input type="date" id="ztdDesde">
             <label>Hasta: </label><input type="date" id="ztdHasta">
-            <button class="btn-reporte" id="btnActualizarZTD">🔄 Actualizar</button>
-            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;">📥 Descargar CSV</button>
+            <button class="btn-reporte" id="btnActualizarZTD" data-i18n="btn.actualizar">🔄 Actualizar</button>
+            <button class="btn-reporte" id="btnDescargarZTD" style="background:#2d4a2d;margin-left:8px;" data-i18n="btn.descargarCSV">📥 Descargar CSV</button>
         </div>
         <canvas id="ztdChart" style="max-height:220px;margin-top:10px;"></canvas>
         <p id="ztdInfo" style="font-size:12px;color:#8aa08a;margin-top:8px;">Selecciona una estación para ver su serie de ZTD.</p>
@@ -350,7 +386,7 @@
 <div id="tabContent-clima" class="tab-content" style="display:none;">
 <div id="climaExtra" style="">
         <div class="selector">
-            <label for="citySelect">📍 Selecciona una ciudad: </label>
+            <label for="citySelect" data-i18n="sel.clima">📍 Selecciona una ciudad: </label>
             <select id="citySelect">
                 <option value="Bogota,CO,4.7110,-74.0721">Bogotá, Colombia</option>
                 <option value="Medellin,CO,6.2442,-75.5812">Medellín, Colombia</option>
@@ -380,7 +416,7 @@
         </div>
 
         <div class="alertas-panel">
-            <h3>⚡ Panel de Alertas Personalizables</h3>
+            <h3 data-i18n="alertas.titulo">⚡ Panel de Alertas Personalizables</h3>
             <div class="alertas-grid">
                 <div class="alerta-item">
                     <label>🌡️ Temperatura (ºC)</label>
@@ -406,7 +442,7 @@
             </div>
         </div>
     </div><div id="controlesClima" class="layer-control">
-        <label><input type="checkbox" id="toggleChirps" checked> 🌧️ Precipitación (CHIRPS Jul 2026)</label>
+        <label><input type="checkbox" id="toggleChirps" checked> <span data-i18n="ctrl.precipitacion">🌧️ Precipitación (CHIRPS Jul 2026)</span></label>
         <span class="update-badge" id="climaBadge">🌍 Cargando clima…</span>
     </div>
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0">
@@ -470,7 +506,7 @@
 <!-- ═══ TAB AQI ═══ -->
 <div id="tabContent-aqi" class="tab-content" style="display:none;">
 <div id="selectorAQIWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
-        <label for="selectorAQI" style="font-weight:600;color:#8e44ad;margin:0;">🌫️ Ir a ciudad:</label>
+        <label for="selectorAQI" style="font-weight:600;color:#8e44ad;margin:0;" data-i18n="sel.aqi">🌫️ Ir a ciudad:</label>
         <select id="selectorAQI" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:200px;">
             <option value="">-- Selecciona --</option>
             <option value="4.6097,-74.0817,9">Bogotá</option>
@@ -481,11 +517,11 @@
             <option value="10.4806,-66.9036,9">Caracas</option>
         </select>
     </div><div id="map-aqi" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div><div id="controlesAQI" class="layer-control" style="">
-        <label><input type="checkbox" id="toggleAQI" checked> 🌫️ Mostrar ciudades</label>
+        <label><input type="checkbox" id="toggleAQI" checked> <span data-i18n="ctrl.mostrarCiudades">🌫️ Mostrar ciudades</span></label>
         <span class="update-badge" id="aqiBadge">🌫️ Cargando AQI…</span>
     </div><div id="analisisAQI" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
-        <h4 style="color:#2d4a2d;">📊 Análisis Científico: Calidad del Aire</h4>
-        <p style="color:#666;font-size:14px;">Niveles de PM2.5 en 6 ciudades andinas según estándares OMS.</p>
+        <h4 style="color:#2d4a2d;" data-i18n="analisis.aqi">📊 Análisis Científico: Calidad del Aire</h4>
+        <p style="color:#666;font-size:14px;" data-i18n="analisis.aqi.desc">Niveles de PM2.5 en 6 ciudades andinas según estándares OMS.</p>
         <div id="estadisticasAQI" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
                 <div id="aqiPromedio" style="font-size:24px;font-weight:700;color:#2D6A4F;">--</div>
@@ -596,16 +632,16 @@
 <!-- ═══ TAB DEFORESTACIÓN ═══ -->
 <div id="tabContent-deforestacion" class="tab-content" style="display:none;">
 <div id="selectorDeforestacionWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
-        <label for="selectorDeforestacion" style="font-weight:600;color:#c0392b;margin:0;">🌳 Ir a zona crítica:</label>
+        <label for="selectorDeforestacion" style="font-weight:600;color:#c0392b;margin:0;" data-i18n="sel.deforestacion">🌳 Ir a zona crítica:</label>
         <select id="selectorDeforestacion" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:240px;">
             <option value="">-- Selecciona una zona --</option>
         </select>
     </div><div id="map-deforestacion" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div><div id="controlesDeforestacion" class="layer-control" style="">
-        <label><input type="checkbox" id="toggleDeforestacion" checked> 🌳 Zonas críticas</label>
+        <label><input type="checkbox" id="toggleDeforestacion" checked> <span data-i18n="ctrl.mostrarZonas">🌳 Zonas críticas</span></label>
         <span class="update-badge" id="deforBadge">🌳 Cargando datos GFW…</span>
     </div><div id="analisisDeforestacion" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
-        <h4 style="color:#2d4a2d;">📊 Análisis Científico: Deforestación Andina</h4>
-        <p style="color:#666;font-size:14px;">Pérdida de cobertura arbórea en países andinos (Global Forest Watch 2024).</p>
+        <h4 style="color:#2d4a2d;" data-i18n="analisis.defor">📊 Análisis Científico: Deforestación Andina</h4>
+        <p style="color:#666;font-size:14px;" data-i18n="analisis.defor.desc">Pérdida de cobertura arbórea en países andinos (Global Forest Watch 2024).</p>
         <div id="estadisticasDefor" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
                 <div id="deforTotal" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
@@ -671,7 +707,7 @@
 <div id="tabContent-areasprotegidas" class="tab-content" style="display:none;">
     <!-- Selector -->
     <div id="selectorAreasWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
-        <label for="selectorAreas" style="font-weight:600;color:#1e8449;margin:0;">🌿 Ir a área protegida:</label>
+        <label for="selectorAreas" style="font-weight:600;color:#1e8449;margin:0;" data-i18n="sel.areas">🌿 Ir a área protegida:</label>
         <select id="selectorAreas" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:280px;">
             <option value="">-- Selecciona --</option>
         </select>
@@ -682,15 +718,15 @@
 
     <!-- Controles -->
     <div id="controlesAreas" class="layer-control">
-        <label><input type="checkbox" id="toggleTopografiaAreas"> 🛰️ Vista satélite</label>
-        <label><input type="checkbox" id="toggleAreas" checked> 🌿 Mostrar áreas protegidas</label>
+        <label><input type="checkbox" id="toggleTopografiaAreas"> <span data-i18n="ctrl.vistaSatelite">🛰️ Vista satélite</span></label>
+        <label><input type="checkbox" id="toggleAreas" checked> <span data-i18n="ctrl.mostrarAreas">🌿 Mostrar áreas protegidas</span></label>
         <span class="update-badge" id="areasBadge">🌿 Cargando áreas…</span>
     </div>
 
     <!-- Análisis científico -->
     <div id="analisisAreas" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
-        <h4 style="color:#2d4a2d;">📊 Análisis Científico: Áreas Protegidas Andinas</h4>
-        <p style="color:#666;font-size:14px;">Superficie protegida por país y distribución de las principales áreas de conservación.</p>
+        <h4 style="color:#2d4a2d;" data-i18n="analisis.areas">📊 Análisis Científico: Áreas Protegidas Andinas</h4>
+        <p style="color:#666;font-size:14px;" data-i18n="analisis.areas.desc">Superficie protegida por país y distribución de las principales áreas de conservación.</p>
         <div id="estadisticasAreas" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
             <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
                 <div id="areasTotal" style="font-size:24px;font-weight:700;color:#1e8449;">--</div>
@@ -2401,6 +2437,7 @@
     }
 
     window.onload = function() {
+        aplicarIdioma(detectarIdiomaInicial());
         initMapSirgas();
         // Poblar el selector SIRGAS al inicio (no esperar a que el usuario haga clic en el tab)
         cargarAnalisisSIRGAS();
@@ -2465,6 +2502,325 @@
             })
             .catch(e => console.warn('No se pudieron cargar zonas de deforestación', e));
     })();
+
+
+// ═══════════════════════════════════════════════════════════
+// SISTEMA DE TRADUCCIÓN (i18n)
+// ═══════════════════════════════════════════════════════════
+const TRADUCCIONES = {
+    es: {
+        // Header
+        'app.title': '🏔️ Andes Observatorio',
+        'app.subtitle': 'Monitoreo ambiental en tiempo real · Región Andina',
+        // Fases
+        'fases.titulo': '🔄 Fases del Monitoreo — Estado del Sistema',
+        'fase1.nombre': 'Fase 1: Clima',
+        'fase2.nombre': 'Fase 2: SIRGAS',
+        'fase3.nombre': 'Fase 3: ZTD Atmosférico',
+        'fase.clima.detalle': 'Fuente: OpenWeatherMap · Actualización: cada 10 min · Resolución: ciudad',
+        'fase.sirgas.detalle': 'Fuente: SIRGAS-CON · Actualización: semanal · Resolución: mm/año',
+        'fase.ztd.detalle': 'Fuente: SIRGAS-TRO · Actualización: semanal · Resolución: horaria',
+        'fase.estado.pendiente': '⏳ Pendiente',
+        'fase.estado.activo': '✅ Activo',
+        'fase.estado.error': '❌ Error',
+        // Tabs
+        'tab.sirgas': '🛰️ Mapa SIRGAS',
+        'tab.ztd': '💧 Mapa ZTD',
+        'tab.clima': '🌧️ Mapa Clima',
+        'tab.aqi': '🌫️ Mapa AQI',
+        'tab.deforestacion': '🌳 Deforestación',
+        'tab.areas': '🌿 Áreas Protegidas',
+        // Selectores
+        'sel.sirgas': '📍 Ir a estación GNSS:',
+        'sel.ztd': '💧 Ir a estación ZTD:',
+        'sel.clima': '📍 Selecciona una ciudad:',
+        'sel.aqi': '🌫️ Ir a ciudad:',
+        'sel.deforestacion': '🌳 Ir a zona crítica:',
+        'sel.areas': '🌿 Ir a área protegida:',
+        'sel.default': '-- Selecciona --',
+        'sel.zonas': '-- Selecciona una zona --',
+        // Controles
+        'ctrl.vistaSatelite': '🛰️ Vista satélite',
+        'ctrl.mostrarZTD': '💧 Mostrar ZTD',
+        'ctrl.mostrarCiudades': '🌫️ Mostrar ciudades',
+        'ctrl.mostrarZonas': '🌳 Zonas críticas',
+        'ctrl.mostrarAreas': '🌿 Mostrar áreas protegidas',
+        'ctrl.precipitacion': '🌧️ Precipitación (CHIRPS Jul 2026)',
+        // Botones
+        'btn.descargarReporte': '📄 Descargar reporte',
+        'btn.actualizar': '🔄 Actualizar',
+        'btn.descargarCSV': '📥 Descargar CSV',
+        'btn.aplicar': 'Aplicar',
+        // Estados
+        'estado.normal': '✅ Normal',
+        'estado.cerca': '⚠️ Cerca del umbral',
+        'estado.supera': '🚨 Supera umbral',
+        // Títulos de análisis
+        'analisis.sirgas': '📊 Análisis Científico: Velocidades Tectónicas',
+        'analisis.sirgas.desc': 'Clasificación geodésica de las estaciones SIRGAS-CON según su magnitud de velocidad horizontal.',
+        'analisis.ztd': '📊 Análisis Científico: ZTD vs Precipitación',
+        'analisis.ztd.desc': 'Correlación entre anomalía de ZTD y precipitación diaria en Bogotá (estación BOGT).',
+        'analisis.clima': '📊 Análisis Científico: Clima',
+        'analisis.aqi': '📊 Análisis Científico: Calidad del Aire',
+        'analisis.aqi.desc': 'Niveles de PM2.5 en 6 ciudades andinas según estándares OMS.',
+        'analisis.defor': '📊 Análisis Científico: Deforestación Andina',
+        'analisis.defor.desc': 'Pérdida de cobertura arbórea en países andinos (Global Forest Watch 2024).',
+        'analisis.areas': '📊 Análisis Científico: Áreas Protegidas Andinas',
+        'analisis.areas.desc': 'Superficie protegida por país y distribución de las principales áreas de conservación.',
+        // Stats
+        'stat.estaciones': 'Estaciones',
+        'stat.media': 'Media (mm/año)',
+        'stat.maxima': 'Máxima (mm/año)',
+        'stat.std': 'Desv. estándar',
+        'stat.observaciones': 'Observaciones',
+        'stat.correlacion': 'Correlación Spearman (r)',
+        'stat.valorP': 'Valor p',
+        'stat.significancia': 'Significancia',
+        'stat.promedio': 'Promedio µg/m³',
+        'stat.maximo': 'Máximo',
+        'stat.minimo': 'Mínimo',
+        'stat.ciudades': 'Ciudades',
+        'stat.perdidaTotal': 'Pérdida total (ha)',
+        'stat.paises': 'Países',
+        'stat.paisAfectado': 'País más afectado',
+        'stat.zonasCriticas': 'Zonas críticas',
+        'stat.areasProtegidas': 'Áreas protegidas',
+        'stat.superficie': 'Superficie (km²)',
+        'stat.areaMax': 'Área más grande (km²)',
+        // Metodologías
+        'met.titulo': '📚 Metodología',
+        'met.detalle': 'ℹ️ Metodología del análisis',
+        // Footer
+        'footer.titulo': 'Andes Observatorio · Monitoreo de Ecosistemas Andinos',
+        // Panel alertas
+        'alertas.titulo': '⚡ Panel de Alertas Personalizables',
+        'alertas.temp': '🌡️ Temperatura (ºC)',
+        'alertas.hum': '💧 Humedad (%)',
+        'alertas.feels': '🌡️ Sensación (ºC)',
+        'alertas.actual': 'Actual',
+    },
+    en: {
+        // Header
+        'app.title': '🏔️ Andes Observatory',
+        'app.subtitle': 'Environmental monitoring in real time · Andean Region',
+        // Fases
+        'fases.titulo': '🔄 Monitoring Phases — System Status',
+        'fase1.nombre': 'Phase 1: Climate',
+        'fase2.nombre': 'Phase 2: SIRGAS',
+        'fase3.nombre': 'Phase 3: ZTD Atmospheric',
+        'fase.clima.detalle': 'Source: OpenWeatherMap · Update: every 10 min · Resolution: city',
+        'fase.sirgas.detalle': 'Source: SIRGAS-CON · Update: weekly · Resolution: mm/year',
+        'fase.ztd.detalle': 'Source: SIRGAS-TRO · Update: weekly · Resolution: hourly',
+        'fase.estado.pendiente': '⏳ Pending',
+        'fase.estado.activo': '✅ Active',
+        'fase.estado.error': '❌ Error',
+        // Tabs
+        'tab.sirgas': '🛰️ SIRGAS Map',
+        'tab.ztd': '💧 ZTD Map',
+        'tab.clima': '🌧️ Climate Map',
+        'tab.aqi': '🌫️ AQI Map',
+        'tab.deforestacion': '🌳 Deforestation',
+        'tab.areas': '🌿 Protected Areas',
+        // Selectores
+        'sel.sirgas': '📍 Go to GNSS station:',
+        'sel.ztd': '💧 Go to ZTD station:',
+        'sel.clima': '📍 Select a city:',
+        'sel.aqi': '🌫️ Go to city:',
+        'sel.deforestacion': '🌳 Go to critical zone:',
+        'sel.areas': '🌿 Go to protected area:',
+        'sel.default': '-- Select --',
+        'sel.zonas': '-- Select a zone --',
+        // Controles
+        'ctrl.vistaSatelite': '🛰️ Satellite view',
+        'ctrl.mostrarZTD': '💧 Show ZTD',
+        'ctrl.mostrarCiudades': '🌫️ Show cities',
+        'ctrl.mostrarZonas': '🌳 Critical zones',
+        'ctrl.mostrarAreas': '🌿 Show protected areas',
+        'ctrl.precipitacion': '🌧️ Precipitation (CHIRPS Jul 2026)',
+        // Botones
+        'btn.descargarReporte': '📄 Download report',
+        'btn.actualizar': '🔄 Update',
+        'btn.descargarCSV': '📥 Download CSV',
+        'btn.aplicar': 'Apply',
+        // Estados
+        'estado.normal': '✅ Normal',
+        'estado.cerca': '⚠️ Near threshold',
+        'estado.supera': '🚨 Exceeds threshold',
+        // Títulos de análisis
+        'analisis.sirgas': '📊 Scientific Analysis: Tectonic Velocities',
+        'analisis.sirgas.desc': 'Geodetic classification of SIRGAS-CON stations by horizontal velocity magnitude.',
+        'analisis.ztd': '📊 Scientific Analysis: ZTD vs Precipitation',
+        'analisis.ztd.desc': 'Correlation between ZTD anomaly and daily precipitation in Bogotá (BOGT station).',
+        'analisis.clima': '📊 Scientific Analysis: Climate',
+        'analisis.aqi': '📊 Scientific Analysis: Air Quality',
+        'analisis.aqi.desc': 'PM2.5 levels in 6 Andean cities according to WHO standards.',
+        'analisis.defor': '📊 Scientific Analysis: Andean Deforestation',
+        'analisis.defor.desc': 'Tree cover loss in Andean countries (Global Forest Watch 2024).',
+        'analisis.areas': '📊 Scientific Analysis: Andean Protected Areas',
+        'analisis.areas.desc': 'Protected area by country and distribution of main conservation areas.',
+        // Stats
+        'stat.estaciones': 'Stations',
+        'stat.media': 'Mean (mm/year)',
+        'stat.maxima': 'Maximum (mm/year)',
+        'stat.std': 'Std. deviation',
+        'stat.observaciones': 'Observations',
+        'stat.correlacion': 'Spearman correlation (r)',
+        'stat.valorP': 'p-value',
+        'stat.significancia': 'Significance',
+        'stat.promedio': 'Average µg/m³',
+        'stat.maximo': 'Maximum',
+        'stat.minimo': 'Minimum',
+        'stat.ciudades': 'Cities',
+        'stat.perdidaTotal': 'Total loss (ha)',
+        'stat.paises': 'Countries',
+        'stat.paisAfectado': 'Most affected country',
+        'stat.zonasCriticas': 'Critical zones',
+        'stat.areasProtegidas': 'Protected areas',
+        'stat.superficie': 'Area (km²)',
+        'stat.areaMax': 'Largest area (km²)',
+        // Metodologías
+        'met.titulo': '📚 Methodology',
+        'met.detalle': 'ℹ️ Analysis methodology',
+        // Footer
+        'footer.titulo': 'Andes Observatory · Andean Ecosystem Monitoring',
+        // Panel alertas
+        'alertas.titulo': '⚡ Customizable Alerts Panel',
+        'alertas.temp': '🌡️ Temperature (ºC)',
+        'alertas.hum': '💧 Humidity (%)',
+        'alertas.feels': '🌡️ Feels like (ºC)',
+        'alertas.actual': 'Current',
+    },
+    pt: {
+        // Header
+        'app.title': '🏔️ Observatório Andes',
+        'app.subtitle': 'Monitoramento ambiental em tempo real · Região Andina',
+        // Fases
+        'fases.titulo': '🔄 Fases do Monitoramento — Estado do Sistema',
+        'fase1.nombre': 'Fase 1: Clima',
+        'fase2.nombre': 'Fase 2: SIRGAS',
+        'fase3.nombre': 'Fase 3: ZTD Atmosférico',
+        'fase.clima.detalle': 'Fonte: OpenWeatherMap · Atualização: a cada 10 min · Resolução: cidade',
+        'fase.sirgas.detalle': 'Fonte: SIRGAS-CON · Atualização: semanal · Resolução: mm/ano',
+        'fase.ztd.detalle': 'Fonte: SIRGAS-TRO · Atualização: semanal · Resolução: horária',
+        'fase.estado.pendiente': '⏳ Pendente',
+        'fase.estado.activo': '✅ Ativo',
+        'fase.estado.error': '❌ Erro',
+        // Tabs
+        'tab.sirgas': '🛰️ Mapa SIRGAS',
+        'tab.ztd': '💧 Mapa ZTD',
+        'tab.clima': '🌧️ Mapa Clima',
+        'tab.aqi': '🌫️ Mapa AQI',
+        'tab.deforestacion': '🌳 Desmatamento',
+        'tab.areas': '🌿 Áreas Protegidas',
+        // Selectores
+        'sel.sirgas': '📍 Ir para estação GNSS:',
+        'sel.ztd': '💧 Ir para estação ZTD:',
+        'sel.clima': '📍 Selecione uma cidade:',
+        'sel.aqi': '🌫️ Ir para cidade:',
+        'sel.deforestacion': '🌳 Ir para zona crítica:',
+        'sel.areas': '🌿 Ir para área protegida:',
+        'sel.default': '-- Selecione --',
+        'sel.zonas': '-- Selecione uma zona --',
+        // Controles
+        'ctrl.vistaSatelite': '🛰️ Vista satélite',
+        'ctrl.mostrarZTD': '💧 Mostrar ZTD',
+        'ctrl.mostrarCiudades': '🌫️ Mostrar cidades',
+        'ctrl.mostrarZonas': '🌳 Zonas críticas',
+        'ctrl.mostrarAreas': '🌿 Mostrar áreas protegidas',
+        'ctrl.precipitacion': '🌧️ Precipitação (CHIRPS Jul 2026)',
+        // Botones
+        'btn.descargarReporte': '📄 Baixar relatório',
+        'btn.actualizar': '🔄 Atualizar',
+        'btn.descargarCSV': '📥 Baixar CSV',
+        'btn.aplicar': 'Aplicar',
+        // Estados
+        'estado.normal': '✅ Normal',
+        'estado.cerca': '⚠️ Próximo do limite',
+        'estado.supera': '🚨 Excede o limite',
+        // Títulos de análisis
+        'analisis.sirgas': '📊 Análise Científica: Velocidades Tectônicas',
+        'analisis.sirgas.desc': 'Classificação geodésica das estações SIRGAS-CON pela magnitude da velocidade horizontal.',
+        'analisis.ztd': '📊 Análise Científica: ZTD vs Precipitação',
+        'analisis.ztd.desc': 'Correlação entre anomalia de ZTD e precipitação diária em Bogotá (estação BOGT).',
+        'analisis.clima': '📊 Análise Científica: Clima',
+        'analisis.aqi': '📊 Análise Científica: Qualidade do Ar',
+        'analisis.aqi.desc': 'Níveis de PM2.5 em 6 cidades andinas segundo padrões da OMS.',
+        'analisis.defor': '📊 Análise Científica: Desmatamento Andino',
+        'analisis.defor.desc': 'Perda de cobertura arbórea em países andinos (Global Forest Watch 2024).',
+        'analisis.areas': '📊 Análise Científica: Áreas Protegidas Andinas',
+        'analisis.areas.desc': 'Área protegida por país e distribuição das principais áreas de conservação.',
+        // Stats
+        'stat.estaciones': 'Estações',
+        'stat.media': 'Média (mm/ano)',
+        'stat.maxima': 'Máxima (mm/ano)',
+        'stat.std': 'Desv. padrão',
+        'stat.observaciones': 'Observações',
+        'stat.correlacion': 'Correlação Spearman (r)',
+        'stat.valorP': 'Valor p',
+        'stat.significancia': 'Significância',
+        'stat.promedio': 'Média µg/m³',
+        'stat.maximo': 'Máximo',
+        'stat.minimo': 'Mínimo',
+        'stat.ciudades': 'Cidades',
+        'stat.perdidaTotal': 'Perda total (ha)',
+        'stat.paises': 'Países',
+        'stat.paisAfectado': 'País mais afetado',
+        'stat.zonasCriticas': 'Zonas críticas',
+        'stat.areasProtegidas': 'Áreas protegidas',
+        'stat.superficie': 'Área (km²)',
+        'stat.areaMax': 'Maior área (km²)',
+        // Metodologías
+        'met.titulo': '📚 Metodologia',
+        'met.detalle': 'ℹ️ Metodologia da análise',
+        // Footer
+        'footer.titulo': 'Observatório Andes · Monitoramento de Ecossistemas Andinos',
+        // Panel alertas
+        'alertas.titulo': '⚡ Painel de Alertas Personalizáveis',
+        'alertas.temp': '🌡️ Temperatura (ºC)',
+        'alertas.hum': '💧 Umidade (%)',
+        'alertas.feels': '🌡️ Sensação (ºC)',
+        'alertas.actual': 'Atual',
+    }
+};
+
+function detectarIdiomaInicial() {
+    const guardado = localStorage.getItem('andes_idioma');
+    if (guardado && TRADUCCIONES[guardado]) return guardado;
+    const navegador = (navigator.language || 'es').toLowerCase();
+    if (navegador.startsWith('en')) return 'en';
+    if (navegador.startsWith('pt')) return 'pt';
+    return 'es';
+}
+
+function aplicarIdioma(idioma) {
+    if (!TRADUCCIONES[idioma]) idioma = 'es';
+    
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const clave = el.getAttribute('data-i18n');
+        if (TRADUCCIONES[idioma][clave]) {
+            el.textContent = TRADUCCIONES[idioma][clave];
+        }
+    });
+    
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const clave = el.getAttribute('data-i18n-placeholder');
+        if (TRADUCCIONES[idioma][clave]) {
+            el.placeholder = TRADUCCIONES[idioma][clave];
+        }
+    });
+    
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === idioma);
+    });
+    
+    localStorage.setItem('andes_idioma', idioma);
+    document.documentElement.lang = idioma;
+    window.idiomaActual = idioma;
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => aplicarIdioma(btn.dataset.lang));
+});
 
 </script>
 </body>
