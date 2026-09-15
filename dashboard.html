@@ -146,6 +146,7 @@
         <button id="tabClima" class="map-tab">🌧️ Mapa Clima</button>
         <button id="tabAQI" class="map-tab">🌫️ Mapa AQI</button>
         <button id="tabDeforestacion" class="map-tab">🌳 Deforestación</button>
+        <button id="tabAreasprotegidas" class="map-tab">🌿 Áreas Protegidas</button>
     </div>
 
 <!-- ═══ TAB SIRGAS ═══ -->
@@ -601,6 +602,68 @@
         </div>
     </details>
 
+
+
+<!-- ═══ TAB ÁREAS PROTEGIDAS ═══ -->
+
+</div>
+
+<div id="tabContent-areasprotegidas" class="tab-content" style="display:none;">
+    <!-- Selector -->
+    <div id="selectorAreasWrapper" class="map-selector" style="margin:12px 0;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fcfaf7;padding:10px 16px;border-radius:12px;border:1px solid #ede8e0">
+        <label for="selectorAreas" style="font-weight:600;color:#1e8449;margin:0;">🌿 Ir a área protegida:</label>
+        <select id="selectorAreas" style="padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:white;min-width:280px;">
+            <option value="">-- Selecciona --</option>
+        </select>
+    </div>
+
+    <!-- Mapa -->
+    <div id="map-areas" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div>
+
+    <!-- Controles -->
+    <div id="controlesAreas" class="layer-control">
+        <label><input type="checkbox" id="toggleTopografiaAreas"> 🛰️ Vista satélite</label>
+        <label><input type="checkbox" id="toggleAreas" checked> 🌿 Mostrar áreas protegidas</label>
+        <span class="update-badge" id="areasBadge">🌿 Cargando áreas…</span>
+    </div>
+
+    <!-- Análisis científico -->
+    <div id="analisisAreas" style="background:#fcfaf7;padding:20px;border-radius:12px;margin:16px 0;border:1px solid #ede8e0">
+        <h4 style="color:#2d4a2d;">📊 Análisis Científico: Áreas Protegidas Andinas</h4>
+        <p style="color:#666;font-size:14px;">Superficie protegida por país y distribución de las principales áreas de conservación.</p>
+        <div id="estadisticasAreas" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;">
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="areasTotal" style="font-size:24px;font-weight:700;color:#1e8449;">--</div>
+                <div style="font-size:11px;color:#888;">Áreas protegidas</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="areasSuperficie" style="font-size:24px;font-weight:700;color:#1e8449;">--</div>
+                <div style="font-size:11px;color:#888;">Superficie (km²)</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="areasPaises" style="font-size:24px;font-weight:700;color:#1e8449;">--</div>
+                <div style="font-size:11px;color:#888;">Países</div>
+            </div>
+            <div style="background:white;padding:12px;border-radius:8px;text-align:center;">
+                <div id="areasMax" style="font-size:24px;font-weight:700;color:#c0392b;">--</div>
+                <div style="font-size:11px;color:#888;">Área más grande (km²)</div>
+            </div>
+        </div>
+        <canvas id="chartAreas" style="max-height:250px;"></canvas>
+        <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
+            Fuente: WDPA (World Database on Protected Areas) · Categorías IUCN I-VI
+        </p>
+    </div>
+
+    <!-- Metodología -->
+    <details style="margin:20px 0;background:#f0f5f0;border-radius:12px;padding:14px 20px;border-left:4px solid #8aaa8a;">
+        <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:15px;">📚 Metodología — Mapa Áreas Protegidas</summary>
+        <div style="font-size:13px;color:#4a5a4a;margin-top:12px;line-height:1.7;">
+            <p>Los datos de áreas protegidas provienen de la <strong>World Database on Protected Areas (WDPA)</strong>, base de datos global mantenida por UNEP-WCMC y IUCN. Se incluyen las categorías I-VI de la clasificación IUCN (parques nacionales, reservas, monumentos naturales, áreas de manejo de hábitat, paisajes protegidos y áreas de recursos gestionados).</p>
+            <p><strong>Superficie total</strong>: suma en km² de las áreas protegidas principales mostradas. El <strong>% del territorio</strong> se calcula respecto al territorio continental de cada país.</p>
+            <p><strong>Fuente</strong>: WDPA (UNEP-WCMC &amp; IUCN) · Categorías IUCN I-VI</p>
+        </div>
+    </details>
 </div>
 
 <div class="normativas-panel">
@@ -619,6 +682,24 @@
     const API_KEY = "70232a5a2fff0ed9923878e1a513d00e";
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
     const API_BASE = "https://andes-observatorio.onrender.com";
+
+    const AREAS_PROTEGIDAS = [
+        { nombre: "PNN Tayrona", pais: "Colombia", lat: 11.30, lon: -74.10, km2: 150 },
+        { nombre: "PNN Sierra Nevada de Santa Marta", pais: "Colombia", lat: 10.83, lon: -73.68, km2: 383 },
+        { nombre: "PNN Cocuy", pais: "Colombia", lat: 6.40, lon: -72.35, km2: 3060 },
+        { nombre: "PNN Sumapaz", pais: "Colombia", lat: 3.90, lon: -74.30, km2: 1540 },
+        { nombre: "PNN Amacayacu", pais: "Colombia", lat: -3.70, lon: -70.30, km2: 2935 },
+        { nombre: "Reserva Tambopata", pais: "Perú", lat: -12.80, lon: -69.30, km2: 2747 },
+        { nombre: "PN Huascarán", pais: "Perú", lat: -9.10, lon: -77.60, km2: 3400 },
+        { nombre: "PN Manú", pais: "Perú", lat: -12.00, lon: -71.50, km2: 17163 },
+        { nombre: "PN Cotopaxi", pais: "Ecuador", lat: -0.68, lon: -78.43, km2: 333 },
+        { nombre: "PN Galápagos", pais: "Ecuador", lat: -0.95, lon: -90.96, km2: 7995 },
+        { nombre: "PN Torres del Paine", pais: "Chile", lat: -50.94, lon: -73.40, km2: 2274 },
+        { nombre: "PN Lauca", pais: "Chile", lat: -18.24, lon: -69.35, km2: 1379 },
+        { nombre: "PN Madidi", pais: "Bolivia", lat: -14.20, lon: -68.30, km2: 18958 },
+        { nombre: "PN Noel Kempff", pais: "Bolivia", lat: -14.30, lon: -60.85, km2: 15300 },
+        { nombre: "PN Nahuel Huapi", pais: "Argentina", lat: -41.00, lon: -71.50, km2: 7100 }
+    ];
 
     const DEMO_ZTD_STATIONS = [
         { codigo: "AN02", nombre: "Ancón", pais: "Perú" },
@@ -1434,7 +1515,8 @@
             'ztd': 'tabZTD',
             'clima': 'tabClima',
             'aqi': 'tabAQI',
-            'deforestacion': 'tabDeforestacion'
+            'deforestacion': 'tabDeforestacion',
+            'areasprotegidas': 'tabAreasprotegidas'
         };
         const tabBtn = document.getElementById(tabIdMap[tipo] || 'tabSirgas');
         if (tabBtn) tabBtn.classList.add('active');
@@ -1473,6 +1555,15 @@
                 if (!mapaDeforestacion) initMapaDeforestacion();
                 else mapaDeforestacion.invalidateSize();
                 if (!analisisDeforestacionData) cargarAnalisisDeforestacion();
+            } else if (tipo === 'areasprotegidas') {
+                if (!mapaAreas) {
+                    initMapaAreas();
+                    poblarSelectorAreas();
+                    cargarAnalisisAreas();
+                } else {
+                    mapaAreas.invalidateSize();
+                    if (chartAreas) setTimeout(() => chartAreas.resize(), 100);
+                }
             }
         }, 200);
     }
@@ -1614,6 +1705,174 @@
         }
     }
 
+    let mapaAreas = null;
+    let capaAreas = null;
+    let chartAreas = null;
+    let areasBaseLayers = null;
+
+    function initMapaAreas() {
+        if (mapaAreas) { mapaAreas.remove(); mapaAreas = null; }
+        mapaAreas = L.map('map-areas').setView([-20, -65], 3);
+        
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        });
+        const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '© Esri'
+        });
+        osmLayer.addTo(mapaAreas);
+        areasBaseLayers = { osm: osmLayer, topo: topoLayer };
+
+        capaAreas = L.layerGroup();
+        window.areasMarkers = {};
+        AREAS_PROTEGIDAS.forEach(a => {
+            const radio = Math.max(6, Math.min(20, Math.sqrt(a.km2) / 15));
+            const marker = L.circleMarker([a.lat, a.lon], {
+                radius: radio,
+                fillColor: '#1e8449',
+                color: '#0d4a22',
+                weight: 2,
+                fillOpacity: 0.6
+            }).bindPopup(`<b>🌿 ${a.nombre}</b><br>País: ${a.pais}<br>Superficie: ${a.km2.toLocaleString()} km²`).addTo(capaAreas);
+            // Guardar referencia con toda la info
+            window.areasMarkers[a.nombre] = {
+                marker: marker,
+                nombre: a.nombre,
+                lat: a.lat,
+                lon: a.lon,
+                km2: a.km2,
+                pais: a.pais
+            };
+        });
+        capaAreas.addTo(mapaAreas);
+
+        // ═══ Listener del selector: resaltar área seleccionada ═══
+        const selAreas = document.getElementById('selectorAreas');
+        if (selAreas && !selAreas.dataset.listenerAttached) {
+            selAreas.dataset.listenerAttached = 'true';
+            selAreas.addEventListener('change', function() {
+                // Restaurar TODOS a estado original
+                Object.values(window.areasMarkers).forEach(item => {
+                    item.marker.setStyle({ fillColor: '#1e8449', color: '#0d4a22', weight: 2, fillOpacity: 0.6 });
+                    item.marker.setRadius(Math.max(6, Math.min(20, Math.sqrt(item.km2) / 15)));
+                });
+                mapaAreas.closePopup();
+                
+                const valor = this.value;
+                if (!valor) return;
+                const partes = valor.split(',');
+                const lat = parseFloat(partes[0]);
+                const lon = parseFloat(partes[1]);
+                if (isNaN(lat) || isNaN(lon)) return;
+                
+                // Buscar marcador por coords
+                const seleccionada = Object.values(window.areasMarkers).find(
+                    item => Math.abs(item.lat - lat) < 0.001 && Math.abs(item.lon - lon) < 0.001
+                );
+                
+                if (seleccionada) {
+                    // Resaltar
+                    seleccionada.marker.setStyle({ fillColor: '#d4a017', color: '#5a4a1a', weight: 4, fillOpacity: 1 });
+                    seleccionada.marker.setRadius(28);
+                    // Volar + abrir popup
+                    mapaAreas.flyTo([lat, lon], 7, { duration: 1.5 });
+                    setTimeout(() => seleccionada.marker.openPopup(), 900);
+                    console.log(`✅ Resaltada: ${seleccionada.nombre}`);
+                } else {
+                    mapaAreas.flyTo([lat, lon], 7, { duration: 1.5 });
+                }
+            });
+        }
+
+        // Listeners
+        const toggleTopo = document.getElementById('toggleTopografiaAreas');
+        if (toggleTopo && !toggleTopo.dataset.listenerAttached) {
+            toggleTopo.dataset.listenerAttached = 'true';
+            toggleTopo.addEventListener('change', function() {
+                if (this.checked) {
+                    mapaAreas.removeLayer(areasBaseLayers.osm);
+                    areasBaseLayers.topo.addTo(mapaAreas);
+                } else {
+                    mapaAreas.removeLayer(areasBaseLayers.topo);
+                    areasBaseLayers.osm.addTo(mapaAreas);
+                }
+            });
+        }
+        const toggleAreas = document.getElementById('toggleAreas');
+        if (toggleAreas && !toggleAreas.dataset.listenerAttached) {
+            toggleAreas.dataset.listenerAttached = 'true';
+            toggleAreas.addEventListener('change', function() {
+                if (this.checked) {
+                    if (capaAreas && !mapaAreas.hasLayer(capaAreas)) capaAreas.addTo(mapaAreas);
+                } else {
+                    if (capaAreas && mapaAreas.hasLayer(capaAreas)) mapaAreas.removeLayer(capaAreas);
+                }
+            });
+        }
+
+        document.getElementById('areasBadge').innerText = `🌿 ${AREAS_PROTEGIDAS.length} áreas protegidas`;
+    }
+
+    function poblarSelectorAreas() {
+        const sel = document.getElementById('selectorAreas');
+        if (!sel) return;
+        sel.innerHTML = '<option value="">-- Selecciona --</option>';
+        AREAS_PROTEGIDAS.forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = `${a.lat},${a.lon},6`;
+            opt.textContent = `${a.nombre} (${a.pais})`;
+            sel.appendChild(opt);
+        });
+        console.log(`✅ Selector Áreas poblado con ${AREAS_PROTEGIDAS.length} áreas`);
+    }
+
+    function cargarAnalisisAreas() {
+        // Stats
+        const total = AREAS_PROTEGIDAS.length;
+        const superficie = AREAS_PROTEGIDAS.reduce((s, a) => s + a.km2, 0);
+        const paises = [...new Set(AREAS_PROTEGIDAS.map(a => a.pais))].length;
+        const maxArea = Math.max(...AREAS_PROTEGIDAS.map(a => a.km2));
+
+        document.getElementById('areasTotal').textContent = total;
+        document.getElementById('areasSuperficie').textContent = superficie.toLocaleString();
+        document.getElementById('areasPaises').textContent = paises;
+        document.getElementById('areasMax').textContent = maxArea.toLocaleString();
+
+        // Gráfico: superficie por país
+        const porPais = {};
+        AREAS_PROTEGIDAS.forEach(a => {
+            porPais[a.pais] = (porPais[a.pais] || 0) + a.km2;
+        });
+        const paisesOrdenados = Object.entries(porPais).sort((a, b) => b[1] - a[1]);
+
+        const ctx = document.getElementById('chartAreas').getContext('2d');
+        if (chartAreas && typeof chartAreas.destroy === 'function') { chartAreas.destroy(); chartAreas = null; }
+        chartAreas = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: paisesOrdenados.map(p => p[0]),
+                datasets: [{
+                    label: 'Superficie protegida (km²)',
+                    data: paisesOrdenados.map(p => p[1]),
+                    backgroundColor: '#27ae60',
+                    borderColor: '#1e8449',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: 'Superficie protegida por país (áreas principales)' },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'km²' } }
+                }
+            }
+        });
+        console.log('✅ Análisis Áreas Protegidas cargado');
+    }
+
     function descargarCSV_ZTD() {
         const codigo = document.getElementById('estacionZTD').value;
         if (!codigo || !ztdChart || !ztdChart.data.labels.length) {
@@ -1668,6 +1927,7 @@
     document.getElementById('tabClima').addEventListener('click', function() { mostrarMapa('clima'); });
     document.getElementById('tabAQI').addEventListener('click', function() { mostrarMapa('aqi'); });
     document.getElementById('tabDeforestacion').addEventListener('click', function() { mostrarMapa('deforestacion'); });
+    document.getElementById('tabAreasprotegidas').addEventListener('click', function() { mostrarMapa('areasprotegidas'); });
 
     function colorZTDAnomalia(anomalia, maxAbs) {
         if (maxAbs === 0) return 'hsl(120, 70%, 50%)';
