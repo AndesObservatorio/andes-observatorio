@@ -10,8 +10,42 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f5f0; padding: 20px; }
-        .container { max-width: 100%; margin: 0; padding: 16px 20px; background: white; border-radius: 0; box-shadow: none; border: none; }
+        
+        /* ═══ VARIABLES DE COLOR (MODO CLARO) ═══ */
+        :root {
+            --bg-body: #f8f5f0;
+            --bg-container: white;
+            --bg-card: #fcfaf7;
+            --bg-panel: #f8f5f0;
+            --bg-input: white;
+            --text-primary: #2d4a2d;
+            --text-secondary: #4a5a4a;
+            --text-muted: #8aa08a;
+            --border-color: #ede8e0;
+            --border-strong: #d6cfc4;
+            --accent-green: #2d4a2d;
+            --accent-green-light: #5a7a5a;
+            --shadow-color: rgba(0,0,0,0.08);
+        }
+        
+        /* ═══ VARIABLES DE COLOR (MODO OSCURO) ═══ */
+        body.dark {
+            --bg-body: #1a1f1a;
+            --bg-container: #232a23;
+            --bg-card: #2a322a;
+            --bg-panel: #2a322a;
+            --bg-input: #1e241e;
+            --text-primary: #e8f0e8;
+            --text-secondary: #c8d4c8;
+            --text-muted: #8aaa8a;
+            --border-color: #3a4a3a;
+            --border-strong: #4a5a4a;
+            --accent-green: #8aaa8a;
+            --accent-green-light: #5a7a5a;
+            --shadow-color: rgba(0,0,0,0.3);
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-body); padding: 20px; color: var(--text-primary); transition: background 0.3s, color 0.3s; }
+        .container { max-width: 100%; margin: 0; padding: 16px 20px; background: var(--bg-container); border-radius: 0; box-shadow: none; border: none; transition: background 0.3s; }
         .tab-content { display: block; }
 
         /* ═══ SELECTOR DE IDIOMA ═══ */
@@ -42,47 +76,47 @@
         }
         .lang-btn.active { background: #2d4a2d; color: white; }
         .lang-btn:hover:not(.active) { background: #f0f5f0; }
-        h1 { color: #5a7a5a; text-align: center; font-size: 2rem; }
-        .subtitle { text-align: center; color: #8aa08a; margin-bottom: 18px; border-bottom: 2px solid #f0ebe4; padding-bottom: 12px; }
+        h1 { color: var(--accent-green-light); text-align: center; font-size: 2rem; }
+        .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 18px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
         .selector { text-align: center; margin: 10px 0 18px; }
-        select { padding: 12px 20px; font-size: 16px; border-radius: 40px; border: 1.5px solid #d6cfc4; background: white; min-width: 220px; width: 90%; max-width: 480px; }
+        select { padding: 12px 20px; font-size: 16px; border-radius: 40px; border: 1.5px solid var(--border-strong); background: var(--bg-input); color: var(--text-primary); min-width: 220px; width: 90%; max-width: 480px; }
         .stats { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; margin: 10px 0; }
-        .card { background: #fcfaf7; padding: 16px; border-radius: 18px; text-align: center; border: 1px solid #ede8e0; }
-        .card h3 { color: #5a7a5a; font-size: 0.95rem; }
+        .card { background: var(--bg-card); padding: 16px; border-radius: 18px; text-align: center; border: 1px solid var(--border-color); transition: background 0.3s; }
+        .card h3 { color: var(--accent-green-light); font-size: 0.95rem; }
         .value { font-size: 32px; font-weight: 700; color: #d4a017; }
         .value small { font-size: 18px; color: #8aaa8a; }
-        .fuente { font-size: 11px; color: #b0b8a0; margin-top: 4px; }
-        .layer-control { display: flex; flex-wrap: wrap; gap: 16px 24px; background: #fcfaf7; padding: 10px 20px; border-radius: 40px; margin: 10px 0; align-items: center; border: 1px solid #ede8e0; }
+        .fuente { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+        .layer-control { display: flex; flex-wrap: wrap; gap: 16px 24px; background: var(--bg-card); padding: 10px 20px; border-radius: 40px; margin: 10px 0; align-items: center; border: 1px solid var(--border-color); color: var(--text-primary); }
         .layer-control label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
-        .update-badge { background: #8aaa8a; color: white; padding: 4px 16px; border-radius: 30px; font-size: 13px; margin-left: auto; }
+        .update-badge { background: var(--text-muted); color: white; padding: 4px 16px; border-radius: 30px; font-size: 13px; margin-left: auto; }
         .btn-reporte { background: #d4a017; color: white; border: none; padding: 6px 18px; border-radius: 30px; font-size: 13px; cursor: pointer; }
         #map { height: 60vh; min-height: 350px; width: 100%; border-radius: 12px; margin: 10px 0; border: 1px solid #ede8e0; }
-        .alertas-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
+        .alertas-panel { background: var(--bg-card); padding: 18px 24px; border-radius: 18px; border: 1px solid var(--border-color); margin: 14px 0; color: var(--text-primary); }
         .alertas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; }
-        .alerta-item { background: white; padding: 12px 16px; border-radius: 12px; border: 1px solid #ede8e0; }
+        .alerta-item { background: var(--bg-container); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-primary); }
         .alerta-item label { font-weight: 600; font-size: 14px; }
-        .alerta-item input { padding: 6px 10px; border-radius: 8px; border: 1px solid #d6cfc4; width: 100%; margin-top: 4px; }
-        .valor-actual { font-size: 13px; color: #8aa08a; display: block; margin: 4px 0; }
+        .alerta-item input { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-input); color: var(--text-primary); width: 100%; margin-top: 4px; }
+        .valor-actual { font-size: 13px; color: var(--text-muted); display: block; margin: 4px 0; }
         .estado-alerta { font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 20px; display: inline-block; }
         .estado-alerta.ok { background: #e6f2e6; color: #2d6a2d; }
         .estado-alerta.alerta { background: #ffe6cc; color: #b85a00; }
         .estado-alerta.critico { background: #ffcccc; color: #b30000; }
         .btn-alerta { background: #8aaa8a; color: white; border: none; padding: 4px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; margin-top: 4px; }
         .charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 12px 0; }
-        .chart-card { background: #fcfaf7; padding: 16px; border-radius: 18px; border: 1px solid #ede8e0; }
-        .chart-card h3 { text-align: center; color: #5a7a5a; font-size: 0.95rem; margin-bottom: 8px; }
+        .chart-card { background: var(--bg-card); padding: 16px; border-radius: 18px; border: 1px solid var(--border-color); color: var(--text-primary); }
+        .chart-card h3 { text-align: center; color: var(--accent-green-light); font-size: 0.95rem; margin-bottom: 8px; }
         canvas { max-height: 190px; width: 100% !important; }
-        .sirgas-historico { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
-        .sirgas-historico select { padding: 6px 12px; border-radius: 30px; border: 1.5px solid #d6cfc4; }
-        .oficiales-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
+        .sirgas-historico { background: var(--bg-card); padding: 18px 24px; border-radius: 18px; border: 1px solid var(--border-color); margin: 14px 0; color: var(--text-primary); }
+        .sirgas-historico select { padding: 6px 12px; border-radius: 30px; border: 1.5px solid var(--border-strong); background: var(--bg-input); color: var(--text-primary); }
+        .oficiales-panel { background: var(--bg-card); padding: 18px 24px; border-radius: 18px; border: 1px solid var(--border-color); margin: 14px 0; color: var(--text-primary); }
         .oficiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; }
-        .oficial-item { background: white; padding: 12px 16px; border-radius: 12px; border: 1px solid #ede8e0; }
-        .fuente-oficial { font-size: 12px; font-weight: 600; color: #5a7a5a; background: #e6f2e6; padding: 2px 10px; border-radius: 12px; display: inline-block; }
+        .oficial-item { background: var(--bg-container); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-primary); }
+        .fuente-oficial { font-size: 12px; font-weight: 600; color: var(--accent-green-light); background: var(--bg-panel); padding: 2px 10px; border-radius: 12px; display: inline-block; }
         .oficial-item .dato { font-size: 20px; font-weight: 700; color: #1a4a1a; }
         .oficial-item .label { font-size: 13px; color: #8aa08a; }
-        .normativas-panel { background: #fcfaf7; padding: 18px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
+        .normativas-panel { background: var(--bg-card); padding: 18px 24px; border-radius: 18px; border: 1px solid var(--border-color); margin: 14px 0; color: var(--text-primary); }
         .normativas-panel ul { list-style: none; padding: 0; }
-        .normativas-panel li { padding: 6px 14px; background: white; margin-bottom: 6px; border-radius: 10px; border-left: 4px solid #8aaa8a; font-size: 14px; }
+        .normativas-panel li { padding: 6px 14px; background: var(--bg-container); margin-bottom: 6px; border-radius: 10px; border-left: 4px solid var(--text-muted); font-size: 14px; color: var(--text-primary); }
         footer { background: #5a7a5a; color: #e8efe8; text-align: center; padding: 16px; border-radius: 18px; margin-top: 18px; }
 
         /* ========== FASES DEL MONITOREO ========== */
@@ -122,16 +156,139 @@
         .map-tab {
             padding: 10px 24px;
             border-radius: 30px;
-            border: 1.5px solid #d6cfc4;
-            background: white;
-            color: #5a7a5a;
+            border: 1.5px solid var(--border-strong);
+            background: var(--bg-card);
+            color: var(--accent-green-light);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .map-tab:hover { background: #f4f8f4; }
-        .map-tab.active { background: #5a7a5a; color: white; border-color: #5a7a5a; }
+        .map-tab:hover { background: var(--bg-panel); }
+        .map-tab.active { background: var(--accent-green-light); color: white; border-color: var(--accent-green-light); }
+    
+        /* ═══ ESTILOS ADICIONALES PARA MODO OSCURO ═══ */
+        body.dark select {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+        body.dark .lang-btn {
+            color: var(--text-muted);
+        }
+        body.dark .lang-btn:hover:not(.active) {
+            background: var(--bg-panel);
+        }
+        body.dark details {
+            background: var(--bg-card) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary);
+        }
+        body.dark details summary {
+            color: var(--accent-green-light) !important;
+        }
+        body.dark details > div {
+            color: var(--text-secondary) !important;
+        }
+        body.dark details strong {
+            color: var(--text-primary);
+        }
+        body.dark details p,
+        body.dark details li {
+            color: var(--text-secondary);
+        }
+        body.dark table {
+            color: var(--text-primary);
+        }
+        body.dark table thead {
+            background: var(--accent-green-light) !important;
+        }
+        body.dark table tbody {
+            background: var(--bg-container) !important;
+        }
+        body.dark table td {
+            border-color: var(--border-color) !important;
+        }
+        body.dark footer {
+            color: var(--text-muted);
+        }
+        body.dark footer a {
+            color: var(--accent-green-light);
+        }
+        body.dark .fase-item {
+            background: var(--bg-container);
+            border-color: var(--border-color);
+        }
+        body.dark .fase-nombre {
+            color: var(--text-primary);
+        }
+        body.dark .fase-detalles {
+            color: var(--text-muted);
+        }
+        body.dark .selector {
+            color: var(--text-primary);
+        }
+        body.dark .stats {
+            color: var(--text-primary);
+        }
+        body.dark #citySelect,
+        body.dark #estacionZTD,
+        body.dark #estacionHistorica,
+        body.dark #variableHistorica,
+        body.dark #selectorSirgas,
+        body.dark #selectorZTD,
+        body.dark #selectorAQI,
+        body.dark #selectorDeforestacion,
+        body.dark #selectorAreas {
+            background: var(--bg-input);
+            color: var(--text-primary);
+        }
+        body.dark .metodologia-panel,
+        body.dark .normativas-panel {
+            background: var(--bg-card);
+        }
+        body.dark .normativas-panel h3,
+        body.dark .metodologia-panel h3 {
+            color: var(--accent-green-light);
+        }
+        body.dark .normativas-panel li {
+            background: var(--bg-container);
+        }
+        body.dark p, body.dark span, body.dark div {
+            /* Fallback para textos sin clase específica */
+        }
+
+    
+        /* ═══ MAPAS EN MODO OSCURO (filtro CSS) ═══ */
+        body.dark .leaflet-tile-container img.leaflet-tile {
+            filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9);
+        }
+        body.dark .leaflet-container {
+            background: #1a1f1a !important;
+        }
+        body.dark .leaflet-control-attribution {
+            background: rgba(35, 42, 35, 0.9) !important;
+            color: #8aaa8a !important;
+        }
+        body.dark .leaflet-control-attribution a {
+            color: #8aaa8a !important;
+        }
+        body.dark .leaflet-popup-content-wrapper,
+        body.dark .leaflet-popup-tip {
+            background: #2a322a !important;
+            color: #e8f0e8 !important;
+        }
+        body.dark .leaflet-popup-content {
+            color: #e8f0e8 !important;
+        }
+        body.dark .leaflet-bar a {
+            background: #2a322a !important;
+            color: #e8f0e8 !important;
+            border-color: #3a4a3a !important;
+        }
+        body.dark .leaflet-bar a:hover {
+            background: #3a4a3a !important;
+        }
     </style>
 <base target="_blank">
 </head>
@@ -142,6 +299,7 @@
     <button class="lang-btn active" data-lang="es">Español</button>
     <button class="lang-btn" data-lang="en">English</button>
     <button class="lang-btn" data-lang="pt">Português</button>
+    <button class="lang-btn" id="themeToggle" title="Modo claro/oscuro" style="font-size:14px;padding:5px 10px;">🌙</button>
 </div>
 
 <div class="container">
@@ -1857,8 +2015,8 @@
     function initMapClima() {
         if (mapClima) return;
         mapClima = L.map('map-clima').setView([-15, -65], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
+        L.tileLayer(getTileURL(), {
+            attribution: getTileAttribution()
         }).addTo(mapClima);
         cargarCapasClima();
 
@@ -2007,10 +2165,23 @@
         return cuadricula;
     }
 
-    function initMapSirgas() {
+    
+// ═══════════════════════════════════════════════════════════
+// HELPER: Obtener URL del tile según el tema actual
+// ═══════════════════════════════════════════════════════════
+function getTileURL() {
+    // OSM para ambos modos (el modo oscuro se aplica por CSS filter)
+    return 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+}
+
+function getTileAttribution() {
+    return '© OpenStreetMap';
+}
+
+function initMapSirgas() {
         if (mapSirgas) mapSirgas.remove();
         mapSirgas = L.map('map-sirgas').setView([-15, -65], 4);
-        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', name: 'osm' });
+        const osmLayer = L.tileLayer(getTileURL(), { attribution: getTileAttribution(), name: 'osm' });
         const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '© Esri', name: 'topo' });
         osmLayer.addTo(mapSirgas);
         window.sirgasBaseLayers = { osm: osmLayer, topo: topoLayer };
@@ -2040,7 +2211,7 @@
     function initMapZTD() {
         if (mapZTD) mapZTD.remove();
         mapZTD = L.map('map-ztd').setView([-15, -65], 4);
-        const osmLayerZTD = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', name: 'osm' });
+        const osmLayerZTD = L.tileLayer(getTileURL(), { attribution: getTileAttribution(), name: 'osm' });
         const topoLayerZTD = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '© Esri', name: 'topo' });
         osmLayerZTD.addTo(mapZTD);
         window.ztdBaseLayers = { osm: osmLayerZTD, topo: topoLayerZTD };
@@ -2120,8 +2291,8 @@
         if (mapaAreas) { mapaAreas.remove(); mapaAreas = null; }
         mapaAreas = L.map('map-areas').setView([-20, -65], 3);
         
-        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
+        const osmLayer = L.tileLayer(getTileURL(), {
+            attribution: getTileAttribution()
         });
         const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: '© Esri'
@@ -2528,7 +2699,7 @@
 
     async function initMapaDeforestacion() {
         mapaDeforestacion = L.map('map-deforestacion').setView([-15, -60], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapaDeforestacion);
+        L.tileLayer(getTileURL(), {attribution: getTileAttribution()}).addTo(mapaDeforestacion);
         
         try {
             const res = await fetch('assets/geojson/analisis_deforestacion.json');
@@ -2594,7 +2765,7 @@
 
     async function initMapaAQI() {
         mapaAQI = L.map('map-aqi').setView([-15, -65], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapaAQI);
+        L.tileLayer(getTileURL(), {attribution: getTileAttribution()}).addTo(mapaAQI);
         
         // Cargar AQI de cada ciudad
         const ciudades = ['Bogota', 'Medellin', 'Lima', 'Santiago', 'Quito', 'Caracas'];
@@ -3486,6 +3657,158 @@ function aplicarIdioma(idioma) {
 document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => aplicarIdioma(btn.dataset.lang));
 });
+
+
+// ═══════════════════════════════════════════════════════════
+// SISTEMA DE MODO OSCURO
+// ═══════════════════════════════════════════════════════════
+function detectarTemaInicial() {
+    const guardado = localStorage.getItem('andes_tema');
+    if (guardado === 'dark' || guardado === 'light') return guardado;
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+    }
+    return 'light';
+}
+
+function aplicarTema(tema) {
+    if (tema === 'dark') {
+        document.body.classList.add('dark');
+        const btn = document.getElementById('themeToggle');
+        if (btn) btn.textContent = '☀️';
+    } else {
+        document.body.classList.remove('dark');
+        const btn = document.getElementById('themeToggle');
+        if (btn) btn.textContent = '🌙';
+    }
+    localStorage.setItem('andes_tema', tema);
+    window.temaActual = tema;
+    
+    // Actualizar gráficos Chart.js y mapas Leaflet
+    if (typeof actualizarTemaGraficos === 'function') {
+        actualizarTemaGraficos(tema);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// ACTUALIZAR TEMA DE GRÁFICOS CHART.JS + TILES LEAFLET
+// ═══════════════════════════════════════════════════════════
+function actualizarTemaGraficos(tema) {
+    const dark = tema === 'dark';
+    
+    // Configuración global de Chart.js
+    if (typeof Chart !== 'undefined') {
+        Chart.defaults.color = dark ? '#c8d4c8' : '#4a5a4a';
+        Chart.defaults.borderColor = dark ? '#3a4a3a' : '#e8e0d8';
+        Chart.defaults.backgroundColor = dark ? '#2a322a' : '#fcfaf7';
+        
+        // Aplicar a todos los gráficos registrados
+        const charts = [
+            'chartSIRGAS', 'chartZTDPrecip', 'chartAQI', 'chartDeforestacion',
+            'chartAreas', 'sirgasHistoryChart', 'ztdChart', 'tempChart',
+            'protectedChart', 'trendChart'
+        ];
+        
+        charts.forEach(nombre => {
+            const chart = window[nombre];
+            if (chart && typeof chart === 'object' && chart.options) {
+                aplicarColoresGrafico(chart, dark);
+                if (typeof chart.update === 'function') chart.update('none');
+            }
+        });
+    }
+    
+    // Cambiar tiles de Leaflet a modo oscuro
+    cambiarTilesLeaflet(dark);
+}
+
+function aplicarColoresGrafico(chart, dark) {
+    try {
+        // Fondo
+        if (!chart.options.plugins) chart.options.plugins = {};
+        chart.options.plugins.legend = chart.options.plugins.legend || {};
+        chart.options.plugins.legend.labels = chart.options.plugins.legend.labels || {};
+        chart.options.plugins.legend.labels.color = dark ? '#c8d4c8' : '#4a5a4a';
+        
+        if (chart.options.plugins.title) {
+            chart.options.plugins.title.color = dark ? '#e8f0e8' : '#2d4a2d';
+        }
+        
+        // Ejes
+        if (chart.options.scales) {
+            Object.keys(chart.options.scales).forEach(k => {
+                const eje = chart.options.scales[k];
+                eje.ticks = eje.ticks || {};
+                eje.ticks.color = dark ? '#8aaa8a' : '#4a5a4a';
+                eje.grid = eje.grid || {};
+                eje.grid.color = dark ? '#3a4a3a' : '#e8e0d8';
+                if (eje.title) eje.title.color = dark ? '#c8d4c8' : '#4a5a4a';
+            });
+        }
+    } catch(e) {
+        console.warn('No se pudo actualizar gráfico:', e);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// CAMBIAR TILES DE LEAFLET A CARTODB DARK MATTER
+// ═══════════════════════════════════════════════════════════
+const TILE_CLARO = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const TILE_OSCURO = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+
+function cambiarTilesLeaflet(dark) {
+    console.log('🎨 Cambiando tiles a modo', dark ? 'oscuro' : 'claro');
+    const mapas = ['mapSirgas', 'mapZTD', 'mapClima', 'mapaAQI', 'mapaDeforestacion', 'mapaAreas'];
+    
+    mapas.forEach(nombreMapa => {
+        const mapa = window[nombreMapa];
+        if (!mapa || !mapa.eachLayer) return;
+        
+        mapa.eachLayer(layer => {
+            // Detectar si es un tile layer
+            if (layer._url && typeof layer._url === 'string') {
+                const esURLActual = layer._url;
+                // Si el tile es de OSM y estamos en modo oscuro, cambiar
+                if (esURLActual.includes('openstreetmap.org') && dark) {
+                    const urlVieja = layer._url;
+                    layer.setUrl(TILE_OSCURO);
+                    // Guardar la URL original para restaurarla
+                    if (!layer._urlOriginal) layer._urlOriginal = urlVieja;
+                } else if (esURLActual.includes('cartocdn.com') && !dark) {
+                    const urlOriginal = layer._urlOriginal || TILE_CLARO;
+                    layer.setUrl(urlOriginal);
+                }
+            }
+        });
+    });
+    
+    // Actualizar base layers guardados
+    ['window.sirgasBaseLayers', 'window.ztdBaseLayers', 'areasBaseLayers'].forEach(ref => {
+        const layers = eval(ref);
+        if (layers && layers.osm) {
+            if (dark && layers.osm._url && layers.osm._url.includes('openstreetmap.org')) {
+                if (!layers.osm._urlOriginal) layers.osm._urlOriginal = layers.osm._url;
+                layers.osm.setUrl(TILE_OSCURO);
+            } else if (!dark && layers.osm._url && layers.osm._url.includes('cartocdn.com')) {
+                layers.osm.setUrl(layers.osm._urlOriginal || TILE_CLARO);
+            }
+        }
+    });
+}
+
+function toggleTema() {
+    const actual = document.body.classList.contains('dark') ? 'dark' : 'light';
+    aplicarTema(actual === 'dark' ? 'light' : 'dark');
+}
+
+// Listener del botón
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('themeToggle');
+    if (btn) btn.addEventListener('click', toggleTema);
+});
+
+// Aplicar tema al cargar
+aplicarTema(detectarTemaInicial());
 
 </script>
 </body>
