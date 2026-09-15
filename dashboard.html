@@ -181,6 +181,17 @@
                 <div style="font-size:11px;color:#888;">Desv. estándar</div>
             </div>
         </div>
+        <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Velocidades Tectónicas</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                
+<p>Se calcularon las velocidades horizontales (Vn, Ve) de 7 estaciones SIRGAS-CON mediante ajuste por mínimos cuadrados a las series temporales de coordenadas, tras remover saltos instrumentales, cambios de antena y efectos estacionales.</p>
+<p>La <strong>magnitud horizontal</strong> se obtiene como √(Vn² + Ve²). El <strong>azimut</strong> se mide desde el Norte geográfico (0°) en sentido horario.</p>
+<p><strong>Clasificación</strong> según umbrales SIRGAS: intraplaca (0–5), deformación (5–15), actividad (15–25), borde de placa (&gt;25) mm/año.</p>
+<p><em>Limitaciones</em>: los valores dependen del marco de referencia (ITRF2014, época 2010.0) y del intervalo temporal analizado.</p>
+
+            </div>
+        </details>
         <canvas id="chartSIRGAS" style="max-height:250px;"></canvas>
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: SIRGAS-CON. Clasificación: intraplaca (0-5), deformación (5-15), actividad (15-25), borde de placa (>25) mm/año.
@@ -274,6 +285,17 @@
                 <div style="font-size:11px;color:#888;">Significancia</div>
             </div>
         </div>
+        <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Anomalía ZTD vs Precipitación</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                
+<p>Se calculó la <strong>correlación de Spearman</strong> entre la anomalía diaria de ZTD (estación BOGT) y la precipitación diaria registrada por Open-Meteo, para el período dic 2025 – jun 2026.</p>
+<p>La <strong>anomalía ZTD</strong> se define como ZTD_actual − promedio histórico de la estación, eliminando el sesgo altitudinal entre estaciones.</p>
+<p><strong>Interpretación</strong>: r = 0.397 con p &lt; 0.0001 indica una correlación positiva moderada pero estadísticamente significativa. La anomalía ZTD explica ~16% de la varianza en precipitación.</p>
+<p><em>Limitaciones</em>: una sola estación (BOGT), un solo período; la correlación no implica causalidad.</p>
+
+            </div>
+        </details>
         <canvas id="chartZTDPrecip" style="max-height:250px;"></canvas>
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: SIRGAS-CON (ZTD) + Open-Meteo (precipitación). Período: 2025-12-15 a 2026-06-06. Método: Spearman.
@@ -390,10 +412,30 @@
     <div id="map-clima" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0">
     </div>
 
-    <div class="chart-card" id="tempPorPaisWrapper" style=""><h3>📊 Temperatura por País</h3><canvas id="tempChart"></canvas>
+    <div class="chart-card" id="tempPorPaisWrapper" style=""><h3>📊 Temperatura por País</h3><details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Temperatura por País</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                
+<p>Los datos de temperatura por país provienen de OpenWeatherMap, con resolución por ciudad y actualización cada 10 minutos.</p>
+<p>Se muestra la temperatura actual de la ciudad representativa de cada país andino. La media se calcula sobre las ciudades disponibles.</p>
+<p><em>Fuente</em>: OpenWeatherMap API.</p>
+
+            </div>
+        </details>
+        <canvas id="tempChart"></canvas>
     </div>
 
-    <div class="chart-card" id="tendenciaWrapper" style=""><h3>📉 Tendencia 7 días</h3><canvas id="trendChart"></canvas>
+    <div class="chart-card" id="tendenciaWrapper" style=""><h3>📉 Tendencia 7 días</h3><details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Tendencia 7 días</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                
+<p>La <strong>tendencia 7 días</strong> se calcula como media móvil de las últimas 168 horas (7 días × 24 h) de datos horarios de temperatura.</p>
+<p>Permite visualizar patrones diarios y fluctuaciones semanales.</p>
+<p><em>Fuente</em>: OpenWeatherMap API.</p>
+
+            </div>
+        </details>
+        <canvas id="trendChart"></canvas>
         </div>
 
     <div class="oficiales-panel">
@@ -463,6 +505,17 @@
                 <div style="font-size:11px;color:#888;">Ciudades</div>
             </div>
         </div>
+        <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Calidad del Aire</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                
+<p>Se consultaron los niveles de <strong>PM2.5</strong> (µg/m³) en 6 ciudades andinas vía OpenAQ API v3, que agrega datos de estaciones oficiales.</p>
+<p>Se calculan: <strong>promedio</strong>, <strong>máximo</strong>, <strong>mínimo</strong> y <strong>número de ciudades con datos</strong>. Las ciudades sin datos aparecen en gris.</p>
+<p><strong>Clasificación OMS 2021 (media 24h)</strong>: bueno (&lt;50), moderado (50–100), malo (100–150), muy malo (&gt;150) µg/m³.</p>
+<p><em>Limitaciones</em>: no todas las ciudades tienen estaciones activas; la cobertura es variable.</p>
+
+            </div>
+        </details>
         <canvas id="chartAQI" style="max-height:250px;"></canvas>
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: OpenAQ API v3. Estándar OMS 2021: 15 µg/m³ (24h). Clasificación: bueno (<50), moderado (50-100), malo (100-150), muy malo (>150).
@@ -571,6 +624,16 @@
                 <div style="font-size:11px;color:#888;">Zonas críticas</div>
             </div>
         </div>
+        <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Deforestación Andina</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                
+<p>Los datos de <strong>pérdida de cobertura arbórea</strong> provienen de Global Forest Watch (GFW), basados en análisis satelital Landsat con resolución 30 m. Se considera "bosque" con umbral de cobertura ≥ 30%.</p>
+<p>El período analizado es <strong>2024</strong> (último año completo disponible). La pérdida se mide en hectáreas.</p>
+<p><em>Limitaciones</em>: la clasificación depende del umbral de cobertura elegido (30%). Otros umbrales (10%, 50%) arrojan resultados distintos.</p>
+
+            </div>
+        </details>
         <canvas id="chartDeforestacion" style="max-height:250px;"></canvas>
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: Global Forest Watch (2024). Umbral de cobertura: 30%.
@@ -646,6 +709,16 @@
                 <div style="font-size:11px;color:#888;">Área más grande (km²)</div>
             </div>
         </div>
+        <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Áreas Protegidas Andinas</summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                
+<p>Se utilizaron 15 áreas protegidas representativas de la región andina, con superficie oficial reportada por WDPA (UNEP-WCMC &amp; IUCN).</p>
+<p>Se suman las superficies por país para comparar el nivel de protección relativa. <strong>No incluye áreas marinas ni reservas de biosfera</strong> no clasificadas como IUCN I-VI.</p>
+<p><em>Limitaciones</em>: muestra solo una selección de áreas; el total real de superficie protegida por país es mayor.</p>
+
+            </div>
+        </details>
         <canvas id="chartAreas" style="max-height:250px;"></canvas>
         <p style="font-size:11px;color:#8aa08a;margin-top:12px;font-style:italic;">
             Fuente: WDPA (World Database on Protected Areas) · Categorías IUCN I-VI
