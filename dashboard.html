@@ -1014,7 +1014,7 @@
     </details>
 
     <!-- Mecanismo C -->
-    <details style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
+    <details id="detailsMecanismoC" style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
         <summary style="cursor:pointer;font-weight:700;color:#27ae60;font-size:16px;" data-i18n="mec.c.titulo">🌧️ Mecanismo C: Convección Atmosférica y el Ciclo Hidrológico</summary>
         <div style="font-size:14px;color:#4a5a4a;margin-top:14px;line-height:1.7;">
             <p><strong data-i18n="mec.c.fundamento.titulo">Fundamento físico:</strong> <span data-i18n="mec.c.fundamento.texto">El calentamiento superficial intensifica la convección atmosférica, aumenta la capacidad de retención de vapor de agua de la atmósfera (ley de Clausius-Clapeyron) y altera la circulación atmosférica a gran escala. Este mecanismo opera exclusivamente en la atmósfera y la hidrosfera, sin acoplamiento directo con la litosfera.</span></p>
@@ -1045,6 +1045,27 @@
             <p style="background:#fff3cd;padding:10px 14px;border-radius:8px;margin-top:12px;font-size:13px;">
                 <strong data-i18n="mec.c.nota.titulo">Nota importante:</strong> <span data-i18n="mec.c.nota.texto">Este mecanismo no debe confundirse con los Mecanismos A y B. El calor atmosférico no "penetra" en la litosfera ni "atrae" el calor interno terrestre.</span>
             </p>
+
+            <!-- 🆕 MAPA INTERACTIVO MECANISMO C -->
+            <div style="margin-top:24px;padding-top:18px;border-top:2px solid #ede8e0;">
+                <h5 style="margin:0 0 12px;color:#2c5f2c;" data-i18n="mec.c.mapa.titulo">🗺️ Mapa interactivo: Estaciones ZTD y Precipitación CHIRPS</h5>
+
+                <div id="mapa-mecanismo-c" style="height:420px;width:100%;border-radius:14px;margin:12px 0;border:1px solid #ede8e0;"></div>
+
+                <div class="layer-control" style="margin:10px 0;">
+                    <label><input type="checkbox" id="toggleZTDmec" checked> <span data-i18n="mec.c.mapa.toggleZTD">🌫️ Estaciones ZTD</span></label>
+                    <label><input type="checkbox" id="togglePrecipmec" checked> <span data-i18n="mec.c.mapa.togglePrecip">🌧️ Precipitación CHIRPS</span></label>
+                    <span class="update-badge" id="mecCbadge">🌫️ Cargando…</span>
+                </div>
+
+                <div style="background:#f8f5f0;padding:12px 16px;border-radius:10px;margin-top:8px;font-size:12px;">
+                    <strong data-i18n="mec.c.mapa.leyenda">Anomalía ZTD:</strong>
+                    <span style="color:#9b59b6;margin-left:8px;">● <span data-i18n="mec.c.mapa.muyHumedo">Muy húmedo (&gt;+10mm)</span></span>
+                    <span style="color:#3498db;margin-left:8px;">● <span data-i18n="mec.c.mapa.humedo">Húmedo (0 a +10mm)</span></span>
+                    <span style="color:#27ae60;margin-left:8px;">● <span data-i18n="mec.c.mapa.normal">Normal (-10 a 0mm)</span></span>
+                    <span style="color:#e74c3c;margin-left:8px;">● <span data-i18n="mec.c.mapa.seco">Seco (&lt;-10mm)</span></span>
+                </div>
+            </div>
         </div>
     </details>
 
@@ -3809,6 +3830,136 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Aplicar tema al cargar
 aplicarTema(detectarTemaInicial());
+
+
+// ═══════════════════════════════════════════════════════════
+// MAPA INTERACTIVO DEL MECANISMO C (ZTD ↔ Precipitación)
+// ═══════════════════════════════════════════════════════════
+let mapaMecanismoC = null;
+let capaZTDmec = null;
+let capaPrecipMec = null;
+
+async function initMapaMecanismoC() {
+    if (mapaMecanismoC) {
+        mapaMecanismoC.remove();
+        mapaMecanismoC = null;
+    }
+
+    const contenedor = document.getElementById('mapa-mecanismo-c');
+    if (!contenedor) return;
+
+    mapaMecanismoC = L.map('mapa-mecanismo-c').setView([-15, -70], 4);
+    L.tileLayer(getTileURL(), { attribution: getTileAttribution() }).addTo(mapaMecanismoC);
+
+    // 1. Estaciones ZTD
+    capaZTDmec = L.layerGroup();
+    try {
+        const res = await fetch('assets/geojson/estaciones_ztd.json');
+        const data = await res.json();
+        const estaciones = data.estaciones || [];
+
+        estaciones.forEach(est => {
+            if (!est.lat || !est.lon) return;
+            const ztdProm = est.ztd_promedio_mm || 0;
+            const anomalia = ztdProm - 2200;
+            let color = '#27ae60';
+            let categoria = 'Normal';
+            if (anomalia > 10) { color = '#9b59b6'; categoria = 'Muy húmedo'; }   // Morado
+            else if (anomalia > 0) { color = '#3498db'; categoria = 'Húmedo'; }   // Azul
+            else if (anomalia > -10) { color = '#27ae60'; categoria = 'Normal'; } // Verde
+            else { color = '#e74c3c'; categoria = 'Seco'; }                       // Rojo
+
+            L.circleMarker([est.lat, est.lon], {
+                radius: 10, fillColor: color, color: '#fff',
+                weight: 2, opacity: 1, fillOpacity: 0.85
+            }).bindPopup(
+                '<b>📍 ' + est.codigo + '</b><br>' +
+                'ZTD promedio: ' + ztdProm + ' mm<br>' +
+                'Anomalía: ' + anomalia.toFixed(1) + ' mm<br>' +
+                'Categoría: ' + categoria + '<br>' +
+                'Obs: ' + est.n_obs
+            ).addTo(capaZTDmec);
+        });
+        console.log('✅ Mecanismo C: ' + estaciones.length + ' estaciones ZTD');
+    } catch(e) {
+        console.warn('Error cargando estaciones ZTD', e);
+    }
+
+    // 2. Precipitación CHIRPS
+    capaPrecipMec = L.layerGroup();
+    try {
+        const res = await fetch('assets/geojson/chirps_julio2026.geojson');
+        const gj = await res.json();
+        L.geoJSON(gj, {
+            pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+                radius: 4, fillColor: getColorPrecip(f.properties.precip_mm || 0),
+                color: 'transparent', fillOpacity: 0.5
+            }),
+            onEachFeature: (f, layer) => {
+                layer.bindPopup('<b>💧 Precipitación:</b> ' + f.properties.precip_mm + ' mm/mes');
+            }
+        }).addTo(capaPrecipMec);
+        console.log('✅ Mecanismo C: ' + gj.features.length + ' puntos CHIRPS');
+    } catch(e) {
+        console.warn('Error cargando CHIRPS', e);
+    }
+
+    capaPrecipMec.addTo(mapaMecanismoC);
+    capaZTDmec.addTo(mapaMecanismoC);
+
+    const badge = document.getElementById('mecCbadge');
+    if (badge) badge.innerText = '🌫️ Mecanismo C activo';
+
+    // Listeners de checkboxes
+    const toggleZTD = document.getElementById('toggleZTDmec');
+    if (toggleZTD && !toggleZTD.dataset.listenerAttached) {
+        toggleZTD.dataset.listenerAttached = 'true';
+        toggleZTD.addEventListener('change', function() {
+            if (this.checked) {
+                if (capaZTDmec && !mapaMecanismoC.hasLayer(capaZTDmec)) capaZTDmec.addTo(mapaMecanismoC);
+            } else {
+                if (capaZTDmec && mapaMecanismoC.hasLayer(capaZTDmec)) mapaMecanismoC.removeLayer(capaZTDmec);
+            }
+        });
+    }
+
+    const togglePrecip = document.getElementById('togglePrecipmec');
+    if (togglePrecip && !togglePrecip.dataset.listenerAttached) {
+        togglePrecip.dataset.listenerAttached = 'true';
+        togglePrecip.addEventListener('change', function() {
+            if (this.checked) {
+                if (capaPrecipMec && !mapaMecanismoC.hasLayer(capaPrecipMec)) capaPrecipMec.addTo(mapaMecanismoC);
+            } else {
+                if (capaPrecipMec && mapaMecanismoC.hasLayer(capaPrecipMec)) mapaMecanismoC.removeLayer(capaPrecipMec);
+            }
+        });
+    }
+
+    setTimeout(() => {
+        if (mapaMecanismoC) mapaMecanismoC.invalidateSize();
+    }, 200);
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// LISTENER: inicializar el mapa del Mecanismo C al abrir el details
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+    const detailsC = document.getElementById('detailsMecanismoC');
+    if (detailsC) {
+        detailsC.addEventListener('toggle', function() {
+            if (this.open) {
+                setTimeout(function() {
+                    if (!mapaMecanismoC) {
+                        initMapaMecanismoC();
+                    } else {
+                        mapaMecanismoC.invalidateSize();
+                    }
+                }, 150);
+            }
+        });
+    }
+});
 
 </script>
 </body>
