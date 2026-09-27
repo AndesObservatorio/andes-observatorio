@@ -3718,8 +3718,8 @@ function actualizarTemaGraficos(tema) {
         });
     }
     
-    // Cambiar tiles de Leaflet a modo oscuro
-    cambiarTilesLeaflet(dark);
+    // (Los tiles se mantienen en OSM; el modo oscuro se aplica por CSS filter)
+    // cambiarTilesLeaflet(dark);
 }
 
 function aplicarColoresGrafico(chart, dark) {
@@ -3754,7 +3754,7 @@ function aplicarColoresGrafico(chart, dark) {
 // CAMBIAR TILES DE LEAFLET A CARTODB DARK MATTER
 // ═══════════════════════════════════════════════════════════
 const TILE_CLARO = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const TILE_OSCURO = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+const TILE_OSCURO = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // Mismo OSM, el modo oscuro se aplica por CSS
 
 function cambiarTilesLeaflet(dark) {
     console.log('🎨 Cambiando tiles a modo', dark ? 'oscuro' : 'claro');
