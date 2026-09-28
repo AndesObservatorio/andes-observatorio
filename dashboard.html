@@ -1050,7 +1050,22 @@
             <div style="margin-top:24px;padding-top:18px;border-top:2px solid #ede8e0;">
                 <h5 style="margin:0 0 12px;color:#2c5f2c;" data-i18n="mec.c.mapa.titulo">🗺️ Mapa interactivo: Estaciones ZTD y Precipitación CHIRPS</h5>
 
-                <div id="mapa-mecanismo-c" style="height:420px;width:100%;border-radius:14px;margin:12px 0;border:1px solid #ede8e0;"></div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin:12px 0;">
+                    <div id="mapa-mecanismo-c" style="height:420px;flex:2;min-width:300px;border-radius:14px;border:1px solid #ede8e0;"></div>
+                    <div style="flex:1;min-width:280px;background:#fcfaf7;border-radius:14px;border:1px solid #ede8e0;padding:14px;">
+                        <h5 style="margin:0 0 10px;color:#2c5f2c;font-size:14px;" data-i18n="mec.c.mapa.spearman.titulo">📊 Correlación ZTD vs Precipitación</h5>
+                        <div id="statsSpearmanMecC" style="font-size:12px;margin-bottom:8px;color:#4a5a4a;">
+                            <div><strong>r (Spearman):</strong> <span id="mecC_r">--</span></div>
+                            <div><strong>Valor p:</strong> <span id="mecC_p">--</span></div>
+                            <div><strong>Observaciones:</strong> <span id="mecC_n">--</span></div>
+                            <div><strong>Estación:</strong> <span id="mecC_est">--</span></div>
+                        </div>
+                        <canvas id="chartZTDPrecipMecC" style="max-height:280px;"></canvas>
+                        <p style="font-size:10px;color:#8aa08a;margin-top:8px;font-style:italic;" data-i18n="mec.c.mapa.spearman.fuente">
+                            Fuente: SIRGAS-CON (ZTD) + Open-Meteo (precipitación)
+                        </p>
+                    </div>
+                </div>
 
                 <div class="layer-control" style="margin:10px 0;">
                     <label><input type="checkbox" id="toggleZTDmec" checked> <span data-i18n="mec.c.mapa.toggleZTD">🌫️ Estaciones ZTD</span></label>
@@ -1065,6 +1080,44 @@
                     <span style="color:#3498db;margin-left:8px;">● <span data-i18n="mec.c.mapa.humedo">Húmedo (0 a +10mm)</span></span>
                     <span style="color:#27ae60;margin-left:8px;">● <span data-i18n="mec.c.mapa.normal">Normal (-10 a 0mm)</span></span>
                     <span style="color:#e74c3c;margin-left:8px;">● <span data-i18n="mec.c.mapa.seco">Seco (&lt;-10mm)</span></span>
+                </div>
+
+                <!-- 🆕 ANÁLISIS AVANZADO -->
+                <div style="margin-top:24px;padding-top:18px;border-top:2px solid #ede8e0;">
+                    <h5 style="margin:0 0 12px;color:#2c5f2c;">
+                        📊 Análisis avanzado — <span id="mecC_estacion_avanzada">BOGT (por defecto)</span>
+                    </h5>
+
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;">
+
+                        <!-- 🔗 Correlación con lag -->
+                        <div style="background:#fcfaf7;padding:14px;border-radius:12px;border:1px solid #ede8e0;">
+                            <h6 style="margin:0 0 10px;color:#2c5f2c;font-size:13px;">🔗 Correlación con lag</h6>
+                            <canvas id="chartLagMecC" style="max-height:180px;"></canvas>
+                            <p id="lagInfoMecC" style="font-size:11px;color:#8aa08a;margin-top:6px;font-style:italic;">
+                                Cargando...
+                            </p>
+                        </div>
+
+                        <!-- 📈 ROC-AUC -->
+                        <div style="background:#fcfaf7;padding:14px;border-radius:12px;border:1px solid #ede8e0;">
+                            <h6 style="margin:0 0 10px;color:#2c5f2c;font-size:13px;">📈 Curva ROC (predicción de lluvia intensa)</h6>
+                            <canvas id="chartROCMecC" style="max-height:180px;"></canvas>
+                            <p id="rocInfoMecC" style="font-size:11px;color:#8aa08a;margin-top:6px;font-style:italic;">
+                                Cargando...
+                            </p>
+                        </div>
+
+                        <!-- 📉 Tendencia -->
+                        <div style="background:#fcfaf7;padding:14px;border-radius:12px;border:1px solid #ede8e0;">
+                            <h6 style="margin:0 0 10px;color:#2c5f2c;font-size:13px;">📉 Tendencia del ZTD</h6>
+                            <canvas id="chartTendenciaMecC" style="max-height:180px;"></canvas>
+                            <p id="tendenciaInfoMecC" style="font-size:11px;color:#8aa08a;margin-top:6px;font-style:italic;">
+                                Cargando...
+                            </p>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -3867,13 +3920,14 @@ async function initMapaMecanismoC() {
             'seco':       { color: '#e74c3c', label: 'Seco' }
         };
 
+        window.markersMecC = {};
         estaciones.forEach(est => {
             if (!est.lat || !est.lon) return;
             const cat = CATEGORIAS[est.categoria] || CATEGORIAS['normal'];
             const anomalia = est.anomalia_mm || 0;
             const signo = anomalia >= 0 ? '+' : '';
 
-            L.circleMarker([est.lat, est.lon], {
+            const marker = L.circleMarker([est.lat, est.lon], {
                 radius: 10, fillColor: cat.color, color: '#fff',
                 weight: 2, opacity: 1, fillOpacity: 0.85
             }).bindPopup(
@@ -3882,8 +3936,17 @@ async function initMapaMecanismoC() {
                 'ZTD promedio histórico: ' + est.ztd_promedio_mm + ' mm<br>' +
                 '<b style="color:' + cat.color + '">Anomalía: ' + signo + anomalia.toFixed(1) + ' mm (' + cat.label + ')</b><br>' +
                 'Observaciones: ' + est.n_obs + '<br>' +
-                '<small>Período: ' + est.periodo.inicio + ' → ' + est.periodo.fin + '</small>'
+                '<small>Período: ' + est.periodo.inicio + ' → ' + est.periodo.fin + '</small>' +
+                '<br><small style="color:#8aaa8a;font-style:italic;">Haz clic en el marcador para ver su análisis detallado</small>'
             ).addTo(capaZTDmec);
+
+            // Listener: al hacer clic, actualizar gráfico Spearman + análisis avanzado
+            marker.on('click', function() {
+                cargarSpearmanMecC(est.codigo, est.nombre);
+                cargarAnalisisAvanzadoMecC(est.codigo);
+            });
+
+            window.markersMecC[est.codigo] = marker;
         });
         console.log('✅ Mecanismo C: ' + estaciones.length + ' estaciones con anomalía real');
     } catch(e) {
@@ -3939,6 +4002,11 @@ async function initMapaMecanismoC() {
             }
         });
     }
+
+    // Cargar gráfico Spearman en paralelo
+    cargarSpearmanMecC();
+    // Cargar análisis avanzado por defecto (BOGT)
+    cargarAnalisisAvanzadoMecC('BOGT');
 
     setTimeout(() => {
         if (mapaMecanismoC) mapaMecanismoC.invalidateSize();
@@ -4019,6 +4087,286 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', descargarCSVMecanismoC);
     }
 });
+
+
+// ═══════════════════════════════════════════════════════════
+// GRÁFICO SPEARMAN DEL MECANISMO C
+// ═══════════════════════════════════════════════════════════
+let chartSpearmanMecC = null;
+
+async function cargarSpearmanMecC(codigo, nombre) {
+    try {
+        // Si no se pasa código, usar el JSON global (fallback)
+        let data;
+        if (codigo) {
+            const res = await fetch('assets/geojson/analisis_ztd_por_estacion.json');
+            const dataAll = await res.json();
+            data = dataAll.estaciones[codigo];
+            if (!data) {
+                console.warn('No hay análisis para ' + codigo);
+                return;
+            }
+            data.estacion = codigo;
+        } else {
+            const res = await fetch('assets/geojson/analisis_ztd_precip.json');
+            data = await res.json();
+        }
+
+        // Actualizar stats
+        const r = data.correlacion?.spearman_r ?? 0;
+        const p = data.correlacion?.p_value ?? 1;
+        const n = data.n_observaciones ?? 0;
+
+        const elR = document.getElementById('mecC_r');
+        const elP = document.getElementById('mecC_p');
+        const elN = document.getElementById('mecC_n');
+        const elEst = document.getElementById('mecC_est');
+
+        if (elR) elR.textContent = r.toFixed(3);
+        if (elP) elP.textContent = p < 0.0001 ? '< 0.0001' : p.toFixed(4);
+        if (elN) elN.textContent = n;
+        if (elEst) elEst.textContent = (nombre ? codigo + ' - ' + nombre : codigo || 'BOGT');
+
+        // Crear gráfico scatter
+        const puntos = (data.datos || []).filter(d => d.ztd_anomaly !== null && d.precip !== null);
+
+        const canvas = document.getElementById('chartZTDPrecipMecC');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        if (chartSpearmanMecC && typeof chartSpearmanMecC.destroy === 'function') {
+            chartSpearmanMecC.destroy();
+            chartSpearmanMecC = null;
+        }
+
+        const esOscuro = document.body.classList.contains('dark');
+        const colorTexto = esOscuro ? '#c8d4c8' : '#4a5a4a';
+        const colorGrid = esOscuro ? '#3a4a3a' : '#e8e0d8';
+
+        chartSpearmanMecC = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'ZTD vs Precip',
+                    data: puntos.map(d => ({ x: d.ztd_anomaly, y: d.precip })),
+                    backgroundColor: 'rgba(45, 106, 79, 0.6)',
+                    borderColor: '#2D6A4F',
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Anomalía ZTD (mm)', color: colorTexto, font: { size: 10 } },
+                        ticks: { color: colorTexto, font: { size: 9 } },
+                        grid: { color: colorGrid }
+                    },
+                    y: {
+                        title: { display: true, text: 'Precipitación (mm)', color: colorTexto, font: { size: 10 } },
+                        ticks: { color: colorTexto, font: { size: 9 } },
+                        grid: { color: colorGrid },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        console.log('✅ Gráfico Spearman del Mecanismo C cargado');
+    } catch(e) {
+        console.warn('No se pudo cargar el gráfico Spearman', e);
+    }
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// ANÁLISIS AVANZADO DEL MECANISMO C
+// ═══════════════════════════════════════════════════════════
+let chartLagMecC = null;
+let chartROCMecC = null;
+let chartTendenciaMecC = null;
+let datosCompletosMecC = null;
+
+async function cargarAnalisisAvanzadoMecC(codigo) {
+    // Cargar JSON completo (una sola vez)
+    if (!datosCompletosMecC) {
+        try {
+            const res = await fetch('assets/geojson/analisis_ztd_completo.json');
+            datosCompletosMecC = await res.json();
+        } catch(e) {
+            console.warn('No se pudo cargar análisis avanzado', e);
+            return;
+        }
+    }
+
+    const data = datosCompletosMecC.estaciones?.[codigo];
+    if (!data) {
+        console.warn('Sin análisis avanzado para ' + codigo);
+        return;
+    }
+
+    // Actualizar el nombre de la estación
+    const elEst = document.getElementById('mecC_estacion_avanzada');
+    if (elEst) elEst.textContent = codigo + ' - ' + (data.lat?.toFixed(2) || '') + ', ' + (data.lon?.toFixed(2) || '');
+
+    const esOscuro = document.body.classList.contains('dark');
+    const colorTexto = esOscuro ? '#c8d4c8' : '#4a5a4a';
+    const colorGrid = esOscuro ? '#3a4a3a' : '#e8e0d8';
+
+    // ═══════════════════════════════════════════════════════════
+    // 1. GRÁFICO DE LAG
+    // ═══════════════════════════════════════════════════════════
+    const lags = data.lags || [];
+    const ctxLag = document.getElementById('chartLagMecC')?.getContext('2d');
+    if (ctxLag && lags.length > 0) {
+        if (chartLagMecC && typeof chartLagMecC.destroy === 'function') chartLagMecC.destroy();
+        const colores = lags.map(l => l.r > 0 ? '#27ae60' : '#e74c3c');
+        chartLagMecC = new Chart(ctxLag, {
+            type: 'bar',
+            data: {
+                labels: lags.map(l => 'Lag ' + l.lag_dias + 'd'),
+                datasets: [{
+                    label: 'Spearman r',
+                    data: lags.map(l => l.r),
+                    backgroundColor: colores,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: colorTexto, font: { size: 9 } }, grid: { color: colorGrid } },
+                    x: { ticks: { color: colorTexto, font: { size: 9 } } }
+                }
+            }
+        });
+        // Info
+        const mejor = lags.reduce((a, b) => Math.abs(a.r) > Math.abs(b.r) ? a : b);
+        document.getElementById('lagInfoMecC').textContent =
+            'Mejor correlación: lag ' + mejor.lag_dias + ' días (r = ' + mejor.r.toFixed(3) + ')';
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 2. GRÁFICO ROC
+    // ═══════════════════════════════════════════════════════════
+    const roc = data.roc_auc || {};
+    const ctxROC = document.getElementById('chartROCMecC')?.getContext('2d');
+    if (ctxROC && roc.fpr && roc.tpr) {
+        if (chartROCMecC && typeof chartROCMecC.destroy === 'function') chartROCMecC.destroy();
+        chartROCMecC = new Chart(ctxROC, {
+            type: 'line',
+            data: {
+                labels: roc.fpr,
+                datasets: [
+                    {
+                        label: 'ROC (AUC=' + roc.auc.toFixed(3) + ')',
+                        data: roc.tpr,
+                        borderColor: '#2D6A4F',
+                        backgroundColor: 'rgba(45, 106, 79, 0.15)',
+                        fill: true,
+                        tension: 0.2,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Azar (AUC=0.5)',
+                        data: roc.fpr,
+                        borderColor: '#aaa',
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { labels: { color: colorTexto, font: { size: 9 } } }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'FPR', color: colorTexto, font: { size: 9 } }, ticks: { color: colorTexto, font: { size: 8 } }, grid: { color: colorGrid } },
+                    y: { title: { display: true, text: 'TPR', color: colorTexto, font: { size: 9 } }, ticks: { color: colorTexto, font: { size: 8 } }, grid: { color: colorGrid } }
+                }
+            }
+        });
+        document.getElementById('rocInfoMecC').textContent =
+            'AUC = ' + roc.auc.toFixed(3) + ' · ' + roc.n_eventos + ' eventos extremos';
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 3. GRÁFICO DE TENDENCIA
+    // ═══════════════════════════════════════════════════════════
+    const puntos = data.datos || [];
+    const ctxTend = document.getElementById('chartTendenciaMecC')?.getContext('2d');
+    if (ctxTend && puntos.length > 0) {
+        if (chartTendenciaMecC && typeof chartTendenciaMecC.destroy === 'function') chartTendenciaMecC.destroy();
+
+        const fechas = puntos.map(p => p.fecha);
+        const ztds = puntos.map(p => p.ztd);
+
+        // Línea de tendencia (regresión lineal)
+        const n = ztds.length;
+        const x = Array.from({ length: n }, (_, i) => i);
+        const sumX = x.reduce((a, b) => a + b, 0);
+        const sumY = ztds.reduce((a, b) => a + b, 0);
+        const sumXY = x.reduce((acc, xi, i) => acc + xi * ztds[i], 0);
+        const sumX2 = x.reduce((acc, xi) => acc + xi * xi, 0);
+        const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+        const intercept = (sumY - slope * sumX) / n;
+        const lineaTendencia = x.map(xi => slope * xi + intercept);
+
+        chartTendenciaMecC = new Chart(ctxTend, {
+            type: 'line',
+            data: {
+                labels: fechas,
+                datasets: [
+                    {
+                        label: 'ZTD',
+                        data: ztds,
+                        borderColor: '#3498db',
+                        borderWidth: 1.5,
+                        pointRadius: 0,
+                        fill: false,
+                        tension: 0.2
+                    },
+                    {
+                        label: 'Tendencia',
+                        data: lineaTendencia,
+                        borderColor: '#e74c3c',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { display: false },
+                    y: { ticks: { color: colorTexto, font: { size: 8 } }, grid: { color: colorGrid } }
+                }
+            }
+        });
+
+        const tend = data.tendencia || {};
+        const signo = tend.slope_mm_mes >= 0 ? '+' : '';
+        const color = tend.significativa ? (tend.slope_mm_mes >= 0 ? '#27ae60' : '#e74c3c') : '#8aa08a';
+        document.getElementById('tendenciaInfoMecC').innerHTML =
+            '<span style="color:' + color + ';font-weight:600;">' +
+            signo + tend.slope_mm_mes.toFixed(2) + ' mm/mes</span> · ' +
+            (tend.significativa ? 'significativa (p<0.05)' : 'no significativa');
+    }
+}
 
 </script>
 </body>
