@@ -948,7 +948,7 @@
     </div>
 
     <!-- Mecanismo A -->
-    <details open style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
+    <details id="detailsMecanismoA" open style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
         <summary style="cursor:pointer;font-weight:700;color:#c0392b;font-size:16px;" data-i18n="mec.a.titulo">🌋 Mecanismo A: Descompresión por Pérdida de Masa Superficial</summary>
         <div style="font-size:14px;color:#4a5a4a;margin-top:14px;line-height:1.7;">
             <p><strong data-i18n="mec.a.fundamento.titulo">Fundamento físico:</strong> <span data-i18n="mec.a.fundamento.texto">La corteza terrestre responde elásticamente a cambios de carga superficial. Cuando una masa (hielo, agua, sedimento) se deposita o se retira, la superficie se hunde o se levanta en un proceso conocido como ajuste isostático o rebote elástico.</span></p>
@@ -975,6 +975,37 @@
                 <li>☑️ <span data-i18n="mec.a.ind.p2">Balance de masa glaciar (fuentes: IDEAM, WGMS, estudios académicos).</span></li>
                 <li>☑️ <span data-i18n="mec.a.ind.p3">Índices de actividad volcánica (SO₂, sismicidad volcánica, deformación volcánica).</span></li>
             </ul>
+
+            <!-- 🆕 MAPA INTERACTIVO MECANISMO A -->
+            <div style="margin-top:24px;padding-top:18px;border-top:2px solid #ede8e0;">
+                <h5 style="margin:0 0 12px;color:#2c5f2c;" data-i18n="mec.a.mapa.titulo">🗺️ Mapa interactivo: Glaciares y Volcanes Andinos</h5>
+
+                <div id="mapa-mecanismo-a" style="height:500px;width:100%;border-radius:14px;margin:12px 0;border:1px solid #ede8e0;"></div>
+
+                <div class="layer-control" style="margin:10px 0;">
+                    <label><input type="checkbox" id="toggleVolcanesA" checked> <span data-i18n="mec.a.mapa.toggleVolcanes">🌋 Volcanes activos</span></label>
+                    <label><input type="checkbox" id="toggleGlaciaresA" checked> <span data-i18n="mec.a.mapa.toggleGlaciares">🧊 Glaciares</span></label>
+                    <label><input type="checkbox" id="toggleEstacionesA"> <span data-i18n="mec.a.mapa.toggleEstaciones">📡 Estaciones GNSS</span></label>
+                    <span class="update-badge" id="mecAbadge">🌋 Cargando…</span>
+                </div>
+
+                <div style="background:#f8f5f0;padding:12px 16px;border-radius:10px;margin-top:8px;font-size:12px;">
+                    <strong data-i18n="mec.a.mapa.leyenda">Leyenda:</strong>
+                    <span style="color:#c0392b;margin-left:8px;">▲ <span data-i18n="mec.a.mapa.volcanes">Volcán activo</span></span>
+                    <span style="color:#3498db;margin-left:8px;">■ <span data-i18n="mec.a.mapa.glaciares">Glaciar (cerca de volcán)</span></span>
+                    <span style="color:#e67e22;margin-left:8px;">● <span data-i18n="mec.a.mapa.estaciones">Estación GNSS</span></span>
+                </div>
+
+                <p style="background:#e8f4fd;padding:12px 16px;border-radius:8px;margin-top:12px;font-size:12px;border-left:4px solid #2980b9;">
+                    <strong>📖 Referencias clave:</strong>
+                    Sigmundsson et al. (2010) <em>Phil. Trans. R. Soc. A</em> ·
+                    Watt et al. (2013) <em>Earth-Science Reviews</em> ·
+                    Pagli &amp; Sigmundsson (2008) <em>J. Geophys. Res.</em> ·
+                    Singer et al. (2018) <em>Bull. Volcanol.</em> ·
+                    Smithsonian GVP (2024) ·
+                    RGI 6.2 (2023)
+                </p>
+            </div>
         </div>
     </details>
 
@@ -2201,8 +2232,28 @@
                     if (chartAreas) setTimeout(() => chartAreas.resize(), 100);
                 }
             } else if (tipo === 'acoplamiento') {
-                // Tab estático: solo mostrar contenido, sin mapa
-                console.log('🌍 Tab Acoplamiento Tierra-Clima activado');
+                console.log('🌍 Tab Acoplamiento Tierra-Clima activado. Mecanismo A abierto:', document.getElementById('detailsMecanismoA')?.open);
+                // Inicializar/reajustar mapas de mecanismos
+                setTimeout(function() {
+                    // Mecanismo A (si el details está abierto)
+                    const detA = document.getElementById('detailsMecanismoA');
+                    if (detA && detA.open) {
+                        if (!mapaMecanismoA) {
+                            initMapaMecanismoA();
+                        } else {
+                            mapaMecanismoA.invalidateSize();
+                        }
+                    }
+                    // Mecanismo C (si el details está abierto)
+                    const detC = document.getElementById('detailsMecanismoC');
+                    if (detC && detC.open) {
+                        if (!mapaMecanismoC) {
+                            initMapaMecanismoC();
+                        } else {
+                            mapaMecanismoC.invalidateSize();
+                        }
+                    }
+                }, 300);
             }
         }, 200);
     }
@@ -4367,6 +4418,222 @@ async function cargarAnalisisAvanzadoMecC(codigo) {
             (tend.significativa ? 'significativa (p<0.05)' : 'no significativa');
     }
 }
+
+
+// ═══════════════════════════════════════════════════════════
+// MAPA INTERACTIVO DEL MECANISMO A (Glaciares ↔ Volcanes)
+// ═══════════════════════════════════════════════════════════
+let mapaMecanismoA = null;
+let capaVolcanesA = null;
+let capaGlaciaresA = null;
+let capaEstacionesA = null;
+
+async function initMapaMecanismoA() {
+    if (mapaMecanismoA) {
+        mapaMecanismoA.remove();
+        mapaMecanismoA = null;
+    }
+
+    const contenedor = document.getElementById('mapa-mecanismo-a');
+    if (!contenedor) return;
+
+    mapaMecanismoA = L.map('mapa-mecanismo-a').setView([-20, -70], 4);
+    L.tileLayer(getTileURL(), { attribution: getTileAttribution() }).addTo(mapaMecanismoA);
+
+    // ═══════════════════════════════════════════════════════════
+    // 1. CAPA DE VOLCANES (triángulos rojos)
+    // ═══════════════════════════════════════════════════════════
+    capaVolcanesA = L.layerGroup();
+    try {
+        const res = await fetch('assets/geojson/volcanes_andinos.json');
+        const data = await res.json();
+        const volcanes = data.features || [];
+
+        volcanes.forEach(v => {
+            const [lon, lat] = v.geometry.coordinates;
+            const p = v.properties;
+            const elev = p.elevacion_m ? p.elevacion_m.toFixed(0) + ' m' : 'N/A';
+            const ultima = p.ultima_erupcion && p.ultima_erupcion !== 'Unknown' ? p.ultima_erupcion : 'Desconocida';
+
+            L.circleMarker([lat, lon], {
+                radius: 8,
+                fillColor: '#c0392b',
+                color: '#7b1c1c',
+                weight: 2,
+                fillOpacity: 0.9
+            }).bindPopup(
+                '<b>🌋 ' + p.nombre + '</b><br>' +
+                'País: ' + p.pais + '<br>' +
+                'Elevación: ' + elev + '<br>' +
+                'Tipo: ' + (p.tipo || 'N/A') + '<br>' +
+                'Última erupción: ' + ultima
+            ).addTo(capaVolcanesA);
+        });
+        console.log('✅ Mecanismo A: ' + volcanes.length + ' volcanes');
+    } catch(e) {
+        console.warn('Error cargando volcanes', e);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 2. CAPA DE GLACIARES (polígonos azules)
+    // ═══════════════════════════════════════════════════════════
+    capaGlaciaresA = L.geoJSON(null, {
+        style: function(feature) {
+            return {
+                fillColor: '#3498db',
+                color: '#1f5c8f',
+                weight: 1,
+                fillOpacity: 0.5
+            };
+        },
+        onEachFeature: function(feature, layer) {
+            const p = feature.properties;
+            const area = p.area_km2 ? p.area_km2.toFixed(2) + ' km²' : 'N/A';
+            const elevMin = p.elev_min_m ? p.elev_min_m.toFixed(0) + ' m' : 'N/A';
+            const elevMax = p.elev_max_m ? p.elev_max_m.toFixed(0) + ' m' : 'N/A';
+            const dist = p.distancia_km ? p.distancia_km.toFixed(1) + ' km' : 'N/A';
+
+            layer.bindPopup(
+                '<b>🧊 ' + (p.nombre || 'Glaciar sin nombre') + '</b><br>' +
+                'Área: <b>' + area + '</b><br>' +
+                'Elevación: ' + elevMin + ' → ' + elevMax + '<br>' +
+                '<hr style="margin:6px 0;">' +
+                '🌋 <b>Volcán asociado: ' + (p.volcan_nombre || 'N/A') + '</b><br>' +
+                'País: ' + (p.volcan_pais || 'N/A') + '<br>' +
+                'Elevación del volcán: ' + (p.volcan_elev_m ? p.volcan_elev_m.toFixed(0) + ' m' : 'N/A') + '<br>' +
+                'Tipo: ' + (p.volcan_tipo || 'N/A') + '<br>' +
+                '<b style="color:#e67e22;">📏 Distancia: ' + dist + '</b>'
+            );
+        }
+    });
+    console.log('🔄 Mecanismo A: Iniciando carga de glaciares...');
+    try {
+        const res = await fetch('assets/geojson/glaciares_volcanes.json');
+        console.log('📥 Mecanismo A: Fetch status =', res.status, 'ok =', res.ok);
+        const data = await res.json();
+        console.log('📦 Mecanismo A: Data cargada, features =', data.features.length);
+        capaGlaciaresA.addData(data);
+        console.log('✅ Mecanismo A: ' + data.features.length + ' glaciares cargados. Capas en capaGlaciaresA:', capaGlaciaresA.getLayers().length);
+    } catch(e) {
+        console.error('❌ Error cargando glaciares:', e.message, e);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 3. CAPA DE ESTACIONES GNSS (círculos naranjas)
+    // ═══════════════════════════════════════════════════════════
+    capaEstacionesA = L.layerGroup();
+    try {
+        const res = await fetch('assets/geojson/anomalia_ztd.json');
+        const data = await res.json();
+        const estaciones = data.estaciones || [];
+
+        estaciones.forEach(e => {
+            if (!e.lat || !e.lon) return;
+            L.circleMarker([e.lat, e.lon], {
+                radius: 7,
+                fillColor: '#e67e22',
+                color: '#a0520f',
+                weight: 2,
+                fillOpacity: 0.9
+            }).bindPopup(
+                '<b>📡 ' + e.codigo + ' - ' + e.nombre + '</b><br>' +
+                'País: ' + e.pais + '<br>' +
+                'ZTD último: ' + e.ztd_ultimo_mm + ' mm'
+            ).addTo(capaEstacionesA);
+        });
+        console.log('✅ Mecanismo A: ' + estaciones.length + ' estaciones GNSS');
+    } catch(e) {
+        console.warn('Error cargando estaciones', e);
+    }
+
+    // Agregar capas al mapa
+    console.log('🗺️ Mecanismo A: Agregando capas al mapa...');
+    console.log('   Volcanes:', capaVolcanesA.getLayers().length);
+    console.log('   Glaciares:', capaGlaciaresA.getLayers().length);
+    
+    capaVolcanesA.addTo(mapaMecanismoA);
+    capaGlaciaresA.addTo(mapaMecanismoA);
+    // Estaciones no se agregan por defecto (checkbox desactivado)
+    console.log('✅ Mecanismo A: Capas agregadas al mapa');
+    
+    // ⚠️ Forzar la vista después de agregar capas
+    // (Leaflet auto-fitBounds a veces centra en zona sin volcanes)
+    setTimeout(function() {
+        if (mapaMecanismoA) {
+            mapaMecanismoA.setView([-20, -70], 4);
+            console.log('🎯 Mecanismo A: Vista reseteada a [-20, -70] zoom 4');
+        }
+    }, 100);
+
+    // Badge
+    const badge = document.getElementById('mecAbadge');
+    if (badge) badge.innerText = '🌋 Mecanismo A activo';
+
+    // ═══════════════════════════════════════════════════════════
+    // 4. LISTENERS DE CHECKBOXES
+    // ═══════════════════════════════════════════════════════════
+    const toggleVolcanes = document.getElementById('toggleVolcanesA');
+    if (toggleVolcanes && !toggleVolcanes.dataset.listenerAttached) {
+        toggleVolcanes.dataset.listenerAttached = 'true';
+        toggleVolcanes.addEventListener('change', function() {
+            if (this.checked) {
+                if (capaVolcanesA && !mapaMecanismoA.hasLayer(capaVolcanesA)) capaVolcanesA.addTo(mapaMecanismoA);
+            } else {
+                if (capaVolcanesA && mapaMecanismoA.hasLayer(capaVolcanesA)) mapaMecanismoA.removeLayer(capaVolcanesA);
+            }
+        });
+    }
+
+    const toggleGlaciares = document.getElementById('toggleGlaciaresA');
+    if (toggleGlaciares && !toggleGlaciares.dataset.listenerAttached) {
+        toggleGlaciares.dataset.listenerAttached = 'true';
+        toggleGlaciares.addEventListener('change', function() {
+            if (this.checked) {
+                if (capaGlaciaresA && !mapaMecanismoA.hasLayer(capaGlaciaresA)) capaGlaciaresA.addTo(mapaMecanismoA);
+            } else {
+                if (capaGlaciaresA && mapaMecanismoA.hasLayer(capaGlaciaresA)) mapaMecanismoA.removeLayer(capaGlaciaresA);
+            }
+        });
+    }
+
+    const toggleEstaciones = document.getElementById('toggleEstacionesA');
+    if (toggleEstaciones && !toggleEstaciones.dataset.listenerAttached) {
+        toggleEstaciones.dataset.listenerAttached = 'true';
+        toggleEstaciones.addEventListener('change', function() {
+            if (this.checked) {
+                if (capaEstacionesA && !mapaMecanismoA.hasLayer(capaEstacionesA)) capaEstacionesA.addTo(mapaMecanismoA);
+            } else {
+                if (capaEstacionesA && mapaMecanismoA.hasLayer(capaEstacionesA)) mapaMecanismoA.removeLayer(capaEstacionesA);
+            }
+        });
+    }
+
+    setTimeout(() => {
+        if (mapaMecanismoA) mapaMecanismoA.invalidateSize();
+    }, 200);
+}
+
+// ═══════════════════════════════════════════════════════════
+// LISTENER: inicializar el mapa del Mecanismo A al abrir el details
+// ═══════════════════════════════════════════════════════════
+// Listener al abrir el details del Mecanismo A (para cuando el usuario lo expande)
+document.addEventListener('DOMContentLoaded', function() {
+    const detailsA = document.getElementById('detailsMecanismoA');
+    if (detailsA) {
+        detailsA.addEventListener('toggle', function() {
+            if (this.open) {
+                // Esperar a que el DOM se renderice y el tab esté visible
+                setTimeout(function() {
+                    if (!mapaMecanismoA) {
+                        initMapaMecanismoA();
+                    } else {
+                        mapaMecanismoA.invalidateSize();
+                    }
+                }, 400);
+            }
+        });
+    }
+});
 
 </script>
 </body>
