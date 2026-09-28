@@ -1,0 +1,215 @@
+{
+  "fuente": "SIRGAS-TRO",
+  "generado": "2026-09-28",
+  "total_estaciones": 13,
+  "estaciones": [
+    {
+      "codigo": "RDSD",
+      "nombre": "Santo Domingo",
+      "pais": "Rep. Dominicana",
+      "lat": 18.48,
+      "lon": -69.91,
+      "n_obs": 111,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2565.2,
+      "ztd_ultimo_mm": 2619.3,
+      "anomalia_mm": 54.1,
+      "categoria": "muy_humedo"
+    },
+    {
+      "codigo": "ANTC",
+      "nombre": "Antofagasta",
+      "pais": "Chile",
+      "lat": -23.65,
+      "lon": -70.4,
+      "n_obs": 4166,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2212.4,
+      "ztd_ultimo_mm": 2252.7,
+      "anomalia_mm": 40.3,
+      "categoria": "muy_humedo"
+    },
+    {
+      "codigo": "BOGT",
+      "nombre": "Bogotá",
+      "pais": "Colombia",
+      "lat": 4.64,
+      "lon": -74.08,
+      "n_obs": 4008,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1853.5,
+      "ztd_ultimo_mm": 1874.5,
+      "anomalia_mm": 21.0,
+      "categoria": "muy_humedo"
+    },
+    {
+      "codigo": "CALI",
+      "nombre": "Cali",
+      "pais": "Colombia",
+      "lat": 3.45,
+      "lon": -76.53,
+      "n_obs": 3917,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2314.4,
+      "ztd_ultimo_mm": 2334.7,
+      "anomalia_mm": 20.3,
+      "categoria": "muy_humedo"
+    },
+    {
+      "codigo": "QUI3",
+      "nombre": "Quito",
+      "pais": "Ecuador",
+      "lat": -0.18,
+      "lon": -78.47,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1776.5,
+      "ztd_ultimo_mm": 1786.7,
+      "anomalia_mm": 10.2,
+      "categoria": "muy_humedo"
+    },
+    {
+      "codigo": "SANT",
+      "nombre": "Santiago",
+      "pais": "Chile",
+      "lat": -33.44,
+      "lon": -70.66,
+      "n_obs": 4176,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2221.2,
+      "ztd_ultimo_mm": 2229.2,
+      "anomalia_mm": 8.0,
+      "categoria": "humedo"
+    },
+    {
+      "codigo": "AN02",
+      "nombre": "Ancón",
+      "pais": "Perú",
+      "lat": -12.05,
+      "lon": -77.04,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2549.3,
+      "ztd_ultimo_mm": 2552.0,
+      "anomalia_mm": 2.7,
+      "categoria": "humedo"
+    },
+    {
+      "codigo": "GLPS",
+      "nombre": "Galápagos",
+      "pais": "Ecuador",
+      "lat": -0.74,
+      "lon": -90.3,
+      "n_obs": 119,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2601.1,
+      "ztd_ultimo_mm": 2596.9,
+      "anomalia_mm": -4.2,
+      "categoria": "normal"
+    },
+    {
+      "codigo": "AP01",
+      "nombre": "Arequipa Norte",
+      "pais": "Perú",
+      "lat": -16.4,
+      "lon": -71.53,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1885.0,
+      "ztd_ultimo_mm": 1880.2,
+      "anomalia_mm": -4.8,
+      "categoria": "normal"
+    },
+    {
+      "codigo": "CS01",
+      "nombre": "Cusco",
+      "pais": "Perú",
+      "lat": -13.53,
+      "lon": -71.97,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1639.1,
+      "ztd_ultimo_mm": 1629.5,
+      "anomalia_mm": -9.6,
+      "categoria": "normal"
+    },
+    {
+      "codigo": "IQQE",
+      "nombre": "Iquique",
+      "pais": "Chile",
+      "lat": -20.27,
+      "lon": -69.86,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2431.3,
+      "ztd_ultimo_mm": 2419.0,
+      "anomalia_mm": -12.3,
+      "categoria": "seco"
+    },
+    {
+      "codigo": "LPGS",
+      "nombre": "La Plata",
+      "pais": "Argentina",
+      "lat": -34.9,
+      "lon": -57.93,
+      "n_obs": 120,
+      "periodo": {
+        "inicio": "2026-06-02",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 2493.5,
+      "ztd_ultimo_mm": 2480.1,
+      "anomalia_mm": -13.4,
+      "categoria": "seco"
+    },
+    {
+      "codigo": "AREQ",
+      "nombre": "Arequipa",
+      "pais": "Perú",
+      "lat": -16.47,
+      "lon": -71.49,
+      "n_obs": 4173,
+      "periodo": {
+        "inicio": "2025-12-15",
+        "fin": "2026-06-06"
+      },
+      "ztd_promedio_mm": 1848.8,
+      "ztd_ultimo_mm": 1807.5,
+      "anomalia_mm": -41.3,
+      "categoria": "seco"
+    }
+  ]
+}

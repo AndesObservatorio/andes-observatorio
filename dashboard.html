@@ -1055,6 +1055,7 @@
                 <div class="layer-control" style="margin:10px 0;">
                     <label><input type="checkbox" id="toggleZTDmec" checked> <span data-i18n="mec.c.mapa.toggleZTD">🌫️ Estaciones ZTD</span></label>
                     <label><input type="checkbox" id="togglePrecipmec" checked> <span data-i18n="mec.c.mapa.togglePrecip">🌧️ Precipitación CHIRPS</span></label>
+                    <button class="btn-reporte" id="btnDescargarMecC" style="background:#27ae60;margin-left:8px;">📥 <span data-i18n="mec.c.mapa.descargar">Descargar CSV</span></button>
                     <span class="update-badge" id="mecCbadge">🌫️ Cargando…</span>
                 </div>
 
@@ -3851,38 +3852,42 @@ async function initMapaMecanismoC() {
     mapaMecanismoC = L.map('mapa-mecanismo-c').setView([-15, -70], 4);
     L.tileLayer(getTileURL(), { attribution: getTileAttribution() }).addTo(mapaMecanismoC);
 
-    // 1. Estaciones ZTD
+    // 1. Estaciones ZTD (con anomalía REAL desde la BD)
     capaZTDmec = L.layerGroup();
     try {
-        const res = await fetch('assets/geojson/estaciones_ztd.json');
+        const res = await fetch('assets/geojson/anomalia_ztd.json');
         const data = await res.json();
         const estaciones = data.estaciones || [];
 
+        // Mapa de categoría a color y etiqueta
+        const CATEGORIAS = {
+            'muy_humedo': { color: '#9b59b6', label: 'Muy húmedo' },
+            'humedo':     { color: '#3498db', label: 'Húmedo' },
+            'normal':     { color: '#27ae60', label: 'Normal' },
+            'seco':       { color: '#e74c3c', label: 'Seco' }
+        };
+
         estaciones.forEach(est => {
             if (!est.lat || !est.lon) return;
-            const ztdProm = est.ztd_promedio_mm || 0;
-            const anomalia = ztdProm - 2200;
-            let color = '#27ae60';
-            let categoria = 'Normal';
-            if (anomalia > 10) { color = '#9b59b6'; categoria = 'Muy húmedo'; }   // Morado
-            else if (anomalia > 0) { color = '#3498db'; categoria = 'Húmedo'; }   // Azul
-            else if (anomalia > -10) { color = '#27ae60'; categoria = 'Normal'; } // Verde
-            else { color = '#e74c3c'; categoria = 'Seco'; }                       // Rojo
+            const cat = CATEGORIAS[est.categoria] || CATEGORIAS['normal'];
+            const anomalia = est.anomalia_mm || 0;
+            const signo = anomalia >= 0 ? '+' : '';
 
             L.circleMarker([est.lat, est.lon], {
-                radius: 10, fillColor: color, color: '#fff',
+                radius: 10, fillColor: cat.color, color: '#fff',
                 weight: 2, opacity: 1, fillOpacity: 0.85
             }).bindPopup(
-                '<b>📍 ' + est.codigo + '</b><br>' +
-                'ZTD promedio: ' + ztdProm + ' mm<br>' +
-                'Anomalía: ' + anomalia.toFixed(1) + ' mm<br>' +
-                'Categoría: ' + categoria + '<br>' +
-                'Obs: ' + est.n_obs
+                '<b>📍 ' + est.codigo + ' - ' + est.nombre + ', ' + est.pais + '</b><br>' +
+                'ZTD último: <b>' + est.ztd_ultimo_mm + ' mm</b><br>' +
+                'ZTD promedio histórico: ' + est.ztd_promedio_mm + ' mm<br>' +
+                '<b style="color:' + cat.color + '">Anomalía: ' + signo + anomalia.toFixed(1) + ' mm (' + cat.label + ')</b><br>' +
+                'Observaciones: ' + est.n_obs + '<br>' +
+                '<small>Período: ' + est.periodo.inicio + ' → ' + est.periodo.fin + '</small>'
             ).addTo(capaZTDmec);
         });
-        console.log('✅ Mecanismo C: ' + estaciones.length + ' estaciones ZTD');
+        console.log('✅ Mecanismo C: ' + estaciones.length + ' estaciones con anomalía real');
     } catch(e) {
-        console.warn('Error cargando estaciones ZTD', e);
+        console.warn('Error cargando anomalías ZTD', e);
     }
 
     // 2. Precipitación CHIRPS
@@ -3958,6 +3963,60 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 150);
             }
         });
+    }
+});
+
+
+// ═══════════════════════════════════════════════════════════
+// DESCARGAR CSV DEL MECANISMO C
+// ═══════════════════════════════════════════════════════════
+async function descargarCSVMecanismoC() {
+    try {
+        const res = await fetch('assets/geojson/anomalia_ztd.json');
+        const data = await res.json();
+        const estaciones = data.estaciones || [];
+
+        // Encabezado del CSV
+        let csv = 'codigo,nombre,pais,lat,lon,n_obs,periodo_inicio,periodo_fin,ztd_promedio_mm,ztd_ultimo_mm,anomalia_mm,categoria\n';
+
+        // Filas
+        estaciones.forEach(e => {
+            csv += [
+                e.codigo,
+                '"' + (e.nombre || '') + '"',
+                '"' + (e.pais || '') + '"',
+                e.lat,
+                e.lon,
+                e.n_obs,
+                e.periodo?.inicio || '',
+                e.periodo?.fin || '',
+                e.ztd_promedio_mm,
+                e.ztd_ultimo_mm,
+                e.anomalia_mm,
+                e.categoria
+            ].join(',') + '\n';
+        });
+
+        // Descargar
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        const fecha = new Date().toISOString().slice(0, 10);
+        link.download = `anomalia_ztd_${fecha}.csv`;
+        link.click();
+        console.log('✅ CSV descargado');
+    } catch(e) {
+        console.error('Error al descargar CSV', e);
+        alert('Error al generar el CSV. Revisa la consola.');
+    }
+}
+
+// Listener del botón (una vez cargado el DOM)
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('btnDescargarMecC');
+    if (btn && !btn.dataset.listenerAttached) {
+        btn.dataset.listenerAttached = 'true';
+        btn.addEventListener('click', descargarCSVMecanismoC);
     }
 });
 
