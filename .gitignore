@@ -34,3 +34,14 @@ script.js
 # Base de datos local
 *.db
 data/tropo_raw/
+
+# Datos crudos de glaciares y volcanes (se regeneran con scripts/)
+data/glaciares/
+data/volcanes/
+
+# GeoJSON grande sin filtrar (reemplazado por glaciares_volcanes.json)
+assets/geojson/glaciares_andinos.json
+
+# Backups del dashboard
+dashboard.html.*.bak
+dashboard.html.ROTO

@@ -1,0 +1,3838 @@
+{
+  "type": "FeatureCollection",
+  "fuente": "Smithsonian Global Volcanism Program",
+  "generado": "2026-09-28",
+  "total": 182,
+  "por_pais": {
+    "Chile": 86,
+    "Perú": 16,
+    "Ecuador": 21,
+    "Argentina": 34,
+    "Colombia": 14,
+    "Bolivia": 11
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-096",
+        "nombre": "Acamarachi",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 6046.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.62,
+          -23.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-062",
+        "nombre": "Aguilera",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 0.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.83,
+          -50.17
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-002",
+        "nombre": "Andahua Valley",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 4713.0,
+        "tipo": "Cinder cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.33,
+          -15.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-153",
+        "nombre": "Antillanca Group",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 1990.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.153,
+          -40.771
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-03=",
+        "nombre": "Antisana",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 5753.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.141,
+          -0.481
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-124",
+        "nombre": "Antofagasta de la Sierra",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 4000.0,
+        "tipo": "Scoria cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.5,
+          -26.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-18-",
+        "nombre": "Antofagasta de la Sierra",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 4000.0,
+        "tipo": "Scoria cones",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.5,
+          -26.083
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-123",
+        "nombre": "Antofalla",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 6100.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.0,
+          -25.53
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-08=",
+        "nombre": "Antuco",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2979.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.349,
+          -37.406
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-107",
+        "nombre": "Aracar",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 6082.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.77,
+          -24.27
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-16-",
+        "nombre": "Aracar",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 6082.0,
+        "tipo": "Stratovolcano",
+        "estado": "Uncertain",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.767,
+          -24.25
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-059",
+        "nombre": "Arenales",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 3437.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.483,
+          -47.2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-021",
+        "nombre": "Atacazo",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 4463.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.617,
+          -0.353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-023",
+        "nombre": "Atuel, Caldera del",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 5189.0,
+        "tipo": "Caldera",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.05,
+          -34.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-09=",
+        "nombre": "Azufral, Volcan",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4070.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.68,
+          1.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-06=",
+        "nombre": "Azul, Cerro [Quizapu]",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3788.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.761,
+          -35.653
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-122",
+        "nombre": "Bayo, Cerro",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-N",
+        "elevacion_m": 5401.0,
+        "tipo": "Complex volcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.58,
+          -25.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-064",
+        "nombre": "Blanca, Loma",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2268.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.009,
+          -36.286
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-011",
+        "nombre": "Bravo, Cerro",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4000.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.3,
+          5.092
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-012",
+        "nombre": "Bravo, Cerro",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4000.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.3,
+          5.092
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-07=",
+        "nombre": "Burney, Monte",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 1758.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.4,
+          -52.33
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-112",
+        "nombre": "Caburga",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 995.0,
+        "tipo": "Cinder cone",
+        "estado": "Tephrochronology",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.83,
+          -39.2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-042",
+        "nombre": "Calabozos",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3508.0,
+        "tipo": "Caldera",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.496,
+          -35.558
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-02=",
+        "nombre": "Calbuco",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2003.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.614,
+          -41.326
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-091",
+        "nombre": "Callaqui",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3164.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.45,
+          -37.92
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-14=",
+        "nombre": "Carran-Los Venados",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 1114.0,
+        "tipo": "Pyroclastic cone",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.07,
+          -40.35
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-06-",
+        "nombre": "Casiri, Nevados",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5650.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.82,
+          -17.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-004",
+        "nombre": "Cayambe",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 5790.0,
+        "tipo": "Compound volcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.986,
+          0.029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-006",
+        "nombre": "Cayambe",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 5790.0,
+        "tipo": "Compound volcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.986,
+          0.029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-021",
+        "nombre": "Cayute-La Vigueria",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 506.0,
+        "tipo": "Pyroclastic cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.27,
+          -41.25
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-012",
+        "nombre": "Cayutué-La Viguería",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 506.0,
+        "tipo": "Pyroclastic cones",
+        "estado": "Tephrochronology",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.267,
+          -41.25
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-022",
+        "nombre": "Chacana",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 4643.0,
+        "tipo": "Caldera",
+        "estado": "Historical",
+        "ultima_erupcion": "D4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.25,
+          -0.375
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-005",
+        "nombre": "Chachani, Nevado",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 6057.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.53,
+          -16.191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-007",
+        "nombre": "Chachani, Nevado",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 6057.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.53,
+          -16.191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-041",
+        "nombre": "Chaiten",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 962.0,
+        "tipo": "Caldera",
+        "estado": "Holocene",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.646,
+          -42.833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-101",
+        "nombre": "Chapulul, Cerro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2143.0,
+        "tipo": "Cinder cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.08,
+          -38.37
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-101",
+        "nombre": "Chiliques",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5778.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.7,
+          -23.58
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-098",
+        "nombre": "Chiliques",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5778.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.7,
+          -23.583
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-07=",
+        "nombre": "Chillan, Nevados de",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3212.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.377,
+          -36.863
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-071",
+        "nombre": "Chimborazo",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 6310.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.815,
+          -1.464
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-095",
+        "nombre": "Colachi",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5631.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.65,
+          -23.23
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-021",
+        "nombre": "Colluma, Cerro",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Bolivia",
+        "elevacion_m": 3876.0,
+        "tipo": "Maar",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.07,
+          -18.5
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-09-",
+        "nombre": "Cook, Isla",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 150.0,
+        "tipo": "Lava dome",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.27,
+          -54.95
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-09=",
+        "nombre": "Copahue",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2965.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.17,
+          -37.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-14-",
+        "nombre": "Copiapo",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 6052.0,
+        "tipo": "Stratovolcano",
+        "estado": "Uncertain",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.13,
+          -27.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-05=",
+        "nombre": "Corcovado",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2300.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.8,
+          -43.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-103",
+        "nombre": "Cordon Chalviri",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5623.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.62,
+          -23.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-102",
+        "nombre": "Cordon de Puntas Negras",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5852.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.53,
+          -23.75
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-121",
+        "nombre": "Cordon del Azufre",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-N",
+        "elevacion_m": 5463.0,
+        "tipo": "Complex volcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.52,
+          -25.33
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-001",
+        "nombre": "Coropuna",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 6377.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.65,
+          -15.52
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-05=",
+        "nombre": "Cotopaxi",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 5911.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.436,
+          -0.677
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-025",
+        "nombre": "Crater Basalt Volc Field",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-S/Argentina",
+        "elevacion_m": 1359.0,
+        "tipo": "Cinder cones",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.183,
+          -42.017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-002",
+        "nombre": "Cuicocha",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 3246.0,
+        "tipo": "Caldera",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.364,
+          0.308
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-10=",
+        "nombre": "Cumbal",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4764.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.88,
+          0.98
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-19-",
+        "nombre": "Cóndor, Cerro el",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 6532.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.35,
+          -26.617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-05=",
+        "nombre": "Descabezado Grande",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3953.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.75,
+          -35.58
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-067",
+        "nombre": "Domuyo",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 4709.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.42,
+          -36.63
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-07=",
+        "nombre": "Dona Juana",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4150.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.92,
+          1.47
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-112",
+        "nombre": "Escorial, Cerro",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-N",
+        "elevacion_m": 5447.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.37,
+          -25.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-00-",
+        "nombre": "Firura, Nevados",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5498.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.63,
+          -15.23
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-08=",
+        "nombre": "Galeras",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4276.0,
+        "tipo": "Complex volcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.37,
+          1.22
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-02=",
+        "nombre": "Guagua Pichincha",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 4784.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.598,
+          -0.171
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-02=",
+        "nombre": "Guallatiri",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 6071.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.17,
+          -18.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-093",
+        "nombre": "Guayaques",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Chile-N",
+        "elevacion_m": 5598.0,
+        "tipo": "Lava dome",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.58,
+          -22.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-023",
+        "nombre": "Hornopiren",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 1572.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.431,
+          -41.874
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-123",
+        "nombre": "Huanquihue Group",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 1300.0,
+        "tipo": "Pyroclastic cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.55,
+          -39.87
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-03=",
+        "nombre": "Huaynaputina",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 4850.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.85,
+          -16.608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-057",
+        "nombre": "Hudson, Cerro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 1905.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.97,
+          -45.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-03=",
+        "nombre": "Huequi",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 1318.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.578,
+          -42.377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-05=",
+        "nombre": "Huila",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 5365.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.05,
+          2.92
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-041",
+        "nombre": "Illiniza",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 5248.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.714,
+          -0.659
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-04=",
+        "nombre": "Irruputuncu",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Chile-N",
+        "elevacion_m": 5163.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.55,
+          -20.73
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-03=",
+        "nombre": "Isluga",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5050.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.83,
+          -19.15
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-035",
+        "nombre": "Jayu Khota, Laguna",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Bolivia",
+        "elevacion_m": 3650.0,
+        "tipo": "Maars",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.417,
+          -19.45
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-122",
+        "nombre": "Lanin",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-C",
+        "elevacion_m": 3747.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.5,
+          -39.633
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-10=",
+        "nombre": "Lascar",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5592.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.73,
+          -23.37
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-12=",
+        "nombre": "Lastarria",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5697.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.5,
+          -25.17
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-06=",
+        "nombre": "Lautaro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 3380.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.55,
+          -49.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-011",
+        "nombre": "Lexone",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5340.0,
+        "tipo": "Lava dome",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.48,
+          -17.87
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-092",
+        "nombre": "Licancabur",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5916.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.88,
+          -22.83
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-11=",
+        "nombre": "Llaima",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3125.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.729,
+          -38.692
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-11=",
+        "nombre": "Llullaillaco",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-N",
+        "elevacion_m": 6739.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.53,
+          -24.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-063",
+        "nombre": "Longavi, Nevado de",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3242.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.161,
+          -36.193
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-10=",
+        "nombre": "Lonquimay",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2865.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.58,
+          -38.377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-056",
+        "nombre": "Maca",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2960.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.2,
+          -45.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-04=",
+        "nombre": "Machin, Cerro",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 2650.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.4,
+          4.48
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-021",
+        "nombre": "Maipo",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-C",
+        "elevacion_m": 5264.0,
+        "tipo": "Caldera",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.833,
+          -34.161
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-061",
+        "nombre": "Maule, Laguna del",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3092.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.58,
+          -36.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-053",
+        "nombre": "Melimoyu",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2400.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.88,
+          -44.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-055",
+        "nombre": "Mentolat",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 1660.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.08,
+          -44.67
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-04=",
+        "nombre": "Minchinmavida",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2404.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.43,
+          -42.78
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-01=",
+        "nombre": "Misti, El",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5822.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.409,
+          -16.294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-13=",
+        "nombre": "Mocho-Choshuenco",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2422.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.027,
+          -39.927
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-003",
+        "nombre": "Mojanda",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 4263.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.27,
+          0.13
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-005",
+        "nombre": "Mojanda",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 4263.0,
+        "tipo": "Stratovolcanoes",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.267,
+          0.133
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-041",
+        "nombre": "Mondaca",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2048.0,
+        "tipo": "Lava dome",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.8,
+          -35.464
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-106",
+        "nombre": "Negrillar, El",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 3500.0,
+        "tipo": "Pyroclastic cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.25,
+          -24.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-109",
+        "nombre": "Negrillar, La",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 4109.0,
+        "tipo": "Pyroclastic cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.6,
+          -24.28
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-11=",
+        "nombre": "Negro de Mayasquer, Cerro",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Colombia",
+        "elevacion_m": 4445.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.964,
+          0.828
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-125",
+        "nombre": "Nevada, Sierra",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile",
+        "elevacion_m": 6127.0,
+        "tipo": "Complex volcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.58,
+          -26.48
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-008",
+        "nombre": "Nicholson, Cerro",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 2520.0,
+        "tipo": "Cinder cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.753,
+          -16.258
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-036",
+        "nombre": "Nuevo Mundo",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Bolivia",
+        "elevacion_m": 5438.0,
+        "tipo": "Lava domes",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.483,
+          -19.783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-13=",
+        "nombre": "Ojos del Salado, Nevados",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-N",
+        "elevacion_m": 6887.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.53,
+          -27.12
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-05=",
+        "nombre": "Olca-Paruma",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Chile-N",
+        "elevacion_m": 5407.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.48,
+          -20.93
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-06=",
+        "nombre": "Ollague",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Chile-N",
+        "elevacion_m": 5868.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.18,
+          -21.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-01=",
+        "nombre": "Osorno",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2652.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.493,
+          -41.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-097",
+        "nombre": "Overo, Cerro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 4555.0,
+        "tipo": "Maar",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.67,
+          -23.35
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-08-",
+        "nombre": "Palei-Aike Volc Field",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 250.0,
+        "tipo": "Cinder cone",
+        "estado": "Anthropology",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.0,
+          -52.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-052",
+        "nombre": "Palena Volc Group",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 0.0,
+        "tipo": "Cinder cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.5,
+          -43.68
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-022",
+        "nombre": "Palomo",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 4860.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.295,
+          -34.608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-042",
+        "nombre": "Pampa Luxsar",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Bolivia",
+        "elevacion_m": 5543.0,
+        "tipo": "Volcanic field",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.2,
+          -20.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-152",
+        "nombre": "Pantoja, Cerro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2112.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.95,
+          -40.77
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-012",
+        "nombre": "Patilla Pata",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Bolivia",
+        "elevacion_m": 5300.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.03,
+          -18.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-066",
+        "nombre": "Payun Matru, Cerro",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 3691.0,
+        "tipo": "Shield volcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.2,
+          -36.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-20-",
+        "nombre": "Peinado",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 5740.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.15,
+          -26.617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-062",
+        "nombre": "Petacas",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4054.0,
+        "tipo": "Lava dome",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.78,
+          1.57
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-032",
+        "nombre": "Pina, Cerro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 4037.0,
+        "tipo": "Unknown",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.65,
+          -19.492
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-04=",
+        "nombre": "Planchon-Peteroa",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 4107.0,
+        "tipo": "Caldera",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.57,
+          -35.24
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-072",
+        "nombre": "Puesto Cortaderas",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 970.0,
+        "tipo": "Pyroclastic cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.62,
+          -37.55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-073",
+        "nombre": "Puesto Cortaderas",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 970.0,
+        "tipo": "Pyroclastic cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.617,
+          -37.567
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-105",
+        "nombre": "Pular",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 6233.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.05,
+          -24.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-011",
+        "nombre": "Pululagua",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 3356.0,
+        "tipo": "Caldera",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.463,
+          0.038
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-16-",
+        "nombre": "Puntiagudo-Cordon Cenizo",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2493.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.264,
+          -40.969
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-06=",
+        "nombre": "Purace",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4650.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.4,
+          2.32
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-094",
+        "nombre": "Purico Complex",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5703.0,
+        "tipo": "Pyroclastic shield",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.75,
+          -23.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-09=",
+        "nombre": "Putana",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5890.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.87,
+          -22.57
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-15=",
+        "nombre": "Puyehue",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2236.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.117,
+          -40.59
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-054",
+        "nombre": "Puyuhuapi",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 255.0,
+        "tipo": "Cinder cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.53,
+          -44.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-121",
+        "nombre": "Quetrupillan",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2360.0,
+        "tipo": "Caldera",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.7,
+          -39.5
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-06=",
+        "nombre": "Quilotoa",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 3914.0,
+        "tipo": "Caldera",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.9,
+          -0.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-004",
+        "nombre": "Quimsachata",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 3923.0,
+        "tipo": "Lava dome",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.17,
+          -14.37
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-063",
+        "nombre": "Reclus",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 0.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7,
+          -50.98
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-065",
+        "nombre": "Resago, Volcan",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 1550.0,
+        "tipo": "Cinder cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.92,
+          -36.45
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-01=",
+        "nombre": "Reventador",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 3562.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.656,
+          -0.078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-024",
+        "nombre": "Risco Plateado",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 4999.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.0,
+          -34.933
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1506-02=",
+        "nombre": "Robinson Crusoe",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-Is",
+        "elevacion_m": 922.0,
+        "tipo": "Shield volcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.85,
+          -33.658
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-21-",
+        "nombre": "Robledo",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 4400.0,
+        "tipo": "Caldera",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.717,
+          -26.767
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-02=",
+        "nombre": "Ruiz",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 5321.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.322,
+          4.895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-058",
+        "nombre": "Río Murta",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": null,
+        "tipo": "Pyroclastic cones",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.667,
+          -46.167
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-003",
+        "nombre": "Sabancaya",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5967.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.85,
+          -15.78
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-006",
+        "nombre": "Sabancaya",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5967.0,
+        "tipo": "Stratovolcanoes",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.85,
+          -15.783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-091",
+        "nombre": "Sairecabur",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Chile-N",
+        "elevacion_m": 5971.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.88,
+          -22.73
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1506-01=",
+        "nombre": "San Felix",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-Is",
+        "elevacion_m": 183.0,
+        "tipo": "Shield volcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.12,
+          -26.27
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-02=",
+        "nombre": "San Jose",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-C",
+        "elevacion_m": 5856.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.897,
+          -33.782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-07=",
+        "nombre": "San Pedro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 6145.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.4,
+          -21.88
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-062",
+        "nombre": "San Pedro-Pellado",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 3621.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.849,
+          -35.989
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-09=",
+        "nombre": "Sangay",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 5230.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.33,
+          -2.03
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-021",
+        "nombre": "Santa Isabel",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4950.0,
+        "tipo": "Shield volcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.37,
+          4.82
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-001",
+        "nombre": "Soche",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 3955.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.58,
+          0.552
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-108",
+        "nombre": "Socompa",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Chile-N",
+        "elevacion_m": 6051.0,
+        "tipo": "Stratovolcano",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.25,
+          -24.4
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-111",
+        "nombre": "Sollipulli",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2282.0,
+        "tipo": "Caldera",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.52,
+          -38.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-061",
+        "nombre": "Sotara",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 4400.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.58,
+          2.12
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-04=",
+        "nombre": "Sumaco",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 3990.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.626,
+          -0.538
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-01=",
+        "nombre": "Tacora",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 5980.0,
+        "tipo": "Stratovolcano",
+        "estado": "Fumarolic",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.77,
+          -17.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-031",
+        "nombre": "Ticsani",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5408.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.595,
+          -16.755
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-03=",
+        "nombre": "Tinguiririca",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 4280.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.352,
+          -34.814
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-22-",
+        "nombre": "Tipas",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 6660.0,
+        "tipo": "Complex volcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.55,
+          -27.2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-131",
+        "nombre": "Tipas",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 6660.0,
+        "tipo": "Complex volcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.55,
+          -27.2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-093",
+        "nombre": "Tolguaca",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2806.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.645,
+          -38.31
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-092",
+        "nombre": "Tolguaca",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2806.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.645,
+          -38.31
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1501-03=",
+        "nombre": "Tolima",
+        "pais": "Colombia",
+        "pais_en": "Colombia",
+        "region": "Colombia",
+        "elevacion_m": 5200.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -75.33,
+          4.67
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-081",
+        "nombre": "Trocon",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 2500.0,
+        "tipo": "Lava domes",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.9,
+          -37.733
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-071",
+        "nombre": "Tromen",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 3978.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.03,
+          -37.142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-011",
+        "nombre": "Tronador",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 3491.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.885,
+          -41.157
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-104",
+        "nombre": "Tujle, Cerro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-N",
+        "elevacion_m": 3550.0,
+        "tipo": "Maar",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.95,
+          -23.83
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-081",
+        "nombre": "Tulabug",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 3336.0,
+        "tipo": "Scoria cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.613,
+          -1.78
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1502-08=",
+        "nombre": "Tungurahua",
+        "pais": "Ecuador",
+        "pais_en": "Ecuador",
+        "region": "Ecuador",
+        "elevacion_m": 5023.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.442,
+          -1.467
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-01=",
+        "nombre": "Tupungatito",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 6000.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.8,
+          -33.4
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-04=",
+        "nombre": "Tutupaca",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5815.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.358,
+          -17.025
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-15-",
+        "nombre": "Tuzgle, Cerro",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 5500.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.483,
+          -24.05
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-02=",
+        "nombre": "Ubinas",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5672.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.903,
+          -16.355
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1506-03=",
+        "nombre": "Unnamed",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-Is",
+        "elevacion_m": 0.0,
+        "tipo": "Submarine volcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.78,
+          -33.622
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-161",
+        "nombre": "Unnamed",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": null,
+        "tipo": "Pyroclastic cone",
+        "estado": "Holocene?",
+        "ultima_erupcion": "?"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.267,
+          -25.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1506-04=",
+        "nombre": "Unnamed",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-Is",
+        "elevacion_m": -642.0,
+        "tipo": "Submarine volcano",
+        "estado": "Uncertain",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.83,
+          -33.62
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-061",
+        "nombre": "Viedma, Volcan",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 1300.0,
+        "tipo": "Subglacial volcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.28,
+          -49.358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1507-12=",
+        "nombre": "Villarrica",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-C",
+        "elevacion_m": 2847.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.93,
+          -39.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-024",
+        "nombre": "Volcanico, Cerro",
+        "pais": "Argentina",
+        "pais_en": "Argentina",
+        "region": "Argentina",
+        "elevacion_m": 0.0,
+        "tipo": "Cinder cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.65,
+          -42.07
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-050",
+        "nombre": "Yanteles",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2042.0,
+        "tipo": "Stratovolcanoes",
+        "estado": "Radiocarbon",
+        "ultima_erupcion": "D7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.8,
+          -43.5
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-051",
+        "nombre": "Yanteles, Cerro",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2050.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.83,
+          -43.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1508-022",
+        "nombre": "Yate",
+        "pais": "Chile",
+        "pais_en": "Chile",
+        "region": "Chile-S",
+        "elevacion_m": 2187.0,
+        "tipo": "Stratovolcano",
+        "estado": "Holocene",
+        "ultima_erupcion": "U"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.396,
+          -41.755
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1504-05-",
+        "nombre": "Yucamane",
+        "pais": "Perú",
+        "pais_en": "Peru",
+        "region": "Peru",
+        "elevacion_m": 5550.0,
+        "tipo": "Stratovolcano",
+        "estado": "Historical",
+        "ultima_erupcion": "D4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.2,
+          -17.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "numero": "1505-061",
+        "nombre": "Yumia, Cerro",
+        "pais": "Bolivia",
+        "pais_en": "Bolivia",
+        "region": "Bolivia",
+        "elevacion_m": 4050.0,
+        "tipo": "Cone",
+        "estado": "Holocene",
+        "ultima_erupcion": "Unknown"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.5,
+          -21.5
+        ]
+      }
+    }
+  ]
+}
