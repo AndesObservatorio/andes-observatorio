@@ -1005,6 +1005,23 @@
                     Smithsonian GVP (2024) ·
                     RGI 6.2 (2023)
                 </p>
+
+                <!-- 🔬 METODOLOGÍA DEL MECANISMO A -->
+                <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+                    <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Mecanismo A</summary>
+                    <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                        <p><strong>Criterio de selección de glaciares:</strong> se incluyeron glaciares del Randolph Glacier Inventory 6.2 (RGI) que se encuentran <strong>a menos de 10 km</strong> de un volcán activo del Smithsonian Global Volcanism Program (GVP). Este criterio asegura que el glaciar está sobre o muy cerca del sistema magmático del volcán, condición necesaria para el Mecanismo A.</p>
+                        <p><strong>Datos de entrada:</strong></p>
+                        <ul style="margin-left:20px;">
+                            <li><strong>Volcanes:</strong> 182 volcanes del Holoceno en Sudamérica (Smithsonian GVP 2024)</li>
+                            <li><strong>Glaciares:</strong> 1,173 glaciares de RGI 6.2 (regiones 16 y 17: Low Latitudes + Southern Andes)</li>
+                            <li><strong>Estaciones GNSS:</strong> 13 estaciones SIRGAS con series ZTD (opcional)</li>
+                        </ul>
+                        <p><strong>Cálculo de distancia:</strong> se usa distancia geodésica en proyección Web Mercator (EPSG:3857) entre el centroide del glaciar y la cumbre del volcán más cercano.</p>
+                        <p><strong>Limitaciones:</strong> la distancia horizontal al volcán no captura la profundidad del sistema magmático ni la conectividad hidrológica real entre glaciar y cámara magmática. Este análisis es <em>exploratorio</em>.</p>
+                        <p><strong>Fuente:</strong> RGI 6.2 (2023) + Smithsonian GVP (2024)</p>
+                    </div>
+                </details>
             </div>
         </div>
     </details>
@@ -3285,6 +3302,15 @@ const TRADUCCIONES = {
         // Integridad
         'mec.integridad.titulo': '📜 Declaración de Integridad Científica',
         'mec.integridad.texto': 'Los datos SIRGAS en este dashboard se utilizan para verificar exploratoriamente hipótesis de acoplamiento clima-Tierra sólida (Mecanismos A y B). Todos los análisis de correlación muestran resultados de pruebas estadísticas (valor p, intervalos de confianza). La separación de componentes no tectónicas en señales de desplazamiento vertical tiene incertidumbre. Los datos de esta plataforma no sustituyen las publicaciones oficiales de cada institución, ni se utilizan para decisiones de alerta temprana.',
+        // ═══ Mapa Mecanismo A ═══
+        'mec.a.mapa.titulo': '🗺️ Mapa interactivo: Glaciares y Volcanes Andinos',
+        'mec.a.mapa.toggleVolcanes': '🌋 Volcanes activos',
+        'mec.a.mapa.toggleGlaciares': '🧊 Glaciares',
+        'mec.a.mapa.toggleEstaciones': '📡 Estaciones GNSS',
+        'mec.a.mapa.leyenda': 'Leyenda:',
+        'mec.a.mapa.volcanes': 'Volcán activo',
+        'mec.a.mapa.glaciares': 'Glaciar (cerca de volcán)',
+        'mec.a.mapa.estaciones': 'Estación GNSS',
         // ═══ Claves SVG para mapas de integración ═══
         'mec.tabla.mapa': 'Mapa visual',
         // Mapa A
@@ -3496,6 +3522,15 @@ const TRADUCCIONES = {
         'mec.metodos.c.texto': 'Correlation by lags (0-72h) + ROC-AUC curves for predictive capacity of intense precipitation. Criterion: AUC > 0.7.',
         'mec.integridad.titulo': '📜 Scientific Integrity Statement',
         'mec.integridad.texto': 'SIRGAS data in this dashboard are used to exploratorily verify climate-solid Earth coupling hypotheses (Mechanisms A and B). All correlation analyses show statistical test results (p-value, confidence intervals). Separating non-tectonic components in vertical displacement signals has uncertainty. The data on this platform do not replace the official publications of each institution, nor are they used for early warning decisions.',
+        // ═══ Map Mechanism A ═══
+        'mec.a.mapa.titulo': '🗺️ Interactive map: Andean Glaciers and Volcanoes',
+        'mec.a.mapa.toggleVolcanes': '🌋 Active volcanoes',
+        'mec.a.mapa.toggleGlaciares': '🧊 Glaciers',
+        'mec.a.mapa.toggleEstaciones': '📡 GNSS stations',
+        'mec.a.mapa.leyenda': 'Legend:',
+        'mec.a.mapa.volcanes': 'Active volcano',
+        'mec.a.mapa.glaciares': 'Glacier (near volcano)',
+        'mec.a.mapa.estaciones': 'GNSS station',
         // ═══ SVG keys ═══
         'mec.tabla.mapa': 'Visual map',
         // Map A
@@ -3707,6 +3742,15 @@ const TRADUCCIONES = {
         'mec.metodos.c.texto': 'Correlação por atrasos (0-72h) + curvas ROC-AUC para capacidade preditiva de precipitação intensa. Critério: AUC > 0,7.',
         'mec.integridad.titulo': '📜 Declaração de Integridade Científica',
         'mec.integridad.texto': 'Os dados SIRGAS neste painel são usados para verificar exploratoriamente hipóteses de acoplamento clima-Terra sólida (Mecanismos A e B). Todas as análises de correlação mostram resultados de testes estatísticos (valor p, intervalos de confiança). A separação de componentes não tectônicas em sinais de deslocamento vertical tem incerteza. Os dados desta plataforma não substituem as publicações oficiais de cada instituição, nem são usados para decisões de alerta precoce.',
+        // ═══ Mapa Mecanismo A ═══
+        'mec.a.mapa.titulo': '🗺️ Mapa interativo: Geleiras e Vulcões Andinos',
+        'mec.a.mapa.toggleVolcanes': '🌋 Vulcões ativos',
+        'mec.a.mapa.toggleGlaciares': '🧊 Geleiras',
+        'mec.a.mapa.toggleEstaciones': '📡 Estações GNSS',
+        'mec.a.mapa.leyenda': 'Legenda:',
+        'mec.a.mapa.volcanes': 'Vulcão ativo',
+        'mec.a.mapa.glaciares': 'Geleira (perto de vulcão)',
+        'mec.a.mapa.estaciones': 'Estação GNSS',
         // ═══ SVG keys ═══
         'mec.tabla.mapa': 'Mapa visual',
         // Mapa A
