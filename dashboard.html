@@ -1027,7 +1027,7 @@
     </details>
 
     <!-- Mecanismo B -->
-    <details style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
+    <details id="detailsMecanismoB" style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
         <summary style="cursor:pointer;font-weight:700;color:#2980b9;font-size:16px;" data-i18n="mec.b.titulo">💧 Mecanismo B: Transferencia de Esfuerzos por Carga Hidrológica</summary>
         <div style="font-size:14px;color:#4a5a4a;margin-top:14px;line-height:1.7;">
             <p><strong data-i18n="mec.b.fundamento.titulo">Fundamento físico:</strong> <span data-i18n="mec.b.fundamento.texto">Las variaciones en el almacenamiento de agua (precipitación, humedad del suelo, aguas subterráneas, embalses) modifican la carga sobre la corteza. Estos cambios de carga generan deformación elástica y modifican el estado de esfuerzos en fallas someras, pudiendo modular la sismicidad regional.</span></p>
@@ -1058,6 +1058,75 @@
             <p style="background:#fff3cd;padding:10px 14px;border-radius:8px;margin-top:12px;font-size:13px;">
                 <strong data-i18n="mec.b.limitacion.titulo">Limitación:</strong> <span data-i18n="mec.b.limitacion.texto">La señal de modulación sísmica por carga es pequeña y requiere alta precisión. Este módulo se presenta como exploratorio.</span>
             </p>
+
+            <!-- 🆕 MAPA INTERACTIVO MECANISMO B -->
+            <div style="margin-top:24px;padding-top:18px;border-top:2px solid #ede8e0;">
+                <h5 style="margin:0 0 12px;color:#2c5f2c;" data-i18n="mec.b.mapa.titulo">🗺️ Mapa interactivo: Sismicidad y Precipitación Andina</h5>
+
+                <div id="mapa-mecanismo-b" style="height:500px;width:100%;border-radius:14px;margin:12px 0;border:1px solid #ede8e0;"></div>
+
+                <div class="layer-control" style="margin:10px 0;">
+                    <label><input type="checkbox" id="toggleSismosB" checked> <span data-i18n="mec.b.mapa.toggleSismos">🟠 Epicentros sísmicos (M≥4.5)</span></label>
+                    <label><input type="checkbox" id="togglePrecipB" checked> <span data-i18n="mec.b.mapa.togglePrecip">🌧️ Precipitación CHIRPS</span></label>
+                    <span class="update-badge" id="mecBbadge">🟠 Cargando…</span>
+                </div>
+
+                <div style="background:#f8f5f0;padding:12px 16px;border-radius:10px;margin-top:8px;font-size:12px;">
+                    <strong data-i18n="mec.b.mapa.leyenda">Leyenda:</strong>
+                    <span style="color:#e74c3c;margin-left:8px;">● <span data-i18n="mec.b.mapa.sismosAlta">M ≥ 6.0</span></span>
+                    <span style="color:#e67e22;margin-left:8px;">● <span data-i18n="mec.b.mapa.sismosMedia">M 5.0-5.9</span></span>
+                    <span style="color:#f1c40f;margin-left:8px;">● <span data-i18n="mec.b.mapa.sismosBaja">M 4.5-4.9</span></span>
+                    <span style="color:#3498db;margin-left:8px;">🌧️ <span data-i18n="mec.b.mapa.precipitacion">Precipitación</span></span>
+                </div>
+
+                <!-- AVISO CIENTÍFICO (resultado negativo) -->
+                <div style="background:#ffeaa7;padding:14px 18px;border-radius:10px;margin-top:12px;border-left:4px solid #d4a017;">
+                    <strong style="color:#856404;">⚠️ <span data-i18n="mec.b.aviso.titulo">Resultado del análisis exploratorio</span></strong>
+                    <p style="color:#856404;font-size:13px;margin:8px 0 0;line-height:1.6;">
+                        <span data-i18n="mec.b.aviso.texto">El análisis de correlación cruzada entre sismos superficiales (M≥4.5, profundidad &lt;30 km) y precipitación regional durante 2015-2025 <strong>no muestra correlación estadísticamente significativa</strong> en ningún retardo entre 0 y 12 meses (p &gt; 0.05). Este resultado es consistente con la observación de que la señal sísmica tectónica domina sobre cualquier modulación por carga hidrológica en la región andina. Es un resultado científico válido que motiva futuras investigaciones con otras metodologías.</span>
+                    </p>
+                </div>
+
+                <!-- Análisis de correlación cruzada -->
+                <div style="background:#fcfaf7;padding:14px;border-radius:12px;border:1px solid #ede8e0;margin-top:12px;">
+                    <h6 style="margin:0 0 10px;color:#2c5f2c;font-size:13px;">📊 <span data-i18n="mec.b.mapa.lags.titulo">Correlación cruzada por retardo (0-12 meses)</span></h6>
+                    <canvas id="chartLagsMecB" style="max-height:220px;"></canvas>
+                    <p id="lagsInfoMecB" style="font-size:11px;color:#8aa08a;margin-top:6px;font-style:italic;">
+                        <span data-i18n="mec.b.mapa.lags.cargando">Cargando análisis…</span>
+                    </p>
+                </div>
+
+                <!-- Serie temporal -->
+                <div style="background:#fcfaf7;padding:14px;border-radius:12px;border:1px solid #ede8e0;margin-top:12px;">
+                    <h6 style="margin:0 0 10px;color:#2c5f2c;font-size:13px;">📈 <span data-i18n="mec.b.mapa.serie.titulo">Serie temporal: sismos vs precipitación</span></h6>
+                    <canvas id="chartSerieMecB" style="max-height:250px;"></canvas>
+                </div>
+
+                <!-- Referencias -->
+                <p style="background:#e8f4fd;padding:12px 16px;border-radius:8px;margin-top:12px;font-size:12px;border-left:4px solid #2980b9;">
+                    <strong>📖 <span data-i18n="mec.b.mapa.referencias.titulo">Referencias clave:</span></strong>
+                    <span data-i18n="mec.b.mapa.referencias.texto">Bettinelli et al. (2008) <em>G-cubed</em> · Craig et al. (2017) <em>EPSL</em> · Panda et al. (2018) <em>JGR</em> · USGS Earthquake Catalog (2025) · Open-Meteo ERA5 (2024)</span>
+                </p>
+
+                <!-- Metodología -->
+                <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+                    <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ <span data-i18n="mec.b.metodologia.titulo">Metodología del análisis — Mecanismo B</span></summary>
+                    <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                        <p><strong>Criterio de selección sísmica:</strong> eventos M ≥ 4.5 con profundidad &lt; 30 km (superficiales/corticales), descargados del catálogo USGS Earthquake Catalog para el período 2015-2025 en la región andina (-56 a 13 lat, -82 a -34 lon).</p>
+                        <p><strong>Datos de entrada:</strong></p>
+                        <ul style="margin-left:20px;">
+                            <li><strong>Sismos totales:</strong> 6,115 eventos (M≥4.5)</li>
+                            <li><strong>Sismos superficiales:</strong> 2,344 eventos (prof. &lt;30 km)</li>
+                            <li><strong>Precipitación:</strong> promedio mensual de 5 estaciones SIRGAS (BOGT, CALI, SANT, AREQ, ANTC) vía Open-Meteo ERA5</li>
+                            <li><strong>Serie temporal:</strong> 132 meses (2015-01 → 2025-12)</li>
+                        </ul>
+                        <p><strong>Análisis estadístico:</strong> correlación de Spearman entre la serie mensual de sismos y la serie mensual de precipitación, evaluada con retardos de 0 a 12 meses.</p>
+                        <p><strong>Resultado:</strong> ninguna correlación significativa (p &gt; 0.05 en todos los lags). El mejor lag (7 meses) tiene r = -0.152 (p = 0.0902), sin alcanzar significancia.</p>
+                        <p><strong>Limitaciones:</strong> (1) la señal sísmica tectónica domina sobre la modulación por carga; (2) el promedio regional enmascara variabilidad local; (3) la precipitación es una proxy imperfecta de la carga hidrológica (falta GRACE).</p>
+                        <p><strong>Fuente:</strong> USGS + Open-Meteo ERA5</p>
+                    </div>
+                </details>
+            </div>
         </div>
     </details>
 
@@ -1718,13 +1787,13 @@
         tempChart = new Chart(ctx, {
             type: 'bar',
             data: { labels: [], datasets: [{ label: 'Temperatura (°C)', data: [], backgroundColor: [] }] },
-            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 35, title: { display: true, text: 'Temperatura (°C)' } } } }
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 35, title: { display: true, text: t('chart.temp.titulo') } } } }
         });
         const ctx2 = document.getElementById('protectedChart').getContext('2d');
         protectedChart = new Chart(ctx2, {
             type: 'bar',
             data: { labels: Object.keys(areasProtegidas), datasets: [{ label: 'Áreas protegidas (%)', data: Object.values(areasProtegidas), backgroundColor: '#99cc99', borderColor: '#4caf50', borderWidth: 1, borderRadius: 4 }] },
-            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 40, title: { display: true, text: 'Áreas protegidas (%)' } } } }
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 40, title: { display: true, text: t('chart.areas.titulo') } } } }
         });
         const ctx3 = document.getElementById('trendChart').getContext('2d');
         trendChart = new Chart(ctx3, {
@@ -1744,7 +1813,7 @@
             data: { labels: [], datasets: [
                 { label: 'ZTD total (mm)', data: [], borderColor: '#2c5f8a', tension: 0.3, fill: true, backgroundColor: 'rgba(44,95,138,0.08)', pointRadius: 1 }
             ] },
-            options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { title: { display: true, text: 'ZTD (mm)' } } } }
+            options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { title: { display: true, text: t('chart.ztd.titulo') } } } }
         });
         actualizarGrafico();
     }
@@ -2055,7 +2124,7 @@
                 options: {
                     responsive: true,
                     plugins: {
-                        title: { display: true, text: 'Magnitud de velocidad por estación' },
+                        title: { display: true, text: t('chart.sirgas.velocidad.titulo') },
                         tooltip: {
                             callbacks: {
                                 afterLabel: function(context) {
@@ -2066,7 +2135,7 @@
                         }
                     },
                     scales: {
-                        y: { beginAtZero: true, title: { display: true, text: 'mm/año' } }
+                        y: { beginAtZero: true, title: { display: true, text: t('chart.sirgas.velocidad.eje') } }
                     }
                 }
             });
@@ -2114,11 +2183,11 @@
                 options: {
                     responsive: true,
                     plugins: {
-                        title: { display: true, text: 'Anomalía ZTD (mm) vs Precipitación (mm)' }
+                        title: { display: true, text: t('chart.sirgas.scatter.titulo') }
                     },
                     scales: {
-                        x: { title: { display: true, text: 'Anomalía ZTD (mm)' } },
-                        y: { title: { display: true, text: 'Precipitación (mm)' }, beginAtZero: true }
+                        x: { title: { display: true, text: t('chart.sirgas.scatter.x') } },
+                        y: { title: { display: true, text: t('chart.sirgas.scatter.y') }, beginAtZero: true }
                     }
                 }
             });
@@ -2259,6 +2328,15 @@
                             initMapaMecanismoA();
                         } else {
                             mapaMecanismoA.invalidateSize();
+                        }
+                    }
+                    // Mecanismo B (si el details está abierto)
+                    const detB = document.getElementById('detailsMecanismoB');
+                    if (detB && detB.open) {
+                        if (!mapaMecanismoB) {
+                            initMapaMecanismoB();
+                        } else {
+                            mapaMecanismoB.invalidateSize();
                         }
                     }
                     // Mecanismo C (si el details está abierto)
@@ -2582,11 +2660,11 @@ function initMapSirgas() {
             options: {
                 responsive: true,
                 plugins: {
-                    title: { display: true, text: 'Superficie protegida por país (áreas principales)' },
+                    title: { display: true, text: t('chart.areas.superficie.titulo') },
                     legend: { display: false }
                 },
                 scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'km²' } }
+                    y: { beginAtZero: true, title: { display: true, text: t('chart.areas.superficie.eje') } }
                 }
             }
         });
@@ -2893,10 +2971,10 @@ function initMapSirgas() {
                 options: {
                     responsive: true,
                     plugins: {
-                        title: { display: true, text: 'Pérdida de cobertura arbórea por país (2024)' }
+                        title: { display: true, text: t('chart.defor.titulo') }
                     },
                     scales: {
-                        y: { beginAtZero: true, title: { display: true, text: 'Hectáreas' } }
+                        y: { beginAtZero: true, title: { display: true, text: t('chart.defor.eje') } }
                     }
                 }
             });
@@ -3027,7 +3105,7 @@ function initMapSirgas() {
                         title: { display: true, text: `PM2.5 por ciudad (${valoresValidos.length}/${ciudades.length} con datos)` }
                     },
                     scales: {
-                        y: { beginAtZero: true, title: { display: true, text: 'µg/m³' } }
+                        y: { beginAtZero: true, title: { display: true, text: t('chart.aqi.eje') } }
                     }
                 }
             });
@@ -3302,6 +3380,48 @@ const TRADUCCIONES = {
         // Integridad
         'mec.integridad.titulo': '📜 Declaración de Integridad Científica',
         'mec.integridad.texto': 'Los datos SIRGAS en este dashboard se utilizan para verificar exploratoriamente hipótesis de acoplamiento clima-Tierra sólida (Mecanismos A y B). Todos los análisis de correlación muestran resultados de pruebas estadísticas (valor p, intervalos de confianza). La separación de componentes no tectónicas en señales de desplazamiento vertical tiene incertidumbre. Los datos de esta plataforma no sustituyen las publicaciones oficiales de cada institución, ni se utilizan para decisiones de alerta temprana.',
+        // ═══ Mapa Mecanismo B ═══
+        'mec.b.mapa.titulo': '🗺️ Mapa interactivo: Sismicidad y Precipitación Andina',
+        'mec.b.mapa.toggleSismos': '🟠 Epicentros sísmicos (M≥4.5)',
+        'mec.b.mapa.togglePrecip': '🌧️ Precipitación CHIRPS',
+        'mec.b.mapa.leyenda': 'Leyenda:',
+        'mec.b.mapa.sismosAlta': 'M ≥ 6.0',
+        'mec.b.mapa.sismosMedia': 'M 5.0-5.9',
+        'mec.b.mapa.sismosBaja': 'M 4.5-4.9',
+        'mec.b.mapa.precipitacion': 'Precipitación',
+        'mec.b.aviso.titulo': 'Resultado del análisis exploratorio',
+        'mec.b.aviso.texto': 'El análisis de correlación cruzada entre sismos superficiales (M≥4.5, profundidad <30 km) y precipitación regional durante 2015-2025 <strong>no muestra correlación estadísticamente significativa</strong> en ningún retardo entre 0 y 12 meses (p > 0.05). Este resultado es consistente con la observación de que la señal sísmica tectónica domina sobre cualquier modulación por carga hidrológica en la región andina. Es un resultado científico válido que motiva futuras investigaciones con otras metodologías.',
+        'mec.b.mapa.lags.titulo': 'Correlación cruzada por retardo (0-12 meses)',
+        'mec.b.mapa.lags.cargando': 'Cargando análisis…',
+        'mec.b.mapa.serie.titulo': 'Serie temporal: sismos vs precipitación',
+        'mec.b.mapa.referencias.titulo': 'Referencias clave:',
+        'mec.b.mapa.referencias.texto': 'Bettinelli et al. (2008) <em>G-cubed</em> · Craig et al. (2017) <em>EPSL</em> · Panda et al. (2018) <em>JGR</em> · USGS Earthquake Catalog (2025) · Open-Meteo ERA5 (2024)',
+        'mec.b.metodologia.titulo': 'Metodología del análisis — Mecanismo B',
+        // ═══ Títulos de gráficos ═══
+        'chart.temp.titulo': 'Temperatura (°C)',
+        'chart.areas.titulo': 'Áreas protegidas (%)',
+        'chart.ztd.titulo': 'ZTD (mm)',
+        'chart.sirgas.velocidad.titulo': 'Magnitud de velocidad por estación',
+        'chart.sirgas.velocidad.eje': 'mm/año',
+        'chart.sirgas.scatter.titulo': 'Anomalía ZTD (mm) vs Precipitación (mm)',
+        'chart.sirgas.scatter.x': 'Anomalía ZTD (mm)',
+        'chart.sirgas.scatter.y': 'Precipitación (mm)',
+        'chart.areas.superficie.titulo': 'Superficie protegida por país (áreas principales)',
+        'chart.areas.superficie.eje': 'km²',
+        'chart.defor.titulo': 'Pérdida de cobertura arbórea por país (2024)',
+        'chart.defor.eje': 'Hectares',
+        'chart.aqi.eje': 'µg/m³',
+        'chart.mecC.scatter.x': 'Anomalía ZTD (mm)',
+        'chart.mecC.scatter.y': 'Precipitación (mm)',
+        'chart.mecC.roc.fpr': 'FPR',
+        'chart.mecC.roc.tpr': 'TPR',
+        'chart.mecB.lags.titulo': 'Correlación Spearman por retardo (sismos vs precipitación)',
+        'chart.mecB.lags.eje.r': 'r',
+        'chart.mecB.lags.lag': 'Lag',
+        'chart.mecB.serie.titulo': 'Série temporal mensal (2015-2025)',
+        'chart.mecB.serie.sismos': 'Sismos superficiales',
+        'chart.mecB.serie.precip': 'Precipitación (mm)',
+        'chart.mecB.lags.info': 'Mejor correlación: lag {n} meses (r = {r}, p = {p})',
         // ═══ Mapa Mecanismo A ═══
         'mec.a.mapa.titulo': '🗺️ Mapa interactivo: Glaciares y Volcanes Andinos',
         'mec.a.mapa.toggleVolcanes': '🌋 Volcanes activos',
@@ -3522,6 +3642,48 @@ const TRADUCCIONES = {
         'mec.metodos.c.texto': 'Correlation by lags (0-72h) + ROC-AUC curves for predictive capacity of intense precipitation. Criterion: AUC > 0.7.',
         'mec.integridad.titulo': '📜 Scientific Integrity Statement',
         'mec.integridad.texto': 'SIRGAS data in this dashboard are used to exploratorily verify climate-solid Earth coupling hypotheses (Mechanisms A and B). All correlation analyses show statistical test results (p-value, confidence intervals). Separating non-tectonic components in vertical displacement signals has uncertainty. The data on this platform do not replace the official publications of each institution, nor are they used for early warning decisions.',
+        // ═══ Map Mechanism B ═══
+        'mec.b.mapa.titulo': '🗺️ Interactive map: Andean Seismicity and Precipitation',
+        'mec.b.mapa.toggleSismos': '🟠 Seismic epicenters (M≥4.5)',
+        'mec.b.mapa.togglePrecip': '🌧️ CHIRPS Precipitation',
+        'mec.b.mapa.leyenda': 'Legend:',
+        'mec.b.mapa.sismosAlta': 'M ≥ 6.0',
+        'mec.b.mapa.sismosMedia': 'M 5.0-5.9',
+        'mec.b.mapa.sismosBaja': 'M 4.5-4.9',
+        'mec.b.mapa.precipitacion': 'Precipitation',
+        'mec.b.aviso.titulo': 'Exploratory analysis result',
+        'mec.b.aviso.texto': 'Cross-correlation analysis between shallow earthquakes (M≥4.5, depth <30 km) and regional precipitation during 2015-2025 <strong>shows no statistically significant correlation</strong> at any lag between 0 and 12 months (p > 0.05). This result is consistent with the observation that the tectonic seismic signal dominates over any hydrological load modulation in the Andean region. It is a valid scientific result that motivates future research with other methodologies.',
+        'mec.b.mapa.lags.titulo': 'Cross-correlation by lag (0-12 months)',
+        'mec.b.mapa.lags.cargando': 'Loading analysis…',
+        'mec.b.mapa.serie.titulo': 'Time series: earthquakes vs precipitation',
+        'mec.b.mapa.referencias.titulo': 'Key references:',
+        'mec.b.mapa.referencias.texto': 'Bettinelli et al. (2008) <em>G-cubed</em> · Craig et al. (2017) <em>EPSL</em> · Panda et al. (2018) <em>JGR</em> · USGS Earthquake Catalog (2025) · Open-Meteo ERA5 (2024)',
+        'mec.b.metodologia.titulo': 'Analysis methodology — Mechanism B',
+        // ═══ Chart titles ═══
+        'chart.temp.titulo': 'Temperature (°C)',
+        'chart.areas.titulo': 'Protected areas (%)',
+        'chart.ztd.titulo': 'ZTD (mm)',
+        'chart.sirgas.velocidad.titulo': 'Velocity magnitude per station',
+        'chart.sirgas.velocidad.eje': 'mm/year',
+        'chart.sirgas.scatter.titulo': 'ZTD Anomaly (mm) vs Precipitation (mm)',
+        'chart.sirgas.scatter.x': 'ZTD Anomaly (mm)',
+        'chart.sirgas.scatter.y': 'Precipitation (mm)',
+        'chart.areas.superficie.titulo': 'Protected area by country (main areas)',
+        'chart.areas.superficie.eje': 'km²',
+        'chart.defor.titulo': 'Tree cover loss by country (2024)',
+        'chart.defor.eje': 'Hectares',
+        'chart.aqi.eje': 'µg/m³',
+        'chart.mecC.scatter.x': 'ZTD Anomaly (mm)',
+        'chart.mecC.scatter.y': 'Precipitation (mm)',
+        'chart.mecC.roc.fpr': 'FPR',
+        'chart.mecC.roc.tpr': 'TPR',
+        'chart.mecB.lags.titulo': 'Spearman correlation by lag (earthquakes vs precipitation)',
+        'chart.mecB.lags.eje.r': 'r',
+        'chart.mecB.lags.lag': 'Lag',
+        'chart.mecB.serie.titulo': 'Monthly time series (2015-2025)',
+        'chart.mecB.serie.sismos': 'Shallow earthquakes',
+        'chart.mecB.serie.precip': 'Precipitation (mm)',
+        'chart.mecB.lags.info': 'Best correlation: lag {n} months (r = {r}, p = {p})',
         // ═══ Map Mechanism A ═══
         'mec.a.mapa.titulo': '🗺️ Interactive map: Andean Glaciers and Volcanoes',
         'mec.a.mapa.toggleVolcanes': '🌋 Active volcanoes',
@@ -3697,6 +3859,23 @@ const TRADUCCIONES = {
         'mec.b.ind.p3': 'Catálogos de sismicidade regional (SGC Colômbia, IGP Peru, etc.).',
         'mec.b.limitacion.titulo': 'Limitação:',
         'mec.b.limitacion.texto': 'O sinal de modulação sísmica por carga é pequeno e requer alta precisão. Este módulo é apresentado como exploratório.',
+        // ═══ Mapa Mecanismo B ═══
+        'mec.b.mapa.titulo': '🗺️ Mapa interativo: Sismicidade e Precipitação Andina',
+        'mec.b.mapa.toggleSismos': '🟠 Epicentros sísmicos (M≥4.5)',
+        'mec.b.mapa.togglePrecip': '🌧️ Precipitação CHIRPS',
+        'mec.b.mapa.leyenda': 'Legenda:',
+        'mec.b.mapa.sismosAlta': 'M ≥ 6.0',
+        'mec.b.mapa.sismosMedia': 'M 5.0-5.9',
+        'mec.b.mapa.sismosBaja': 'M 4.5-4.9',
+        'mec.b.mapa.precipitacion': 'Precipitação',
+        'mec.b.aviso.titulo': 'Resultado da análise exploratória',
+        'mec.b.aviso.texto': 'A análise de correlação cruzada entre sismos rasos (M≥4.5, profundidade <30 km) e precipitação regional durante 2015-2025 <strong>não mostra correlação estatisticamente significativa</strong> em nenhum atraso entre 0 e 12 meses (p > 0,05). Este resultado é consistente com a observação de que o sinal sísmico tectônico domina sobre qualquer modulação por carga hidrológica na região andina. É um resultado científico válido que motiva pesquisas futuras com outras metodologias.',
+        'mec.b.mapa.lags.titulo': 'Correlação cruzada por atraso (0-12 meses)',
+        'mec.b.mapa.lags.cargando': 'Carregando análise…',
+        'mec.b.mapa.serie.titulo': 'Série temporal: sismos vs precipitação',
+        'mec.b.mapa.referencias.titulo': 'Referências principais:',
+        'mec.b.mapa.referencias.texto': 'Bettinelli et al. (2008) <em>G-cubed</em> · Craig et al. (2017) <em>EPSL</em> · Panda et al. (2018) <em>JGR</em> · USGS Earthquake Catalog (2025) · Open-Meteo ERA5 (2024)',
+        'mec.b.metodologia.titulo': 'Metodologia da análise — Mecanismo B',
         'mec.c.titulo': '🌧️ Mecanismo C: Convecção Atmosférica e o Ciclo Hidrológico',
         'mec.c.fundamento.titulo': 'Fundamento físico:',
         'mec.c.fundamento.texto': 'O aquecimento superficial intensifica a convecção atmosférica, aumenta a capacidade de retenção de vapor de água da atmosfera (lei de Clausius-Clapeyron) e altera a circulação atmosférica em grande escala. Este mecanismo opera exclusivamente na atmosfera e na hidrosfera, sem acoplamento direto com a litosfera.',
@@ -3786,6 +3965,31 @@ const TRADUCCIONES = {
         'mec.svg.c.hidrosfera': '(Hidrosfera)',
         'mec.svg.c.precip': 'Precipitação',
         'mec.svg.c.extremos': 'Eventos extremos',
+        // ═══ Títulos de gráficos ═══
+        'chart.temp.titulo': 'Temperatura (°C)',
+        'chart.areas.titulo': 'Áreas protegidas (%)',
+        'chart.ztd.titulo': 'ZTD (mm)',
+        'chart.sirgas.velocidad.titulo': 'Magnitude de velocidade por estação',
+        'chart.sirgas.velocidad.eje': 'mm/ano',
+        'chart.sirgas.scatter.titulo': 'Anomalia ZTD (mm) vs Precipitação (mm)',
+        'chart.sirgas.scatter.x': 'Anomalia ZTD (mm)',
+        'chart.sirgas.scatter.y': 'Precipitação (mm)',
+        'chart.areas.superficie.titulo': 'Área protegida por país (áreas principais)',
+        'chart.areas.superficie.eje': 'km²',
+        'chart.defor.titulo': 'Perda de cobertura arbórea por país (2024)',
+        'chart.defor.eje': 'Hectares',
+        'chart.aqi.eje': 'µg/m³',
+        'chart.mecC.scatter.x': 'Anomalia ZTD (mm)',
+        'chart.mecC.scatter.y': 'Precipitação (mm)',
+        'chart.mecC.roc.fpr': 'FPR',
+        'chart.mecC.roc.tpr': 'TPR',
+        'chart.mecB.lags.titulo': 'Correlação Spearman por retardo (sismos vs precipitação)',
+        'chart.mecB.lags.eje.r': 'r',
+        'chart.mecB.lags.lag': 'Lag',
+        'chart.mecB.serie.titulo': 'Série temporal mensal (2015-2025)',
+        'chart.mecB.serie.sismos': 'Sismos rasos',
+        'chart.mecB.serie.precip': 'Precipitação (mm)',
+        'chart.mecB.lags.info': 'Melhor correlação: atraso {n} meses (r = {r}, p = {p})',
     }
 };
 
@@ -3822,11 +4026,43 @@ function aplicarIdioma(idioma) {
     localStorage.setItem('andes_idioma', idioma);
     document.documentElement.lang = idioma;
     window.idiomaActual = idioma;
+    
+    // Regenerar gráficos con los nuevos textos traducidos
+    setTimeout(function() {
+        try {
+            // Regenerar gráficos del Mecanismo B
+            if (typeof cargarGraficosMecB === 'function' && typeof mapaMecanismoB !== 'undefined' && mapaMecanismoB) {
+                cargarGraficosMecB();
+            }
+            // Regenerar gráficos del Mecanismo C
+            if (typeof cargarSpearmanMecC === 'function' && typeof mapaMecanismoC !== 'undefined' && mapaMecanismoC) {
+                const est = document.getElementById('mecC_est');
+                const codigo = est && est.textContent && est.textContent !== 'BOGT (por defecto)' ? est.textContent.split(' - ')[0] : 'BOGT';
+                cargarSpearmanMecC(codigo, null);
+            }
+            // Regenerar gráfico SIRGAS
+            if (typeof cargarAnalisisSIRGAS === 'function' && typeof analisisSIRGASData !== 'undefined' && analisisSIRGASData) {
+                cargarAnalisisSIRGAS();
+            }
+        } catch(e) {
+            console.warn('Error al regenerar gráficos:', e);
+        }
+    }, 300);
 }
 
 document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => aplicarIdioma(btn.dataset.lang));
 });
+
+// ═══════════════════════════════════════════════════════════
+// HELPER t(): obtiene traducción según idioma actual
+// ═══════════════════════════════════════════════════════════
+function t(clave) {
+    const idioma = window.idiomaActual || 'es';
+    return (TRADUCCIONES[idioma] && TRADUCCIONES[idioma][clave]) || 
+           (TRADUCCIONES['es'] && TRADUCCIONES['es'][clave]) || 
+           clave;
+}
 
 
 // ═══════════════════════════════════════════════════════════
@@ -4257,12 +4493,12 @@ async function cargarSpearmanMecC(codigo, nombre) {
                 },
                 scales: {
                     x: {
-                        title: { display: true, text: 'Anomalía ZTD (mm)', color: colorTexto, font: { size: 10 } },
+                        title: { display: true, text: t('chart.mecC.scatter.x'), color: colorTexto, font: { size: 10 } },
                         ticks: { color: colorTexto, font: { size: 9 } },
                         grid: { color: colorGrid }
                     },
                     y: {
-                        title: { display: true, text: 'Precipitación (mm)', color: colorTexto, font: { size: 10 } },
+                        title: { display: true, text: t('chart.mecC.scatter.y'), color: colorTexto, font: { size: 10 } },
                         ticks: { color: colorTexto, font: { size: 9 } },
                         grid: { color: colorGrid },
                         beginAtZero: true
@@ -4384,8 +4620,8 @@ async function cargarAnalisisAvanzadoMecC(codigo) {
                     legend: { labels: { color: colorTexto, font: { size: 9 } } }
                 },
                 scales: {
-                    x: { title: { display: true, text: 'FPR', color: colorTexto, font: { size: 9 } }, ticks: { color: colorTexto, font: { size: 8 } }, grid: { color: colorGrid } },
-                    y: { title: { display: true, text: 'TPR', color: colorTexto, font: { size: 9 } }, ticks: { color: colorTexto, font: { size: 8 } }, grid: { color: colorGrid } }
+                    x: { title: { display: true, text: t('chart.mecC.roc.fpr'), color: colorTexto, font: { size: 9 } }, ticks: { color: colorTexto, font: { size: 8 } }, grid: { color: colorGrid } },
+                    y: { title: { display: true, text: t('chart.mecC.roc.tpr'), color: colorTexto, font: { size: 9 } }, ticks: { color: colorTexto, font: { size: 8 } }, grid: { color: colorGrid } }
                 }
             }
         });
@@ -4672,6 +4908,293 @@ document.addEventListener('DOMContentLoaded', function() {
                         initMapaMecanismoA();
                     } else {
                         mapaMecanismoA.invalidateSize();
+                    }
+                }, 400);
+            }
+        });
+    }
+});
+
+
+// ═══════════════════════════════════════════════════════════
+// MAPA INTERACTIVO DEL MECANISMO B (Sismos ↔ Precipitación)
+// ═══════════════════════════════════════════════════════════
+let mapaMecanismoB = null;
+let capaSismosB = null;
+let capaPrecipB = null;
+let chartLagsMecB = null;
+let chartSerieMecB = null;
+
+async function initMapaMecanismoB() {
+    if (mapaMecanismoB) {
+        mapaMecanismoB.remove();
+        mapaMecanismoB = null;
+    }
+
+    const contenedor = document.getElementById('mapa-mecanismo-b');
+    if (!contenedor) return;
+
+    mapaMecanismoB = L.map('mapa-mecanismo-b').setView([-20, -70], 4);
+    L.tileLayer(getTileURL(), { attribution: getTileAttribution() }).addTo(mapaMecanismoB);
+
+    // ═══════════════════════════════════════════════════════════
+    // 1. CAPA DE SISMOS (círculos según magnitud)
+    // ═══════════════════════════════════════════════════════════
+    capaSismosB = L.layerGroup();
+    try {
+        const res = await fetch('assets/geojson/sismos_andinos.json');
+        const data = await res.json();
+        const sismos = data.features || [];
+
+        sismos.forEach(s => {
+            const [lon, lat] = s.geometry.coordinates;
+            const p = s.properties;
+            const mag = p.mag || 0;
+            const prof = p.prof_km || 0;
+
+            // Solo mostrar superficiales (<30 km) en el mapa (Mecanismo B)
+            if (prof > 30) return;
+
+            // Color y tamaño según magnitud
+            let color = '#f1c40f';  // M 4.5-4.9
+            let radius = 4;
+            if (mag >= 6.0) { color = '#e74c3c'; radius = 10; }
+            else if (mag >= 5.0) { color = '#e67e22'; radius = 6; }
+
+            L.circleMarker([lat, lon], {
+                radius: radius,
+                fillColor: color,
+                color: '#fff',
+                weight: 1,
+                fillOpacity: 0.7
+            }).bindPopup(
+                '<b>🟠 Sismo M' + mag.toFixed(1) + '</b><br>' +
+                '<b>Lugar:</b> ' + (p.lugar || 'N/A') + '<br>' +
+                '<b>Fecha:</b> ' + (p.fecha || 'N/A') + '<br>' +
+                '<b>Profundidad:</b> ' + prof.toFixed(1) + ' km'
+            ).addTo(capaSismosB);
+        });
+        console.log('✅ Mecanismo B: ' + capaSismosB.getLayers().length + ' sismos superficiales');
+    } catch(e) {
+        console.warn('Error cargando sismos', e);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 2. CAPA DE PRECIPITACIÓN CHIRPS
+    // ═══════════════════════════════════════════════════════════
+    capaPrecipB = L.layerGroup();
+    try {
+        const res = await fetch('assets/geojson/chirps_julio2026.geojson');
+        const gj = await res.json();
+        L.geoJSON(gj, {
+            pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+                radius: 3,
+                fillColor: getColorPrecip(f.properties.precip_mm || 0),
+                color: 'transparent',
+                fillOpacity: 0.4
+            }),
+            onEachFeature: (f, layer) => {
+                layer.bindPopup('<b>💧 Precipitación:</b> ' + f.properties.precip_mm + ' mm/mes');
+            }
+        }).addTo(capaPrecipB);
+        console.log('✅ Mecanismo B: ' + gj.features.length + ' puntos de precipitación');
+    } catch(e) {
+        console.warn('Error cargando precipitación', e);
+    }
+
+    // Agregar capas
+    capaPrecipB.addTo(mapaMecanismoB);
+    capaSismosB.addTo(mapaMecanismoB);
+
+    // Badge
+    const badge = document.getElementById('mecBbadge');
+    if (badge) badge.innerText = '🟠 Mecanismo B activo';
+
+    // ═══════════════════════════════════════════════════════════
+    // 3. LISTENERS DE CHECKBOXES
+    // ═══════════════════════════════════════════════════════════
+    const toggleSismos = document.getElementById('toggleSismosB');
+    if (toggleSismos && !toggleSismos.dataset.listenerAttached) {
+        toggleSismos.dataset.listenerAttached = 'true';
+        toggleSismos.addEventListener('change', function() {
+            if (this.checked) {
+                if (capaSismosB && !mapaMecanismoB.hasLayer(capaSismosB)) capaSismosB.addTo(mapaMecanismoB);
+            } else {
+                if (capaSismosB && mapaMecanismoB.hasLayer(capaSismosB)) mapaMecanismoB.removeLayer(capaSismosB);
+            }
+        });
+    }
+
+    const togglePrecip = document.getElementById('togglePrecipB');
+    if (togglePrecip && !togglePrecip.dataset.listenerAttached) {
+        togglePrecip.dataset.listenerAttached = 'true';
+        togglePrecip.addEventListener('change', function() {
+            if (this.checked) {
+                if (capaPrecipB && !mapaMecanismoB.hasLayer(capaPrecipB)) capaPrecipB.addTo(mapaMecanismoB);
+            } else {
+                if (capaPrecipB && mapaMecanismoB.hasLayer(capaPrecipB)) mapaMecanismoB.removeLayer(capaPrecipB);
+            }
+        });
+    }
+
+    // Cargar gráficos
+    cargarGraficosMecB();
+
+    setTimeout(() => {
+        if (mapaMecanismoB) {
+            mapaMecanismoB.invalidateSize();
+            mapaMecanismoB.setView([-20, -70], 4);
+        }
+    }, 200);
+}
+
+// ═══════════════════════════════════════════════════════════
+// GRÁFICOS DEL MECANISMO B
+// ═══════════════════════════════════════════════════════════
+async function cargarGraficosMecB() {
+    try {
+        const res = await fetch('assets/geojson/analisis_sismos_precip.json');
+        const data = await res.json();
+
+        const esOscuro = document.body.classList.contains('dark');
+        const colorTexto = esOscuro ? '#c8d4c8' : '#4a5a4a';
+        const colorGrid = esOscuro ? '#3a4a3a' : '#e8e0d8';
+
+        // ═══ GRÁFICO DE LAGS ═══
+        const lags = data.lags || [];
+        const ctxLags = document.getElementById('chartLagsMecB')?.getContext('2d');
+        if (ctxLags && lags.length > 0) {
+            if (chartLagsMecB && typeof chartLagsMecB.destroy === 'function') chartLagsMecB.destroy();
+            chartLagsMecB = new Chart(ctxLags, {
+                type: 'bar',
+                data: {
+                    labels: lags.map(l => t('chart.mecB.lags.lag') + ' ' + l.lag_meses + 'm'),
+                    datasets: [{
+                        label: 'r (Spearman)',
+                        data: lags.map(l => l.r),
+                        backgroundColor: lags.map(l => 
+                            l.significativa ? '#27ae60' : (l.r > 0 ? '#95a5a6' : '#e74c3c')
+                        ),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: t('chart.mecB.lags.titulo'),
+                            color: colorTexto,
+                            font: { size: 11 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: colorTexto, font: { size: 9 } },
+                            grid: { color: colorGrid },
+                            title: { display: true, text: t('chart.mecB.lags.eje.r'), color: colorTexto, font: { size: 9 } }
+                        },
+                        x: {
+                            ticks: { color: colorTexto, font: { size: 8 } }
+                        }
+                    }
+                }
+            });
+            // Info del mejor lag
+            const mejor = lags.reduce((a, b) => Math.abs(a.r) > Math.abs(b.r) ? a : b);
+            const info = document.getElementById('lagsInfoMecB');
+            if (info) {
+                const sig = mejor.significativa ? '✅ significativa' : '❌ no significativa';
+                info.innerHTML = 'Mejor correlación: lag ' + mejor.lag_meses + ' meses (r = ' + mejor.r.toFixed(3) + ', p = ' + mejor.p_value.toFixed(4) + ') · ' + sig;
+            }
+        }
+
+        // ═══ GRÁFICO DE SERIE TEMPORAL ═══
+        const serie = data.serie_mensual || [];
+        const ctxSerie = document.getElementById('chartSerieMecB')?.getContext('2d');
+        if (ctxSerie && serie.length > 0) {
+            if (chartSerieMecB && typeof chartSerieMecB.destroy === 'function') chartSerieMecB.destroy();
+            chartSerieMecB = new Chart(ctxSerie, {
+                type: 'line',
+                data: {
+                    labels: serie.map(s => s.mes),
+                    datasets: [
+                        {
+                            label: t('chart.mecB.serie.sismos'),
+                            data: serie.map(s => s.sismos),
+                            borderColor: '#e67e22',
+                            backgroundColor: 'rgba(230, 126, 34, 0.1)',
+                            yAxisID: 'y',
+                            tension: 0.3,
+                            pointRadius: 1
+                        },
+                        {
+                            label: t('chart.mecB.serie.precip'),
+                            data: serie.map(s => s.precip_mm),
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            pointRadius: 1,
+                            borderDash: [5, 3]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: colorTexto, font: { size: 10 } }
+                        },
+                        title: {
+                            display: true,
+                            text: t('chart.mecB.serie.titulo'),
+                            color: colorTexto,
+                            font: { size: 11 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            position: 'left',
+                            title: { display: true, text: t('chart.mecB.serie.sismos'), color: '#e67e22', font: { size: 9 } },
+                            ticks: { color: colorTexto, font: { size: 9 } },
+                            grid: { color: colorGrid }
+                        },
+                        y1: {
+                            position: 'right',
+                            title: { display: true, text: t('chart.mecB.serie.precip'), color: '#3498db', font: { size: 9 } },
+                            ticks: { color: colorTexto, font: { size: 9 } },
+                            grid: { display: false }
+                        },
+                        x: {
+                            ticks: { color: colorTexto, font: { size: 8 }, maxTicksLimit: 20 }
+                        }
+                    }
+                }
+            });
+        }
+        console.log('✅ Mecanismo B: Gráficos cargados');
+    } catch(e) {
+        console.warn('Error cargando gráficos del Mecanismo B', e);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LISTENER: inicializar el mapa del Mecanismo B al abrir
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+    const detailsB = document.getElementById('detailsMecanismoB');
+    if (detailsB) {
+        detailsB.addEventListener('toggle', function() {
+            if (this.open) {
+                setTimeout(function() {
+                    if (!mapaMecanismoB) {
+                        initMapaMecanismoB();
+                    } else {
+                        mapaMecanismoB.invalidateSize();
                     }
                 }, 400);
             }

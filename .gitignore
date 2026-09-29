@@ -45,3 +45,6 @@ assets/geojson/glaciares_andinos.json
 # Backups del dashboard
 dashboard.html.*.bak
 dashboard.html.ROTO
+
+# Catálogo sísmico crudo (se regenera con scripts/procesar_sismos.py)
+data/sismos/

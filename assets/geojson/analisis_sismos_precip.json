@@ -1,0 +1,767 @@
+{
+  "fuente": "USGS + Open-Meteo (ERA5)",
+  "generado": "2026-09-28",
+  "criterio": "Sismos superficiales (<30 km, M≥4.5) vs precipitación regional",
+  "total_sismos_superficiales": 2344,
+  "periodo": {
+    "inicio": "2015-01",
+    "fin": "2025-12",
+    "n_meses": 132
+  },
+  "estaciones_usadas": [
+    "BOGT",
+    "CALI",
+    "SANT",
+    "AREQ",
+    "ANTC"
+  ],
+  "correlacion": {
+    "mejor_lag_meses": 7,
+    "r_spearman": -0.1522,
+    "p_value": 0.09022172529703072,
+    "significativa": false
+  },
+  "lags": [
+    {
+      "lag_meses": 0,
+      "r": 0.0251,
+      "p_value": 0.7752780353967085,
+      "significativa": false
+    },
+    {
+      "lag_meses": 1,
+      "r": 0.1236,
+      "p_value": 0.15968456131204808,
+      "significativa": false
+    },
+    {
+      "lag_meses": 2,
+      "r": 0.0757,
+      "p_value": 0.3919990107520712,
+      "significativa": false
+    },
+    {
+      "lag_meses": 3,
+      "r": 0.1109,
+      "p_value": 0.21075471433974569,
+      "significativa": false
+    },
+    {
+      "lag_meses": 4,
+      "r": 0.0891,
+      "p_value": 0.31748480054782013,
+      "significativa": false
+    },
+    {
+      "lag_meses": 5,
+      "r": 0.1341,
+      "p_value": 0.13290078890917187,
+      "significativa": false
+    },
+    {
+      "lag_meses": 6,
+      "r": 0.0044,
+      "p_value": 0.9606083587282318,
+      "significativa": false
+    },
+    {
+      "lag_meses": 7,
+      "r": -0.1522,
+      "p_value": 0.09022172529703072,
+      "significativa": false
+    },
+    {
+      "lag_meses": 8,
+      "r": -0.0626,
+      "p_value": 0.4900595999190935,
+      "significativa": false
+    },
+    {
+      "lag_meses": 9,
+      "r": -0.0844,
+      "p_value": 0.3531633380738772,
+      "significativa": false
+    },
+    {
+      "lag_meses": 10,
+      "r": 0.0432,
+      "p_value": 0.6366439317503444,
+      "significativa": false
+    },
+    {
+      "lag_meses": 11,
+      "r": 0.0871,
+      "p_value": 0.34238099517104364,
+      "significativa": false
+    },
+    {
+      "lag_meses": 12,
+      "r": 0.0998,
+      "p_value": 0.2781591120330913,
+      "significativa": false
+    }
+  ],
+  "serie_mensual": [
+    {
+      "mes": "2015-01",
+      "sismos": 11,
+      "precip_mm": 67.3
+    },
+    {
+      "mes": "2015-02",
+      "sismos": 8,
+      "precip_mm": 111.3
+    },
+    {
+      "mes": "2015-03",
+      "sismos": 25,
+      "precip_mm": 205.9
+    },
+    {
+      "mes": "2015-04",
+      "sismos": 10,
+      "precip_mm": 73.7
+    },
+    {
+      "mes": "2015-05",
+      "sismos": 15,
+      "precip_mm": 35.2
+    },
+    {
+      "mes": "2015-06",
+      "sismos": 15,
+      "precip_mm": 22.5
+    },
+    {
+      "mes": "2015-07",
+      "sismos": 11,
+      "precip_mm": 54.6
+    },
+    {
+      "mes": "2015-08",
+      "sismos": 6,
+      "precip_mm": 53.1
+    },
+    {
+      "mes": "2015-09",
+      "sismos": 239,
+      "precip_mm": 48.7
+    },
+    {
+      "mes": "2015-10",
+      "sismos": 33,
+      "precip_mm": 98.3
+    },
+    {
+      "mes": "2015-11",
+      "sismos": 60,
+      "precip_mm": 101.2
+    },
+    {
+      "mes": "2015-12",
+      "sismos": 21,
+      "precip_mm": 21.4
+    },
+    {
+      "mes": "2016-01",
+      "sismos": 24,
+      "precip_mm": 75.8
+    },
+    {
+      "mes": "2016-02",
+      "sismos": 26,
+      "precip_mm": 111.6
+    },
+    {
+      "mes": "2016-03",
+      "sismos": 17,
+      "precip_mm": 113.0
+    },
+    {
+      "mes": "2016-04",
+      "sismos": 54,
+      "precip_mm": 199.5
+    },
+    {
+      "mes": "2016-05",
+      "sismos": 20,
+      "precip_mm": 82.5
+    },
+    {
+      "mes": "2016-06",
+      "sismos": 13,
+      "precip_mm": 39.3
+    },
+    {
+      "mes": "2016-07",
+      "sismos": 22,
+      "precip_mm": 51.2
+    },
+    {
+      "mes": "2016-08",
+      "sismos": 19,
+      "precip_mm": 27.7
+    },
+    {
+      "mes": "2016-09",
+      "sismos": 14,
+      "precip_mm": 43.5
+    },
+    {
+      "mes": "2016-10",
+      "sismos": 15,
+      "precip_mm": 158.9
+    },
+    {
+      "mes": "2016-11",
+      "sismos": 16,
+      "precip_mm": 120.8
+    },
+    {
+      "mes": "2016-12",
+      "sismos": 28,
+      "precip_mm": 121.8
+    },
+    {
+      "mes": "2017-01",
+      "sismos": 12,
+      "precip_mm": 143.4
+    },
+    {
+      "mes": "2017-02",
+      "sismos": 17,
+      "precip_mm": 89.4
+    },
+    {
+      "mes": "2017-03",
+      "sismos": 18,
+      "precip_mm": 142.7
+    },
+    {
+      "mes": "2017-04",
+      "sismos": 55,
+      "precip_mm": 96.4
+    },
+    {
+      "mes": "2017-05",
+      "sismos": 13,
+      "precip_mm": 125.0
+    },
+    {
+      "mes": "2017-06",
+      "sismos": 7,
+      "precip_mm": 90.8
+    },
+    {
+      "mes": "2017-07",
+      "sismos": 14,
+      "precip_mm": 90.8
+    },
+    {
+      "mes": "2017-08",
+      "sismos": 10,
+      "precip_mm": 75.2
+    },
+    {
+      "mes": "2017-09",
+      "sismos": 9,
+      "precip_mm": 61.8
+    },
+    {
+      "mes": "2017-10",
+      "sismos": 10,
+      "precip_mm": 69.6
+    },
+    {
+      "mes": "2017-11",
+      "sismos": 6,
+      "precip_mm": 72.9
+    },
+    {
+      "mes": "2017-12",
+      "sismos": 15,
+      "precip_mm": 77.8
+    },
+    {
+      "mes": "2018-01",
+      "sismos": 20,
+      "precip_mm": 90.7
+    },
+    {
+      "mes": "2018-02",
+      "sismos": 20,
+      "precip_mm": 65.4
+    },
+    {
+      "mes": "2018-03",
+      "sismos": 9,
+      "precip_mm": 85.2
+    },
+    {
+      "mes": "2018-04",
+      "sismos": 8,
+      "precip_mm": 104.2
+    },
+    {
+      "mes": "2018-05",
+      "sismos": 10,
+      "precip_mm": 101.6
+    },
+    {
+      "mes": "2018-06",
+      "sismos": 14,
+      "precip_mm": 117.4
+    },
+    {
+      "mes": "2018-07",
+      "sismos": 7,
+      "precip_mm": 115.1
+    },
+    {
+      "mes": "2018-08",
+      "sismos": 13,
+      "precip_mm": 57.6
+    },
+    {
+      "mes": "2018-09",
+      "sismos": 9,
+      "precip_mm": 76.1
+    },
+    {
+      "mes": "2018-10",
+      "sismos": 14,
+      "precip_mm": 87.9
+    },
+    {
+      "mes": "2018-11",
+      "sismos": 19,
+      "precip_mm": 85.4
+    },
+    {
+      "mes": "2018-12",
+      "sismos": 18,
+      "precip_mm": 62.9
+    },
+    {
+      "mes": "2019-01",
+      "sismos": 21,
+      "precip_mm": 92.5
+    },
+    {
+      "mes": "2019-02",
+      "sismos": 13,
+      "precip_mm": 137.6
+    },
+    {
+      "mes": "2019-03",
+      "sismos": 19,
+      "precip_mm": 90.0
+    },
+    {
+      "mes": "2019-04",
+      "sismos": 9,
+      "precip_mm": 112.9
+    },
+    {
+      "mes": "2019-05",
+      "sismos": 12,
+      "precip_mm": 99.9
+    },
+    {
+      "mes": "2019-06",
+      "sismos": 9,
+      "precip_mm": 98.9
+    },
+    {
+      "mes": "2019-07",
+      "sismos": 2,
+      "precip_mm": 81.4
+    },
+    {
+      "mes": "2019-08",
+      "sismos": 27,
+      "precip_mm": 30.4
+    },
+    {
+      "mes": "2019-09",
+      "sismos": 16,
+      "precip_mm": 70.1
+    },
+    {
+      "mes": "2019-10",
+      "sismos": 7,
+      "precip_mm": 93.4
+    },
+    {
+      "mes": "2019-11",
+      "sismos": 9,
+      "precip_mm": 116.5
+    },
+    {
+      "mes": "2019-12",
+      "sismos": 17,
+      "precip_mm": 78.0
+    },
+    {
+      "mes": "2020-01",
+      "sismos": 8,
+      "precip_mm": 99.2
+    },
+    {
+      "mes": "2020-02",
+      "sismos": 14,
+      "precip_mm": 93.0
+    },
+    {
+      "mes": "2020-03",
+      "sismos": 14,
+      "precip_mm": 89.4
+    },
+    {
+      "mes": "2020-04",
+      "sismos": 11,
+      "precip_mm": 83.4
+    },
+    {
+      "mes": "2020-05",
+      "sismos": 9,
+      "precip_mm": 92.3
+    },
+    {
+      "mes": "2020-06",
+      "sismos": 9,
+      "precip_mm": 120.5
+    },
+    {
+      "mes": "2020-07",
+      "sismos": 16,
+      "precip_mm": 94.2
+    },
+    {
+      "mes": "2020-08",
+      "sismos": 14,
+      "precip_mm": 75.7
+    },
+    {
+      "mes": "2020-09",
+      "sismos": 41,
+      "precip_mm": 55.3
+    },
+    {
+      "mes": "2020-10",
+      "sismos": 24,
+      "precip_mm": 110.7
+    },
+    {
+      "mes": "2020-11",
+      "sismos": 12,
+      "precip_mm": 98.0
+    },
+    {
+      "mes": "2020-12",
+      "sismos": 17,
+      "precip_mm": 74.7
+    },
+    {
+      "mes": "2021-01",
+      "sismos": 27,
+      "precip_mm": 84.0
+    },
+    {
+      "mes": "2021-02",
+      "sismos": 14,
+      "precip_mm": 74.5
+    },
+    {
+      "mes": "2021-03",
+      "sismos": 15,
+      "precip_mm": 119.2
+    },
+    {
+      "mes": "2021-04",
+      "sismos": 19,
+      "precip_mm": 89.6
+    },
+    {
+      "mes": "2021-05",
+      "sismos": 13,
+      "precip_mm": 110.7
+    },
+    {
+      "mes": "2021-06",
+      "sismos": 21,
+      "precip_mm": 81.9
+    },
+    {
+      "mes": "2021-07",
+      "sismos": 18,
+      "precip_mm": 57.4
+    },
+    {
+      "mes": "2021-08",
+      "sismos": 14,
+      "precip_mm": 98.3
+    },
+    {
+      "mes": "2021-09",
+      "sismos": 24,
+      "precip_mm": 82.2
+    },
+    {
+      "mes": "2021-10",
+      "sismos": 16,
+      "precip_mm": 99.0
+    },
+    {
+      "mes": "2021-11",
+      "sismos": 16,
+      "precip_mm": 104.8
+    },
+    {
+      "mes": "2021-12",
+      "sismos": 17,
+      "precip_mm": 69.5
+    },
+    {
+      "mes": "2022-01",
+      "sismos": 22,
+      "precip_mm": 65.9
+    },
+    {
+      "mes": "2022-02",
+      "sismos": 9,
+      "precip_mm": 98.7
+    },
+    {
+      "mes": "2022-03",
+      "sismos": 21,
+      "precip_mm": 130.9
+    },
+    {
+      "mes": "2022-04",
+      "sismos": 11,
+      "precip_mm": 106.4
+    },
+    {
+      "mes": "2022-05",
+      "sismos": 16,
+      "precip_mm": 78.0
+    },
+    {
+      "mes": "2022-06",
+      "sismos": 16,
+      "precip_mm": 107.7
+    },
+    {
+      "mes": "2022-07",
+      "sismos": 19,
+      "precip_mm": 102.8
+    },
+    {
+      "mes": "2022-08",
+      "sismos": 20,
+      "precip_mm": 67.7
+    },
+    {
+      "mes": "2022-09",
+      "sismos": 16,
+      "precip_mm": 64.9
+    },
+    {
+      "mes": "2022-10",
+      "sismos": 28,
+      "precip_mm": 93.3
+    },
+    {
+      "mes": "2022-11",
+      "sismos": 15,
+      "precip_mm": 89.4
+    },
+    {
+      "mes": "2022-12",
+      "sismos": 19,
+      "precip_mm": 79.8
+    },
+    {
+      "mes": "2023-01",
+      "sismos": 9,
+      "precip_mm": 83.3
+    },
+    {
+      "mes": "2023-02",
+      "sismos": 19,
+      "precip_mm": 99.1
+    },
+    {
+      "mes": "2023-03",
+      "sismos": 20,
+      "precip_mm": 140.9
+    },
+    {
+      "mes": "2023-04",
+      "sismos": 9,
+      "precip_mm": 97.3
+    },
+    {
+      "mes": "2023-05",
+      "sismos": 18,
+      "precip_mm": 83.6
+    },
+    {
+      "mes": "2023-06",
+      "sismos": 17,
+      "precip_mm": 80.1
+    },
+    {
+      "mes": "2023-07",
+      "sismos": 11,
+      "precip_mm": 47.4
+    },
+    {
+      "mes": "2023-08",
+      "sismos": 13,
+      "precip_mm": 69.2
+    },
+    {
+      "mes": "2023-09",
+      "sismos": 8,
+      "precip_mm": 59.2
+    },
+    {
+      "mes": "2023-10",
+      "sismos": 10,
+      "precip_mm": 59.7
+    },
+    {
+      "mes": "2023-11",
+      "sismos": 11,
+      "precip_mm": 90.1
+    },
+    {
+      "mes": "2023-12",
+      "sismos": 18,
+      "precip_mm": 66.8
+    },
+    {
+      "mes": "2024-01",
+      "sismos": 21,
+      "precip_mm": 41.0
+    },
+    {
+      "mes": "2024-02",
+      "sismos": 15,
+      "precip_mm": 86.4
+    },
+    {
+      "mes": "2024-03",
+      "sismos": 19,
+      "precip_mm": 69.9
+    },
+    {
+      "mes": "2024-04",
+      "sismos": 16,
+      "precip_mm": 68.2
+    },
+    {
+      "mes": "2024-05",
+      "sismos": 23,
+      "precip_mm": 111.7
+    },
+    {
+      "mes": "2024-06",
+      "sismos": 15,
+      "precip_mm": 100.3
+    },
+    {
+      "mes": "2024-07",
+      "sismos": 13,
+      "precip_mm": 31.7
+    },
+    {
+      "mes": "2024-08",
+      "sismos": 11,
+      "precip_mm": 50.0
+    },
+    {
+      "mes": "2024-09",
+      "sismos": 9,
+      "precip_mm": 29.7
+    },
+    {
+      "mes": "2024-10",
+      "sismos": 7,
+      "precip_mm": 74.6
+    },
+    {
+      "mes": "2024-11",
+      "sismos": 5,
+      "precip_mm": 101.1
+    },
+    {
+      "mes": "2024-12",
+      "sismos": 10,
+      "precip_mm": 57.9
+    },
+    {
+      "mes": "2025-01",
+      "sismos": 14,
+      "precip_mm": 75.4
+    },
+    {
+      "mes": "2025-02",
+      "sismos": 21,
+      "precip_mm": 163.6
+    },
+    {
+      "mes": "2025-03",
+      "sismos": 12,
+      "precip_mm": 121.3
+    },
+    {
+      "mes": "2025-04",
+      "sismos": 14,
+      "precip_mm": 81.9
+    },
+    {
+      "mes": "2025-05",
+      "sismos": 14,
+      "precip_mm": 80.6
+    },
+    {
+      "mes": "2025-06",
+      "sismos": 10,
+      "precip_mm": 100.1
+    },
+    {
+      "mes": "2025-07",
+      "sismos": 9,
+      "precip_mm": 28.7
+    },
+    {
+      "mes": "2025-08",
+      "sismos": 12,
+      "precip_mm": 67.6
+    },
+    {
+      "mes": "2025-09",
+      "sismos": 26,
+      "precip_mm": 62.3
+    },
+    {
+      "mes": "2025-10",
+      "sismos": 14,
+      "precip_mm": 72.3
+    },
+    {
+      "mes": "2025-11",
+      "sismos": 14,
+      "precip_mm": 92.5
+    },
+    {
+      "mes": "2025-12",
+      "sismos": 12,
+      "precip_mm": 46.2
+    }
+  ],
+  "nota": "Análisis exploratorio. La señal sísmica-tectónica domina sobre la modulación por carga."
+}
