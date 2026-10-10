@@ -402,7 +402,7 @@ app.layout = dbc.Container([
             html.Hr(),
             html.P([html.Strong("1. Mapa Principal: "), "Explora estaciones GNSS, resguardos indígenas, alertas y normas georreferenciadas."]),
             html.P([html.Strong("2. Dashboard de Series: "), "Compara series temporales de desplazamiento entre estaciones."]),
-            html.P([html.Strong("3. MAME Escazú: "), "Vincula alertas ambientales con normas y territorios vulnerables bajo el Marco Escazú."]),
+            html.P([html.Strong("3. MAM Escazú: "), "Vincula alertas ambientales con normas y territorios vulnerables bajo el Marco Escazú."]),
             html.P([html.Strong("4. Simulador: "), "Modela fuentes de deformación tectónica (Mogi, Sill, Dique)."]),
             html.Hr(),
             html.P("💡 Pasa el cursor sobre los elementos del mapa para ver el tooltip 'Ley en el Territorio'.", className="text-muted small")
@@ -473,9 +473,9 @@ app.layout = dbc.Container([
         ]),
 
         # ============================================================
-        # TAB 3: MAME ESCAZÚ (MEJORADO)
+        # TAB 3: MAM ESCAZÚ (MEJORADO)
         # ============================================================
-        dbc.Tab(label="🚦 MAME Escazú", tab_id="tab-mame", children=[
+        dbc.Tab(label="🚦 MAM Escazú", tab_id="tab-mame", children=[
             html.Div([
                 html.H3("Monitoreo Ambiental con Marco Escazú", className="mt-4 mb-2", style={"color": "#5a7a5a", "fontWeight": "700"}),
                 html.P("Vinculación de alertas ambientales con normas georreferenciadas, territorios vulnerables y los tres pilares del Acuerdo de Escazú.",

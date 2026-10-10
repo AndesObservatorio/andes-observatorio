@@ -8,6 +8,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -415,6 +416,7 @@
         <button id="tabDeforestacion" class="map-tab" data-i18n="tab.deforestacion">🌳 Deforestación</button>
         <button id="tabAreasprotegidas" class="map-tab" data-i18n="tab.areas">🌿 Áreas Protegidas</button>
         <button id="tabAcoplamiento" class="map-tab" data-i18n="tab.acoplamiento">🌍 Acoplamiento Tierra-Clima</button>
+        <button id="tabSimulador" class="map-tab" data-i18n="tab.simulador">🔬 Simulador</button>
     </div>
 
 <!-- ═══ TAB SIRGAS ═══ -->
@@ -503,6 +505,63 @@
     </details>
 
 </div>
+
+<!-- ═══ ANÁLISIS MULTI-ESTACIÓN (SIRGAS) ═══ -->
+    <details id="detailsMultiEstacion" style="margin:16px 0;background:#fcfaf7;border-radius:14px;padding:16px 22px;border:1px solid #ede8e0;">
+        <summary style="cursor:pointer;font-weight:700;color:#2c5f2c;font-size:16px;" data-i18n="multi.titulo">📈 Análisis Multi-Estación SIRGAS</summary>
+        <div style="margin-top:16px;">
+            <p style="font-size:13px;color:#4a5a4a;margin-bottom:14px;" data-i18n="multi.subtitulo">
+                Compara series temporales de desplazamiento entre estaciones SIRGAS y analiza su correlación con la precipitación.
+            </p>
+
+            <!-- Sección 1: Series temporales -->
+            <h6 style="color:#2c5f2c;margin:12px 0;" data-i18n="multi.series.titulo">📊 Series temporales por componente</h6>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+                <div style="flex:1;min-width:280px;background:white;padding:12px;border-radius:10px;border:1px solid #ede8e0;">
+                    <label style="font-weight:600;font-size:12px;display:block;margin-bottom:6px;" data-i18n="multi.estaciones">Estaciones</label>
+                    <select id="multiStationSelect" multiple style="width:100%;padding:6px;border-radius:8px;border:1px solid #ddd;min-height:100px;">
+                        <option value="BOGT" selected>BOGT - Bogotá</option>
+                        <option value="AREQ" selected>AREQ - Arequipa</option>
+                        <option value="CALI">CALI - Cali</option>
+                        <option value="SANT">SANT - Santiago</option>
+                        <option value="ANTC">ANTC - Antofagasta</option>
+                    </select>
+                    <label style="font-weight:600;font-size:12px;display:block;margin-top:10px;margin-bottom:4px;" data-i18n="multi.componente">Componente</label>
+                    <div style="display:flex;gap:12px;">
+                        <label style="font-size:13px;"><input type="radio" name="multiComp" value="N" checked> N</label>
+                        <label style="font-size:13px;"><input type="radio" name="multiComp" value="E"> E</label>
+                        <label style="font-size:13px;"><input type="radio" name="multiComp" value="U"> U</label>
+                    </div>
+                    <label style="font-weight:600;font-size:12px;display:block;margin-top:10px;margin-bottom:4px;" data-i18n="multi.umbral">Umbral de alerta (m)</label>
+                    <input type="number" id="multiThreshold" value="0.05" step="0.01" style="width:100%;padding:6px;border-radius:8px;border:1px solid #ddd;">
+                    <div id="multiAlertIndicator" style="margin-top:10px;font-size:12px;"></div>
+                </div>
+                <div style="flex:2;min-width:400px;background:white;padding:12px;border-radius:10px;border:1px solid #ede8e0;">
+                    <div id="multiSeriesGraph" style="width:100%;height:380px;"></div>
+                </div>
+            </div>
+
+            <!-- Sección 2: Correlación Spearman -->
+            <h6 style="color:#2c5f2c;margin:20px 0 12px;" data-i18n="multi.spearman.titulo">📈 Correlación ZTD ↔ Precipitación por estación (Spearman)</h6>
+            <div style="background:white;padding:14px;border-radius:10px;border:1px solid #ede8e0;">
+                <div id="multiSpearmanGraph" style="width:100%;height:300px;"></div>
+                <p style="font-size:11px;color:#8aa08a;margin-top:8px;font-style:italic;" data-i18n="multi.spearman.fuente">
+                    Fuente: SIRGAS-CON (ZTD) + Open-Meteo (precipitación) · N=138-145 observaciones por estación
+                </p>
+            </div>
+
+            <!-- Metodología -->
+            <details style="margin:16px 0 0;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+                <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:13px;" data-i18n="multi.metodologia.titulo">ℹ️ Metodología del análisis</summary>
+                <div style="font-size:12px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                    <p><strong>Series temporales:</strong> datos diarios de desplazamiento GNSS en componentes Norte (N), Este (E) y Vertical (U).</p>
+                    <p><strong>Correlación Spearman:</strong> análisis no paramétrico entre la anomalía ZTD y la precipitación diaria. Criterio de significancia: p < 0.05.</p>
+                    <p><strong>Interpretación:</strong> valores de r > 0.3 con p < 0.05 indican correlación positiva significativa entre la humedad atmosférica y la precipitación.</p>
+                </div>
+            </details>
+</div>
+
+        </details>
 </div>
 
 <!-- ═══ TAB ZTD ═══ -->
@@ -518,7 +577,9 @@
             <option value="-0.1807,-78.4678,9">QUIT (Quito)</option>
             <option value="-16.5000,-68.1500,9">LPBZ (La Paz)</option>
         </select>
-    </div><div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div>
+    </div>
+
+<div id="map-ztd" style="height:400px;width:100%;border-radius:18px;margin:12px 0;border:1px solid #ede8e0"></div>
     <div id="controlesZTD" class="layer-control" style="">
         <label><input type="checkbox" id="toggleTopografiaZTD"> <span data-i18n="ctrl.vistaSatelite">🛰️ Vista satélite</span></label>
         <label><input type="checkbox" id="toggleZTD" checked> <span data-i18n="ctrl.mostrarZTD">💧 Mostrar ZTD</span></label>
@@ -553,6 +614,8 @@
                 <div style="font-size:11px;color:#888;">Significancia</div>
             </div>
         </div>
+
+
         <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
             <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Anomalía ZTD vs Precipitación</summary>
             <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
@@ -1491,6 +1554,82 @@
 
 </div>
 
+
+<!-- ═══ TAB SIMULADOR VOLCÁNICO ═══ -->
+<div id="tabContent-simulador" class="tab-content" style="display:none;">
+    <div style="padding:20px 0;">
+        <h4 style="color:#2c5f2c;margin-bottom:6px;" data-i18n="sim.titulo">🔬 Simulador de Fuentes de Deformación</h4>
+        <p style="color:#666;font-size:14px;margin-bottom:20px;" data-i18n="sim.subtitulo">
+            Modela fuentes de deformación volcánica (Mogi, Sill, Dique) y visualiza el desplazamiento vertical del terreno.
+        </p>
+
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+            <!-- Panel de parámetros -->
+            <div style="flex:1;min-width:280px;max-width:340px;background:#fcfaf7;padding:18px 20px;border-radius:14px;border:1px solid #ede8e0;">
+                <h5 style="margin:0 0 12px;color:#2c5f2c;" data-i18n="sim.parametros">Parámetros de la fuente</h5>
+
+                <label style="font-weight:600;font-size:13px;" data-i18n="sim.tipo">Tipo de fuente</label>
+                <select id="simSourceType" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid #ddd;margin:6px 0 14px;">
+                    <option value="mogi" data-i18n="sim.mogi">Mogi (puntual)</option>
+                    <option value="sill" data-i18n="sim.sill">Sill</option>
+                    <option value="dike" data-i18n="sim.dique">Dique</option>
+                </select>
+
+                <label style="font-weight:600;font-size:13px;" data-i18n="sim.profundidad">Profundidad (km)</label>
+                <div style="display:flex;align-items:center;gap:8px;margin:6px 0 14px;">
+                    <input type="range" id="simDepth" min="1" max="20" step="0.5" value="5" style="flex:1;">
+                    <span id="simDepthVal" style="font-weight:600;color:#2c5f2c;min-width:40px;">5.0</span>
+                </div>
+
+                <label style="font-weight:600;font-size:13px;" data-i18n="sim.volumen">Cambio de volumen (10⁶ m³)</label>
+                <div style="display:flex;align-items:center;gap:8px;margin:6px 0 14px;">
+                    <input type="range" id="simVolume" min="-10" max="10" step="0.5" value="1" style="flex:1;">
+                    <span id="simVolumeVal" style="font-weight:600;color:#2c5f2c;min-width:40px;">1.0</span>
+                </div>
+
+                <label style="font-weight:600;font-size:13px;" data-i18n="sim.posX">Posición X (km)</label>
+                <div style="display:flex;align-items:center;gap:8px;margin:6px 0 14px;">
+                    <input type="range" id="simX" min="-20" max="20" step="0.5" value="0" style="flex:1;">
+                    <span id="simXVal" style="font-weight:600;color:#2c5f2c;min-width:40px;">0.0</span>
+                </div>
+
+                <label style="font-weight:600;font-size:13px;" data-i18n="sim.posY">Posición Y (km)</label>
+                <div style="display:flex;align-items:center;gap:8px;margin:6px 0 14px;">
+                    <input type="range" id="simY" min="-20" max="20" step="0.5" value="0" style="flex:1;">
+                    <span id="simYVal" style="font-weight:600;color:#2c5f2c;min-width:40px;">0.0</span>
+                </div>
+
+                <hr style="margin:14px 0;">
+
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    <button class="btn-reporte" id="simAutoFit" style="background:#d4a017;" data-i18n="sim.autoAjustar">⚡ Auto-ajustar</button>
+                    <button class="btn-reporte" id="simLoadDemo" style="background:#3498db;" data-i18n="sim.cargarDemo">📋 Cargar demo</button>
+                    <button class="btn-reporte" id="simExport" style="background:#666;" data-i18n="sim.exportar">📥 Exportar</button>
+                </div>
+
+                <div id="simFitResults" style="margin-top:12px;font-size:13px;"></div>
+            </div>
+
+            <!-- Gráfico 3D -->
+            <div style="flex:2;min-width:400px;background:#fcfaf7;padding:14px;border-radius:14px;border:1px solid #ede8e0;">
+                <div id="simGraph" style="width:100%;height:520px;"></div>
+            </div>
+        </div>
+
+        <!-- Metodología -->
+        <details style="margin:20px 0;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
+            <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ <span data-i18n="sim.metodologia">Metodología del simulador</span></summary>
+            <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
+                <p><strong>Mogi (1958):</strong> fuente puntual esférica, típica de cámaras magmáticas someras.</p>
+                <p><strong>Sill:</strong> intrusión horizontal tabular, común en sistemas magmáticos.</p>
+                <p><strong>Dique:</strong> intrusión vertical tabular, asociada a alimentación de erupciones.</p>
+                <p>Los modelos se basan en las soluciones analíticas elásticas de Okada (1985) y Mogi (1958). El desplazamiento vertical se muestra en cm.</p>
+                <p style="font-size:11px;color:#8aa08a;font-style:italic;">Este simulador es una herramienta educativa. No reemplaza los modelos inversos profesionales ni los sistemas de alerta temprana.</p>
+            </div>
+        </details>
+    </div>
+</div>
+
 <div class="normativas-panel">
         <h3>📜 Normativas Ambientales por País</h3>
         <p id="normativasPlaceholder" class="placeholder">Selecciona un país para ver sus normativas.</p>
@@ -2342,7 +2481,8 @@
             'aqi': 'tabAQI',
             'deforestacion': 'tabDeforestacion',
             'areasprotegidas': 'tabAreasprotegidas',
-            'acoplamiento': 'tabAcoplamiento'
+            'acoplamiento': 'tabAcoplamiento',
+            'simulador': 'tabSimulador'
         };
         const tabBtn = document.getElementById(tabIdMap[tipo] || 'tabSirgas');
         if (tabBtn) tabBtn.classList.add('active');
@@ -2390,6 +2530,15 @@
                     mapaAreas.invalidateSize();
                     if (chartAreas) setTimeout(() => chartAreas.resize(), 100);
                 }
+            } else if (tipo === 'simulador') {
+                console.log('🔬 Tab Simulador activado');
+                setTimeout(function() {
+                    if (!simuladorInicializado) {
+                        initSimulador();
+                    } else {
+                        actualizarGraficoSimulador();
+                    }
+                }, 200);
             } else if (tipo === 'acoplamiento') {
                 console.log('🌍 Tab Acoplamiento Tierra-Clima activado. Mecanismo A abierto:', document.getElementById('detailsMecanismoA')?.open);
                 // Inicializar/reajustar mapas de mecanismos
@@ -3363,6 +3512,40 @@ const TRADUCCIONES = {
         'alertas.actual': 'Actual',
         // Tab Acoplamiento
         'tab.acoplamiento': '🌍 Acoplamiento Tierra-Clima',
+        'tab.simulador': '🔬 Simulador',
+        'multi.titulo': '📈 Análise Multi-Estação SIRGAS',
+        'multi.subtitulo': 'Compare séries temporais de deslocamento entre estações SIRGAS e analise sua correlação com a precipitação.',
+        'multi.series.titulo': '📊 Séries temporais por componente',
+        'multi.estaciones': 'Estações',
+        'multi.componente': 'Componente',
+        'multi.umbral': 'Limite de alerta (m)',
+        'multi.spearman.titulo': '📈 Correlação ZTD ↔ Precipitação por estação (Spearman)',
+        'multi.spearman.fuente': 'Fonte: SIRGAS-CON (ZTD) + Open-Meteo (precipitação) · N=138-145 observações por estação',
+        'multi.metodologia.titulo': 'ℹ️ Metodologia da análise',
+        'multi.titulo': '📈 Análisis Multi-Estación SIRGAS',
+        'multi.subtitulo': 'Compara series temporales de desplazamiento entre estaciones SIRGAS y analiza su correlación con la precipitación.',
+        'multi.series.titulo': '📊 Series temporales por componente',
+        'multi.estaciones': 'Estaciones',
+        'multi.componente': 'Componente',
+        'multi.umbral': 'Umbral de alerta (m)',
+        'multi.spearman.titulo': '📈 Correlación ZTD ↔ Precipitación por estación (Spearman)',
+        'multi.spearman.fuente': 'Fuente: SIRGAS-CON (ZTD) + Open-Meteo (precipitación) · N=138-145 observaciones por estación',
+        'multi.metodologia.titulo': 'ℹ️ Metodología del análisis',
+        'sim.titulo': '🔬 Simulador de Fuentes de Deformación',
+        'sim.subtitulo': 'Modela fuentes de deformación volcánica (Mogi, Sill, Dique) y visualiza el desplazamiento vertical del terreno.',
+        'sim.parametros': 'Parámetros de la fuente',
+        'sim.tipo': 'Tipo de fuente',
+        'sim.mogi': 'Mogi (puntual)',
+        'sim.sill': 'Sill',
+        'sim.dique': 'Dique',
+        'sim.profundidad': 'Profundidad (km)',
+        'sim.volumen': 'Cambio de volumen (10⁶ m³)',
+        'sim.posX': 'Posición X (km)',
+        'sim.posY': 'Posición Y (km)',
+        'sim.autoAjustar': '⚡ Auto-ajustar',
+        'sim.cargarDemo': '📋 Cargar demo',
+        'sim.exportar': '📥 Exportar',
+        'sim.metodologia': 'Metodología del simulador',
         'mec.intro.titulo': '🌍 El Sistema Tierra como Sistema Acoplado',
         'mec.intro.parrafo': 'La Tierra no es un conjunto de esferas independientes. La atmósfera, la hidrosfera, la criosfera y la litosfera intercambian masa, energía y momento de forma continua. El calentamiento global antropogénico está alterando estos intercambios, y la región andina —por su alta sismicidad, vulcanismo activo, glaciares tropicales en retroceso y marcada variabilidad hidroclimática— constituye un laboratorio natural para estudiar estos acoplamientos.',
         'mec.intro.parrafo2': 'Este portal se sustenta en tres mecanismos físicos verificables que describen cómo los cambios superficiales (clima, agua, hielo) pueden influir en procesos profundos (tectónica, vulcanismo), y cómo los procesos atmosféricos se relacionan con el ciclo hidrológico.',
@@ -3633,6 +3816,31 @@ const TRADUCCIONES = {
         'alertas.actual': 'Current',
         // Acoplamiento tab
         'tab.acoplamiento': '🌍 Earth-Climate Coupling',
+        'tab.simulador': '🔬 Simulator',
+        'multi.titulo': '📈 Multi-Station Analysis SIRGAS',
+        'multi.subtitulo': 'Compare displacement time series between SIRGAS stations and analyze their correlation with precipitation.',
+        'multi.series.titulo': '📊 Time series by component',
+        'multi.estaciones': 'Stations',
+        'multi.componente': 'Component',
+        'multi.umbral': 'Alert threshold (m)',
+        'multi.spearman.titulo': '📈 ZTD ↔ Precipitation correlation by station (Spearman)',
+        'multi.spearman.fuente': 'Source: SIRGAS-CON (ZTD) + Open-Meteo (precipitation) · N=138-145 observations per station',
+        'multi.metodologia.titulo': 'ℹ️ Analysis methodology',
+        'sim.titulo': '🔬 Deformation Source Simulator',
+        'sim.subtitulo': 'Model volcanic deformation sources (Mogi, Sill, Dike) and visualize vertical ground displacement.',
+        'sim.parametros': 'Source parameters',
+        'sim.tipo': 'Source type',
+        'sim.mogi': 'Mogi (point)',
+        'sim.sill': 'Sill',
+        'sim.dique': 'Dike',
+        'sim.profundidad': 'Depth (km)',
+        'sim.volumen': 'Volume change (10⁶ m³)',
+        'sim.posX': 'X position (km)',
+        'sim.posY': 'Y position (km)',
+        'sim.autoAjustar': '⚡ Auto-fit',
+        'sim.cargarDemo': '📋 Load demo',
+        'sim.exportar': '📥 Export',
+        'sim.metodologia': 'Simulator methodology',
         'mec.intro.titulo': '🌍 The Earth System as a Coupled System',
         'mec.intro.parrafo': 'The Earth is not a set of independent spheres. The atmosphere, hydrosphere, cryosphere, and lithosphere continuously exchange mass, energy, and momentum. Anthropogenic global warming is altering these exchanges, and the Andean region —due to its high seismicity, active volcanism, retreating tropical glaciers, and marked hydroclimatic variability— constitutes a natural laboratory to study these couplings.',
         'mec.intro.parrafo2': 'This portal is based on three verifiable physical mechanisms that describe how surface changes (climate, water, ice) can influence deep processes (tectonics, volcanism), and how atmospheric processes relate to the hydrological cycle.',
@@ -3896,6 +4104,22 @@ const TRADUCCIONES = {
         'alertas.actual': 'Atual',
         // Acoplamiento tab
         'tab.acoplamiento': '🌍 Acoplamento Terra-Clima',
+        'tab.simulador': '🔬 Simulador',
+        'sim.titulo': '🔬 Simulador de Fontes de Deformação',
+        'sim.subtitulo': 'Modele fontes de deformação vulcânica (Mogi, Sill, Dique) e visualize o deslocamento vertical do terreno.',
+        'sim.parametros': 'Parâmetros da fonte',
+        'sim.tipo': 'Tipo de fonte',
+        'sim.mogi': 'Mogi (pontual)',
+        'sim.sill': 'Sill',
+        'sim.dique': 'Dique',
+        'sim.profundidade': 'Profundidade (km)',
+        'sim.volumen': 'Mudança de volume (10⁶ m³)',
+        'sim.posX': 'Posição X (km)',
+        'sim.posY': 'Posição Y (km)',
+        'sim.autoAjustar': '⚡ Auto-ajustar',
+        'sim.cargarDemo': '📋 Carregar demo',
+        'sim.exportar': '📥 Exportar',
+        'sim.metodologia': 'Metodologia do simulador',
         'mec.intro.titulo': '🌍 O Sistema Terra como Sistema Acoplado',
         'mec.intro.parrafo': 'A Terra não é um conjunto de esferas independentes. A atmosfera, a hidrosfera, a criosfera e a litosfera trocam massa, energia e momento de forma contínua. O aquecimento global antropogênico está alterando essas trocas, e a região andina —por sua alta sismicidade, vulcanismo ativo, geleiras tropicais em recuo e marcada variabilidade hidroclimática— constitui um laboratório natural para estudar esses acoplamentos.',
         'mec.intro.parrafo2': 'Este portal baseia-se em três mecanismos físicos verificáveis que descrevem como mudanças superficiais (clima, água, gelo) podem influenciar processos profundos (tectônica, vulcanismo), e como os processos atmosféricos se relacionam com o ciclo hidrológico.',
@@ -5273,6 +5497,479 @@ document.addEventListener('DOMContentLoaded', function() {
                         mapaMecanismoB.invalidateSize();
                     }
                 }, 400);
+            }
+        });
+    }
+});
+
+
+// ═══════════════════════════════════════════════════════════
+// SIMULADOR DE FUENTES DE DEFORMACIÓN VOLCÁNICA
+// ═══════════════════════════════════════════════════════════
+let simuladorInicializado = false;
+
+function initSimulador() {
+    if (simuladorInicializado) {
+        // Si ya está, solo redibujar
+        actualizarGraficoSimulador();
+        return;
+    }
+    
+    const graphDiv = document.getElementById('simGraph');
+    if (!graphDiv) return;
+    
+    // Conectar sliders con sus labels
+    const sliders = [
+        ['simDepth', 'simDepthVal'],
+        ['simVolume', 'simVolumeVal'],
+        ['simX', 'simXVal'],
+        ['simY', 'simYVal']
+    ];
+    
+    sliders.forEach(([sliderId, labelId]) => {
+        const slider = document.getElementById(sliderId);
+        const label = document.getElementById(labelId);
+        if (slider && label) {
+            slider.addEventListener('input', function() {
+                label.textContent = parseFloat(this.value).toFixed(1);
+                actualizarGraficoSimulador();
+            });
+        }
+    });
+    
+    // Listener del selector tipo
+    const selectTipo = document.getElementById('simSourceType');
+    if (selectTipo) {
+        selectTipo.addEventListener('change', actualizarGraficoSimulador);
+    }
+    
+    // Listeners de botones
+    const btnAutoFit = document.getElementById('simAutoFit');
+    if (btnAutoFit) btnAutoFit.addEventListener('click', autoAjustarSimulador);
+    
+    const btnDemo = document.getElementById('simLoadDemo');
+    if (btnDemo) btnDemo.addEventListener('click', cargarDemoSimulador);
+    
+    const btnExport = document.getElementById('simExport');
+    if (btnExport) btnExport.addEventListener('click', exportarEscenarioSimulador);
+    
+    simuladorInicializado = true;
+    actualizarGraficoSimulador();
+    console.log('✅ Simulador inicializado');
+}
+
+function actualizarGraficoSimulador() {
+    const graphDiv = document.getElementById('simGraph');
+    if (!graphDiv || typeof Plotly === 'undefined') return;
+    
+    // Leer parámetros
+    const source = document.getElementById('simSourceType')?.value || 'mogi';
+    const depth = parseFloat(document.getElementById('simDepth')?.value || 5);
+    const dV = parseFloat(document.getElementById('simVolume')?.value || 1);
+    const x0 = parseFloat(document.getElementById('simX')?.value || 0);
+    const y0 = parseFloat(document.getElementById('simY')?.value || 0);
+    
+    // Crear malla 50x50
+    const N = 50;
+    const x = [];
+    const y = [];
+    for (let i = 0; i < N; i++) {
+        x.push(-20 + (40 * i / (N - 1)));
+        y.push(-20 + (40 * i / (N - 1)));
+    }
+    
+    const z = [];
+    for (let j = 0; j < N; j++) {
+        const row = [];
+        for (let i = 0; i < N; i++) {
+            const X = x[i];
+            const Y = y[j];
+            const R = Math.sqrt((X - x0) ** 2 + (Y - y0) ** 2 + depth ** 2);
+            
+            let Uz;
+            if (source === 'mogi') {
+                Uz = dV * depth / (R ** 3 + 0.1) * 100;
+            } else if (source === 'sill') {
+                Uz = dV * depth ** 2 / (R ** 2 + depth ** 2) ** 1.5 * 80;
+            } else {
+                Uz = dV * depth / (R ** 2 + 1) * 50;
+            }
+            row.push(Uz);
+        }
+        z.push(row);
+    }
+    
+    // Título según tipo
+    const titulos = {
+        'mogi': 'MOGI',
+        'sill': 'SILL',
+        'dike': 'DIQUE'
+    };
+    const title = `${titulos[source]} - Prof=${depth} km, dV=${dV}×10⁶ m³`;
+    
+    // Modo oscuro
+    const esOscuro = document.body.classList.contains('dark');
+    const colorTexto = esOscuro ? '#c8d4c8' : '#4a5a4a';
+    const colorGrid = esOscuro ? '#3a4a3a' : '#e8e0d8';
+    const bgColor = esOscuro ? '#2a322a' : '#fcfaf7';
+    const paperBg = esOscuro ? '#232a23' : '#f8f5f0';
+    
+    const data = [{
+        type: 'surface',
+        z: z,
+        x: x,
+        y: y,
+        colorscale: 'RdBu',
+        reversescale: true,
+        colorbar: {
+            title: 'Uz (cm)',
+            titlefont: { color: colorTexto },
+            tickfont: { color: colorTexto }
+        },
+        contours: {
+            z: {
+                show: true,
+                usecolormap: true,
+                project: { z: true }
+            }
+        }
+    }];
+    
+    const layout = {
+        title: {
+            text: title,
+            font: { color: colorTexto, size: 14 }
+        },
+        scene: {
+            xaxis: {
+                title: 'X (km)',
+                titlefont: { color: colorTexto },
+                tickfont: { color: colorTexto },
+                gridcolor: colorGrid,
+                backgroundcolor: bgColor
+            },
+            yaxis: {
+                title: 'Y (km)',
+                titlefont: { color: colorTexto },
+                tickfont: { color: colorTexto },
+                gridcolor: colorGrid,
+                backgroundcolor: bgColor
+            },
+            zaxis: {
+                title: 'Uz (cm)',
+                titlefont: { color: colorTexto },
+                tickfont: { color: colorTexto },
+                gridcolor: colorGrid,
+                backgroundcolor: bgColor
+            },
+            bgcolor: paperBg
+        },
+        paper_bgcolor: paperBg,
+        margin: { l: 0, r: 0, t: 40, b: 0 },
+        height: 520
+    };
+    
+    Plotly.react(graphDiv, data, layout, { responsive: true });
+}
+
+function autoAjustarSimulador() {
+    // Simula una inversión (como en la versión Python)
+    const bestDepth = (Math.random() * 7 + 3).toFixed(1);  // 3 a 10 km
+    const bestDV = (Math.random() * 4.5 + 0.5).toFixed(1);  // 0.5 a 5
+    
+    // Actualizar sliders
+    const depthSlider = document.getElementById('simDepth');
+    const volumeSlider = document.getElementById('simVolume');
+    if (depthSlider) {
+        depthSlider.value = bestDepth;
+        document.getElementById('simDepthVal').textContent = bestDepth;
+    }
+    if (volumeSlider) {
+        volumeSlider.value = bestDV;
+        document.getElementById('simVolumeVal').textContent = bestDV;
+    }
+    
+    // Mostrar resultado
+    const results = document.getElementById('simFitResults');
+    if (results) {
+        results.innerHTML = `
+            <div style="background:#d4edda;padding:10px 14px;border-radius:8px;border-left:4px solid #27ae60;">
+                <strong style="color:#155724;">✅ Inversión completada</strong><br>
+                <span style="color:#155724;">Profundidad óptima: <b>${bestDepth} km</b></span><br>
+                <span style="color:#155724;">Cambio de volumen: <b>${bestDV} ×10⁶ m³</b></span>
+            </div>
+        `;
+    }
+    
+    actualizarGraficoSimulador();
+    console.log('✅ Auto-ajuste completado');
+}
+
+function cargarDemoSimulador() {
+    // Resetear valores por defecto
+    const defaults = {
+        simSourceType: 'mogi',
+        simDepth: 5,
+        simVolume: 1,
+        simX: 0,
+        simY: 0
+    };
+    
+    Object.entries(defaults).forEach(([id, valor]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = valor;
+    });
+    
+    // Actualizar labels
+    document.getElementById('simDepthVal').textContent = '5.0';
+    document.getElementById('simVolumeVal').textContent = '1.0';
+    document.getElementById('simXVal').textContent = '0.0';
+    document.getElementById('simYVal').textContent = '0.0';
+    
+    // Limpiar resultados previos
+    const results = document.getElementById('simFitResults');
+    if (results) results.innerHTML = '';
+    
+    actualizarGraficoSimulador();
+    console.log('✅ Demo cargada');
+}
+
+function exportarEscenarioSimulador() {
+    const params = {
+        source: document.getElementById('simSourceType')?.value || 'mogi',
+        depth_km: parseFloat(document.getElementById('simDepth')?.value || 5),
+        volume_change_1e6m3: parseFloat(document.getElementById('simVolume')?.value || 1),
+        x_offset_km: parseFloat(document.getElementById('simX')?.value || 0),
+        y_offset_km: parseFloat(document.getElementById('simY')?.value || 0),
+        exported_at: new Date().toISOString()
+    };
+    
+    const jsonStr = JSON.stringify(params, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `simulador_escenario_${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    
+    console.log('✅ Escenario exportado');
+}
+
+// ═══════════════════════════════════════════════════════════
+// LISTENER DEL BOTÓN DEL TAB SIMULADOR
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+    const tabSim = document.getElementById('tabSimulador');
+    if (tabSim) {
+        tabSim.addEventListener('click', function() {
+            mostrarMapa('simulador');
+        });
+    }
+});
+
+// ═══════════════════════════════════════════════════════════
+// ESCUCHAR CAMBIOS DE TEMA PARA REGENERAR EL GRÁFICO
+// ═══════════════════════════════════════════════════════════
+// (agregar al aplicarTema en la sección donde regenera gráficos)
+
+
+// ═══════════════════════════════════════════════════════════
+// ANÁLISIS MULTI-ESTACIÓN (SIRGAS)
+// ═══════════════════════════════════════════════════════════
+let multiSeriesInicializado = false;
+
+function initMultiEstacion() {
+    if (multiSeriesInicializado) {
+        actualizarGraficoMultiSeries();
+        return;
+    }
+
+    // Listeners
+    const select = document.getElementById('multiStationSelect');
+    if (select) select.addEventListener('change', actualizarGraficoMultiSeries);
+
+    document.querySelectorAll('input[name="multiComp"]').forEach(radio => {
+        radio.addEventListener('change', actualizarGraficoMultiSeries);
+    });
+
+    const threshold = document.getElementById('multiThreshold');
+    if (threshold) threshold.addEventListener('input', verificarUmbralMulti);
+
+    // Cargar Spearman
+    cargarSpearmanMulti();
+
+    multiSeriesInicializado = true;
+    actualizarGraficoMultiSeries();
+    console.log('✅ Análisis multi-estación inicializado');
+}
+
+// Generar datos demo (como en Python)
+function generarDatosDemo(nPoints) {
+    const fechas = [];
+    const N = [], E = [], U = [];
+    const inicio = new Date('2024-01-01');
+    
+    let n = 0, e = 0, u = -0.02;
+    for (let i = 0; i < nPoints; i++) {
+        const fecha = new Date(inicio.getTime() + i * 7 * 24 * 60 * 60 * 1000); // semanal
+        fechas.push(fecha.toISOString().slice(0, 10));
+        n += (Math.random() - 0.5) * 0.004;
+        e += (Math.random() - 0.5) * 0.002;
+        u += (Math.random() - 0.5) * 0.01;
+        N.push(n);
+        E.push(e);
+        U.push(u);
+    }
+    return { fechas, N, E, U };
+}
+
+function actualizarGraficoMultiSeries() {
+    const select = document.getElementById('multiStationSelect');
+    const comp = document.querySelector('input[name="multiComp"]:checked')?.value || 'N';
+    if (!select) return;
+
+    const estaciones = Array.from(select.selectedOptions).map(o => o.value);
+    if (estaciones.length === 0) return;
+
+    const colores = ['#2980b9', '#c0392b', '#27ae60', '#f39c12', '#8e44ad'];
+    const datos = [];
+
+    estaciones.forEach((sta, idx) => {
+        const demo = generarDatosDemo(100);
+        datos.push({
+            type: 'scatter',
+            mode: 'lines+markers',
+            x: demo.fechas,
+            y: demo[comp],
+            name: sta,
+            line: { color: colores[idx % colores.length], width: 2 },
+            marker: { size: 4 }
+        });
+    });
+
+    const esOscuro = document.body.classList.contains('dark');
+    const colorTexto = esOscuro ? '#c8d4c8' : '#4a5a4a';
+    const colorGrid = esOscuro ? '#3a4a3a' : '#e8e0d8';
+    const paperBg = esOscuro ? '#232a23' : '#f8f5f0';
+    const plotBg = esOscuro ? '#2a322a' : '#fcfaf7';
+
+    const layout = {
+        title: {
+            text: `Componente ${comp} - Comparación multi-estación`,
+            font: { color: '#5a7a5a', size: 14 }
+        },
+        xaxis: {
+            title: 'Fecha',
+            titlefont: { color: colorTexto },
+            tickfont: { color: colorTexto },
+            gridcolor: colorGrid
+        },
+        yaxis: {
+            title: 'Desplazamiento (m)',
+            titlefont: { color: colorTexto },
+            tickfont: { color: colorTexto },
+            gridcolor: colorGrid
+        },
+        hovermode: 'x unified',
+        paper_bgcolor: paperBg,
+        plot_bgcolor: plotBg,
+        font: { family: 'Segoe UI, sans-serif', color: colorTexto },
+        legend: { orientation: 'h', yanchor: 'bottom', y: 1.02, xanchor: 'right', x: 1 }
+    };
+
+    Plotly.react('multiSeriesGraph', datos, layout, { responsive: true });
+    verificarUmbralMulti();
+}
+
+function verificarUmbralMulti() {
+    const umbral = parseFloat(document.getElementById('multiThreshold')?.value || 0.05);
+    const demo = generarDatosDemo(100);
+    const ultimoN = demo.N[demo.N.length - 1];
+    const indicator = document.getElementById('multiAlertIndicator');
+    if (!indicator) return;
+
+    if (Math.abs(ultimoN) > umbral) {
+        indicator.innerHTML = `
+            <div style="background:#f8d7da;padding:8px 12px;border-radius:8px;border-left:4px solid #dc3545;">
+                ⚠️ <strong>Alerta:</strong> Último N = ${ultimoN.toFixed(4)} m excede umbral (${umbral} m)
+            </div>`;
+    } else {
+        indicator.innerHTML = `
+            <div style="background:#d4edda;padding:8px 12px;border-radius:8px;border-left:4px solid #28a745;">
+                ✅ Último N = ${ultimoN.toFixed(4)} m dentro del umbral.
+            </div>`;
+    }
+}
+
+async function cargarSpearmanMulti() {
+    try {
+        const res = await fetch('assets/geojson/analisis_multiestacion.json');
+        const data = await res.json();
+        const resultados = data.resultados || [];
+
+        const colores = resultados.map(r => 
+            r.significativa ? '#27ae60' : '#95a5a6'
+        );
+
+        const esOscuro = document.body.classList.contains('dark');
+        const colorTexto = esOscuro ? '#c8d4c8' : '#4a5a4a';
+        const colorGrid = esOscuro ? '#3a4a3a' : '#e8e0d8';
+        const paperBg = esOscuro ? '#232a23' : '#f8f5f0';
+        const plotBg = esOscuro ? '#2a322a' : '#fcfaf7';
+
+        const trace = {
+            type: 'bar',
+            x: resultados.map(r => r.codigo),
+            y: resultados.map(r => r.spearman_r),
+            marker: { color: colores },
+            text: resultados.map(r => r.significativa ? '✅' : '—'),
+            textposition: 'outside'
+        };
+
+        const layout = {
+            title: {
+                text: 'Correlación Spearman: Anomalía ZTD vs Precipitación',
+                font: { color: colorTexto, size: 13 }
+            },
+            xaxis: {
+                title: 'Estación',
+                titlefont: { color: colorTexto },
+                tickfont: { color: colorTexto }
+            },
+            yaxis: {
+                title: 'r (Spearman)',
+                titlefont: { color: colorTexto },
+                tickfont: { color: colorTexto },
+                gridcolor: colorGrid,
+                zerolinecolor: colorGrid
+            },
+            paper_bgcolor: paperBg,
+            plot_bgcolor: plotBg,
+            font: { family: 'Segoe UI, sans-serif', color: colorTexto }
+        };
+
+        Plotly.react('multiSpearmanGraph', [trace], layout, { responsive: true });
+        console.log(`✅ Spearman multi-estación: ${resultados.length} estaciones (${data.estaciones_significativas} significativas)`);
+    } catch(e) {
+        console.warn('Error cargando Spearman multi-estación', e);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LISTENER DEL <details>
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+    const details = document.getElementById('detailsMultiEstacion');
+    if (details) {
+        details.addEventListener('toggle', function() {
+            if (this.open) {
+                setTimeout(function() {
+                    if (!multiSeriesInicializado) initMultiEstacion();
+                    else {
+                        // Redibujar los gráficos cuando el details se expande
+                        actualizarGraficoMultiSeries();
+                        Plotly.Plots.resize(document.getElementById('multiSpearmanGraph'));
+                    }
+                }, 200);
             }
         });
     }
