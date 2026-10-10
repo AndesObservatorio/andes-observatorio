@@ -180,33 +180,89 @@ async def get_serie_tropo(
 @app.get("/api/v1/ambiental/aqi/{ciudad}")
 def get_aqi(ciudad: str):
     try:
-        # Coordenadas de ciudades andinas
-        coordenadas = {
-            "Bogota": (4.6097, -74.0817),
+        # ═══════════════════════════════════════════════════════════
+        # DICCIONARIO COMPLETO DE CIUDADES ANDINAS
+        # Acepta tanto nombre largo (Bogota) como código SIRGAS (BOGT)
+        # ═══════════════════════════════════════════════════════════
+        CIUDADES = {
+            # Colombia
+            "Bogota": (4.6097, -74.0817), "BOGT": (4.6097, -74.0817),
+            "BOG2": (4.6097, -74.0817),
             "Medellin": (6.2442, -75.5812),
-            "Lima": (-12.0464, -77.0428),
-            "Santiago": (-33.4489, -70.6693),
+            "Cali": (3.4516, -76.5320), "CALI": (3.4516, -76.5320),
+            # Ecuador
+            "Quito": (-0.1807, -78.4678), "QUIT": (-0.1807, -78.4678),
+            # Perú
+            "Lima": (-12.0464, -77.0428), "LIMA": (-12.0464, -77.0428),
+            "Arequipa": (-16.4090, -71.5375), "AREQ": (-16.4090, -71.5375),
+            "Cusco": (-13.5319, -71.9675), "CUZ1": (-13.5319, -71.9675),
+            "AN02": (-12.05, -77.04),
+            "AP01": (-16.4, -71.53),
+            # Bolivia
+            "La Paz": (-16.5000, -68.1500), "LPBZ": (-16.5000, -68.1500),
+            "LPGS": (-16.5000, -68.1500),
+            # Chile
+            "Santiago": (-33.4489, -70.6693), "SANT": (-33.4489, -70.6693),
+            "Antofagasta": (-23.6509, -70.3975), "ANTC": (-23.6509, -70.3975),
+            "Concepcion": (-36.8201, -73.0444), "CONZ": (-36.8201, -73.0444),
+            # Argentina
+            "Mendoza": (-32.8895, -68.8458), "MEND": (-32.8895, -68.8458),
+            # Venezuela
+            "Caracas": (10.4806, -66.9036), "CARI": (10.4806, -66.9036),
+            # Brasil
+            "RioGrande": (-32.0350, -52.0986), "RIOG": (-32.0350, -52.0986),
+            # Bolivia (GLPS - Galápagos es Ecuador, pero por compatibilidad)
+            "GLPS": (-0.7428, -90.3156),
+            # Ecuador (IQQE - Iquique es Chile)
+            "IQQE": (-20.2208, -70.1408),
+            # RDSD - Río de Janeiro?
+            "RDSD": (-22.9068, -43.1729),
+            # CS01 - sin identificar, usar Bogotá
+            "CS01": (4.6097, -74.0817),
         }
-        lat, lon = coordenadas.get(ciudad, (4.6097, -74.0817))
-        url = f"https://api.openaq.org/v3/locations?coordinates={lat},{lon}&radius=10000&limit=1&parameter=pm25"
-        r = requests.get(url, headers={"X-API-Key": "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5"}, timeout=10)
+        
+        # Buscar coordenadas — si no existe, devolver error claro
+        if ciudad not in CIUDADES:
+            return {
+                "ciudad": ciudad,
+                "valor": "Ciudad no soportada",
+                "unidad": "",
+                "error": f"Ciudad '{ciudad}' no está en el catálogo. Ciudades soportadas: {len(CIUDADES)}"
+            }
+        
+        lat, lon = CIUDADES[ciudad]
+        
+        # ═══════════════════════════════════════════════════════════
+        # CONSULTA A OPENAQ (con timeout y mejor manejo de errores)
+        # ═══════════════════════════════════════════════════════════
+        API_KEY = "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5"
+        headers = {"X-API-Key": API_KEY}
+        
+        url = f"https://api.openaq.org/v3/locations?coordinates={lat},{lon}&radius=25000&limit=1&parameter=pm25"
+        r = requests.get(url, headers=headers, timeout=10)
+        
+        if r.status_code != 200:
+            return {"ciudad": ciudad, "valor": "OpenAQ no disponible", "unidad": "", "http_status": r.status_code}
+        
         data = r.json()
-        if data.get('results'):
-            loc = data['results'][0]
-            for sensor in loc.get('sensors', []):
-                if sensor['parameter']['name'] == 'pm25':
-                    # Obtener la última medición real
-                    sensor_id = sensor['id']
-                    url2 = f"https://api.openaq.org/v3/sensors/{sensor_id}/measurements?limit=1&parameter=pm25"
-                    r2 = requests.get(url2, headers={"X-API-Key": "190380ae0610cef5dcddb05d6bf70dbbb9a3d81f37e590301273ce4911b355f5"}, timeout=10)
-                    d2 = r2.json()
-                    if d2.get('results'):
-                        valor = d2['results'][0].get('value', '--')
-                        return {"ciudad": ciudad, "valor": valor, "unidad": "µg/m³"}
-            return {"ciudad": ciudad, "valor": "Ubicación sin PM2.5", "unidad": ""}
-        return {"ciudad": ciudad, "valor": "Sin datos", "unidad": ""}
+        if not data.get('results'):
+            return {"ciudad": ciudad, "valor": "Sin estación cercana", "unidad": ""}
+        
+        loc = data['results'][0]
+        for sensor in loc.get('sensors', []):
+            if sensor['parameter']['name'] == 'pm25':
+                sensor_id = sensor['id']
+                url2 = f"https://api.openaq.org/v3/sensors/{sensor_id}/measurements?limit=1&parameter=pm25"
+                r2 = requests.get(url2, headers=headers, timeout=10)
+                d2 = r2.json()
+                if d2.get('results'):
+                    valor = d2['results'][0].get('value', '--')
+                    return {"ciudad": ciudad, "valor": valor, "unidad": "µg/m³", "lat": lat, "lon": lon}
+                return {"ciudad": ciudad, "valor": "Sin mediciones recientes", "unidad": ""}
+        
+        return {"ciudad": ciudad, "valor": "Ubicación sin PM2.5", "unidad": ""}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": str(e), "ciudad": ciudad}
 
 @app.get("/health")
 def health_check():
