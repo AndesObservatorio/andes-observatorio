@@ -28,6 +28,50 @@
         footer { color: #8aa08a; font-size: 0.9rem; }
         .contacto { margin-top: 20px; }
         .contacto a { color: #2d4a2d; text-decoration: none; font-weight: 600; }
+
+        /* ═══ SECCIÓN DE LOGOS INSTITUCIONALES ═══ */
+        .logos-institucionales-landing {
+            margin: 40px 0 30px;
+            padding: 24px 20px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #ede8e0;
+        }
+        .logos-institucionales-landing .titulo-seccion {
+            font-size: 12px;
+            color: #8aa08a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .logos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 20px;
+            align-items: center;
+            justify-items: center;
+        }
+        .logos-grid .logo-item {
+            max-height: 50px;
+            max-width: 110px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.2s, filter 0.2s;
+            filter: grayscale(30%);
+            opacity: 0.85;
+        }
+        .logos-grid .logo-item:hover {
+            transform: scale(1.15);
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .logos-grid { grid-template-columns: repeat(2, 1fr); }
+            .logos-grid .logo-item { max-height: 40px; max-width: 90px; }
+        }
         
         /* ═══ SELECTOR DE IDIOMA ═══ */
         .lang-selector {
@@ -89,6 +133,25 @@
         <div class="metrica"><div class="valor">3</div><div class="label" data-i18n="metric.escazu">Pilares Escazú</div></div>
     </div>
 
+    <!-- ═══ SECCIÓN: CON EL APOYO DE ═══ -->
+    <div class="logos-institucionales-landing">
+        <div class="titulo-seccion" data-i18n="header.apoyo">Con el apoyo de:</div>
+        <div class="logos-grid">
+            <img src="assets/logos/sirgas.png" alt="SIRGAS" class="logo-item" title="SIRGAS - Sistema de Referencia Geocéntrico para las Américas">
+            <img src="assets/logos/iag.png" alt="IAG" class="logo-item" title="International Association of Geodesy">
+            <img src="assets/logos/igac.jpg" alt="IGAC" class="logo-item" title="Instituto Geográfico Agustín Codazzi">
+            <img src="assets/logos/ideam.png" alt="IDEAM" class="logo-item" title="IDEAM Colombia">
+            <img src="assets/logos/igp.png" alt="IGP" class="logo-item" title="Instituto Geofísico del Perú">
+            <img src="assets/logos/senamhi.webp" alt="SENAMHI" class="logo-item" title="SENAMHI Perú">
+            <img src="assets/logos/sgc.jpg" alt="SGC" class="logo-item" title="Servicio Geológico Colombiano">
+            <img src="assets/logos/smithsonian.svg" alt="Smithsonian GVP" class="logo-item" title="Smithsonian Global Volcanism Program">
+            <img src="assets/logos/gfw.svg" alt="Global Forest Watch" class="logo-item" title="Global Forest Watch">
+            <img src="assets/logos/unep.svg" alt="UNEP-WCMC" class="logo-item" title="UNEP World Conservation Monitoring Centre">
+            <img src="assets/logos/cepal.png" alt="CEPAL" class="logo-item" title="CEPAL - Naciones Unidas">
+            <img src="assets/logos/andes.jpg" alt="Andes Observatorio" class="logo-item" title="Andes Observatorio">
+        </div>
+    </div>
+
     <footer>
         <p data-i18n="footer.datos">💧 Datos SIRGAS + ZTD + Clima en tiempo real</p>
         <div class="contacto">
@@ -105,6 +168,7 @@
 const TRADUCCIONES = {
     es: {
         'app.title': 'Andes Observatorio',
+        'header.apoyo': 'Con el apoyo de:',
         'app.subtitle': 'Monitoreo geodésico y ambiental en tiempo real para la región andina',
         'btn.dashboard': '🗺️ Dashboard en Vivo',
         'btn.simulador': '🌦️ Simulador Climático',
@@ -120,6 +184,7 @@ const TRADUCCIONES = {
     },
     en: {
         'app.title': 'Andes Observatory',
+        'header.apoyo': 'Supported by:',
         'app.subtitle': 'Geodetic and environmental monitoring in real time for the Andean region',
         'btn.dashboard': '🗺️ Live Dashboard',
         'btn.simulador': '🌦️ Climate Simulator',
@@ -135,6 +200,7 @@ const TRADUCCIONES = {
     },
     pt: {
         'app.title': 'Observatório Andes',
+        'header.apoyo': 'Com o apoio de:',
         'app.subtitle': 'Monitoramento geodésico e ambiental em tempo real para a região andina',
         'btn.dashboard': '🗺️ Painel ao Vivo',
         'btn.simulador': '🌦️ Simulador Climático',

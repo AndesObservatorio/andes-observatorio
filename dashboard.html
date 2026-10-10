@@ -78,6 +78,74 @@
         .lang-btn:hover:not(.active) { background: #f0f5f0; }
         h1 { color: var(--accent-green-light); text-align: center; font-size: 2rem; }
         .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 18px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
+
+        /* ═══ HEADER CON LOGOS ═══ */
+        .header-app {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 12px 0;
+            flex-wrap: wrap;
+        }
+        .header-app .logo-andes {
+            height: 60px;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .header-app .titulo-bloque {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+        }
+        .header-app h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            text-align: left;
+        }
+        .header-app .subtitle {
+            border: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        .logos-institucionales {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border-radius: 14px;
+            margin: 12px 0 18px;
+            border: 1px solid var(--border-color);
+        }
+        .logos-institucionales .logo-item {
+            height: 40px;
+            width: auto;
+            max-width: 100px;
+            object-fit: contain;
+            filter: grayscale(0%);
+            transition: transform 0.2s;
+        }
+        .logos-institucionales .logo-item:hover {
+            transform: scale(1.1);
+        }
+        body.dark .logos-institucionales .logo-item {
+            filter: brightness(1.2) contrast(1.1);
+        }
+        .logos-institucionales .label-apoyo {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
         .selector { text-align: center; margin: 10px 0 18px; }
         select { padding: 12px 20px; font-size: 16px; border-radius: 40px; border: 1.5px solid var(--border-strong); background: var(--bg-input); color: var(--text-primary); min-width: 220px; width: 90%; max-width: 480px; }
         .stats { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; margin: 10px 0; }
@@ -303,8 +371,13 @@
 </div>
 
 <div class="container">
-    <h1 data-i18n="app.title">🏔️ Andes Observatorio</h1>
-    <div class="subtitle" data-i18n="app.subtitle">Monitoreo ambiental en tiempo real · Región Andina</div>
+    <div class="header-app">
+        <img src="assets/logos/andes.jpg" alt="Andes Observatorio" class="logo-andes" onerror="this.style.display='none'">
+        <div class="titulo-bloque">
+            <h1 data-i18n="app.title">🏔️ Andes Observatorio</h1>
+            <div class="subtitle" data-i18n="app.subtitle">Monitoreo ambiental en tiempo real · Región Andina</div>
+        </div>
+    </div>
 
     <!-- ========== 3 FASES DEL MONITOREO ========== -->
     <div class="fases-panel">
@@ -3200,6 +3273,7 @@ const TRADUCCIONES = {
     es: {
         // Header
         'app.title': '🏔️ Andes Observatorio',
+        'header.apoyo': 'Con el apoyo de:',
         'app.subtitle': 'Monitoreo ambiental en tiempo real · Región Andina',
         // Fases
         'fases.titulo': '🔄 Fases del Monitoreo — Estado del Sistema',
@@ -3469,6 +3543,7 @@ const TRADUCCIONES = {
     en: {
         // Header
         'app.title': '🏔️ Andes Observatory',
+        'header.apoyo': 'Supported by:',
         'app.subtitle': 'Environmental monitoring in real time · Andean Region',
         // Fases
         'fases.titulo': '🔄 Monitoring Phases — System Status',
@@ -3731,6 +3806,7 @@ const TRADUCCIONES = {
     pt: {
         // Header
         'app.title': '🏔️ Observatório Andes',
+        'header.apoyo': 'Com o apoio de:',
         'app.subtitle': 'Monitoramento ambiental em tempo real · Região Andina',
         // Fases
         'fases.titulo': '🔄 Fases do Monitoramento — Estado do Sistema',
