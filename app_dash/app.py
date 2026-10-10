@@ -401,9 +401,7 @@ app.layout = dbc.Container([
             html.P("Esta plataforma integra datos geodésicos (SIRGAS), normativas ambientales y territorios indígenas para el monitoreo de la región andina."),
             html.Hr(),
             html.P([html.Strong("1. Mapa Principal: "), "Explora estaciones GNSS, resguardos indígenas, alertas y normas georreferenciadas."]),
-            html.P([html.Strong("2. Dashboard de Series: "), "Compara series temporales de desplazamiento entre estaciones."]),
             html.P([html.Strong("3. MAM Escazú: "), "Vincula alertas ambientales con normas y territorios vulnerables bajo el Marco Escazú."]),
-            html.P([html.Strong("4. Simulador: "), "Modela fuentes de deformación tectónica (Mogi, Sill, Dique)."]),
             html.Hr(),
             html.P("💡 Pasa el cursor sobre los elementos del mapa para ver el tooltip 'Ley en el Territorio'.", className="text-muted small")
         ]),
@@ -442,35 +440,6 @@ app.layout = dbc.Container([
         # ============================================================
         # TAB 2: DASHBOARD DE SERIES
         # ============================================================
-        dbc.Tab(label="📈 Dashboard de Series", tab_id="tab-dashboard", children=[
-            dbc.Row([
-                dbc.Col([
-                    html.H5("Seleccionar Estaciones", className="mt-4"),
-                    dcc.Dropdown(
-                        id='station-dropdown',
-                        options=[{'label': s['id'], 'value': s['id']} for s in cargar_estaciones()],
-                        multi=True,
-                        value=['AREQ', 'BOGT'],
-                        placeholder="Selecciona estaciones..."
-                    ),
-                    html.H5("Componente", className="mt-3"),
-                    dcc.RadioItems(
-                        id='component-radio',
-                        options=[{'label': c, 'value': c} for c in ['N', 'E', 'U']],
-                        value='N',
-                        inline=True,
-                        labelStyle={'marginRight': '15px'}
-                    ),
-                    html.Hr(),
-                    html.H5("Umbral de alerta (m)"),
-                    dbc.Input(id='threshold-input', type='number', value=0.05, step=0.01),
-                    html.Div(id='alert-indicator', className='mt-3')
-                ], width=3),
-                dbc.Col([
-                    dcc.Loading(dcc.Graph(id='time-series-graph'), type="circle")
-                ], width=9)
-            ], className="mt-3")
-        ]),
 
         # ============================================================
         # TAB 3: MAM ESCAZÚ (MEJORADO)
@@ -525,44 +494,6 @@ app.layout = dbc.Container([
         # ============================================================
         # TAB 4: SIMULADOR
         # ============================================================
-        dbc.Tab(label="🔬 Simulador", tab_id="tab-simulator", children=[
-            dbc.Row([
-                dbc.Col([
-                    html.H5("Parámetros de la fuente", className="mt-4"),
-                    html.Label("Tipo de fuente"),
-                    dcc.Dropdown(
-                        id='source-type',
-                        options=[
-                            {'label': 'Mogi (puntual)', 'value': 'mogi'},
-                            {'label': 'Sill', 'value': 'sill'},
-                            {'label': 'Dique', 'value': 'dike'}
-                        ],
-                        value='mogi'
-                    ),
-                    html.Label("Profundidad (km)", className="mt-2"),
-                    dcc.Slider(1, 20, 0.5, value=5, id='depth-slider',
-                              tooltip={"placement": "bottom", "always_visible": True}),
-                    html.Label("Cambio de volumen (10⁶ m³)", className="mt-2"),
-                    dcc.Slider(-10, 10, 0.5, value=1, id='volume-slider',
-                              tooltip={"placement": "bottom", "always_visible": True}),
-                    html.Label("Posición X (km)", className="mt-2"),
-                    dcc.Slider(-20, 20, 0.5, value=0, id='x-slider',
-                              tooltip={"placement": "bottom", "always_visible": True}),
-                    html.Label("Posición Y (km)", className="mt-2"),
-                    dcc.Slider(-20, 20, 0.5, value=0, id='y-slider',
-                              tooltip={"placement": "bottom", "always_visible": True}),
-                    html.Hr(),
-                    dbc.Button("Auto-ajustar", id='auto-fit-button', color='warning', className='me-2 mb-2'),
-                    dbc.Button("Cargar demo", id='load-demo-button', color='info', className='me-2 mb-2'),
-                    dbc.Button("Exportar escenario", id='export-button', color='secondary', className='mb-2'),
-                    html.Div(id='fit-results', className='mt-2'),
-                    html.A("Descargar JSON", id='download-link', className='btn btn-link', style={'display': 'none'})
-                ], width=4),
-                dbc.Col([
-                    dcc.Loading(dcc.Graph(id='simulator-graph'), type="cube")
-                ], width=8)
-            ], className="mt-3")
-        ])
     ])
 ], fluid=True, style={"background": "#f8f5f0", "minHeight": "100vh", "paddingBottom": "40px"})
 
@@ -610,172 +541,6 @@ def close_onboarding(n):
 def filtrar_normas(pais, pilar):
     return create_normas_cards(pais_filtro=pais if pais else None, pilar_filtro=pilar if pilar else None)
 
-# --- Dashboard multi-estación ---
-def get_demo_data():
-    dates = pd.date_range('2024-01-01', periods=100, freq='W')
-    np.random.seed(42)
-    return pd.DataFrame({
-        'date': dates,
-        'N': np.cumsum(np.random.randn(100) * 0.002),
-        'E': np.cumsum(np.random.randn(100) * 0.001),
-        'U': np.cumsum(np.random.randn(100) * 0.005) - 0.02
-    })
 
-@app.callback(
-    Output('time-series-graph', 'figure'),
-    [Input('station-dropdown', 'value'),
-     Input('component-radio', 'value')]
-)
-def update_multi_station(selected_stations, component):
-    if not selected_stations:
-        return go.Figure()
-    fig = go.Figure()
-    colors = px.colors.qualitative.Bold
-    for i, sta in enumerate(selected_stations):
-        df = get_demo_data()
-        color = colors[i % len(colors)]
-        fig.add_trace(go.Scatter(
-            x=df.date, y=df[component], 
-            mode='lines+markers', 
-            name=sta,
-            line=dict(color=color, width=2),
-            marker=dict(size=5)
-        ))
-    fig.update_layout(
-        title=dict(text=f"Componente {component} - Comparación multi-estación", font=dict(color="#5a7a5a")),
-        xaxis_title="Fecha",
-        yaxis_title="Desplazamiento (m)",
-        hovermode='x unified',
-        paper_bgcolor='#f8f5f0',
-        plot_bgcolor='#fcfaf7',
-        font=dict(family="Segoe UI, sans-serif", color="#4a6a4a"),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-    )
-    fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='#e8e0d8')
-    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='#e8e0d8')
-    return fig
-
-# --- Alerta de umbral ---
-@app.callback(
-    Output('alert-indicator', 'children'),
-    [Input('station-dropdown', 'value'),
-     Input('threshold-input', 'value')]
-)
-def check_alert(stations, threshold):
-    if not stations:
-        return ""
-    df = get_demo_data()
-    last_N = df['N'].iloc[-1]
-    if abs(last_N) > threshold:
-        return html.Div([
-            html.I(className="fas fa-exclamation-triangle me-2"),
-            f"Alerta: último N = {last_N:.4f} m excede umbral ({threshold} m)"
-        ], className="text-danger fw-bold p-2 rounded", style={"background": "#f8d7da", "borderLeft": "4px solid #dc3545"})
-    return html.Div([
-        html.I(className="fas fa-check-circle me-2"),
-        f"Último N = {last_N:.4f} m dentro del umbral."
-    ], className="text-success p-2 rounded", style={"background": "#d4edda", "borderLeft": "4px solid #28a745"})
-
-# --- Simulador 3D ---
-@app.callback(
-    Output('simulator-graph', 'figure'),
-    [Input('source-type', 'value'),
-     Input('depth-slider', 'value'),
-     Input('volume-slider', 'value'),
-     Input('x-slider', 'value'),
-     Input('y-slider', 'value')]
-)
-def update_simulator(source, depth, dV, x0, y0):
-    x = np.linspace(-20, 20, 50)
-    y = np.linspace(-20, 20, 50)
-    X, Y = np.meshgrid(x, y)
-    R = np.sqrt((X-x0)**2 + (Y-y0)**2 + depth**2)
-
-    if source == 'mogi':
-        Uz = dV * depth / (R**3 + 0.1) * 100
-        title = f'MOGI - Prof={depth} km, dV={dV}×10⁶ m³'
-    elif source == 'sill':
-        Uz = dV * depth**2 / (R**2 + depth**2)**1.5 * 80
-        title = f'SILL - Prof={depth} km, dV={dV}×10⁶ m³'
-    else:
-        Uz = dV * depth / (R**2 + 1) * 50
-        title = f'DIQUE - Prof={depth} km, dV={dV}×10⁶ m³'
-
-    fig = go.Figure(data=[
-        go.Surface(z=Uz, x=x, y=y, colorscale='RdBu_r', colorbar_title="Uz (cm)", 
-                  contours=dict(z=dict(show=True, usecolormap=True, project_z=True)))
-    ])
-    fig.update_layout(
-        title=dict(text=title, font=dict(color="#5a7a5a")),
-        scene=dict(
-            xaxis_title='X (km)', yaxis_title='Y (km)', zaxis_title='Uz (cm)',
-            bgcolor='#fcfaf7',
-            xaxis=dict(showgrid=True, gridcolor='#e8e0d8'),
-            yaxis=dict(showgrid=True, gridcolor='#e8e0d8'),
-            zaxis=dict(showgrid=True, gridcolor='#e8e0d8')
-        ),
-        paper_bgcolor='#f8f5f0',
-        margin=dict(l=0, r=0, t=40, b=0),
-        height=500
-    )
-    return fig
-
-# --- Auto-ajuste ---
-@app.callback(
-    [Output('fit-results', 'children', allow_duplicate=True),
-     Output('depth-slider', 'value', allow_duplicate=True),
-     Output('volume-slider', 'value', allow_duplicate=True)],
-    Input('auto-fit-button', 'n_clicks'),
-    prevent_initial_call=True
-)
-def run_inversion(n):
-    best_depth = round(np.random.uniform(3, 10), 1)
-    best_dV = round(np.random.uniform(0.5, 5), 1)
-    return html.Div([
-        html.H6([html.I(className="fas fa-check-circle me-2"), "Inversión completada"]),
-        html.P(f"Profundidad óptima: {best_depth} km", className="mb-1"),
-        html.P(f"Cambio de volumen: {best_dV} ×10⁶ m³", className="mb-0")
-    ], className="alert alert-success"), best_depth, best_dV
-
-# --- Cargar demo ---
-@app.callback(
-    [Output('source-type', 'value', allow_duplicate=True),
-     Output('depth-slider', 'value', allow_duplicate=True),
-     Output('volume-slider', 'value', allow_duplicate=True),
-     Output('x-slider', 'value', allow_duplicate=True),
-     Output('y-slider', 'value', allow_duplicate=True)],
-    Input('load-demo-button', 'n_clicks'),
-    prevent_initial_call=True
-)
-def load_demo(n):
-    return 'mogi', 5, 2, 0, 0
-
-# --- Exportar escenario ---
-@app.callback(
-    Output('download-link', 'href', allow_duplicate=True),
-    Output('download-link', 'style', allow_duplicate=True),
-    Input('export-button', 'n_clicks'),
-    [State('source-type', 'value'),
-     State('depth-slider', 'value'),
-     State('volume-slider', 'value'),
-     State('x-slider', 'value'),
-     State('y-slider', 'value')],
-    prevent_initial_call=True
-)
-def export_scenario(n, source, depth, dV, x0, y0):
-    params = {
-        'source': source,
-        'depth_km': depth,
-        'volume_change_1e6m3': dV,
-        'x_offset_km': x0,
-        'y_offset_km': y0,
-        'exported_at': datetime.now().isoformat()
-    }
-    json_str = json.dumps(params, indent=2)
-    return f'data:text/plain;charset=utf-8,{json_str}', {'display': 'inline-block'}
-
-# ============================================================
-# EJECUCIÓN
-# ============================================================
 if __name__ == '__main__':
     app.run(debug=True, port=8051)
