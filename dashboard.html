@@ -584,6 +584,7 @@
         <label><input type="checkbox" id="toggleTopografiaZTD"> <span data-i18n="ctrl.vistaSatelite">🛰️ Vista satélite</span></label>
         <label><input type="checkbox" id="toggleZTD" checked> <span data-i18n="ctrl.mostrarZTD">💧 Mostrar ZTD</span></label>
         <span class="update-badge" id="ztdMapBadge">💧 Cargando ZTD…</span>
+        <span class="update-badge" id="ztdBadge" style="font-size:11px;">⚪ Sin datos</span>
         <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:#5a7a5a;margin-left:auto;flex-wrap:wrap;">
             <span title="Anomalía = ZTD actual − promedio histórico de la estación. Elimina el sesgo altitudinal.">📊 Anomalía ZTD:</span>
             <span style="background:linear-gradient(to right,#c0392b,#d4a017,#2c5f2c,#4a9,#2c5f8a);width:140px;height:10px;border-radius:4px;display:inline-block;" title="Azul=húmedo | Verde=normal | Rojo=seco"></span>
@@ -1647,6 +1648,70 @@
     const API_SIRGAS = "https://andes-observatorio.onrender.com/api/v1/geodesia/velocidades";
     const API_BASE = "https://andes-observatorio.onrender.com";
 
+
+    // ═══════════════════════════════════════════════════════════
+    // HELPER: FETCH CON FALLBACK A RESPALDO LOCAL
+    // ═══════════════════════════════════════════════════════════
+    // Prioridad 1: Fetch a Render (tiempo real)
+    // Prioridad 2: Fetch a assets/geojson/respaldo/ (datos congelados)
+    // En AMBOS casos, actualiza un badge indicando el origen.
+    async function fetchConFallback(urlLive, urlRespaldo, badgeId = null) {
+        const TIMEOUT_MS = 1500;
+        
+        // ─── Helper para actualizar badge ───
+        function setBadge(tipo) {
+            if (!badgeId) return;
+            const badge = document.getElementById(badgeId);
+            if (!badge) return;
+            
+            if (tipo === 'live') {
+                badge.innerHTML = '🔴 <b>En vivo</b>';
+                badge.style.color = '#c0392b';
+                badge.title = 'Datos en tiempo real desde Render.com';
+            } else if (tipo === 'respaldo') {
+                badge.innerHTML = '📁 <b>Respaldo</b>';
+                badge.style.color = '#d68910';
+                badge.title = 'Datos de respaldo (Render no disponible)';
+            }
+        }
+        
+        // ─── Intentar LIVE con timeout corto ───
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+            
+            console.log(`🔄 [LIVE] ${urlLive}`);
+            const res = await fetch(urlLive, { 
+                signal: controller.signal,
+                cache: 'no-store'
+            });
+            clearTimeout(timeoutId);
+            
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            console.log(`✅ [LIVE OK] ${urlLive}`);
+            setBadge('live');
+            return { data, origen: 'live' };
+        } catch (e) {
+            console.warn(`⚠️ [LIVE FAIL] ${e.message}`);
+        }
+        
+        // ─── Fallback: Respaldo local ───
+        try {
+            console.log(`🔄 [RESPALDO] ${urlRespaldo}`);
+            const res = await fetch(urlRespaldo);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            console.log(`✅ [RESPALDO OK] ${urlRespaldo}`);
+            setBadge('respaldo');
+            return { data, origen: 'respaldo' };
+        } catch (e) {
+            console.error(`❌ [RESPALDO FAIL] ${urlRespaldo}: ${e.message}`);
+            setBadge('error');
+            return { data: null, origen: 'error' };
+        }
+    }
+
     const AREAS_PROTEGIDAS = [
         { nombre: "PNN Tayrona", pais: "Colombia", lat: 11.30, lon: -74.10, km2: 150 },
         { nombre: "PNN Sierra Nevada de Santa Marta", pais: "Colombia", lat: 10.83, lon: -73.68, km2: 383 },
@@ -2090,11 +2155,15 @@
             console.warn('No se pudo leer JSON local, probando API', e);
         }
 
-        // 2. FALLBACK: usar API
+        // 2. FALLBACK: usar API con respaldo local
         try {
-            const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
-            if (!res.ok) throw new Error("API no disponible");
-            const data = await res.json();
+            const resultado = await fetchConFallback(
+                `${API_BASE}/api/v1/geodesia/tropo/estaciones`,
+                'assets/geojson/respaldo/tropo_estaciones.json',
+                null
+            );
+            if (!resultado.data) throw new Error("Sin datos");
+            const data = resultado.data;
             const estaciones = data.estaciones || [];
             if (estaciones.length === 0) {
                 select.innerHTML = '<option value="">Sin estaciones disponibles todavía</option>';
@@ -2126,8 +2195,10 @@
         if (hasta) url += `&hasta=${hasta}`;
         document.getElementById('ztdInfo').innerText = '🔄 Cargando datos…';
         try {
-            const res = await fetch(url);
-            const data = await res.json();
+            const urlRespaldo = `assets/geojson/respaldo/ztd_series/${codigo}.json`;
+            const resultado = await fetchConFallback(url, urlRespaldo, 'ztdBadge');
+            const data = resultado.data;
+            if (!data) throw new Error("Sin datos");
             const puntos = data.datos || [];
             if (puntos.length === 0) {
                 document.getElementById('ztdInfo').innerText = `⚠️ Sin datos de ZTD para ${codigo} en ese rango de fechas.`;
@@ -2150,8 +2221,13 @@
         const badge = document.getElementById('sirgasBadge');
         badge.innerText = '🔄 Actualizando SIRGAS…';
         try {
-            const res = await fetch(API_SIRGAS);
-            const data = await res.json();
+            const resultado = await fetchConFallback(
+                API_SIRGAS,
+                'assets/geojson/respaldo/velocidades.json',
+                'sirgasBadge'
+            );
+            const data = resultado.data;
+            if (!data) throw new Error("Sin datos");
             estacionesSIRGAS = data.estaciones || data;
             const ahora = new Date();
             const count = Array.isArray(estacionesSIRGAS) ? estacionesSIRGAS.length : 0;
@@ -2989,8 +3065,12 @@ function initMapSirgas() {
         // 2. FALLBACK: si JSON local falló o vino vacío, usar API
         if (Object.keys(coordenadasZTD).length === 0) {
             try {
-                const resEst = await fetch(`${API_BASE}/api/v1/geodesia/tropo/estaciones`);
-                const dataEst = await resEst.json();
+                const resultadoEst = await fetchConFallback(
+                    `${API_BASE}/api/v1/geodesia/tropo/estaciones`,
+                    'assets/geojson/respaldo/tropo_estaciones.json',
+                    null
+                );
+                const dataEst = resultadoEst.data || { estaciones: [] };
                 (dataEst.estaciones || []).forEach(e => {
                     if (e.lat && e.lon) {
                         coordenadasZTD[e.codigo] = [e.lat, e.lon];
@@ -3009,8 +3089,12 @@ function initMapSirgas() {
 
         for (const codigo of codigos) {
             try {
-                const res = await fetch(`${API_BASE}/api/v1/geodesia/tropo/${codigo}/serie?limite=500`);
-                const data = await res.json();
+                const resultadoSerie = await fetchConFallback(
+                    `${API_BASE}/api/v1/geodesia/tropo/${codigo}/serie?limite=500`,
+                    `assets/geojson/respaldo/ztd_series/${codigo}.json`,
+                    null
+                );
+                const data = resultadoSerie.data || { datos: [] };
                 const puntos = data.datos || [];
                 if (puntos.length > 0) {
                     ztdSerieCache[codigo] = puntos;
@@ -3122,9 +3206,12 @@ function initMapSirgas() {
         const ciudades = {aqiBogota: 'Bogota', aqiMedellin: 'Medellin', aqiLima: 'Lima', aqiSantiago: 'Santiago'};
         for (const [id, ciudad] of Object.entries(ciudades)) {
             try {
-                const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
-                if (!res.ok) throw new Error('OpenAQ no disponible');
-                const data = await res.json();
+                const resultadoAqi = await fetchConFallback(
+                    `https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`,
+                    `assets/geojson/respaldo/aqi/${ciudad.toUpperCase()}.json`,
+                    null
+                );
+                const data = resultadoAqi.data || {};
                 if (data.valor && data.valor !== 'Sin datos') {
                     document.getElementById(id).innerText = data.valor + ' ' + (data.unidad || 'µg/m³');
                 } else {
@@ -3224,20 +3311,22 @@ function initMapSirgas() {
         const datos = {};
         for (const ciudad of ciudades) {
             try {
-                const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.valor && data.valor !== 'Sin datos') {
-                        datos[ciudad] = { valor: data.valor, lat: coords[ciudad][0], lon: coords[ciudad][1] };
-                        const color = data.valor < 50 ? '#27ae60' : data.valor < 100 ? '#f1c40f' : data.valor < 150 ? '#e67e22' : '#e74c3c';
-                        L.circleMarker(coords[ciudad], {
-                            radius: 18,
-                            fillColor: color,
-                            color: color,
-                            fillOpacity: 0.6,
-                            weight: 2
-                        }).bindPopup(`<b>${ciudad}</b><br>PM2.5: ${data.valor} µg/m³`).addTo(mapaAQI);
-                    }
+                const resultadoAqi = await fetchConFallback(
+                    `https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`,
+                    `assets/geojson/respaldo/aqi/${ciudad.toUpperCase()}.json`,
+                    null
+                );
+                const data = resultadoAqi.data || {};
+                if (data.valor && data.valor !== 'Sin datos') {
+                    datos[ciudad] = { valor: data.valor, lat: coords[ciudad][0], lon: coords[ciudad][1] };
+                    const color = data.valor < 50 ? '#27ae60' : data.valor < 100 ? '#f1c40f' : data.valor < 150 ? '#e67e22' : '#e74c3c';
+                    L.circleMarker(coords[ciudad], {
+                        radius: 18,
+                        fillColor: color,
+                        color: color,
+                        fillOpacity: 0.6,
+                        weight: 2
+                    }).bindPopup(`<b>${ciudad}</b><br>PM2.5: ${data.valor} µg/m³`).addTo(mapaAQI);
                 }
             } catch(e) {}
         }
@@ -3255,14 +3344,14 @@ function initMapSirgas() {
             for (const ciudad of ciudades) {
                 labels.push(ciudad);  // Siempre incluir la ciudad
                 try {
-                    const res = await fetch(`https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data.valor && data.valor !== 'Sin datos' && !isNaN(data.valor)) {
-                            valores.push(data.valor);
-                        } else {
-                            valores.push(null);
-                        }
+                    const resultadoAqi = await fetchConFallback(
+                        `https://andes-observatorio.onrender.com/api/v1/ambiental/aqi/${ciudad}`,
+                        `assets/geojson/respaldo/aqi/${ciudad.toUpperCase()}.json`,
+                        null
+                    );
+                    const data = resultadoAqi.data || {};
+                    if (data.valor && data.valor !== 'Sin datos' && !isNaN(data.valor)) {
+                        valores.push(data.valor);
                     } else {
                         valores.push(null);
                     }
