@@ -228,6 +228,14 @@ Ver [METODOLOGIA.md](METODOLOGIA.md) para:
 
 ---
 
-## 📖 Reportes de Análisis
+## 📖 Documentación y reportes
+
+### Documentos del proyecto
+
+- **[Resumen ejecutivo](docs/resumen_ejecutivo.md)** — Síntesis completa del proyecto (octubre 2026)
+- **[Metodología científica](METODOLOGIA.md)** — Fuentes de datos, algoritmos y referencias APA
+- **[Presentación SIRGAS](PRESENTACION_SIRGAS.md)** — Material del Simposio SIRGAS 2026
+
+### Reportes de análisis
 
 - [Mecanismo C: ZTD vs Precipitación](analysis/REPORTE_MECANISMO_C.md)
