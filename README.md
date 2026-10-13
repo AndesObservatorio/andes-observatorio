@@ -41,15 +41,24 @@ mardown
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Stack de desarrollo
 
-| Tecnología | Uso |
-|------------|-----|
-| HTML5, CSS3, JavaScript | Frontend |
-| [Chart.js](https://www.chart.js/) | Gráficos interactivos |
-| [Leaflet](https://leafletjs.com/) | Mapas interactivos |
-| [OpenWeatherMap API](https://openweathermap.org/) | Datos climáticos en tiempo real |
-| GitHub Pages | Alojamiento gratuito |
+Este proyecto fue desarrollado con las siguientes herramientas:
+
+| Componente | Herramienta | Rol |
+|---|---|---|
+| 🧠 **Asistencia IA** | DeepSeek | Apoyo en desarrollo, debugging y documentación |
+| 🐧 **Sistema operativo** | Ubuntu Linux | Entorno de desarrollo |
+| 🎨 **Frontend** | HTML5 · CSS3 · JavaScript | Interfaz web |
+| 🗺️ **Mapas** | Leaflet + OpenStreetMap | Visualización geográfica |
+| 📊 **Gráficos** | Plotly · Chart.js | Series temporales y datos |
+| 🐍 **Backend** | Python · FastAPI | API REST |
+| 🗄️ **Base de datos** | SQLite · PostgreSQL/Supabase | Almacenamiento |
+| 🛰️ **Datos geodésicos** | SIRGAS-CON · SIRGAS-TRO | ZTD y velocidades tectónicas |
+| 🌦️ **Datos climáticos** | OpenWeatherMap · OpenAQ | Clima y calidad del aire |
+| ☁️ **Despliegue** | GitHub Pages · Render.com | Hosting |
+
+> **Nota legal:** DeepSeek y Ubuntu son marcas registradas de sus respectivos dueños. Andes Observatorio no está afiliado ni respaldado por ellos. Su mención es un reconocimiento técnico a las herramientas utilizadas durante el desarrollo.
 
 ---
 
