@@ -398,7 +398,7 @@ app.layout = dbc.Container([
     dbc.Modal([
         dbc.ModalHeader(dbc.ModalTitle("🏔️ Bienvenido a Andes Observatorio")),
         dbc.ModalBody([
-            html.P("Esta plataforma integra datos geodésicos (SIRGAS), normativas ambientales y territorios indígenas para el monitoreo de la región andina."),
+            html.P("Esta plataforma integra datos geodésicos (SIRGAS), normativas ambientales y territorios indígenas para el monitoreo de la Región Andina."),
             html.Hr(),
             html.P([html.Strong("1. Mapa Principal: "), "Explora estaciones GNSS, resguardos indígenas, alertas y normas georreferenciadas."]),
             html.P([html.Strong("3. MAM Escazú: "), "Vincula alertas ambientales con normas y territorios vulnerables bajo el Marco Escazú."]),

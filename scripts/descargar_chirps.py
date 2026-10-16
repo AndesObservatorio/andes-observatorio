@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Descarga precipitación mensual CHIRPS para la región andina.
+Descarga precipitación mensual CHIRPS para la Región Andina.
 Nueva estructura: by_month/chirps-v2.0.AAAA.MM.days_p05.nc
 """
 import os

@@ -18,7 +18,7 @@ print(f"📂 Abriendo {nc_path}...")
 ds = xr.open_dataset(nc_path)
 var = list(ds.data_vars)[0]
 
-# Recorte región andina
+# Recorte Región Andina
 ds_andes = ds.sel(
     latitude=slice(-60, 15),
     longitude=slice(-90, -30)

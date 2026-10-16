@@ -1,4 +1,4 @@
-# Andes Observatorio: Plataforma de monitoreo geodésico y ambiental para la región andina
+# Andes Observatorio: Plataforma de monitoreo geodésico y ambiental para la Región Andina
 
 **Autora:** María J. Sierra Bernal  
 **Estudiante de la Especialización en Gestión Ambiental**  
@@ -15,7 +15,7 @@ Creadora y desarrolladora del proyecto
 
 ## Resumen ejecutivo
 
-Andes Observatorio es una plataforma de código abierto que integra datos geodésicos de la red SIRGAS-CON con variables ambientales para el monitoreo climático en la región andina. El proyecto demuestra la aplicabilidad práctica de los productos troposféricos SIRGAS — específicamente el Retardo Troposférico Cenital (ZTD) — como indicador del contenido de vapor de agua atmosférico y su correlación con eventos de precipitación.
+Andes Observatorio es una plataforma de código abierto que integra datos geodésicos de la red SIRGAS-CON con variables ambientales para el monitoreo climático en la Región Andina. El proyecto demuestra la aplicabilidad práctica de los productos troposféricos SIRGAS — específicamente el Retardo Troposférico Cenital (ZTD) — como indicador del contenido de vapor de agua atmosférico y su correlación con eventos de precipitación.
 
 La plataforma integra **13 estaciones GNSS SIRGAS**, de las cuales **5 cuentan con series temporales completas** que permiten el análisis de correlación ZTD-precipitación mediante el coeficiente de Spearman. Los resultados muestran **correlaciones positivas significativas (r > 0.3, p < 0.0001) en 4 de 5 estaciones analizadas**: Bogotá (r = 0.397), Cali (r = 0.507), Arequipa (r = 0.363) y Santiago (r = 0.326). La estación Antofagasta no muestra correlación significativa (r = −0.044), resultado consistente con su ubicación en una zona árida del desierto de Atacama.
 
@@ -28,13 +28,13 @@ El proyecto se materializa en **cuatro componentes interconectados**:
 
 La plataforma está desarrollada con tecnologías de código abierto (HTML5, JavaScript, Python/FastAPI, Leaflet, Plotly) y desplegada en GitHub Pages y Render.com. El proyecto se alinea con los objetivos del **Simposio SIRGAS 2026** y la **Agenda 2030** (ODS 13 y 15).
 
-**Palabras clave:** SIRGAS · ZTD · GNSS · vapor de agua · monitoreo ambiental · región andina.
+**Palabras clave:** SIRGAS · ZTD · GNSS · vapor de agua · monitoreo ambiental · Región Andina.
 
 ---
 
 ## 1. Contexto y motivación
 
-La región andina concentra el 99% de los glaciares tropicales del mundo y es fuente de agua para más de 50 millones de personas. Desde 1960, la temperatura media ha aumentado +1.5°C, superando el promedio global, lo que acelera el retroceso glaciar y altera los patrones de precipitación. Los modelos climáticos proyectan una reducción del 30% al 50% en la disponibilidad hídrica andina para 2050 bajo escenarios RCP 8.5.
+La Región Andina concentra el 99% de los glaciares tropicales del mundo y es fuente de agua para más de 50 millones de personas. Desde 1960, la temperatura media ha aumentado +1.5°C, superando el promedio global, lo que acelera el retroceso glaciar y altera los patrones de precipitación. Los modelos climáticos proyectan una reducción del 30% al 50% en la disponibilidad hídrica andina para 2050 bajo escenarios RCP 8.5.
 
 Frente a este contexto, la información climática y geodésica disponible se encuentra fragmentada en múltiples instituciones sin interoperabilidad, limitando su uso para la toma de decisiones. Andes Observatorio nace para abordar esta brecha, integrando datos SIRGAS en una plataforma accesible que democratiza el acceso a información geoespacial de calidad.
 

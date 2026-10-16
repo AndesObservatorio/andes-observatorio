@@ -6,7 +6,7 @@ Este módulo centraliza QUÉ estaciones procesa el pipeline troposférico
 la lógica de descarga o parseo cuando se quiera cambiar la cobertura.
 
 Hoy: solo las estaciones que ya muestra el dashboard de Andes Observatorio
-     (región andina: Colombia, Ecuador, Perú, Bolivia, Chile, Argentina).
+     (Región Andina: Colombia, Ecuador, Perú, Bolivia, Chile, Argentina).
 Más adelante: agregar más regiones (o pasar a cobertura global de SIRGAS-CON)
      es tan simple como sumar entradas a REGIONES o usar scope="global"
      en get_active_stations(), sin tocar ningún otro archivo del pipeline.

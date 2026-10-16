@@ -141,7 +141,7 @@ FastAPI. (2026). *FastAPI: Modern web framework for building APIs with Python*. 
 
 Si usa estos datos, cite:
 
-Sierra Bernal, M. J. (2026). *Andes Observatorio: Plataforma de monitoreo geodésico y ambiental para la región andina* [Aplicación web]. https://andesobservatorio.github.io/andes-observatorio/
+Sierra Bernal, M. J. (2026). *Andes Observatorio: Plataforma de monitoreo geodésico y ambiental para la Región Andina* [Aplicación web]. https://andesobservatorio.github.io/andes-observatorio/
 
 
 
@@ -151,7 +151,7 @@ Sierra Bernal, M. J. (2026). *Andes Observatorio: Plataforma de monitoreo geodé
 
 ### 8.1 Mecanismo C: Correlación ZTD vs Precipitación
 
-**Objetivo:** Verificar si la anomalía de ZTD predice eventos de precipitación en la región andina.
+**Objetivo:** Verificar si la anomalía de ZTD predice eventos de precipitación en la Región Andina.
 
 **Datos:**
 - **ZTD:** SIRGAS-CON (soluciones horarias, latencia ~30 días)

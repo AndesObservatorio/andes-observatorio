@@ -3,7 +3,7 @@
 ## Simposio SIRGAS 2026 - Montevideo, Uruguay
 
 ### 🎯 Objetivo
-Presentar una plataforma de código abierto que integra datos climáticos y geodésicos (SIRGAS) para el monitoreo ambiental en la región andina.
+Presentar una plataforma de código abierto que integra datos climáticos y geodésicos (SIRGAS) para el monitoreo ambiental en la Región Andina.
 
 ### 📊 Datos Integrados
 - **OpenWeatherMap**: Temperatura, humedad, presión (tiempo real)
@@ -18,7 +18,7 @@ Presentar una plataforma de código abierto que integra datos climáticos y geod
 - **Despliegue**: GitHub Actions, Render
 
 ### 📈 Resultados
-- 5+ estaciones SIRGAS monitoreadas en la región andina
+- 5+ estaciones SIRGAS monitoreadas en la Región Andina
 - 20,440+ observaciones de ZTD procesadas
 - Dashboard interactivo con visualizaciones en tiempo real
 - Histórico de datos desde diciembre 2025

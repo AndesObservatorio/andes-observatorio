@@ -5,7 +5,7 @@
 **Período:** 2025-12-15 a 2026-06-06 (174 días)
 
 ## Objetivo
-Verificar si la anomalía de ZTD (Retardo Troposférico Cenital) predice eventos de precipitación en la región andina.
+Verificar si la anomalía de ZTD (Retardo Troposférico Cenital) predice eventos de precipitación en la Región Andina.
 
 ## Datos
 - **ZTD:** SIRGAS-CON, estación BOGT (4,008 registros horarios)

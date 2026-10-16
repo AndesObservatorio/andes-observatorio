@@ -7,9 +7,9 @@ mardown
 [![Leaflet](https://img.shields.io/badge/maps-Leaflet-green)](https://leafletjs.com/)
 [![Chart.js](https://img.shields.io/badge/charts-Chart.js-red)](https://www.chart.js/)
 
-## 📊 Monitoreo ambiental de la región andina en tiempo real
+## 📊 Monitoreo ambiental de la Región Andina en tiempo real
 
-**Andes Observatorio** es una plataforma interactiva que monitorea y visualiza datos ambientales de los países de la región andina en tiempo real. Combina datos meteorológicos, áreas protegidas y visualización geográfica para ofrecer una herramienta completa de monitoreo.
+**Andes Observatorio** es una plataforma interactiva que monitorea y visualiza datos ambientales de los países de la Región Andina en tiempo real. Combina datos meteorológicos, áreas protegidas y visualización geográfica para ofrecer una herramienta completa de monitoreo.
 
 ---
 

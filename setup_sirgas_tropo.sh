@@ -160,7 +160,7 @@ Este módulo centraliza QUÉ estaciones procesa el pipeline troposférico
 la lógica de descarga o parseo cuando se quiera cambiar la cobertura.
 
 Hoy: solo las estaciones que ya muestra el dashboard de Andes Observatorio
-     (región andina: Colombia, Ecuador, Perú, Bolivia, Chile, Argentina).
+     (Región Andina: Colombia, Ecuador, Perú, Bolivia, Chile, Argentina).
 Más adelante: agregar más regiones (o pasar a cobertura global de SIRGAS-CON)
      es tan simple como sumar entradas a REGIONES o usar scope="global"
      en get_active_stations(), sin tocar ningún otro archivo del pipeline.
@@ -922,9 +922,9 @@ mardown
 [![Leaflet](https://img.shields.io/badge/maps-Leaflet-green)](https://leafletjs.com/)
 [![Chart.js](https://img.shields.io/badge/charts-Chart.js-red)](https://www.chart.js/)
 
-## 📊 Monitoreo ambiental de la región andina en tiempo real
+## 📊 Monitoreo ambiental de la Región Andina en tiempo real
 
-**Andes Observatorio** es una plataforma interactiva que monitorea y visualiza datos ambientales de los países de la región andina en tiempo real. Combina datos meteorológicos, áreas protegidas y visualización geográfica para ofrecer una herramienta completa de monitoreo.
+**Andes Observatorio** es una plataforma interactiva que monitorea y visualiza datos ambientales de los países de la Región Andina en tiempo real. Combina datos meteorológicos, áreas protegidas y visualización geográfica para ofrecer una herramienta completa de monitoreo.
 
 ---
 

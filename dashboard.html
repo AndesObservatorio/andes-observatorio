@@ -189,26 +189,27 @@
         footer { background: #5a7a5a; color: #e8efe8; text-align: center; padding: 16px; border-radius: 18px; margin-top: 18px; }
 
         /* ========== FASES DEL MONITOREO ========== */
-        .fases-panel { background: linear-gradient(135deg, #f4f8f4 0%, #fcfaf7 100%); padding: 20px 24px; border-radius: 18px; border: 1px solid #ede8e0; margin: 14px 0; }
-        .fases-panel h3 { color: #5a7a5a; margin-bottom: 14px; font-size: 1rem; text-align: center; }
-        .fases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-        .fase-item { background: white; padding: 18px 14px; border-radius: 16px; border: 2px solid #ede8e0; text-align: center; transition: all 0.35s ease; position: relative; overflow: hidden; }
-        .fase-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #d6cfc4; transition: all 0.35s ease; }
-        .fase-item.activa { border-color: #27ae60; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39,174,96,0.12); }
+        .fases-panel { background: linear-gradient(135deg, #f4f8f4 0%, #fcfaf7 100%); padding: 6px 10px; border-radius: 10px; border: 1px solid #ede8e0; margin: 6px 0; }
+        .fases-panel h3 { color: #5a7a5a; margin-bottom: 4px; font-size: 0.72rem; text-align: center; font-weight: 600; letter-spacing: 0.3px; }
+        .fases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .fase-item { background: white; padding: 6px 10px 5px; border-radius: 8px; border: 1.5px solid #ede8e0; text-align: left; transition: all 0.25s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 3px; }
+        .fase-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #d6cfc4; transition: all 0.25s ease; }
+        .fase-item.activa { border-color: #27ae60; box-shadow: 0 4px 12px rgba(39,174,96,0.10); }
         .fase-item.activa::before { background: #27ae60; }
         .fase-item.pendiente { border-color: #f1c40f; }
         .fase-item.pendiente::before { background: #f1c40f; }
         .fase-item.error { border-color: #e74c3c; }
         .fase-item.error::before { background: #e74c3c; }
-        .fase-icon { font-size: 32px; margin-bottom: 8px; }
-        .fase-nombre { font-size: 13px; font-weight: 700; color: #4a6a4a; margin-bottom: 6px; }
-        .fase-estado { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 6px; }
+        .fase-header { display: flex; align-items: center; gap: 6px; width: 100%; }
+        .fase-icon { font-size: 16px; line-height: 1; flex-shrink: 0; }
+        .fase-nombre { font-size: 10px; font-weight: 700; color: #4a6a4a; flex: 1; text-align: left; line-height: 1.2; }
+        .fase-estado { font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
         .fase-estado.activo { background: #d4edda; color: #155724; }
         .fase-estado.pendiente { background: #fff3cd; color: #856404; }
         .fase-estado.error { background: #f8d7da; color: #721c24; }
-        .fase-detalles { font-size: 11px; color: #8aa08a; line-height: 1.5; }
-        .fase-barra { width: 100%; height: 6px; background: #f0ebe4; border-radius: 3px; margin-top: 10px; overflow: hidden; }
-        .fase-barra-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; width: 0%; }
+        .fase-detalles { font-size: 9px; color: #8aa08a; line-height: 1.3; text-align: left; width: 100%; }
+        .fase-barra { width: 100%; height: 2px; background: #f0ebe4; border-radius: 2px; overflow: hidden; }
+        .fase-barra-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; width: 0%; }
         .fase-item.activa .fase-barra-fill { width: 100%; background: #27ae60; }
         .fase-item.pendiente .fase-barra-fill { width: 60%; background: #f1c40f; }
         .fase-item.error .fase-barra-fill { width: 100%; background: #e74c3c; }
@@ -385,23 +386,29 @@
         <h3 data-i18n="fases.titulo">🔄 Fases del Monitoreo — Estado del Sistema</h3>
         <div class="fases-grid">
             <div class="fase-item pendiente" id="faseClima">
-                <div class="fase-icon">🌡️</div>
-                <div class="fase-nombre" data-i18n="fase1.nombre">Fase 1: Clima</div>
-                <div class="fase-estado pendiente" id="estadoClima">⏳ Pendiente</div>
+                <div class="fase-header">
+                    <span class="fase-icon">🌡️</span>
+                    <span class="fase-nombre" data-i18n="fase1.nombre">Fase 1: Clima</span>
+                    <span class="fase-estado pendiente" id="estadoClima">⏳</span>
+                </div>
                 <div class="fase-detalles" id="detalleClima" data-i18n="fase.clima.detalle">Fuente: OpenWeatherMap · Actualización: cada 10 min · Resolución: ciudad</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraClima"></div></div>
             </div>
             <div class="fase-item pendiente" id="faseSirgas">
-                <div class="fase-icon">🛰️</div>
-                <div class="fase-nombre" data-i18n="fase2.nombre">Fase 2: SIRGAS</div>
-                <div class="fase-estado pendiente" id="estadoSirgas">⏳ Pendiente</div>
+                <div class="fase-header">
+                    <span class="fase-icon">🛰️</span>
+                    <span class="fase-nombre" data-i18n="fase2.nombre">Fase 2: SIRGAS</span>
+                    <span class="fase-estado pendiente" id="estadoSirgas">⏳</span>
+                </div>
                 <div class="fase-detalles" id="detalleSirgas" data-i18n="fase.sirgas.detalle">Fuente: SIRGAS-CON · Actualización: semanal · Resolución: mm/año</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraSirgas"></div></div>
             </div>
             <div class="fase-item pendiente" id="faseZTD">
-                <div class="fase-icon">💧</div>
-                <div class="fase-nombre" data-i18n="fase3.nombre">Fase 3: ZTD Atmosférico</div>
-                <div class="fase-estado pendiente" id="estadoZTD">⏳ Pendiente</div>
+                <div class="fase-header">
+                    <span class="fase-icon">💧</span>
+                    <span class="fase-nombre" data-i18n="fase3.nombre">Fase 3: ZTD Atmosférico</span>
+                    <span class="fase-estado pendiente" id="estadoZTD">⏳</span>
+                </div>
                 <div class="fase-detalles" id="detalleZTD" data-i18n="fase.ztd.detalle">Fuente: SIRGAS-TRO · Actualización: semanal · Resolución: horaria</div>
                 <div class="fase-barra"><div class="fase-barra-fill" id="barraZTD"></div></div>
             </div>
@@ -491,7 +498,7 @@
         <div style="font-size:13px;color:#4a5a4a;margin-top:12px;line-height:1.7;">
             
 <p>Las velocidades tectónicas se calcularon a partir de <strong>soluciones semanales SIRGAS-CON</strong> (Sistema de Referencia Geocéntrico para las Américas), en el marco de referencia <strong>ITRF2014</strong>, época 2010.0. Se aplicaron correcciones por saltos instrumentales, cambios de antena y efectos estacionales (anuales y semianuales).</p>
-<p><strong>Clasificación tectónica</strong> según umbrales propuestos por el proyecto SIRGAS para la región andina:</p>
+<p><strong>Clasificación tectónica</strong> según umbrales propuestos por el proyecto SIRGAS para la Región Andina:</p>
 <ul style="margin-left:20px;">
     <li>Intraplaca (0–5 mm/año)</li>
     <li>Deformación media (5–15 mm/año)</li>
@@ -1045,7 +1052,7 @@
             <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ Metodología del análisis — Áreas Protegidas Andinas</summary>
             <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
                 
-<p>Se utilizaron 15 áreas protegidas representativas de la región andina, con superficie oficial reportada por WDPA (UNEP-WCMC &amp; IUCN).</p>
+<p>Se utilizaron 15 áreas protegidas representativas de la Región Andina, con superficie oficial reportada por WDPA (UNEP-WCMC &amp; IUCN).</p>
 <p>Se suman las superficies por país para comparar el nivel de protección relativa. <strong>No incluye áreas marinas ni reservas de biosfera</strong> no clasificadas como IUCN I-VI.</p>
 <p><em>Limitaciones</em>: muestra solo una selección de áreas; el total real de superficie protegida por país es mayor.</p>
 
@@ -1080,7 +1087,7 @@
     <!-- Introducción -->
     <div style="background:#f8f5f0;padding:24px 28px;border-radius:16px;margin:16px 0;border-left:4px solid #2d4a2d;">
         <h3 style="color:#2d4a2d;margin:0 0 12px;" data-i18n="mec.intro.titulo">🌍 El Sistema Tierra como Sistema Acoplado</h3>
-        <p style="color:#4a5a4a;line-height:1.7;margin:0;" data-i18n="mec.intro.parrafo">La Tierra no es un conjunto de esferas independientes. La atmósfera, la hidrosfera, la criosfera y la litosfera intercambian masa, energía y momento de forma continua. El calentamiento global antropogénico está alterando estos intercambios, y la región andina —por su alta sismicidad, vulcanismo activo, glaciares tropicales en retroceso y marcada variabilidad hidroclimática— constituye un laboratorio natural para estudiar estos acoplamientos.</p>
+        <p style="color:#4a5a4a;line-height:1.7;margin:0;" data-i18n="mec.intro.parrafo">La Tierra no es un conjunto de esferas independientes. La atmósfera, la hidrosfera, la criosfera y la litosfera intercambian masa, energía y momento de forma continua. El calentamiento global antropogénico está alterando estos intercambios, y la Región Andina —por su alta sismicidad, vulcanismo activo, glaciares tropicales en retroceso y marcada variabilidad hidroclimática— constituye un laboratorio natural para estudiar estos acoplamientos.</p>
         <p style="color:#4a5a4a;line-height:1.7;margin:12px 0 0;" data-i18n="mec.intro.parrafo2">Este portal se sustenta en tres mecanismos físicos verificables que describen cómo los cambios superficiales (clima, agua, hielo) pueden influir en procesos profundos (tectónica, vulcanismo), y cómo los procesos atmosféricos se relacionan con el ciclo hidrológico.</p>
     </div>
 
@@ -1220,7 +1227,7 @@
                 <div style="background:#ffeaa7;padding:14px 18px;border-radius:10px;margin-top:12px;border-left:4px solid #d4a017;">
                     <strong style="color:#856404;">⚠️ <span data-i18n="mec.b.aviso.titulo">Resultado del análisis exploratorio</span></strong>
                     <p style="color:#856404;font-size:13px;margin:8px 0 0;line-height:1.6;">
-                        <span data-i18n="mec.b.aviso.texto">El análisis de correlación cruzada entre sismos superficiales (M≥4.5, profundidad &lt;30 km) y precipitación regional durante 2015-2025 <strong>no muestra correlación estadísticamente significativa</strong> en ningún retardo entre 0 y 12 meses (p &gt; 0.05). Este resultado es consistente con la observación de que la señal sísmica tectónica domina sobre cualquier modulación por carga hidrológica en la región andina. Es un resultado científico válido que motiva futuras investigaciones con otras metodologías.</span>
+                        <span data-i18n="mec.b.aviso.texto">El análisis de correlación cruzada entre sismos superficiales (M≥4.5, profundidad &lt;30 km) y precipitación regional durante 2015-2025 <strong>no muestra correlación estadísticamente significativa</strong> en ningún retardo entre 0 y 12 meses (p &gt; 0.05). Este resultado es consistente con la observación de que la señal sísmica tectónica domina sobre cualquier modulación por carga hidrológica en la Región Andina. Es un resultado científico válido que motiva futuras investigaciones con otras metodologías.</span>
                     </p>
                 </div>
 
@@ -1249,7 +1256,7 @@
                 <details style="margin:16px 0 12px;background:#f4f8f4;border-radius:10px;padding:10px 14px;">
                     <summary style="cursor:pointer;font-weight:600;color:#2c5f2c;font-size:14px;">ℹ️ <span data-i18n="mec.b.metodologia.titulo">Metodología del análisis — Mecanismo B</span></summary>
                     <div style="font-size:13px;color:#4a5a4a;margin-top:8px;line-height:1.6;">
-                        <p><strong>Criterio de selección sísmica:</strong> eventos M ≥ 4.5 con profundidad &lt; 30 km (superficiales/corticales), descargados del catálogo USGS Earthquake Catalog para el período 2015-2025 en la región andina (-56 a 13 lat, -82 a -34 lon).</p>
+                        <p><strong>Criterio de selección sísmica:</strong> eventos M ≥ 4.5 con profundidad &lt; 30 km (superficiales/corticales), descargados del catálogo USGS Earthquake Catalog para el período 2015-2025 en la Región Andina (-56 a 13 lat, -82 a -34 lon).</p>
                         <p><strong>Datos de entrada:</strong></p>
                         <ul style="margin-left:20px;">
                             <li><strong>Sismos totales:</strong> 6,115 eventos (M≥4.5)</li>
@@ -1852,7 +1859,7 @@
         } else {
             fase.classList.add('pendiente');
             estadoEl.classList.add('pendiente');
-            estadoEl.innerText = '⏳ ' + (mensaje || 'Pendiente');
+            estadoEl.innerText = '⏳ Pendiente';
         }
         if (detalle) detalleEl.innerText = detalle;
     }
@@ -3636,7 +3643,7 @@ const TRADUCCIONES = {
         'sim.exportar': '📥 Exportar',
         'sim.metodologia': 'Metodología del simulador',
         'mec.intro.titulo': '🌍 El Sistema Tierra como Sistema Acoplado',
-        'mec.intro.parrafo': 'La Tierra no es un conjunto de esferas independientes. La atmósfera, la hidrosfera, la criosfera y la litosfera intercambian masa, energía y momento de forma continua. El calentamiento global antropogénico está alterando estos intercambios, y la región andina —por su alta sismicidad, vulcanismo activo, glaciares tropicales en retroceso y marcada variabilidad hidroclimática— constituye un laboratorio natural para estudiar estos acoplamientos.',
+        'mec.intro.parrafo': 'La Tierra no es un conjunto de esferas independientes. La atmósfera, la hidrosfera, la criosfera y la litosfera intercambian masa, energía y momento de forma continua. El calentamiento global antropogénico está alterando estos intercambios, y la Región Andina —por su alta sismicidad, vulcanismo activo, glaciares tropicales en retroceso y marcada variabilidad hidroclimática— constituye un laboratorio natural para estudiar estos acoplamientos.',
         'mec.intro.parrafo2': 'Este portal se sustenta en tres mecanismos físicos verificables que describen cómo los cambios superficiales (clima, agua, hielo) pueden influir en procesos profundos (tectónica, vulcanismo), y cómo los procesos atmosféricos se relacionan con el ciclo hidrológico.',
         // Mecanismo A
         'mec.a.titulo': '🌋 Mecanismo A: Descompresión por Pérdida de Masa Superficial',
@@ -3736,7 +3743,7 @@ const TRADUCCIONES = {
         'mec.b.mapa.sismosBaja': 'M 4.5-4.9',
         'mec.b.mapa.precipitacion': 'Precipitación',
         'mec.b.aviso.titulo': 'Resultado del análisis exploratorio',
-        'mec.b.aviso.texto': 'El análisis de correlación cruzada entre sismos superficiales (M≥4.5, profundidad <30 km) y precipitación regional durante 2015-2025 <strong>no muestra correlación estadísticamente significativa</strong> en ningún retardo entre 0 y 12 meses (p > 0.05). Este resultado es consistente con la observación de que la señal sísmica tectónica domina sobre cualquier modulación por carga hidrológica en la región andina. Es un resultado científico válido que motiva futuras investigaciones con otras metodologías.',
+        'mec.b.aviso.texto': 'El análisis de correlación cruzada entre sismos superficiales (M≥4.5, profundidad <30 km) y precipitación regional durante 2015-2025 <strong>no muestra correlación estadísticamente significativa</strong> en ningún retardo entre 0 y 12 meses (p > 0.05). Este resultado es consistente con la observación de que la señal sísmica tectónica domina sobre cualquier modulación por carga hidrológica en la Región Andina. Es un resultado científico válido que motiva futuras investigaciones con otras metodologías.',
         'mec.b.mapa.lags.titulo': 'Correlación cruzada por retardo (0-12 meses)',
         'mec.b.mapa.lags.cargando': 'Cargando análisis…',
         'mec.b.mapa.serie.titulo': 'Serie temporal: sismos vs precipitación',

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Análisis de deforestación en la región andina.
+Análisis de deforestación en la Región Andina.
 Fuente: Global Forest Watch (datos 2024)
 """
 import json
