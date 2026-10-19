@@ -2050,14 +2050,33 @@
         const datos = [];
         const colores = [];
         const paleta = ['#fff5cc','#ffebb3','#ffd699','#ffb366','#ff8c42','#ff6b35','#e63946'];
+        const tempPorPais = {};
+        const conteoPais = {};
+        
         for (const c of ciudades) {
             const clima = await getClima(c.query);
-            labels.push(c.pais);
             const temp = clima ? clima.temp : 0;
-            datos.push(temp);
-            let idx = Math.min(Math.floor(temp / 5), paleta.length - 1);
+            
+            // Agrupamos en lugar de empujar
+            if (!tempPorPais[c.pais]) { 
+                tempPorPais[c.pais] = 0; 
+                conteoPais[c.pais] = 0; 
+            }
+            tempPorPais[c.pais] += temp;
+            conteoPais[c.pais]++;
+        }
+        
+        // Ahora generamos los arrays finales (promediados)
+        for (const pais in tempPorPais) {
+            labels.push(pais);
+            const tempPromedio = tempPorPais[pais] / conteoPais[pais];
+            datos.push(tempPromedio.toFixed(1)); // Guardamos con 1 decimal
+            
+            let idx = Math.min(Math.floor(tempPromedio / 5), paleta.length - 1);
             colores.push(paleta[idx] || paleta[0]);
         }
+
+        
         if (tempChart) {
             tempChart.data.labels = labels;
             tempChart.data.datasets[0].data = datos;
@@ -2875,7 +2894,7 @@ function initMapSirgas() {
                 
                 if (seleccionada) {
                     // Resaltar
-                    seleccionada.marker.setStyle({ fillColor: '#d4a017', color: '#5a4a1a', weight: 4, fillOpacity: 1 });
+                    seleccionada.marker.setStyle({ fillColor: '#d4a017', color: '#5a4a1a', weight: 3, fillOpacity: 0.4, radius: 10 });
                     seleccionada.marker.setRadius(28);
                     // Volar + abrir popup
                     mapaAreas.flyTo([lat, lon], 7, { duration: 1.5 });
