@@ -2483,16 +2483,52 @@
             // Gráfico scatter
             const puntos = analisisZTDData.datos.filter(d => d.ztd_anomaly !== null);
             const ctx = document.getElementById('chartZTDPrecip').getContext('2d');
+            // Calcular línea de tendencia (regresión lineal simple)
+            const xs = puntos.map(d => d.ztd_anomaly);
+            const ys = puntos.map(d => d.precip);
+            const n = xs.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            for (let i = 0; i < n; i++) {
+                sumX += xs[i];
+                sumY += ys[i];
+                sumXY += xs[i] * ys[i];
+                sumX2 += xs[i] * xs[i];
+            }
+            const pendiente = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            const intercepto = (sumY - pendiente * sumX) / n;
+            
+            // Crear puntos de la línea de tendencia
+            const minX = Math.min(...xs);
+            const maxX = Math.max(...xs);
+            const lineaTendencia = [
+                { x: minX, y: pendiente * minX + intercepto },
+                { x: maxX, y: pendiente * maxX + intercepto }
+            ];
+
             new Chart(ctx, {
                 type: 'scatter',
                 data: {
-                    datasets: [{
-                        label: 'ZTD vs Precipitación',
-                        data: puntos.map(d => ({x: d.ztd_anomaly, y: d.precip})),
-                        backgroundColor: 'rgba(45, 106, 79, 0.5)',
-                        borderColor: '#2D6A4F',
-                        pointRadius: 4
-                    }]
+                    datasets: [
+                        {
+                            label: 'ZTD vs Precipitación',
+                            data: puntos.map(d => ({x: d.ztd_anomaly, y: d.precip})),
+                            backgroundColor: 'rgba(45, 106, 79, 0.4)', // Transparencia
+                            borderColor: 'rgba(45, 106, 79, 0.8)',
+                            pointRadius: 3, // Más pequeños
+                            pointHoverRadius: 6,
+                            showLine: false
+                        },
+                        {
+                            label: 'Línea de tendencia',
+                            data: lineaTendencia,
+                            type: 'line',
+                            borderColor: '#e74c3c', // Línea roja para destacar
+                            borderWidth: 2,
+                            borderDash: [5, 5], // Línea discontinua
+                            pointRadius: 0, // Sin puntos en la línea
+                            fill: false
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -4889,16 +4925,51 @@ async function cargarSpearmanMecC(codigo, nombre) {
         const colorTexto = esOscuro ? '#c8d4c8' : '#4a5a4a';
         const colorGrid = esOscuro ? '#3a4a3a' : '#e8e0d8';
 
+        // Calcular línea de tendencia para el Mecanismo C
+        const xsMecC = puntos.map(d => d.ztd_anomaly);
+        const ysMecC = puntos.map(d => d.precip);
+        const nMecC = xsMecC.length;
+        let sumXMecC = 0, sumYMecC = 0, sumXYMecC = 0, sumX2MecC = 0;
+        for (let i = 0; i < nMecC; i++) {
+            sumXMecC += xsMecC[i];
+            sumYMecC += ysMecC[i];
+            sumXYMecC += xsMecC[i] * ysMecC[i];
+            sumX2MecC += xsMecC[i] * xsMecC[i];
+        }
+        const pendienteMecC = (nMecC * sumXYMecC - sumXMecC * sumYMecC) / (nMecC * sumX2MecC - sumXMecC * sumXMecC);
+        const interceptoMecC = (sumYMecC - pendienteMecC * sumXMecC) / nMecC;
+        
+        const minXMecC = Math.min(...xsMecC);
+        const maxXMecC = Math.max(...xsMecC);
+        const lineaTendenciaMecC = [
+            { x: minXMecC, y: pendienteMecC * minXMecC + interceptoMecC },
+            { x: maxXMecC, y: pendienteMecC * maxXMecC + interceptoMecC }
+        ];
+
         chartSpearmanMecC = new Chart(ctx, {
             type: 'scatter',
             data: {
-                datasets: [{
-                    label: 'ZTD vs Precip',
-                    data: puntos.map(d => ({ x: d.ztd_anomaly, y: d.precip })),
-                    backgroundColor: 'rgba(45, 106, 79, 0.6)',
-                    borderColor: '#2D6A4F',
-                    pointRadius: 3
-                }]
+                datasets: [
+                    {
+                        label: 'ZTD vs Precip',
+                        data: puntos.map(d => ({ x: d.ztd_anomaly, y: d.precip })),
+                        backgroundColor: 'rgba(45, 106, 79, 0.4)', // Transparencia
+                        borderColor: 'rgba(45, 106, 79, 0.8)',
+                        pointRadius: 3, // Más pequeños
+                        pointHoverRadius: 6,
+                        showLine: false
+                    },
+                    {
+                        label: 'Línea de tendencia',
+                        data: lineaTendenciaMecC,
+                        type: 'line',
+                        borderColor: '#e74c3c',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ]
             },
             options: {
                 responsive: true,
